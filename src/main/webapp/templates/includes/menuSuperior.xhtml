@@ -1,0 +1,17 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:ui="http://java.sun.com/jsf/facelets">
+    <h:panelGroup>
+        <h:outputLink value="#{request.contextPath}/inicio.jsf">
+            <h:outputText value="#{lang['menuSuperior.linkInicio']}" />
+        </h:outputLink>
+        <h:outputText value=" | "/>
+        <h:outputLink value="#{request.contextPath}/spring/usuarios">
+            <h:outputText value="#{lang['menuSuperior.linkMantenedorUsuario']}" />
+        </h:outputLink>
+        <h:outputText value=" | "/>
+        <h:outputLink value="#{request.contextPath}/spring/remuneraciones">
+            <h:outputText value="#{lang['menuSuperior.linkLibroRemuneraciones']}" />
+        </h:outputLink>
+    </h:panelGroup>
+</ui:composition>

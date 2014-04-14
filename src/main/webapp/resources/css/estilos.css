@@ -1,0 +1,69 @@
+html,body {
+    font-family: Arial, helvetica, sans-serif;
+    font-size: 10pt;
+    margin: 0;
+    padding: 0;
+}
+
+.fondo {
+    background: url("./img/theme/bg.svg") no-repeat center fixed;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+}
+
+.esqueleto {
+    width: 1024px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.logoSuperior {
+    background: url('./img/theme/logoSuperior.png') no-repeat left;
+    width: 1024px;
+    height: 135px;
+    padding: 0;
+    margin: 0 auto;
+}
+
+.actionPanel{
+    width: 100%;
+    alignment-adjust: central;
+    text-align: center;
+}
+
+
+.datos {
+    border-collapse: collapse;
+    font-size: 8pt;
+} .datos thead {
+    text-align: center
+} .datos thead td {
+    border: 1px solid gray;
+    -moz-border-radius-topleft: 3px;
+    -webkit-border-top-left-radius: 3px;
+    border-top-left-radius: 3px;
+    -moz-border-radius-topright: 3px;
+    -webkit-border-top-right-radius: 3px;
+    border-top-right-radius: 3px;
+} .datos tbody td {
+    border: 1px solid gray;
+    padding-left: 2px;
+    padding-right: 2px;
+}
+
+.ui-icon {
+    float:left;
+}
+
+.ui-datatable .ui-column-filter {
+    //display:none;
+}
+
+.ui-datatable-data .ui-widget-content {
+    font-size: 8pt;
+}
+
+.ui-panel.ui-widget-content {
+    border:0;
+}

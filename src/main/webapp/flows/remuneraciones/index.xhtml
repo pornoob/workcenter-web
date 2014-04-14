@@ -1,0 +1,263 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>#{lang['indexRemuneraciones.tituloModulo']}</h2>
+
+        <h:form id="formRemuneraciones">
+            <p:commandButton action="#{mantenedorRemuneraciones.criterioEmpleador()}" update="filtros" value="#{lang['indexRemuneraciones.linkSegunEmpleador']}"/>
+            <p:commandButton action="#{mantenedorRemuneraciones.criterioConductor()}" update="filtros" value="#{lang['indexRemuneraciones.linkSegunDependiente']}"/>
+
+            <p:panel id="filtros">
+                <ui:fragment rendered="#{constantes.filtroEmpleador eq mantenedorRemuneraciones.criterio}">
+                    <h:panelGrid columns="9">
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelEmpleador']}"/>:
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.empleadorSeleccionado}" converter="entityConverter" 
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="#{lang['generico.seleccionarTodos']}"/>
+                            <f:selectItems value="#{mantenedorRemuneraciones.empleadores}" var="e" 
+                                           itemLabel="#{e.nombre}" itemValue="#{e}"/> 
+                        </p:selectOneMenu>
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelMes']}"/>:
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.mesSeleccionado}">
+                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="#{lang['generico.seleccionarTodos']}"/>
+                            <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}" itemValue="#{m.id}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelAnio']}"/>:
+                        <h:inputText value="#{mantenedorRemuneraciones.anioIngresado}"/>
+                    </h:panelGrid>
+                </ui:fragment>
+
+                <ui:fragment rendered="#{constantes.filtroConductor eq mantenedorRemuneraciones.criterio}">
+                    <h:panelGrid columns="9">
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelConductor']}"/>:
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.conductorSeleccionado}" converter="entityConverter" 
+                                         filter="true" filterMatchMode="contains" >
+                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="#{lang['generico.seleccionarTodos']}"/>
+                            <f:selectItems value="#{mantenedorRemuneraciones.conductores}" var="c" 
+                                           itemLabel="#{c.getNombreCompleto()}" itemValue="#{c}"/> 
+                        </p:selectOneMenu>
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelMes']}"/>:
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.mesSeleccionado}">
+                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="#{lang['generico.seleccionarTodos']}"/>
+                            <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}" itemValue="#{m.id}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="#{lang['indexRemuneraciones.labelAnio']}"/>:
+                        <h:inputText value="#{mantenedorRemuneraciones.anioIngresado}"/>
+                    </h:panelGrid>
+                </ui:fragment>
+                <p:commandButton value="#{lang['generico.filtrar']}" ajax="true" update="resultados" actionListener="#{mantenedorRemuneraciones.filtrarRemuneraciones()}"/>
+            </p:panel>
+            <p:panel id="resultados">
+                <ui:fragment rendered="#{mantenedorRemuneraciones.criterio ne null}">
+                    <table class="datos">
+                        <thead class=" ui-widget-header">
+                            <tr>
+                                <td rowspan="3">Nombre conductor</td>
+                                <td rowspan="3">Rut conductor</td>
+                                <td rowspan="3">Total hrs</td>
+                                <td rowspan="3">Sueldo base</td>
+                                <td colspan="5">Ingresos del mes</td>
+                                <ui:fragment rendered="#{mantenedorRemuneraciones.bonosTablaRemuneracion.cantidadColumnas gt 0}">
+                                    <td colspan="#{mantenedorRemuneraciones.bonosTablaRemuneracion.cantidadColumnas}">Bonos</td>
+                                </ui:fragment>
+                                <ui:fragment rendered="#{mantenedorRemuneraciones.bonosTablaRemuneracion.cantidadColumnas eq 0}">
+                                    <td rowspan="3">Bonos</td>
+                                </ui:fragment>
+                                <td rowspan="3">Total remuneraciones imponible</td>
+                                <td colspan="2">Otros beneficios no imponibles</td>
+                                <td rowspan="3">Total haberes</td>
+                                <td colspan="#{8 + mantenedorRemuneraciones.descuentosTablaRemuneracion.cantidadColumnas}">Descuentos previsionales - impuestos y otros</td>
+                                <td rowspan="3">Total descuentos</td>
+                                <td rowspan="3">Alcance líquido</td>
+                                <td rowspan="3">Anticipos</td>
+                                <td rowspan="3">Dif Caja</td>
+                                <td rowspan="3">Saldo líquido</td>
+                            </tr>
+                            <tr>
+                                <td rowspan="2">Gratificación</td>
+                                <td rowspan="2">Hrs Espera</td>
+                                <td colspan="2">Semana corrida</td>
+                                <td rowspan="2">Total Viajes/Hrs. Extra</td>
+
+                                <ui:repeat value="#{mantenedorRemuneraciones.bonosTablaRemuneracion.tipos}" var="btr">
+                                    <td rowspan="2"><h:outputText value="#{btr.toString()}"/></td>
+                                </ui:repeat>
+
+                                <td rowspan="2">Viatico</td>
+                                <td rowspan="2">Otros</td>
+
+                                <td colspan="5">Cotizaciones previsionales</td>
+                                <td colspan="2">Sistema de salud</td>
+                                <td rowspan="2">Impuesto de renta</td>
+                                <td colspan="#{mantenedorRemuneraciones.descuentosTablaRemuneracion.cantidadColumnas}">Otros Descuentos</td>
+                            </tr>
+                            <tr>
+                                <td>Atrasos</td>
+                                <td>Valor</td>
+
+                                <td>Organismo</td>
+                                <td>%</td>
+                                <td>Cotización</td>
+                                <td>APV y/o Cta. Ahorro</td>
+                                <td>Seg. cesantía</td>
+
+                                <td>Organismo</td>
+                                <td>Descuento al trabajador</td>
+
+                                <ui:repeat value="#{mantenedorRemuneraciones.descuentosTablaRemuneracion.tipos}" var="dtr">
+                                    <td><h:outputText value="#{dtr.toString()}"/></td>
+                                </ui:repeat>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ui:fragment rendered="#{mantenedorRemuneraciones.remuneraciones.size() == 0}">
+                                <tr class="#{mantenedorRemuneraciones.obtenerColorFila()}">
+                                    <td colspan="30" style="padding: 10px">
+                                        <h:outputText value="#{lang['generico.sinResultados']}"/>
+                                    </td>
+                                </tr>
+                            </ui:fragment>
+                            <ui:repeat value="#{mantenedorRemuneraciones.remuneraciones}" var="r">
+                                <tr class="#{mantenedorRemuneraciones.obtenerColorFila()}">
+                                    <td>
+                                        <p:commandLink>
+                                            <p:fileDownload value="#{r.archivo}" />  
+                                        </p:commandLink>
+                                        <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText style="white-space: nowrap" value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}" converter="rutConverter"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.diasTrabajados}" />
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.sueldoBase}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.gratificacion}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.horaEspera}" >
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value=""/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.semanaCorrida}" >
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.totalViajes+r.horasExtras}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <ui:repeat value="#{mantenedorRemuneraciones.obtenerBonos(r)}" var="b">
+                                        <td>
+                                            <h:outputText value="#{b.monto}">
+                                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </td>
+                                    </ui:repeat>
+                                    <td>
+                                        <h:outputText value="#{r.totalImponible}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.viatico}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value=""/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.totalHaberes}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.nomAFP}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.porcentajeAFP}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.dectoAFP}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value=""/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.aporteTrabajador}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.nomPrevision}"/>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.dctoPrevision}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.impUnico}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
+                                        </h:outputText>
+                                    </td>
+                                    <ui:repeat value="#{mantenedorRemuneraciones.obtenerDescuentos(r)}" var="d">
+                                        <td>
+                                            <h:outputText value="#{d.monto}">
+                                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                            </h:outputText>
+                                        </td>
+                                    </ui:repeat>
+                                    <td>
+                                        <h:outputText value="#{r.totalDctos}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.alcanceLiquido}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.anticipoSueldo}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.difCaja}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                    <td>
+                                        <h:outputText value="#{r.liqPagar}">
+                                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                        </h:outputText>
+                                    </td>
+                                </tr>
+                            </ui:repeat>
+                        </tbody>
+                    </table>
+                </ui:fragment>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

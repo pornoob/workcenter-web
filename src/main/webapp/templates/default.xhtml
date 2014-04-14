@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?> 
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+
+    <f:view contentType="text/html">
+
+        <h:head>
+            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+            <title>Transportes Ventanas / Puchuncaví</title>
+            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/estilos.css" />
+        </h:head>
+        <h:body>
+            <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
+            <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"  />
+            <p:ajaxStatus onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+
+            <p:dialog header="" closable="false" resizable="false" widgetVar="idleDialog" modal="true" width="400" dynamic="true">  
+                <h:outputText value="" />
+                <p:commandButton/>
+            </p:dialog>  
+
+            <!--<div class="logoSuperior"></div>-->
+            <div class="esqueleto">
+<!--                <ui:include src="/templates/includes/barraAutentificacion.xhtml" />
+                <ui:include src="/templates/includes/menuSuperior.xhtml" />-->
+
+                <div class="contenido">
+                    <ui:insert name="contenido"></ui:insert>
+                </div>
+
+                <ui:include src="/templates/includes/piePagina.xhtml" />
+
+                <p:dialog widgetVar="statusDialog" modal="true" closable="false" showHeader="false">
+                    <img src="#{request.contextPath}/resources/css/img/theme/ajax-loader.gif" alt="" />
+                </p:dialog>
+            </div>
+
+        </h:body>
+    </f:view>
+</html>
