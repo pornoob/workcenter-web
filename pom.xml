@@ -8,6 +8,20 @@
     <name>workcenter</name>
     <url>http://maven.apache.org</url>
     
+    <repositories>
+        <repository>
+            <id>maven</id>
+            <name>Maven</name>
+            <url>http://maven.apache.org</url>
+        </repository>
+        
+<!--        <repository>
+            <id>ice-pdf</id>
+            <name>ICEpdf</name>
+            <url>https://repository.jboss.org/nexus/content/groups/public/</url>
+        </repository>-->
+    </repositories>
+    
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <primefaces-version>4.0</primefaces-version>

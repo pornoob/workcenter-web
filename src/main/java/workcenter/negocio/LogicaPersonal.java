@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.PersonalDao;
 import workcenter.entidades.Personal;
-import workcenter.util.Md5;
+import workcenter.util.pojo.Md5;
 import workcenter.util.components.Constantes;
 
 /**

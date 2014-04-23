@@ -1,4 +1,4 @@
-package workcenter.util;
+package workcenter.util.pojo;
 
 
 import java.io.IOException;
@@ -13,6 +13,10 @@ import javax.servlet.http.HttpServletResponse;
  * @author colivares
  */
 public class FacesUtil {
+    public static String obtenerContextPath() {
+        return obtenerHttpServletRequest().getContextPath();
+    }
+    
     public static HttpServletRequest obtenerHttpServletRequest() {
         return (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
     }

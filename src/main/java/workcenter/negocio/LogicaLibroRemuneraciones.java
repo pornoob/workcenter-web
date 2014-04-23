@@ -23,10 +23,10 @@ public class LogicaLibroRemuneraciones {
 
     @Transactional(readOnly = true)
     public List<Remuneracion> obtenerSegunConductor(Personal c, Integer mes, Integer anio) {
-        if (mes < 1) {
+        if (mes != null && mes < 1) {
             mes = null;
         }
-        if (anio <= 0) {
+        if (anio != null && anio <= 0) {
             anio = null;
         }
         return remuneracionDao.obtener(c, mes, anio);
@@ -34,10 +34,10 @@ public class LogicaLibroRemuneraciones {
 
     @Transactional(readOnly = true)
     public List<Remuneracion> obtenerSegunEmpleador(Empresa e, Integer mes, Integer anio) {
-        if (mes < 1) {
+        if (mes != null && mes < 1) {
             mes = null;
         }
-        if (anio <= 0) {
+        if (anio != null && anio <= 0) {
             anio = null;
         }
         return remuneracionDao.obtener(e, mes, anio);
@@ -46,5 +46,13 @@ public class LogicaLibroRemuneraciones {
     @Transactional(readOnly = true)
     public List<Remuneracion> obtenerRemuneraciones() {
         return remuneracionDao.obtenerTodas();
+    }
+
+    public boolean liquidacionEsImagen(Remuneracion r) {
+        String formato = r.getExtension().toLowerCase().trim();
+        if (formato.equals("jpg") || formato.equals("png") || formato.equals("tiff")) {
+            return true;
+        }
+        return false;
     }
 }

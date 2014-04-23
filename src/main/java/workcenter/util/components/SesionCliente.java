@@ -1,5 +1,6 @@
 package workcenter.util.components;
 
+import java.io.Serializable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -14,7 +15,7 @@ import workcenter.util.dto.UsuarioDto;
  */
 @Component
 @Scope("session")
-public class SesionCliente {
+public class SesionCliente implements Serializable {
 
     @Autowired
     UsuarioDao usuarioDao;

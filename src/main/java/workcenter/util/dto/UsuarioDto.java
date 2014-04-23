@@ -1,9 +1,11 @@
 package workcenter.util.dto;
 
+import java.io.Serializable;
+
 /**
  * @author colivares
  */
-public class UsuarioDto {
+public class UsuarioDto implements Serializable {
     private boolean externo;
     private Integer rut;
     private String nombres;

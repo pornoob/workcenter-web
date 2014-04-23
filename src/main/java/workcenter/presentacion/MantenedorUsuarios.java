@@ -13,7 +13,7 @@ import workcenter.entidades.Usuario;
 import workcenter.negocio.LogicaPersonal;
 import workcenter.negocio.LogicaProyecto;
 import workcenter.negocio.LogicaPermiso;
-import workcenter.util.FacesUtil;
+import workcenter.util.pojo.FacesUtil;
 import workcenter.util.services.Idioma;
 
 /**

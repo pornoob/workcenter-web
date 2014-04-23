@@ -38,8 +38,8 @@
                 </p:column>
 
                 <p:column headerText="#{lang['listarUsuarios.columnaAccesoWorkcenter']}">
-                    <h:outputText value="#{lang['generico.si']}" rendered="#{personal.usuario ne null}"/>
-                    <h:outputText value="#{lang['generico.no']}" rendered="#{personal.usuario eq null}"/>
+                    <h:outputText value="#{lang['generico.si']}" rendered="#{personal.usuario.habilitado}"/>
+                    <h:outputText value="#{lang['generico.no']}" rendered="#{!personal.usuario.habilitado}"/>
                 </p:column>
                 
                 <p:column headerText="#{lang['generico.columnaAcciones']}">

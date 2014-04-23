@@ -1,5 +1,6 @@
 package workcenter.dao;
 
+import java.io.Serializable;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,7 +14,7 @@ import workcenter.util.dto.UsuarioDto;
  * @author colivares
  */
 @Repository
-public class UsuarioDao {
+public class UsuarioDao implements Serializable {
     
     @PersistenceContext
     private EntityManager em;

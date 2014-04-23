@@ -33,6 +33,7 @@ public class Constantes implements Serializable {
     private int cantidadFilasTablas = 15;
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
+    private String contextoEstatico = "/static";
 
     public Constantes() {
         ProxyFactory pf = new ProxyFactory(this);
@@ -93,5 +94,9 @@ public class Constantes implements Serializable {
 
     public String getPaginadorTemplate() {
         return paginadorTemplate;
+    }
+
+    public String getContextoEstatico() {
+        return contextoEstatico;
     }
 }

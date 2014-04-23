@@ -56,6 +56,7 @@
                     <table class="datos">
                         <thead class=" ui-widget-header">
                             <tr>
+                                <td rowspan="3">Fecha</td>
                                 <td rowspan="3">Nombre conductor</td>
                                 <td rowspan="3">Rut conductor</td>
                                 <td rowspan="3">Total hrs</td>
@@ -124,10 +125,10 @@
                             <ui:repeat value="#{mantenedorRemuneraciones.remuneraciones}" var="r">
                                 <tr class="#{mantenedorRemuneraciones.obtenerColorFila()}">
                                     <td>
-                                        <p:commandLink>
-                                            <p:fileDownload value="#{r.archivo}" />  
-                                        </p:commandLink>
-                                        <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
+                                        <h:outputText style="white-space: nowrap" value="#{mantenedorRemuneraciones.formatoFecha(r.fechaLiquidacion)}"/>
+                                    </td>
+                                    <td>
+                                        <p:commandLink action="#{mantenedorRemuneraciones.generaLiquidacion(r)}" update=":dlgImagen" oncomplete="PF('dlgImagen').show()" value="#{r.idPersonal.nombreCompleto}"/>
                                     </td>
                                     <td>
                                         <h:outputText style="white-space: nowrap" value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}" converter="rutConverter"/>
@@ -259,5 +260,11 @@
                 </ui:fragment>
             </p:panel>
         </h:form>
+        <p:dialog id="dlgImagen" widgetVar="dlgImagen" closable="true" width="800px" height="600px" resizable="false" modal="true" dynamic="true">
+            <f:facet name="header">
+                <h:outputText value="#{mantenedorRemuneraciones.remuneracionSeleccionada.idPersonal.nombreCompleto}"/>
+            </f:facet>
+            <p:graphicImage width="100%" url="#{mantenedorRemuneraciones.urlLiquidacion}" />
+        </p:dialog>
     </ui:define>
 </ui:composition>

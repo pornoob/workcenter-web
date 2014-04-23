@@ -1,4 +1,4 @@
-package workcenter.util;
+package workcenter.util.pojo;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;

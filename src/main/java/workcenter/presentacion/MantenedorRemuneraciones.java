@@ -1,9 +1,17 @@
 package workcenter.presentacion;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.Serializable;
 import java.math.BigInteger;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,9 +22,12 @@ import workcenter.entidades.Personal;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaLibroRemuneraciones;
 import workcenter.negocio.LogicaPersonal;
+import workcenter.util.pojo.FacesUtil;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.BonosTablaRemuneracion;
 import workcenter.util.pojo.DescuentosTablaRemuneracion;
+import workcenter.util.pojo.StaticContext;
 
 /**
  * @author colivares
@@ -37,6 +48,9 @@ public class MantenedorRemuneraciones implements Serializable {
     @Autowired
     private Constantes constantes;
 
+    @Autowired
+    private SesionCliente sesionCliente;
+
     private Integer criterio = null;
     private List<Personal> conductores;
     private Personal conductorSeleccionado;
@@ -47,16 +61,53 @@ public class MantenedorRemuneraciones implements Serializable {
     private Integer anioIngresado;
     private BonosTablaRemuneracion bonosTablaRemuneracion;
     private DescuentosTablaRemuneracion descuentosTablaRemuneracion;
-    private String[] claseTablas = {
+    private final String[] claseTablas = {
         "ui-datatable-even", "ui-datatable-odd"
     };
     private int colorFila;
+    private String urlLiquidacion;
+    private Remuneracion remuneracionSeleccionada;
 
     public String inicio() {
         conductores = obtenerConductores();
         empleadores = obtenerEmpleadores();
         colorFila = 0;
         return "flowInicio";
+    }
+    
+    public String formatoFecha(Date f) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
+        return sdf.format(f);
+    }
+
+    public void generaLiquidacion(Remuneracion r) {
+        try {
+            if (r.getArchivo() == null) {
+                return;
+            }
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
+            String dir = System.getProperty("catalina.base");
+            String liquidacion = constantes.getContextoEstatico() + FacesUtil.obtenerHttpServletRequest().getContextPath() + "/" + sesionCliente.getUsuario().getRut() + "/liq_" + r.getIdPersonal().getRut() + "_" + sdf.format(r.getFechaLiquidacion()) + "." + r.getExtension();
+            new File(dir+liquidacion.substring(0, liquidacion.lastIndexOf('/'))).mkdirs();
+
+            File archivo = new File(dir + liquidacion);
+            if (archivo.exists() && new Date(archivo.lastModified()).after(r.getFechaLiquidacion())
+                    && r.equals(remuneracionSeleccionada)) {
+                remuneracionSeleccionada = r;
+                urlLiquidacion = StaticContext.obtenerUrlServidor() + liquidacion;
+                System.out.println("URL: " + urlLiquidacion);
+                return;
+            }
+            FileOutputStream fos = new FileOutputStream(dir + liquidacion);
+            fos.write(r.getArchivo());
+            urlLiquidacion = StaticContext.obtenerUrlServidor() + liquidacion;
+            remuneracionSeleccionada = r;
+            System.out.println("URL: " + urlLiquidacion);
+        } catch (FileNotFoundException ex) {
+            Logger.getLogger(MantenedorRemuneraciones.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(MantenedorRemuneraciones.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }
 
     public void filtrarRemuneraciones() {
@@ -71,7 +122,7 @@ public class MantenedorRemuneraciones implements Serializable {
     }
 
     public String obtenerColorFila() {
-        return claseTablas[(colorFila++%claseTablas.length)];
+        return claseTablas[(colorFila++ % claseTablas.length)];
     }
 
     public List<BonoDescuentoRemuneracion> obtenerBonos(Remuneracion r) {
@@ -99,7 +150,7 @@ public class MantenedorRemuneraciones implements Serializable {
         }
         return retorno;
     }
-    
+
     public List<BonoDescuentoRemuneracion> obtenerDescuentos(Remuneracion r) {
         List<BonoDescuentoRemuneracion> retorno = new ArrayList<BonoDescuentoRemuneracion>();
         if (descuentosTablaRemuneracion == null) {
@@ -220,5 +271,21 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public void setDescuentosTablaRemuneracion(DescuentosTablaRemuneracion descuentosTablaRemuneracion) {
         this.descuentosTablaRemuneracion = descuentosTablaRemuneracion;
+    }
+
+    public String getUrlLiquidacion() {
+        return urlLiquidacion;
+    }
+
+    public void setUrlLiquidacion(String urlLiquidacion) {
+        this.urlLiquidacion = urlLiquidacion;
+    }
+
+    public Remuneracion getRemuneracionSeleccionada() {
+        return remuneracionSeleccionada;
+    }
+
+    public void setRemuneracionSeleccionada(Remuneracion remuneracionSeleccionada) {
+        this.remuneracionSeleccionada = remuneracionSeleccionada;
     }
 }
