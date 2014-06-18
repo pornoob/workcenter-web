@@ -6,15 +6,10 @@
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
     <on-start>
-        <evaluate expression="mantenedorUsuarios.inicio()" />
+        <evaluate expression="mantenedorAlarmasGps.inicio()" />
     </on-start>
     
-    <view-state id="listarUsuarios">
-        <transition on="flowListarPersonal" to="listarUsuarios"/>
-        <transition on="flowEditarAccesos" to="editarUsuario"/>
-    </view-state>
-    
-    <view-state id="editarUsuario">
-        <transition on="flowListarPersonal" to="listarUsuarios"/>
+    <view-state id="listarAlarmas">
+        <transition on="flowListarAlarmas" to="listarAlarmas"/>
     </view-state>
 </flow>

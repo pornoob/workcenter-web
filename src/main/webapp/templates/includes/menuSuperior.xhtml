@@ -3,15 +3,25 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets">
     <h:panelGroup>
         <h:outputLink value="#{request.contextPath}/inicio.jsf">
-            <h:outputText value="#{lang['menuSuperior.linkInicio']}" />
+            <h:outputText value="Inicio" />
         </h:outputLink>
-        <h:outputText value=" | "/>
-        <h:outputLink value="#{request.contextPath}/spring/usuarios">
-            <h:outputText value="#{lang['menuSuperior.linkMantenedorUsuario']}" />
-        </h:outputLink>
-        <h:outputText value=" | "/>
-        <h:outputLink value="#{request.contextPath}/spring/remuneraciones">
-            <h:outputText value="#{lang['menuSuperior.linkLibroRemuneraciones']}" />
-        </h:outputLink>
+        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}">
+            <h:outputText value=" | "/>
+            <h:outputLink value="#{request.contextPath}/spring/alarmas_gps">
+                <h:outputText value="Gestión Alarmas GPS" />
+            </h:outputLink>
+        </ui:fragment>
+        <ui:fragment rendered="#{sesionCliente.estaAutentificado()}">
+            <h:outputText value=" | "/>
+            <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
+                <h:outputText value="Informe de Actividades" />
+            </h:outputLink>
+        </ui:fragment>
+        <ui:fragment rendered="#{sesionCliente.estaAutentificado()}">
+            <h:outputText value=" | "/>
+            <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
+                <h:outputText value="Actividades Programadas" />
+            </h:outputLink>
+        </ui:fragment>
     </h:panelGroup>
 </ui:composition>

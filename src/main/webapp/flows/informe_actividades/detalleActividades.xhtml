@@ -1,0 +1,38 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Detalle Actividades</h2>
+        <h:form id="frmAct">
+            <p:commandButton value="Volver" action="#{mantenedorInformeActividades.volver()}"/>
+            <p:dataTable value="#{mantenedorInformeActividades.actividades}" var="ad">
+                <p:column headerText="ID">
+                    #{ad.id}
+                </p:column>
+                <p:column headerText="Fecha">
+                    #{ad.fecha}
+                </p:column>
+                <p:column headerText="Hora">
+                    <h:outputText rendered="#{mantenedorInformeActividades.horaMenorDiez(ad.hora)}" value="0#{ad.hora}:00"/>
+                    <h:outputText rendered="#{!mantenedorInformeActividades.horaMenorDiez(ad.hora)}" value="#{ad.hora}:00"/>
+                </p:column>
+                <p:column headerText="Servicio">
+                    #{ad.idServicio.nombre}
+                </p:column>
+                <p:column headerText="Detalle">
+                    #{ad.detalle}
+                </p:column>
+                <p:column headerText="Adjuntos">
+                    <ui:repeat value="#{mantenedorInformeActividades.obtenerDescargables(ad)}" var="d">
+                        <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                            <p:fileDownload value="#{d.streamedContent}"/>
+                        </p:commandButton>
+                    </ui:repeat>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

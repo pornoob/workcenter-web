@@ -8,7 +8,9 @@ import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.util.pojo.Mes;
+import workcenter.entidades.Servicio;
+import workcenter.util.dto.Horario;
+import workcenter.util.dto.Mes;
 
 /**
  * @author colivares
@@ -30,10 +32,15 @@ public class Constantes implements Serializable {
     
     // Genericos
     private List<Mes> meses;
+    private List<Horario> horarios;
     private int cantidadFilasTablas = 15;
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
     private String contextoEstatico = "/static";
+    private String usuarioFtp = "infoventana";
+    private String claveFtp = "ventana";
+    private String ipServidor = "192.168.0.106";
+    private Servicio servicioGeneral;
 
     public Constantes() {
         ProxyFactory pf = new ProxyFactory(this);
@@ -46,18 +53,45 @@ public class Constantes implements Serializable {
             }
         });
         meses = new ArrayList<Mes>();
-        meses.add(new Mes(1, "Enero"));
-        meses.add(new Mes(2, "Febrero"));
-        meses.add(new Mes(3, "Marzo"));
-        meses.add(new Mes(4, "Abril"));
-        meses.add(new Mes(5, "Mayo"));
-        meses.add(new Mes(6, "Junio"));
-        meses.add(new Mes(7, "Julio"));
-        meses.add(new Mes(8, "Agosto"));
-        meses.add(new Mes(9, "Septiembre"));
-        meses.add(new Mes(10, "Octubre"));
-        meses.add(new Mes(11, "Noviembre"));
-        meses.add(new Mes(12, "Diciembre"));
+        meses.add(new Mes("01", "Enero"));
+        meses.add(new Mes("02", "Febrero"));
+        meses.add(new Mes("03", "Marzo"));
+        meses.add(new Mes("04", "Abril"));
+        meses.add(new Mes("05", "Mayo"));
+        meses.add(new Mes("06", "Junio"));
+        meses.add(new Mes("07", "Julio"));
+        meses.add(new Mes("08", "Agosto"));
+        meses.add(new Mes("09", "Septiembre"));
+        meses.add(new Mes("10", "Octubre"));
+        meses.add(new Mes("11", "Noviembre"));
+        meses.add(new Mes("12", "Diciembre"));
+        servicioGeneral = new Servicio(4);
+        
+        horarios = new ArrayList<Horario>();
+        horarios.add(new Horario(1, "00:00"));
+        horarios.add(new Horario(2, "01:00"));
+        horarios.add(new Horario(3, "02:00"));
+        horarios.add(new Horario(4, "03:00"));
+        horarios.add(new Horario(5, "04:00"));
+        horarios.add(new Horario(6, "05:00"));
+        horarios.add(new Horario(7, "06:00"));
+        horarios.add(new Horario(8, "07:00"));
+        horarios.add(new Horario(9, "08:00"));
+        horarios.add(new Horario(10, "09:00"));
+        horarios.add(new Horario(11, "10:00"));
+        horarios.add(new Horario(12, "11:00"));
+        horarios.add(new Horario(13, "12:00"));
+        horarios.add(new Horario(14, "13:00"));
+        horarios.add(new Horario(15, "14:00"));
+        horarios.add(new Horario(16, "15:00"));
+        horarios.add(new Horario(17, "16:00"));
+        horarios.add(new Horario(18, "17:00"));
+        horarios.add(new Horario(19, "18:00"));
+        horarios.add(new Horario(20, "19:00"));
+        horarios.add(new Horario(21, "20:00"));
+        horarios.add(new Horario(22, "21:00"));
+        horarios.add(new Horario(23, "22:00"));
+        horarios.add(new Horario(24, "23:00"));
     }
 
     public int getCargoConductor() {
@@ -98,5 +132,25 @@ public class Constantes implements Serializable {
 
     public String getContextoEstatico() {
         return contextoEstatico;
+    }
+
+    public String getUsuarioFtp() {
+        return usuarioFtp;
+    }
+
+    public String getClaveFtp() {
+        return claveFtp;
+    }
+
+    public String getIpServidor() {
+        return ipServidor;
+    }
+
+    public Servicio getServicioGeneral() {
+        return servicioGeneral;
+    }
+
+    public List<Horario> getHorarios() {
+        return horarios;
     }
 }

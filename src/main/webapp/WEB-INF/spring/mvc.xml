@@ -36,5 +36,4 @@ http://www.springframework.org/schema/flex http://www.springframework.org/schema
     <bean class="org.springframework.faces.webflow.JsfFlowHandlerAdapter">
         <property name="flowExecutor" ref="flowExecutor" />
     </bean>
-    
 </beans>

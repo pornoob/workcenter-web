@@ -1,13 +1,14 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
+ * To change this template, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -15,61 +16,38 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
- * @author claudio
+ * @author rlabbe
  */
 @Entity
-@Table(name = "documentos")
+@Table(name="documentos", schema = "")
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Documento.findAll", query = "SELECT d FROM Documento d"),
     @NamedQuery(name = "Documento.findById", query = "SELECT d FROM Documento d WHERE d.id = :id"),
-    @NamedQuery(name = "Documento.findByArchivo", query = "SELECT d FROM Documento d WHERE d.archivo = :archivo"),
-    @NamedQuery(name = "Documento.findByUrl", query = "SELECT d FROM Documento d WHERE d.url = :url"),
-    @NamedQuery(name = "Documento.findByFormato", query = "SELECT d FROM Documento d WHERE d.formato = :formato"),
-    @NamedQuery(name = "Documento.findByTipo", query = "SELECT d FROM Documento d WHERE d.tipo = :tipo"),
-    @NamedQuery(name = "Documento.findByTitulo", query = "SELECT d FROM Documento d WHERE d.titulo = :titulo"),
-    @NamedQuery(name = "Documento.findByDescripcion", query = "SELECT d FROM Documento d WHERE d.descripcion = :descripcion"),
-    @NamedQuery(name = "Documento.findByClasificacion", query = "SELECT d FROM Documento d WHERE d.clasificacion = :clasificacion")})
+})
 public class Documento implements Serializable {
-    private static final long serialVersionUID = 1L;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idDocumento")
+    private Collection<AsociacionDocumento> asociacionDocumentoCollection;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
+    @Column(name = "nombre_original")
+    private String nombreOriginal;
     @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 70)
-    @Column(name = "archivo")
-    private String archivo;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 200)
-    @Column(name = "url")
-    private String url;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 4)
-    @Column(name = "formato")
-    private String formato;
-    @Size(max = 20)
-    @Column(name = "tipo")
-    private String tipo;
-    @Size(max = 45)
-    @Column(name = "titulo")
-    private String titulo;
-    @Size(max = 200)
-    @Column(name = "descripcion")
-    private String descripcion;
-    @Column(name = "clasificacion")
-    private Integer clasificacion;
+    @Column(name = "fecha")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date fecha;
 
     public Documento() {
     }
@@ -77,14 +55,7 @@ public class Documento implements Serializable {
     public Documento(Integer id) {
         this.id = id;
     }
-
-    public Documento(Integer id, String archivo, String url, String formato) {
-        this.id = id;
-        this.archivo = archivo;
-        this.url = url;
-        this.formato = formato;
-    }
-
+    
     public Integer getId() {
         return id;
     }
@@ -92,63 +63,7 @@ public class Documento implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
-
-    public String getArchivo() {
-        return archivo;
-    }
-
-    public void setArchivo(String archivo) {
-        this.archivo = archivo;
-    }
-
-    public String getUrl() {
-        return url;
-    }
-
-    public void setUrl(String url) {
-        this.url = url;
-    }
-
-    public String getFormato() {
-        return formato;
-    }
-
-    public void setFormato(String formato) {
-        this.formato = formato;
-    }
-
-    public String getTipo() {
-        return tipo;
-    }
-
-    public void setTipo(String tipo) {
-        this.tipo = tipo;
-    }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public String getDescripcion() {
-        return descripcion;
-    }
-
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
-    }
-
-    public Integer getClasificacion() {
-        return clasificacion;
-    }
-
-    public void setClasificacion(Integer clasificacion) {
-        this.clasificacion = clasificacion;
-    }
-
+    
     @Override
     public int hashCode() {
         int hash = 0;
@@ -169,9 +84,39 @@ public class Documento implements Serializable {
         return true;
     }
 
+    public Documento(Integer id, Date fecha) {
+        this.id = id;
+        this.fecha = fecha;
+    }
+
+    public String getNombreOriginal() {
+        return nombreOriginal;
+    }
+
+    public void setNombreOriginal(String nombreOriginal) {
+        this.nombreOriginal = nombreOriginal;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
     @Override
     public String toString() {
-        return "workcenter.entities.Documento[ id=" + id + " ]";
+        return "workcenter.entidades.Documento[ id=" + id + " ]";
+    }
+
+    @XmlTransient
+    public Collection<AsociacionDocumento> getAsociacionDocumentoCollection() {
+        return asociacionDocumentoCollection;
+    }
+
+    public void setAsociacionDocumentoCollection(Collection<AsociacionDocumento> asociacionDocumentoCollection) {
+        this.asociacionDocumentoCollection = asociacionDocumentoCollection;
     }
     
 }

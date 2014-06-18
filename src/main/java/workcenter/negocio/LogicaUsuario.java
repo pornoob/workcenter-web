@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 import workcenter.dao.UsuarioDao;
 import workcenter.entidades.Proyecto;
 import workcenter.util.dto.UsuarioDto;
+import workcenter.util.pojo.Md5;
 
 /**
  * @author colivares
@@ -20,8 +21,8 @@ public class LogicaUsuario {
     UsuarioDao usuarioDao;
     
     public UsuarioDto logIn(String rut, String pass) {
-//        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
-        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), pass);
+        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
+//        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), pass);
     }
 
     public List<Proyecto> obtenerPermisos(Integer rut) {

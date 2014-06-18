@@ -5,8 +5,20 @@ html,body {
     padding: 0;
 }
 
+label {
+    font-weight: bold;
+}
+
+.alarmaRoja {
+    background: url("./img/icons/luz_roja.png") no-repeat right fixed;
+}
+
+.alarmaVerde {
+    background: url("./img/icons/luz_verde.png") no-repeat right fixed;
+}
+
 .fondo {
-    background: url("./img/theme/bg.svg") no-repeat center fixed;
+    background: url("./img/theme/bg.svg") no-repeat right fixed;
     width: 100%;
     height: 100%;
     position: fixed;
@@ -52,9 +64,9 @@ html,body {
     padding-right: 2px;
 }
 
-.ui-icon {
+/*.ui-icon {
     float:left;
-}
+}*/
 
 .ui-datatable .ui-column-filter {
     //display:none;
@@ -64,6 +76,8 @@ html,body {
     font-size: 8pt;
 }
 
-.ui-panel.ui-widget-content {
+.sinBordes {
     border:0;
+    border-spacing: 0;
+    border-style: none;
 }

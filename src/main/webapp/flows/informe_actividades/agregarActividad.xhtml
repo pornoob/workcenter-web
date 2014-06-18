@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Agregar Actividad</h2>
+        <ui:include src="/components/cargadorArchivos.xhtml">
+            <ui:param name="padre" value="#{mantenedorInformeActividades}"/>
+        </ui:include>
+        <h:form id="frmAct">
+            <p:messages autoUpdate="true"/>
+            <p:growl autoUpdate="true" showDetail="true"/>
+            <h:panelGrid columns="6">
+                <h:outputLabel value="Servicio"/>:
+                <p:selectOneMenu id="sServicios" filter="true" filterMatchMode="contains" value="#{mantenedorInformeActividades.servicioSeleccionado}"
+                                 converter="entityConverter">
+                    <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
+                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
+                                   />
+                </p:selectOneMenu><h:outputText value=""/><h:outputText value=""/><h:outputText value=""/>
+                <h:outputLabel value="Creador"/>:
+                <h:outputText value="#{sesionCliente.nombreCompleto}"/>
+                <h:outputLabel value="Hora de ingreso"/>:
+                <h:panelGroup>
+                    <p:spinner min="0" max="23" size="2" value="#{mantenedorInformeActividades.actividadDiaria.hora}"/> : 00
+                </h:panelGroup>
+                <h:outputLabel value="Tipo actividad"/>:
+                <p:selectOneMenu value="#{mantenedorInformeActividades.actividadDiaria.idTipoActividad}" var="ta" converter="entityConverter">
+                    <f:selectItems value="#{mantenedorInformeActividades.tipoActividades}" var="tipoActividad"
+                                   itemLabel="#{tipoActividad.nombre}" itemValue="#{tipoActividad}"/>
+                    <p:column><img src="#{request.contextPath}#{ta.icono}"/></p:column>
+                    <p:column><h:outputLabel value="#{ta.nombre}" /></p:column>
+                </p:selectOneMenu>
+                <h:outputLabel value="Fecha"/>:
+                <h:panelGroup>
+                    <p:calendar pattern="dd-MM-yyyy" converter="fechaConverter" value="#{mantenedorInformeActividades.actividadDiaria.fecha}"/> (dd-mm-yyyy)
+                </h:panelGroup>
+            </h:panelGrid>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Detalle"/>:
+                <p:inputTextarea value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000" style="width: 800px;height: 100px"/>
+            </h:panelGrid>
+            <p:commandButton value="Volver" action="#{mantenedorInformeActividades.volver()}"/>
+            <p:commandButton value="Guardar" action="#{mantenedorInformeActividades.guardar()}" process="@form" update=":frmAct"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

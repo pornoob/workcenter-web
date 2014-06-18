@@ -4,12 +4,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <div style="float:right">
-        <h:outputLink value="#{request.contextPath}/logIn.jsf" rendered="#{!sesionCliente.estaAutentificado()}">#{lang['barraAutentificacion.linkIniciarSesion']}</h:outputLink>
+        <h:outputLink value="#{request.contextPath}/logIn.jsf" rendered="#{!sesionCliente.estaAutentificado()}">Iniciar Sesión</h:outputLink>
         <h:panelGroup rendered="#{sesionCliente.estaAutentificado()}">
-            <h:outputFormat value="#{lang['barraAutentificacion.bienvenido']}">
+            <h:outputFormat value="Bievenido(a): {0}">
                 <f:param value="#{sesionCliente.getNombreCompleto()}" />
             </h:outputFormat> - 
-            <h:outputLink value="#{request.contextPath}/logOut">#{lang['barraAutentificacion.linkCerrarSesion']}</h:outputLink>
+            <h:outputLink value="#{request.contextPath}/logOut">Cerrar Sesión</h:outputLink>
         </h:panelGroup>
     </div>
     <br/>

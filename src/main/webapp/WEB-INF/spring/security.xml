@@ -16,8 +16,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                    access-denied-page="/inicio.jsf"
                    entry-point-ref="authenticationEntryPoint" >
   
-        <security:intercept-url pattern="/spring/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
-        <security:intercept-url pattern="/spring/usuarios" access="hasRole('MODULO_USUARIOS')"/>
+        <security:intercept-url pattern="/spring/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
     
         <security:logout invalidate-session="true" 
                          logout-success-url="/inicio.jsf"

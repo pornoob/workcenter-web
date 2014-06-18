@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Calendario de actividades</h2>
+        <h:form id="frmAct">
+            <h:panelGrid columns="2">
+                <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.servicioSeleccionado}"
+                                 converter="entityConverter">
+                    <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
+                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
+                                   />
+                </p:selectOneMenu>
+                <p:commandButton value="Actualizar tabla" action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
+            </h:panelGrid>
+            <h3>Leyenda</h3>
+            <table>
+                <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="tipoActividad">
+                    <tr>
+                        <td><img src="#{request.contextPath}#{tipoActividad.icono}"/></td>
+                        <td><h:outputLabel value="#{tipoActividad.nombre}" /></td>
+                    </tr>
+                </ui:repeat>
+            </table>
+            <p:commandButton ajax="false" immediate="true" value="Agregar Actividad" action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
+            <div id="divAct" class="ui-datatable ui-widget">
+                <table class="datos" role="grid">
+                    <thead>
+                        <tr>
+                            <th class="ui-state-default" role="columnheader" colspan="8">
+                                #{mantenedorInformeActividades.semana.toString()}
+                            </th>
+                        </tr>
+                        <tr role="row">
+                            <th class="ui-state-default" role="columnheader" colspan="8">
+                                <div style="float: left"><p:commandLink value="#{mantenedorInformeActividades.linkAnterior}" action="#{mantenedorInformeActividades.obtenerSemanaAnterior()}" update=":frmAct"/></div>
+                                <div style="float: right"><p:commandLink value="#{mantenedorInformeActividades.linkSiguiente}" action="#{mantenedorInformeActividades.obtenerSemanaSiguiente()}" update=":frmAct"/></div>
+                            </th>
+                        </tr>
+                        <tr role="row">
+                            <th class="ui-state-default" role="columnheader"></th>
+                            <ui:repeat value="#{mantenedorInformeActividades.semana.dias}" var="dia">
+                                <th class="ui-state-default" role="columnheader">#{dia.nombre}<br/>#{dia.fechaStr}</th>
+                            </ui:repeat>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ui:repeat value="#{constantes.horarios}" var="horario">
+                            <tr role="row">
+                                <th class="ui-state-default" role="columnheader">#{horario.hora}</th>
+                                <ui:repeat value="#{mantenedorInformeActividades.semana.dias}" var="dia">
+                                    <td style="text-align: center">
+                                        <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="ta">
+                                            <p:panel style="border:0; float: left" rendered="#{mantenedorInformeActividades.hayActividadDelTipo(ta, dia.fecha, horario)}">
+                                                <img style="width: 15px" src="#{request.contextPath}#{ta.icono}"/>
+                                            </p:panel>
+                                        </ui:repeat>
+                                        <div style="clear: both"></div>
+                                        <p:commandLink style="font-size: 6pt" rendered="#{mantenedorInformeActividades.hayActividadDelTipo(dia.fecha, horario)}" action="#{mantenedorInformeActividades.irDetalleActividades()}" value="Ver detalle"/>
+                                    </td>
+                                </ui:repeat>
+                            </tr>
+                        </ui:repeat>
+                    </tbody>
+                </table>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

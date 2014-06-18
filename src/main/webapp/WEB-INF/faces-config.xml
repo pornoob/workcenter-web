@@ -21,6 +21,11 @@
     </converter>
     
     <converter>
+        <converter-id>fechaConverter</converter-id>
+        <converter-class>workcenter.util.converters.FechaConverter</converter-class>
+    </converter>
+    
+    <converter>
         <converter-id>entityConverter</converter-id>
         <converter-class>workcenter.util.converters.EntityConverter</converter-class>
     </converter>
@@ -29,7 +34,7 @@
         <message-bundle>JsfMessageResources</message-bundle>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
    
-        <locale-config>
+<!--        <locale-config>
             <default-locale>es</default-locale>
             <supported-locale>es</supported-locale>
             <supported-locale>en</supported-locale>
@@ -38,7 +43,7 @@
         <resource-bundle>
             <base-name>idiomas/idioma</base-name>
             <var>lang</var>
-        </resource-bundle>
+        </resource-bundle>-->
         
     </application>
 </faces-config>

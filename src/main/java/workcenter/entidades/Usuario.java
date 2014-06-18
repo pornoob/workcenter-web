@@ -17,6 +17,7 @@ import javax.persistence.Table;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
 
 /**
  *
@@ -31,6 +32,8 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
     @NamedQuery(name = "Usuario.findByRutAndPassword", query = "SELECT u FROM Usuario u WHERE u.rut=:rut and u.password = :password")})
 public class Usuario implements Serializable {
+    @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
+    private Collection<GestionAlarmaGps> gestionAlarmaGpsCollection;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -107,7 +110,9 @@ public class Usuario implements Serializable {
             return false;
         }
         Usuario other = (Usuario) object;
-        if ((this.rut == null && other.rut != null) || (this.rut != null && !this.rut.equals(other.rut))) {
+        if (this.getRut() == null || other.getRut() == null) {
+            return false;
+        } else if (this.getRut().intValue() != other.getRut().intValue()) {
             return false;
         }
         return true;
@@ -124,6 +129,15 @@ public class Usuario implements Serializable {
 
     public void setPersonal(Personal personal) {
         this.personal = personal;
+    }
+
+    @XmlTransient
+    public Collection<GestionAlarmaGps> getGestionAlarmaGpsCollection() {
+        return gestionAlarmaGpsCollection;
+    }
+
+    public void setGestionAlarmaGpsCollection(Collection<GestionAlarmaGps> gestionAlarmaGpsCollection) {
+        this.gestionAlarmaGpsCollection = gestionAlarmaGpsCollection;
     }
     
 }
