@@ -8,7 +8,7 @@
         <h2>Detalle Actividades</h2>
         <h:form id="frmAct">
             <p:commandButton value="Volver" action="#{mantenedorInformeActividades.volver()}"/>
-            <p:dataTable value="#{mantenedorInformeActividades.actividades}" var="ad">
+            <p:dataTable value="#{mantenedorInformeActividades.actividadesDetalladas}" var="ad">
                 <p:column headerText="ID">
                     #{ad.id}
                 </p:column>
@@ -21,6 +21,9 @@
                 </p:column>
                 <p:column headerText="Servicio">
                     #{ad.idServicio.nombre}
+                </p:column>
+                <p:column headerText="Creador">
+                    #{ad.persona.nombreCompleto}
                 </p:column>
                 <p:column headerText="Detalle">
                     #{ad.detalle}

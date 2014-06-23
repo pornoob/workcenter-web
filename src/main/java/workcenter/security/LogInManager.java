@@ -12,7 +12,6 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Permiso;
 import workcenter.entidades.Proyecto;
 import workcenter.negocio.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;

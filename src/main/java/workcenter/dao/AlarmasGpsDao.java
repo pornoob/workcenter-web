@@ -50,7 +50,7 @@ public class AlarmasGpsDao {
     public List<AlarmaGps> obtenerPorMes(String mes, String anio, Servicio servicio) {
         StringBuilder sql = new StringBuilder();
         sql.append("select a.* from alarmas_gps a ");
-        sql.append("inner join servicio_ruta sr on (a.ruta like sr.patron) ");
+        sql.append("inner join servicio_ruta sr on (upper(a.ruta) like upper(sr.patron)) ");
         sql.append("where month(fecha)=:mes and year(fecha)=:anio and sr.id_servicio=:servicio order by fecha asc");
         Query q = em.createNativeQuery(sql.toString(), AlarmaGps.class);
         q.setParameter("mes", mes);

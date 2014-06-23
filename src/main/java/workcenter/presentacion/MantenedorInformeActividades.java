@@ -59,6 +59,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     private ActividadDiaria actividadDiaria;
     private Map<String, List<Documento>> documentosSubidos;
     private List<ActividadDiaria> actividades;
+    private List<ActividadDiaria> actividadesDetalladas;
 
     public String inicio() {
         linkAnterior = "<< Anterior";
@@ -104,7 +105,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         }
         return false;
     }
-    
+
     public boolean hayActividadDelTipo(Date fecha, Horario horario) {
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         for (ActividadDiaria ad : actividades) {
@@ -150,7 +151,16 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         return "flowAgregarActividad";
     }
 
-    public String irDetalleActividades() {
+    public String irDetalleActividades(Date dia, Horario h) {
+        actividadesDetalladas = new ArrayList<ActividadDiaria>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+        for (ActividadDiaria ad : actividades) {
+            System.out.println("COMPARANDO: "+dia+" vs "+ad.getFecha()+" Hora: "+ad.getHora()+" vs "+Integer.valueOf(h.getHora().split(":")[0]));
+            if (sdf.format(ad.getFecha()).equals(sdf.format(dia)) && ad.getHora().intValue() == Integer.valueOf(h.getHora().split(":")[0])) {
+                actividadesDetalladas.add(ad);
+            }
+        }
+        System.out.println("EN TOTAL AGREGAMOS: "+actividadesDetalladas.size());
         return "flowDetalleActividades";
     }
 
@@ -310,6 +320,14 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     public void setActividades(List<ActividadDiaria> actividades) {
         this.actividades = actividades;
+    }
+
+    public List<ActividadDiaria> getActividadesDetalladas() {
+        return actividadesDetalladas;
+    }
+
+    public void setActividadesDetalladas(List<ActividadDiaria> actividadesDetalladas) {
+        this.actividadesDetalladas = actividadesDetalladas;
     }
 
     public void subir(FileUploadEvent fue) {

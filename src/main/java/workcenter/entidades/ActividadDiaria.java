@@ -19,6 +19,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -63,6 +64,10 @@ public class ActividadDiaria implements Serializable {
     @Size(max = 1000)
     @Column(name = "detalle")
     private String detalle;
+    
+    @JoinColumn(name = "id_usuario", referencedColumnName = "rut", insertable = false, updatable = false)
+    @OneToOne(fetch = FetchType.EAGER)
+    private Personal persona;
 
     public ActividadDiaria() {
     }
@@ -150,6 +155,14 @@ public class ActividadDiaria implements Serializable {
 
     public void setIdServicio(Servicio idServicio) {
         this.idServicio = idServicio;
+    }
+
+    public Personal getPersona() {
+        return persona;
+    }
+
+    public void setPersona(Personal persona) {
+        this.persona = persona;
     }
 
 }

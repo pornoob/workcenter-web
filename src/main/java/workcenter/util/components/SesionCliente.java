@@ -30,15 +30,15 @@ public class SesionCliente implements Serializable {
 
     public UsuarioDto getUsuario() {
         Authentication a = SecurityContextHolder.getContext().getAuthentication();
-        
-        if (a.getName().equals("anonymousUser")) {
+
+        if (a == null || "anonymousUser".equals(a.getName())) {
             usuario = null;
         } else if (!a.getName().equals("anonymousUser") && (usuario == null || !usuario.getRut().equals(Integer.valueOf(a.getName())))) {
             usuario = usuarioDao.obtenerUsuario(Integer.valueOf(a.getName()));
         }
         return usuario;
     }
-    
+
     public boolean tienePermiso(String permiso) {
         HttpServletRequest request = (HttpServletRequest) FacesUtil.obtenerHttpServletRequest();
         return request.isUserInRole(permiso);
@@ -51,12 +51,12 @@ public class SesionCliente implements Serializable {
     public boolean estaAutentificado() {
         return getUsuario() != null;
     }
-    
+
     public String getNombreCompleto() {
         if (!estaAutentificado()) {
             return null;
         }
-        String string = usuario.getNombres()+" "+usuario.getApellidos();
+        String string = usuario.getNombres() + " " + usuario.getApellidos();
         StringBuilder sb = new StringBuilder();
         for (String s : string.split(" ")) {
             sb.append(StringUtils.capitalize(s));

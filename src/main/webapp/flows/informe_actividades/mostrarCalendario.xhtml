@@ -59,7 +59,7 @@
                                             </p:panel>
                                         </ui:repeat>
                                         <div style="clear: both"></div>
-                                        <p:commandLink style="font-size: 6pt" rendered="#{mantenedorInformeActividades.hayActividadDelTipo(dia.fecha, horario)}" action="#{mantenedorInformeActividades.irDetalleActividades()}" value="Ver detalle"/>
+                                        <p:commandLink style="font-size: 6pt" rendered="#{mantenedorInformeActividades.hayActividadDelTipo(dia.fecha, horario)}" action="#{mantenedorInformeActividades.irDetalleActividades(dia.fecha, horario)}" value="Ver detalle"/>
                                     </td>
                                 </ui:repeat>
                             </tr>

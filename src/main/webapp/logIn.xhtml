@@ -9,7 +9,9 @@
             <p:messages autoUpdate="true" closable="true" />
             <h:panelGrid columns="3">
                 <h:outputLabel for="transVentanasUser" value="Rut"/>:
-                <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"/>
+                <h:panelGroup>
+                    <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"/> (Formato: 12345678-0)
+                </h:panelGroup>
                 <h:outputLabel for="transVentanasPass" value="Contraseña"/>:
                 <h:inputSecret id="transVentanasPass" value="#{autentificacionBean.pass}"/>
                 <p:commandButton value="Ingresar"

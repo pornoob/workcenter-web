@@ -21,7 +21,11 @@ public class LogicaUsuario {
     UsuarioDao usuarioDao;
     
     public UsuarioDto logIn(String rut, String pass) {
-        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
+        try {
+            return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
+        } catch(Exception e) {
+            return null;
+        }
 //        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), pass);
     }
 
