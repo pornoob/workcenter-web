@@ -1,6 +1,7 @@
 
 package workcenter.dao;
 
+import java.text.SimpleDateFormat;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -32,12 +33,14 @@ public class InformeActividadesDao {
         }
     }
 
-    public List<ActividadDiaria> obtenerActividades(Servicio servicio, Integer rut, Semana semana) {
+    public List<ActividadDiaria> obtenerActividades(Servicio servicio, Semana semana) {
         StringBuilder sql = new StringBuilder();
         sql.append("select ad.* from actividad_diaria ad ");
         sql.append("inner join servicio s on (ad.id_servicio=s.id and ad.id_servicio = :idServicio) ");
         sql.append("where ad.fecha >= :fechaInicio and fecha<= :fechaTermino");
         Query q = em.createNativeQuery(sql.toString(), ActividadDiaria.class);
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+//        System.out.println(sql.toString().replaceAll(":idServicio", String.valueOf(servicio.getId())).replaceAll(":fechaInicio", sdf.format(semana.getDias()[0].getFecha())).replaceAll(":fechaTermino", sdf.format(semana.getDias()[6].getFecha())));
         q.setParameter("idServicio", servicio.getId());
         q.setParameter("fechaInicio", semana.getDias()[0].getFecha());
         q.setParameter("fechaTermino", semana.getDias()[6].getFecha());

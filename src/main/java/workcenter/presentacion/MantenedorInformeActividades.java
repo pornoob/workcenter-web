@@ -118,7 +118,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     }
 
     public void obtenerActividades() {
-        actividades = logicaInformeActividades.obtenerActividades(servicioSeleccionado, sesionCliente.getUsuario().getRut(), semana);
+        actividades = logicaInformeActividades.obtenerActividades(servicioSeleccionado, semana);
     }
 
     public String volver() {

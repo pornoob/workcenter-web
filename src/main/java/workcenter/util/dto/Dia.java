@@ -1,8 +1,11 @@
 package workcenter.util.dto;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -68,12 +71,17 @@ public class Dia implements Serializable {
         try {
             return sdf.format(fecha);
         } catch (Exception e) {
-            System.out.println("Fecha: "+fecha);
+            System.out.println("Fecha: " + fecha);
             return "";
         }
     }
 
     public void setFecha(Date fecha) {
-        this.fecha = fecha;
+        try {
+            this.fecha = sdf.parse(sdf.format(fecha));
+        } catch (ParseException ex) {
+            Logger.getLogger(Dia.class.getName()).log(Level.SEVERE, null, ex);
+            this.fecha = null;
+        }
     }
 }

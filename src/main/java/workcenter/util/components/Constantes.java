@@ -2,7 +2,9 @@ package workcenter.util.components;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -19,9 +21,7 @@ import workcenter.util.dto.Mes;
 @Scope("application")
 public class Constantes implements Serializable {
     // Zona de usuarios
-    // Estos funcionan inversos el nivel mínimo es el menos restrictivo
-    private int nivelMinimoPermisos=0;
-    private int nivelMaximoPermisos=3;
+    private Map<Object, Object> accesos;
     
     // Zona de remuneraciones
     private int filtroEmpleador=1;
@@ -92,18 +92,21 @@ public class Constantes implements Serializable {
         horarios.add(new Horario(22, "21:00"));
         horarios.add(new Horario(23, "22:00"));
         horarios.add(new Horario(24, "23:00"));
+        
+        accesos = new HashMap<Object, Object>();
+        accesos.put(new Integer(0), "Administrador");
+        accesos.put(new Integer(1), "Consultor");
+        accesos.put(new Integer(2), "Editor");
+        accesos.put(new Integer(3), "Privilegios Especiales");
+        
+        accesos.put("Administrador", new Integer(0));
+        accesos.put("Consultor", new Integer(1));
+        accesos.put("Editor", new Integer(2));
+        accesos.put("Privilegios Especiales", new Integer(3));
     }
 
     public int getCargoConductor() {
         return cargoConductor;
-    }
-
-    public int getNivelMinimoPermisos() {
-        return nivelMinimoPermisos;
-    }
-
-    public int getNivelMaximoPermisos() {
-        return nivelMaximoPermisos;
     }
 
     public int getFiltroEmpleador() {
@@ -152,5 +155,9 @@ public class Constantes implements Serializable {
 
     public List<Horario> getHorarios() {
         return horarios;
+    }
+
+    public Map<Object, Object> getAccesos() {
+        return accesos;
     }
 }

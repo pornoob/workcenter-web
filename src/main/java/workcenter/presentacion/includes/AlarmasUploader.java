@@ -56,7 +56,7 @@ public class AlarmasUploader {
                 a.setFecha(sdf.parse(fecha));
                 a.setNumero(Integer.parseInt(fila.getCell(0).getStringCellValue().replaceAll("[^0-9]", "").trim()));
                 a.setPatente(fila.getCell(1).getStringCellValue());
-                a.setRuta(fila.getCell(6).getStringCellValue());
+                a.setRuta(fila.getCell(6).getStringCellValue().replaceAll("[^a-zA-Z-]", ""));
                 a.setUbicacion(fila.getCell(7).getStringCellValue());
                 a.setVelocidad(Integer.parseInt(fila.getCell(5).getStringCellValue().replaceAll("[^0-9]", "").trim()));
                 logicaAlarmasGps.guardarAlarma(a);

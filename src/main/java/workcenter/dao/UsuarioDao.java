@@ -6,6 +6,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Permiso;
 import workcenter.entidades.Proyecto;
 import workcenter.entidades.Usuario;
 import workcenter.util.dto.UsuarioDto;
@@ -58,5 +59,13 @@ public class UsuarioDao implements Serializable {
         Query q = em.createNativeQuery(sb.toString(), Proyecto.class);
         q.setParameter("rut", rut);
         return q.getResultList();
+    }
+
+    public Permiso obtenerPermiso(Integer rut, Permiso p, Integer acceso) {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public Permiso obtenerPermiso(Integer rut, String permiso, Integer acceso) {
+        return null;
     }
 }

@@ -42,7 +42,7 @@ public class LogicaInformeActividades {
     }
 
     @Transactional(readOnly = true)
-    public List<ActividadDiaria> obtenerActividades(Servicio servicioSeleccionado, Integer rut, Semana semana) {
-        return informeActividadesDao.obtenerActividades(servicioSeleccionado, rut, semana);
+    public List<ActividadDiaria> obtenerActividades(Servicio servicioSeleccionado, Semana semana) {
+        return informeActividadesDao.obtenerActividades(servicioSeleccionado, semana);
     }
 }

@@ -9,6 +9,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import workcenter.dao.UsuarioDao;
+import workcenter.entidades.Permiso;
 import workcenter.util.dto.UsuarioDto;
 import workcenter.util.pojo.FacesUtil;
 
@@ -21,6 +22,9 @@ public class SesionCliente implements Serializable {
 
     @Autowired
     UsuarioDao usuarioDao;
+    
+    @Autowired
+    Constantes constantes;
 
     private UsuarioDto usuario;
 
@@ -42,6 +46,12 @@ public class SesionCliente implements Serializable {
     public boolean tienePermiso(String permiso) {
         HttpServletRequest request = (HttpServletRequest) FacesUtil.obtenerHttpServletRequest();
         return request.isUserInRole(permiso);
+    }
+    
+    public boolean tieneNivel(String nivel, String permiso) {
+        Integer acceso = (Integer) constantes.getAccesos().get(nivel);
+        Permiso p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, acceso);
+        return p != null;
     }
 
     public void setUsuario(UsuarioDto usuario) {
