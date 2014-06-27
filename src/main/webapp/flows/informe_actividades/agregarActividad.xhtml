@@ -24,7 +24,7 @@
                 <h:outputText value="#{sesionCliente.nombreCompleto}"/>
                 <h:outputLabel value="Hora de ingreso"/>:
                 <h:panelGroup>
-                    <p:spinner min="0" max="23" size="2" value="#{mantenedorInformeActividades.actividadDiaria.hora}"/> : 00
+                    <p:spinner required="true" min="0" max="23" size="2" value="#{mantenedorInformeActividades.actividadDiaria.hora}"/> : 00
                 </h:panelGroup>
                 <h:outputLabel value="Tipo actividad"/>:
                 <p:selectOneMenu value="#{mantenedorInformeActividades.actividadDiaria.idTipoActividad}" var="ta" converter="entityConverter">
@@ -35,12 +35,12 @@
                 </p:selectOneMenu>
                 <h:outputLabel value="Fecha"/>:
                 <h:panelGroup>
-                    <p:calendar pattern="dd-MM-yyyy" converter="fechaConverter" value="#{mantenedorInformeActividades.actividadDiaria.fecha}"/> (dd-mm-yyyy)
+                    <p:calendar required="true" pattern="dd-MM-yyyy" converter="fechaConverter" value="#{mantenedorInformeActividades.actividadDiaria.fecha}"/> (dd-mm-yyyy)
                 </h:panelGroup>
             </h:panelGrid>
             <h:panelGrid columns="3">
                 <h:outputLabel value="Detalle"/>:
-                <p:inputTextarea value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000" style="width: 800px;height: 100px"/>
+                <p:inputTextarea required="true" value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000" style="width: 800px;height: 100px"/>
             </h:panelGrid>
             <p:commandButton value="Volver" action="#{mantenedorInformeActividades.volver()}"/>
             <p:commandButton value="Guardar" action="#{mantenedorInformeActividades.guardar()}" process="@form" update=":frmAct"/>

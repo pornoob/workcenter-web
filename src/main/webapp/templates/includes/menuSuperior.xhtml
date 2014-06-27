@@ -11,7 +11,7 @@
                 <h:outputText value="Gestión Alarmas GPS" />
             </h:outputLink>
         </ui:fragment>
-        <ui:fragment rendered="#{sesionCliente.estaAutentificado()}">
+        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}">
             <h:outputText value=" | "/>
             <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
                 <h:outputText value="Informe de Actividades" />
@@ -20,7 +20,7 @@
         <ui:fragment rendered="#{sesionCliente.estaAutentificado()}">
             <h:outputText value=" | "/>
             <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
-                <h:outputText value="Actividades Programadas" />
+                <h:outputText value="Programa de Actividades" />
             </h:outputLink>
         </ui:fragment>
     </h:panelGroup>

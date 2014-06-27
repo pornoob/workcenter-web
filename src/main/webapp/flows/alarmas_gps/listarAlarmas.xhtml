@@ -8,7 +8,7 @@
         <h2>Listado de Alarmas</h2>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmAlarmas" enctype="multipart/form-data">
-            <p:fileUpload rendered="true" immediate="true" auto="false" multiple="true" oncomplete="#{mantenedorAlarmasGps.inicio()}" mode="advanced" fileUploadListener="#{alarmasUploader.subir}" uploadLabel="Subir" cancelLabel="Cancelar" allowTypes="/(\.|\/)(xlsx|XLSX)$/i" label="Cargar nuevo archivo" />
+            <p:fileUpload rendered="#{mantenedorAlarmasGps.esEditor()}" immediate="true" auto="false" multiple="true" oncomplete="#{mantenedorAlarmasGps.inicio()}" mode="advanced" fileUploadListener="#{alarmasUploader.subir}" uploadLabel="Subir" cancelLabel="Cancelar" allowTypes="/(\.|\/)(xlsx|XLSX)$/i" label="Cargar nuevo archivo" />
             <h:panelGrid columns="3">
                 <p:outputLabel for=":frmAlarmas:sMeses" value="Mes"/>:
                 <p:selectOneMenu id="sMeses" value="#{mantenedorAlarmasGps.mesSeleccionado}">

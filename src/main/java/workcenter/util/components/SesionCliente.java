@@ -48,9 +48,8 @@ public class SesionCliente implements Serializable {
         return request.isUserInRole(permiso);
     }
     
-    public boolean tieneNivel(String nivel, String permiso) {
-        Integer acceso = (Integer) constantes.getAccesos().get(nivel);
-        Permiso p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, acceso);
+    public boolean tieneNivel(Integer nivel, String permiso) {
+        Permiso p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
         return p != null;
     }
 

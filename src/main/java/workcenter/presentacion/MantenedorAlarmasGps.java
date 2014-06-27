@@ -84,6 +84,14 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         descargables = new ArrayList<Descargable>();
         return "flowListarAlarmas";
     }
+    
+    public boolean esEditor() {
+        if (sesionCliente.tieneNivel((Integer)constantes.getAccesos().get("Editor"), constantes.getModuloAlarmasGPS())
+                || sesionCliente.tieneNivel((Integer)constantes.getAccesos().get("Administrador"), constantes.getModuloAlarmasGPS())) {
+            return true;
+        }
+        return false;
+    }
 
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);

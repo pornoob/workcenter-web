@@ -41,6 +41,7 @@ public class Constantes implements Serializable {
     private String claveFtp = "ventana";
     private String ipServidor = "192.168.0.106";
     private Servicio servicioGeneral;
+    private String moduloAlarmasGPS = "Modulo Alarmas GPS";
 
     public Constantes() {
         ProxyFactory pf = new ProxyFactory(this);
@@ -159,5 +160,9 @@ public class Constantes implements Serializable {
 
     public Map<Object, Object> getAccesos() {
         return accesos;
+    }
+
+    public String getModuloAlarmasGPS() {
+        return moduloAlarmasGPS;
     }
 }

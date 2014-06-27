@@ -17,6 +17,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                    entry-point-ref="authenticationEntryPoint" >
   
         <security:intercept-url pattern="/spring/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
+        <security:intercept-url pattern="/spring/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
     
         <security:logout invalidate-session="true" 
                          logout-success-url="/inicio.jsf"

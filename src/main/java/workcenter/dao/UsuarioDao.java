@@ -61,11 +61,21 @@ public class UsuarioDao implements Serializable {
         return q.getResultList();
     }
 
-    public Permiso obtenerPermiso(Integer rut, Permiso p, Integer acceso) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
     public Permiso obtenerPermiso(Integer rut, String permiso, Integer acceso) {
-        return null;
+        StringBuilder sb = new StringBuilder();
+        sb.append("select per.* from permisos per ");
+        sb.append("inner join proyectos pro on (pro.tipo='app' and per.proyecto=pro.id) ");
+        sb.append("where per.usuario = :rut ");
+        sb.append("and pro.titulo = :permiso ");
+        sb.append("and per.nivel = :acceso ");
+        Query q = em.createNativeQuery(sb.toString(), Permiso.class);
+        q.setParameter("rut", rut);
+        q.setParameter("permiso", permiso);
+        q.setParameter("acceso", acceso);
+        try {
+            return (Permiso) q.getSingleResult();
+        } catch(Exception e) {
+            return null;
+        }
     }
 }
