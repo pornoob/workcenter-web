@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="
+        http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <on-start>
+        <evaluate expression="mantenedorProgramaActividades.inicio()" />
+    </on-start>
+    
+    <view-state id="mostrarPlan">
+        <transition on="flowMostrarPlan" to="mostrarPlan"/>
+        <transition on="flowCrearPlan" to="crearPlan"/>
+    </view-state>
+    
+    <view-state id="crearPlan">
+        <transition on="flowMostrarPlan" to="mostrarPlan"/>
+        <transition on="flowAgregarPrograma" to="agregarPrograma"/>
+        <transition on="flowAgregarActividad" to="agregarActividad"/>
+    </view-state>
+    
+    <view-state id="agregarPrograma">
+        <transition on="flowCrearPlan" to="crearPlan"/>
+    </view-state>
+    
+    <view-state id="agregarActividad">
+        <transition on="flowCrearPlan" to="crearPlan"/>
+    </view-state>
+</flow>

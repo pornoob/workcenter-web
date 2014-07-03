@@ -1,0 +1,144 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+    <ui:define name="contenido">
+        <h2>Crear Plan de Actividades</h2>
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmCrearProAct">
+            <h:panelGrid columns="4">
+                <h:outputLabel value="Programa"/>:
+                <p:selectOneMenu id="sProgramas" filter="true" filterMatchMode="contains" converter="entityConverter"
+                                 required="true" requiredMessage="Debes seleccionar un programa"
+                                 value="#{mantenedorProgramaActividades.programa}">
+                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                    <f:selectItems value="#{mantenedorProgramaActividades.programas}" var="p" itemLabel="#{p.nombre}"/>
+                    <p:ajax event="change" listener="#{mantenedorProgramaActividades.obtenerActividades()}" process="@this" update=":frmCrearProAct:sActividades"/>
+                </p:selectOneMenu>
+                <p:commandLink value="Agregar programa" immediate="true" action="#{mantenedorProgramaActividades.irAgregarPrograma()}"/>
+
+                <h:outputLabel value="Actividad"/>:
+                <p:selectOneMenu id="sActividades" value="#{mantenedorProgramaActividades.actividad}" filter="true"
+                                 filterMatchMode="contains" converter="entityConverter"
+                                 required="true" requiredMessage="Debes seleccionar una actividad">
+                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                    <f:selectItems value="#{mantenedorProgramaActividades.actividades}" var="a" itemLabel="#{a.nombre}"/>
+                </p:selectOneMenu>
+                <p:commandLink value="Agregar actividad" immediate="true" action="#{mantenedorProgramaActividades.irAgregarActividad()}"/>
+
+                <h:outputLabel value="Responsable"/>:
+                <p:selectOneMenu value="#{mantenedorProgramaActividades.responsable}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                    <f:selectItems value="#{mantenedorProgramaActividades.responsables}" var="r" itemLabel="#{r.nombreCompleto}"/>
+                </p:selectOneMenu>
+                <h:outputText/>
+            </h:panelGrid>
+
+            <p:dataTable id="tblPlan" editable="true" editMode="cell" value="#{mantenedorProgramaActividades.filasPlan}" var="plan" widgetVar="tblPlan">
+                <p:column headerText="#{constantes.meses.get(0).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.enero}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.enero}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(1).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.febrero}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.febrero}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(2).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.marzo}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.marzo}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(3).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.abril}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.abril}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(4).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.mayo}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.mayo}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(5).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.junio}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.junio}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(6).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.julio}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.julio}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(7).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.agosto}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.agosto}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(8).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.septiembre}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.septiembre}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(9).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.octubre}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.octubre}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(10).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.noviembre}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.noviembre}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                <p:column headerText="#{constantes.meses.get(11).nombre}">
+                    <p:cellEditor>
+                        <f:facet name="output"><h:outputText value="#{mantenedorProgramaActividades.diciembre}"/></f:facet>
+                        <f:facet name="input">
+                            <p:spinner value="#{mantenedorProgramaActividades.diciembre}" min="0" max="100"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+            </p:dataTable>
+
+            <h:panelGroup>
+                <p:commandButton value="Volver" action="#{mantenedorProgramaActividades.irMostrarPlan()}"/>
+                <p:commandButton value="Guardar" action="#{mantenedorProgramaActividades.guardarPlan()}"/>
+            </h:panelGroup>
+        </h:form>
+    </ui:define>
+</ui:composition>

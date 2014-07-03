@@ -1,0 +1,71 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Programa de Actividades</h2>
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmProAct">
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Programa"/>:
+                <p:selectOneMenu id="sProgramas" value="#{mantenedorProgramaActividades.programa}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                    <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                    <f:selectItems value="#{mantenedorProgramaActividades.programas}" var="p" itemLabel="#{p.nombre}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Responsable"/>:
+                <p:selectOneMenu id="sResponsables" value="#{mantenedorProgramaActividades.responsable}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                    <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                    <f:selectItems value="#{mantenedorProgramaActividades.responsables}" var="r" itemLabel="#{r.nombreCompleto}"/>
+                </p:selectOneMenu>
+                <h:panelGroup>
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}" value="Crear" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
+                    <p:commandButton value="Consultar" action="#{mantenedorProgramaActividades.consultar()}"
+                                     process="@this, :frmProAct:sResponsables, :frmProAct:sProgramas" update=":frmProAct:pPlanes"/>
+                </h:panelGroup>
+            </h:panelGrid>
+            
+            <p:panel id="pPlanes" style="border:0">
+                <ui:fragment rendered="#{mantenedorProgramaActividades.haConsultado and mantenedorProgramaActividades.ordenarPorPrograma}">
+                    <ui:repeat value="#{mantenedorProgramaActividades.programas}" var="p">
+                        <h3>PROGRAMA - #{p.nombre}</h3>
+                        <p:dataTable value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
+                            <p:column headerText="Responsable">
+                                <h:outputText value="#{plan.rutResponsable.nombreCompleto}"/>
+                            </p:column>
+                            <p:column headerText="Actividad">
+                                <h:outputText value="#{plan.idActividad.nombre}"/>
+                            </p:column>
+                            <p:columns value="#{constantes.meses}" var="mes">
+                                <f:facet name="header">
+                                    <h:outputText value="#{mes.nombre}"/>
+                                </f:facet>
+                                <h:outputText value="#{plan.obtenerPorMes(mes)}"/>
+                            </p:columns>
+                        </p:dataTable>
+                    </ui:repeat>
+                </ui:fragment>
+                <ui:fragment rendered="#{mantenedorProgramaActividades.haConsultado and !mantenedorProgramaActividades.ordenarPorPrograma}">
+                    <h3>RESPONSABLE - #{mantenedorProgramaActividades.responsable.nombreCompleto}</h3>
+                    <ui:repeat value="#{mantenedorProgramaActividades.programas}" var="p">
+                        <p:dataTable value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
+                            <p:column headerText="Programa">
+                                <h:outputText value="#{plan.idPrograma.nombre}"/>
+                            </p:column>
+                            <p:column headerText="Actividad">
+                                <h:outputText value="#{plan.idActividad.nombre}"/>
+                            </p:column>
+                            <p:columns value="#{constantes.meses}" var="mes">
+                                <f:facet name="header">
+                                    <h:outputText value="#{mes.nombre}"/>
+                                </f:facet>
+                                <h:outputText value="#{plan.obtenerPorMes(mes)}"/>
+                            </p:columns>
+                        </p:dataTable>
+                    </ui:repeat>
+                </ui:fragment>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

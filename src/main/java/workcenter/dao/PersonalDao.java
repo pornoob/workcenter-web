@@ -50,4 +50,19 @@ public class PersonalDao {
         q.setParameter("cargo", cargo);
         return q.getResultList();
     }
+
+    public List<Personal> obtenerPorPermiso(String modulo) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select distinct p.* from personal p ");
+        sb.append("inner join permisos per on (p.rut=per.usuario) ");
+        sb.append("inner join proyectos pro on (per.proyecto=pro.id) ");
+        sb.append("where upper(pro.titulo) = upper(:modulo) ");
+        Query q = em.createNativeQuery(sb.toString(), Personal.class);
+        q.setParameter("modulo", modulo);
+        return q.getResultList();
+    }
+
+    public Personal obtener(Integer rut) {
+        return em.find(Personal.class, rut);
+    }
 }

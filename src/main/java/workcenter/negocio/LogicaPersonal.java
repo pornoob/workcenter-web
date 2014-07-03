@@ -60,4 +60,13 @@ public class LogicaPersonal {
     public List<Personal> obtenerConductores() {
         return personalDao.obtenerSegunCargo(constantes.getCargoConductor());
     }
+
+    @Transactional(readOnly = true)
+    public List<Personal> obtenerPersonalPorPermiso(String modulo) {
+        return personalDao.obtenerPorPermiso(modulo);
+    }
+
+    public Personal obtener(Integer rut) {
+        return personalDao.obtener(rut);
+    }
 }

@@ -87,7 +87,8 @@ public class MantenedorRemuneraciones implements Serializable {
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
             String dir = System.getProperty("catalina.base");
-            String liquidacion = constantes.getContextoEstatico() + FacesUtil.obtenerHttpServletRequest().getContextPath() + "/" + sesionCliente.getUsuario().getRut() + "/liq_" + r.getIdPersonal().getRut() + "_" + sdf.format(r.getFechaLiquidacion()) + "." + r.getExtension();
+//            String liquidacion = constantes.getContextoEstatico() + FacesUtil.obtenerHttpServletRequest().getContextPath() + "/" + sesionCliente.getUsuario().getRut() + "/liq_" + r.getIdPersonal().getRut() + "_" + sdf.format(r.getFechaLiquidacion()) + "." + r.getExtension();
+            String liquidacion = "";
             new File(dir+liquidacion.substring(0, liquidacion.lastIndexOf('/'))).mkdirs();
 
             File archivo = new File(dir + liquidacion);

@@ -30,7 +30,11 @@ public class LogInManager implements AuthenticationProvider, Serializable {
 
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String rut = a.getName();
-        String password = a.getCredentials().toString();
+        String password = "";
+        try {
+            password = a.getCredentials().toString();
+        } catch (NullPointerException ne) {
+        }
         UsuarioDto usuario = logicaUsuario.logIn(rut, password);
         if (usuario == null) {
             throw new BadCredentialsException(idioma.obtenerMensaje("validador.usuarioInvalido"));

@@ -66,13 +66,13 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         linkSiguiente = "Siguiente >>";
         fechaSeleccionada = new Date();
         obtenerServicios();
-        obtenerSemana();
-        obtenerTiposActividades();
         try {
             servicioSeleccionado = servicios.get(0);
         } catch (NullPointerException e) {
             servicioSeleccionado = null;
         }
+        obtenerSemana();
+        obtenerTiposActividades();
         obtenerActividades();
         return "flowMostrarCalendario";
     }
@@ -118,6 +118,9 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     }
 
     public void obtenerActividades() {
+        if (servicioSeleccionado == null) {
+            return;
+        }
         actividades = logicaInformeActividades.obtenerActividades(servicioSeleccionado, semana);
     }
 
@@ -194,6 +197,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
             semana.getDias()[i].setFecha(fechasSemana.get(i));
         }
         fechaSeleccionada = c.getTime();
+        obtenerActividades();
     }
 
     public void obtenerSemanaSiguiente() {
@@ -222,6 +226,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
             semana.getDias()[i].setFecha(fechasSemana.get(i));
         }
         fechaSeleccionada = c.getTime();
+        obtenerActividades();
     }
 
     public void obtenerSemana() {
@@ -248,6 +253,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
             semana.getDias()[i].setFecha(fechasSemana.get(i));
         }
         fechaSeleccionada = c.getTime();
+        obtenerActividades();
     }
 
     public Semana getSemana() {

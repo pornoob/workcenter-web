@@ -42,6 +42,14 @@ public class SesionCliente implements Serializable {
         }
         return usuario;
     }
+    
+    public boolean esEditor(String modulo) {
+        if (tieneNivel((Integer)constantes.getAccesos().get("Editor"), constantes.getModuloAlarmasGPS())
+                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), constantes.getModuloAlarmasGPS())) {
+            return true;
+        }
+        return false;
+    }
 
     public boolean tienePermiso(String permiso) {
         HttpServletRequest request = (HttpServletRequest) FacesUtil.obtenerHttpServletRequest();

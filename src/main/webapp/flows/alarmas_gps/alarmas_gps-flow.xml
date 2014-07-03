@@ -11,5 +11,10 @@
     
     <view-state id="listarAlarmas">
         <transition on="flowListarAlarmas" to="listarAlarmas"/>
+        <transition on="flowDetalleAlarmas" to="detalleAlarmas"/>
+    </view-state>
+    
+    <view-state id="detalleAlarmas">
+        <transition on="flowListarAlarmas" to="listarAlarmas"/>
     </view-state>
 </flow>

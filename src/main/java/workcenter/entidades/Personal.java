@@ -51,6 +51,10 @@ import org.springframework.util.StringUtils;
     @NamedQuery(name = "Personal.findByContactoe", query = "SELECT p FROM Personal p WHERE p.contactoe = :contactoe"),
     @NamedQuery(name = "Personal.findByEdomicilio", query = "SELECT p FROM Personal p WHERE p.edomicilio = :edomicilio")})
 public class Personal implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCreador")
+    private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
+    private Collection<MpaPlanPrograma> mpaPlanProgramaCollection1;
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -275,5 +279,23 @@ public class Personal implements Serializable {
 
     public void setContratospersonalCollection(Collection<ContratoPersonal> contratospersonalCollection) {
         this.contratospersonalCollection = contratospersonalCollection;
+    }
+
+    @XmlTransient
+    public Collection<MpaPlanPrograma> getMpaPlanProgramaCollection() {
+        return mpaPlanProgramaCollection;
+    }
+
+    public void setMpaPlanProgramaCollection(Collection<MpaPlanPrograma> mpaPlanProgramaCollection) {
+        this.mpaPlanProgramaCollection = mpaPlanProgramaCollection;
+    }
+
+    @XmlTransient
+    public Collection<MpaPlanPrograma> getMpaPlanProgramaCollection1() {
+        return mpaPlanProgramaCollection1;
+    }
+
+    public void setMpaPlanProgramaCollection1(Collection<MpaPlanPrograma> mpaPlanProgramaCollection1) {
+        this.mpaPlanProgramaCollection1 = mpaPlanProgramaCollection1;
     }
 }

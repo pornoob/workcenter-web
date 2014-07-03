@@ -17,9 +17,9 @@
                 <h:outputText value="Informe de Actividades" />
             </h:outputLink>
         </ui:fragment>
-        <ui:fragment rendered="#{sesionCliente.estaAutentificado()}">
+        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}">
             <h:outputText value=" | "/>
-            <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
+            <h:outputLink value="#{request.contextPath}/spring/programa_actividades">
                 <h:outputText value="Programa de Actividades" />
             </h:outputLink>
         </ui:fragment>

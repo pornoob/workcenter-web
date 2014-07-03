@@ -1,0 +1,72 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <p:growl autoUpdate="true" showDetail="true"/>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h2>Detalle Alarmas</h2>
+        <h3>Alarmas de #{mantenedorAlarmasGps.conductorSeleccionado} en el #{mantenedorAlarmasGps.fechaSeleccionadaMod}</h3>
+        <p:panel id="pDetalle" style="border: 0;">
+            <ui:fragment rendered="#{mantenedorAlarmasGps.puedeGestionar() and mantenedorAlarmasGps.indicarGestionActivado}">
+                <ui:include src="/components/cargadorArchivos.xhtml">
+                    <ui:param name="padre" value="#{mantenedorAlarmasGps}"/>
+                </ui:include>
+            </ui:fragment>
+            <h:form id="fDetalle">
+                <ui:fragment rendered="#{mantenedorAlarmasGps.puedeGestionar()}">
+                    <p:commandButton rendered="#{!mantenedorAlarmasGps.indicarGestionActivado}" value="Especificar gestión" action="#{mantenedorAlarmasGps.indicarGestion()}" update=":pDetalle"/>
+                    <p:panel style="border:0;" id="pGestion" rendered="#{mantenedorAlarmasGps.indicarGestionActivado}">
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Detalle"/>:
+                            <h:inputTextarea value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
+                        </h:panelGrid>
+                        <p:commandButton value="Guardar gestión" action="#{mantenedorAlarmasGps.guardarGestion()}" update=":fDetalle" oncomplete="PF('mDetalle').hide()"/>
+                    </p:panel>
+                </ui:fragment>
+                <ui:fragment rendered="#{mantenedorAlarmasGps.puedeVerGestion()}">
+                    <p:commandButton value="Ver gestión" action="#{mantenedorAlarmasGps.verGestion()}" update=":fDetalle"/>
+                    <p:panel style="border: 0" id="pVerGestion" rendered="#{mantenedorAlarmasGps.indicarGestionActivado}">
+                        <h:panelGrid columns="3">
+                            <h:outputLabel value="Detalle"/>:
+                            <h:inputTextarea readonly="true" style="width: 800px; height: 120px" value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
+                        </h:panelGrid>
+                        <h3>Descargables</h3>
+                        <h:panelGrid columns="1">
+                            <ui:repeat value="#{mantenedorAlarmasGps.descargables}" var="d">
+                                <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                                    <p:fileDownload value="#{d.streamedContent}"/>
+                                </p:commandButton>
+                            </ui:repeat>
+                        </h:panelGrid>
+                    </p:panel>
+                </ui:fragment>
+                <p:dataTable id="tDetalle" value="#{mantenedorAlarmasGps.detalleAlarmas}" var="a" rows="20" paginator="true">
+                    <p:column headerText="N°">
+                        <h:outputText value="#{a.numero}"/>
+                    </p:column>
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{a.fecha}" converter="fechaConverter"/>
+                    </p:column>
+                    <p:column headerText="Patente">
+                        <h:outputText value="#{a.patente}"/>
+                    </p:column>
+                    <p:column headerText="Alarma">
+                        <h:outputText value="#{a.alarma}"/>
+                    </p:column>
+                    <p:column headerText="Velocidad">
+                        <h:outputText value="#{a.velocidad}"/>
+                    </p:column>
+                    <p:column headerText="Ruta">
+                        <h:outputText value="#{a.ruta}"/>
+                    </p:column>
+                    <p:column headerText="Ubicación">
+                        <h:outputText value="#{a.ubicacion}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:panel>
+    </ui:define>
+</ui:composition>

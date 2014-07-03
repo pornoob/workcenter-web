@@ -7,15 +7,6 @@
     <ui:define name="contenido">
         <h2>Calendario de actividades</h2>
         <h:form id="frmAct">
-            <h:panelGrid columns="2">
-                <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.servicioSeleccionado}"
-                                 converter="entityConverter">
-                    <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
-                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
-                                   />
-                </p:selectOneMenu>
-                <p:commandButton value="Actualizar tabla" action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
-            </h:panelGrid>
             <h3>Leyenda</h3>
             <table>
                 <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="tipoActividad">
@@ -25,7 +16,17 @@
                     </tr>
                 </ui:repeat>
             </table>
-            <p:commandButton ajax="false" immediate="true" value="Agregar Actividad" action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
+            <h:panelGrid columns="5">
+                <h:outputLabel value="Servicio"/>:
+                <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.servicioSeleccionado}"
+                                 converter="entityConverter">
+                    <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
+                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
+                                   />
+                </p:selectOneMenu>
+                <p:commandButton value="Actualizar tabla" action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
+                <p:commandButton ajax="false" immediate="true" value="Agregar Actividad" action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
+            </h:panelGrid>
             <div id="divAct" class="ui-datatable ui-widget">
                 <table class="datos" role="grid">
                     <thead>

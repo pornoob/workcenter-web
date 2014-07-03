@@ -85,14 +85,6 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         return "flowListarAlarmas";
     }
     
-    public boolean esEditor() {
-        if (sesionCliente.tieneNivel((Integer)constantes.getAccesos().get("Editor"), constantes.getModuloAlarmasGPS())
-                || sesionCliente.tieneNivel((Integer)constantes.getAccesos().get("Administrador"), constantes.getModuloAlarmasGPS())) {
-            return true;
-        }
-        return false;
-    }
-
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
         if (documentosSubidos == null) {
@@ -214,7 +206,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         }
     }
 
-    public void obtenerDetalleAlarmas(String conductor, String fecha) {
+    public String obtenerDetalleAlarmas(String conductor, String fecha) {
         indicarGestionActivado = false;
         this.conductorSeleccionado = conductor;
         this.fechaSeleccionada = fecha;
@@ -248,6 +240,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         } catch (ParseException ex) {
             Logger.getLogger(MantenedorAlarmasGps.class.getName()).log(Level.SEVERE, null, ex);
         }
+        return "flowDetalleAlarmas";
     }
 
     public void obtenerServicios() {
