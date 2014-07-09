@@ -5,16 +5,11 @@ import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.validator.Validator;
 import javax.faces.validator.ValidatorException;
-import org.springframework.beans.factory.annotation.Autowired;
-import workcenter.util.services.Idioma;
 
 /**
  * @author colivares
  */
 public class RutValidator implements Validator {
-
-    @Autowired
-    Idioma idioma;
 
     @SuppressWarnings("null")
     public void validate(FacesContext fc, UIComponent uic, Object o) throws ValidatorException {

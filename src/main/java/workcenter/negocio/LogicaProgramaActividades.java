@@ -7,11 +7,14 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MpaActividadDao;
+import workcenter.dao.MpaPlanDao;
 import workcenter.dao.MpaProgramaDao;
 import workcenter.entidades.MpaActividad;
+import workcenter.entidades.MpaEjecucionPlan;
 import workcenter.entidades.MpaPlanPrograma;
 import workcenter.entidades.MpaPrograma;
 import workcenter.entidades.Personal;
+import workcenter.util.dto.Mes;
 
 /**
  *
@@ -25,6 +28,9 @@ public class LogicaProgramaActividades {
     
     @Autowired
     MpaActividadDao mpaActividadDao;
+    
+    @Autowired
+    MpaPlanDao mpaPlanDao;
 
     @Transactional(readOnly = false)
     public void guardarPrograma(MpaPrograma p) {
@@ -74,5 +80,25 @@ public class LogicaProgramaActividades {
     @Transactional(readOnly = true)
     public List<MpaPlanPrograma> obtenerPlanes() {
         return mpaProgramaDao.obtenerPlanes();
+    }
+
+    @Transactional(readOnly = true)
+    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Mes mes, Integer responsable) {
+        return mpaPlanDao.obtenerCantEjecuciones(plan, mes, responsable);
+    }
+    
+    @Transactional(readOnly = true)
+    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Integer responsable) {
+        return mpaPlanDao.obtenerCantEjecuciones(plan, responsable);
+    }
+
+    @Transactional(readOnly = false)
+    public void guardarEjecucion(MpaEjecucionPlan ejecucion) {
+        mpaPlanDao.guardarEjecucion(ejecucion);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MpaEjecucionPlan> obtenerEjecuciones(MpaPlanPrograma plan, Mes mes, Integer responsable) {
+        return mpaPlanDao.obtenerEjecuciones(plan, mes, responsable);
     }
 }

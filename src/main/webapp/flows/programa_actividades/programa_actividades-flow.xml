@@ -12,12 +12,17 @@
     <view-state id="mostrarPlan">
         <transition on="flowMostrarPlan" to="mostrarPlan"/>
         <transition on="flowCrearPlan" to="crearPlan"/>
+        <transition on="flowRealizarActividad" to="ingresarRealizacion"/>
     </view-state>
     
     <view-state id="crearPlan">
         <transition on="flowMostrarPlan" to="mostrarPlan"/>
         <transition on="flowAgregarPrograma" to="agregarPrograma"/>
         <transition on="flowAgregarActividad" to="agregarActividad"/>
+    </view-state>
+    
+    <view-state id="ingresarRealizacion">
+        <transition on="flowMostrarPlan" to="mostrarPlan"/>
     </view-state>
     
     <view-state id="agregarPrograma">

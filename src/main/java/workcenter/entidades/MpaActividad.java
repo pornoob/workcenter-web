@@ -41,6 +41,8 @@ import javax.xml.bind.annotation.XmlTransient;
 })
 public class MpaActividad implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idActividad")
+    private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idActividad")
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
     private static final long serialVersionUID = 1L;
     @Id
@@ -125,6 +127,15 @@ public class MpaActividad implements Serializable {
 
     public void setMpaPlanProgramaCollection(Collection<MpaPlanPrograma> mpaPlanProgramaCollection) {
         this.mpaPlanProgramaCollection = mpaPlanProgramaCollection;
+    }
+
+    @XmlTransient
+    public Collection<MpaEjecucionPlan> getMpaEjecucionPlanCollection() {
+        return mpaEjecucionPlanCollection;
+    }
+
+    public void setMpaEjecucionPlanCollection(Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection) {
+        this.mpaEjecucionPlanCollection = mpaEjecucionPlanCollection;
     }
 
 }

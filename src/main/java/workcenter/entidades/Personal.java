@@ -51,6 +51,8 @@ import org.springframework.util.StringUtils;
     @NamedQuery(name = "Personal.findByContactoe", query = "SELECT p FROM Personal p WHERE p.contactoe = :contactoe"),
     @NamedQuery(name = "Personal.findByEdomicilio", query = "SELECT p FROM Personal p WHERE p.edomicilio = :edomicilio")})
 public class Personal implements Serializable {
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
+    private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCreador")
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
@@ -297,5 +299,14 @@ public class Personal implements Serializable {
 
     public void setMpaPlanProgramaCollection1(Collection<MpaPlanPrograma> mpaPlanProgramaCollection1) {
         this.mpaPlanProgramaCollection1 = mpaPlanProgramaCollection1;
+    }
+
+    @XmlTransient
+    public Collection<MpaEjecucionPlan> getMpaEjecucionPlanCollection() {
+        return mpaEjecucionPlanCollection;
+    }
+
+    public void setMpaEjecucionPlanCollection(Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection) {
+        this.mpaEjecucionPlanCollection = mpaEjecucionPlanCollection;
     }
 }

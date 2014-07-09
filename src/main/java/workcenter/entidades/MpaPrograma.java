@@ -36,6 +36,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "MpaPrograma.findByNombre", query = "SELECT m FROM MpaPrograma m WHERE m.nombre = :nombre")})
 public class MpaPrograma implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPrograma")
+    private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPrograma")
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
 
     private static final long serialVersionUID = 1L;
@@ -122,6 +124,15 @@ public class MpaPrograma implements Serializable {
 
     public void setMpaPlanProgramaCollection(Collection<MpaPlanPrograma> mpaPlanProgramaCollection) {
         this.mpaPlanProgramaCollection = mpaPlanProgramaCollection;
+    }
+
+    @XmlTransient
+    public Collection<MpaEjecucionPlan> getMpaEjecucionPlanCollection() {
+        return mpaEjecucionPlanCollection;
+    }
+
+    public void setMpaEjecucionPlanCollection(Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection) {
+        this.mpaEjecucionPlanCollection = mpaEjecucionPlanCollection;
     }
 
 }

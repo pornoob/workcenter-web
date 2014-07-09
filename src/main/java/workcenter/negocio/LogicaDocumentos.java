@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.DocumentoDao;
 import workcenter.entidades.AsociacionDocumento;
 import workcenter.entidades.Documento;
+import workcenter.entidades.MpaPlanPrograma;
 
 /**
  *
@@ -42,6 +43,8 @@ public class LogicaDocumentos {
     @Transactional(readOnly = false)
     public void asociarDocumentos(List<Documento> docs, Object entidad) {
         Class clase = entidad.getClass();
+        System.err.println("LLEGA: "+docs);
+        System.err.println("CON: "+entidad);
         for (Documento d : docs) {
             AsociacionDocumento ad = new AsociacionDocumento();
             ad.setIdDocumento(d);
@@ -72,10 +75,13 @@ public class LogicaDocumentos {
                     Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
+            System.err.println("AD: "+ad);
             documentoDao.guardarAsociacion(ad);
+            System.err.println("AD2: "+ad);
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Documento> obtenerDocumentosAsociados(Object entidad) {
         if (entidad == null) {
             return new ArrayList<Documento>();
@@ -109,5 +115,12 @@ public class LogicaDocumentos {
             }
         }
         return documentoDao.obtenerDocumentos(nombreTabla, objectId.toString());
+    }
+
+    @Transactional(readOnly = false)
+    public void asociarDocumento(Documento d, Object entidad) {
+        List<Documento> docs = new ArrayList<Documento>();
+        docs.add(d);
+        asociarDocumentos(docs, entidad);
     }
 }

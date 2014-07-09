@@ -34,6 +34,8 @@
                     <f:selectItems value="#{mantenedorProgramaActividades.responsables}" var="r" itemLabel="#{r.nombreCompleto}"/>
                 </p:selectOneMenu>
                 <h:outputText/>
+                <h:outputLabel value="Año Vigencia"/>:
+                <p:spinner id="anio" required="true" requiredMessage="Debes especificar el año de vigencia del programa" value="#{mantenedorProgramaActividades.planSeleccionado.anioVigencia}" min="2014"/>
             </h:panelGrid>
 
             <p:dataTable id="tblPlan" editable="true" editMode="cell" value="#{mantenedorProgramaActividades.filasPlan}" var="plan" widgetVar="tblPlan">

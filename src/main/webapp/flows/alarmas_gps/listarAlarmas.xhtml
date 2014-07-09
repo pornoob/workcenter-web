@@ -26,31 +26,31 @@
                 <h3>
                     <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
                 </h3>
-                <p:dataTable emptyMessage="No hay alarmas" class="datos" id="tabla" widgetVar="tAlarmas" rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="#{mantenedorAlarmasGps.conductores}" var="conductor">
+                <p:dataTable style="font-size: 8pt" emptyMessage="No hay alarmas" class="datos" id="tabla" widgetVar="tAlarmas" rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="#{mantenedorAlarmasGps.conductores}" var="conductor">
                     <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" rowspan="1">
                         <f:facet name="header">
                             <h:commandLink>
                                 <h:outputText value="#{col.header}"/>
                             </h:commandLink>
                         </f:facet>
-                        <div>
-                            <div style="float: left">
+                        <ui:fragment rendered="#{mantenedorAlarmasGps.noEsCero(conductor, col.id)}">
+                            <ui:fragment rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
-                                               style="white-space: nowrap" target="_blank" 
-                                               />
-                            </div>
-                            <div style="float: right">
-                                <ui:fragment rendered="#{mantenedorAlarmasGps.noEsCero(conductor, col.id)}">
-                                    <ui:fragment rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
-                                        <img src="#{request.contextPath}/resources/css/img/icons/luz_verde.png"/>
-                                    </ui:fragment>
-                                    <ui:fragment rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
-                                        <img src="#{request.contextPath}/resources/css/img/icons/luz_roja.png"/>
-                                    </ui:fragment>
-                                </ui:fragment>
-                            </div>
-                        </div>
+                                               style="white-space: nowrap; display: block" target="_blank" 
+                                               >
+                                    <h:graphicImage style="float: right" value="/img/icons/luz_verde.png"/>
+                                </h:commandLink>
+                            </ui:fragment>
+                            <ui:fragment rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
+                                <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
+                                               value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
+                                               style="white-space: nowrap; display: block" target="_blank" 
+                                               >
+                                    <h:graphicImage style="float: right" value="/img/icons/luz_roja.png"/>
+                                </h:commandLink>
+                            </ui:fragment>
+                        </ui:fragment>
                     </p:columns>
                 </p:dataTable>
             </p:panel>

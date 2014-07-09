@@ -64,6 +64,22 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/spring/*</url-pattern>
     </servlet-mapping>
+    
+    <!-- Controlador para dibujar imagenes desde JSF -->
+    <servlet>
+        <servlet-name>imagenServlet</servlet-name>
+        <servlet-class>workcenter.util.ImagenesServlet</servlet-class>
+        <init-param>
+            <param-name>pathImagenes</param-name>
+            <param-value>/resources/css/img</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>imagenServlet</servlet-name>
+        <url-pattern>/img/*</url-pattern>
+    </servlet-mapping>
+    
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>

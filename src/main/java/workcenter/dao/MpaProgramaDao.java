@@ -40,11 +40,19 @@ public class MpaProgramaDao {
 
     public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select max(fecha) as fecha, id, id_programa, id_actividad, rut_responsable, rut_creador ");
-        sql.append("from mpa_plan_programa ");
-        sql.append("where id_programa=:programa ");
-        sql.append("and rut_responsable=:responsable ");
-        sql.append("group by 3,4,5,6 ");
+        
+        sql.append("select t1.* from mpa_plan_programa t1 ");
+        sql.append("inner join ( ");
+        sql.append("    select max(fecha) as fecha,id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append("    from mpa_plan_programa ");
+        sql.append("    group by id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append(") t2 ");
+        sql.append("on t1.id_programa = t2.id_programa and t1.id_actividad=t2.id_actividad ");
+        sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
+        sql.append("and t1.fecha=t2.fecha ");
+        sql.append("where t1.id_programa=:programa ");
+        sql.append("and t1.rut_responsable=:responsable ");
+        
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("programa", programa.getId())
                 .setParameter("responsable", responsable.getRut())
@@ -53,10 +61,18 @@ public class MpaProgramaDao {
 
     public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select max(fecha) as fecha, id, id_programa, id_actividad, rut_responsable, rut_creador ");
-        sql.append("from mpa_plan_programa ");
-        sql.append("where id_programa=:programa ");
-        sql.append("group by 3,4,5,6 ");
+        
+        sql.append("select t1.* from mpa_plan_programa t1 ");
+        sql.append("inner join ( ");
+        sql.append("    select max(fecha) as fecha,id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append("    from mpa_plan_programa ");
+        sql.append("    group by id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append(") t2 ");
+        sql.append("on t1.id_programa = t2.id_programa and t1.id_actividad=t2.id_actividad ");
+        sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
+        sql.append("and t1.fecha=t2.fecha ");
+        sql.append("where t1.id_programa=:programa ");
+        
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("programa", programa.getId())
                 .getResultList();
@@ -64,10 +80,18 @@ public class MpaProgramaDao {
 
     public List<MpaPlanPrograma> obtenerPlanes(Personal responsable) {
         StringBuilder sql = new StringBuilder();
-        sql.append("select max(fecha) as fecha, id, id_programa, id_actividad, rut_responsable, rut_creador ");
-        sql.append("from mpa_plan_programa ");
-        sql.append("where rut_responsable=:responsable ");
-        sql.append("group by 3,4,5,6 ");
+        
+        sql.append("select t1.* from mpa_plan_programa t1 ");
+        sql.append("inner join ( ");
+        sql.append("    select max(fecha) as fecha,id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append("    from mpa_plan_programa ");
+        sql.append("    group by id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append(") t2 ");
+        sql.append("on t1.id_programa = t2.id_programa and t1.id_actividad=t2.id_actividad ");
+        sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
+        sql.append("and t1.fecha=t2.fecha ");
+        sql.append("where t1.rut_responsable=:responsable ");
+        
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("responsable", responsable.getRut())
                 .getResultList();
@@ -75,9 +99,15 @@ public class MpaProgramaDao {
     
     public List<MpaPlanPrograma> obtenerPlanes() {
         StringBuilder sql = new StringBuilder();
-        sql.append("select max(fecha) as fecha, id, id_programa, id_actividad, rut_responsable, rut_creador ");
-        sql.append("from mpa_plan_programa ");
-        sql.append("group by 3,4,5,6 ");
+        sql.append("select t1.* from mpa_plan_programa t1 ");
+        sql.append("inner join ( ");
+        sql.append("    select max(fecha) as fecha,id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append("    from mpa_plan_programa ");
+        sql.append("    group by id_programa, id_actividad, rut_responsable, rut_creador ");
+        sql.append(") t2 ");
+        sql.append("on t1.id_programa = t2.id_programa and t1.id_actividad=t2.id_actividad ");
+        sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
+        sql.append("and t1.fecha=t2.fecha ");
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class).getResultList();
     }
 }

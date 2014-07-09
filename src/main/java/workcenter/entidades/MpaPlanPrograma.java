@@ -67,6 +67,10 @@ public class MpaPlanPrograma implements Serializable {
     private MpaPrograma idPrograma;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPlan", orphanRemoval = true, fetch = FetchType.EAGER)
     private Collection<MpaValorPlanPrograma> mpaValorPlanProgramaCollection;
+    @Basic(optional = false)
+    @NotNull
+    @Column(name = "anio_vigencia")
+    private Integer anioVigencia;
 
     public MpaPlanPrograma() {
     }
@@ -195,4 +199,30 @@ public class MpaPlanPrograma implements Serializable {
         return 0;
     }
 
+    public Integer obtenerAnual() {
+        int suma = 0;
+        for (MpaValorPlanPrograma valor : getMpaValorPlanProgramaCollection()) {
+            suma += valor.getEnero();
+            suma += valor.getFebrero();
+            suma += valor.getMarzo();
+            suma += valor.getAbril();
+            suma += valor.getMayo();
+            suma += valor.getJunio();
+            suma += valor.getJulio();
+            suma += valor.getAgosto();
+            suma += valor.getSeptiembre();
+            suma += valor.getOctubre();
+            suma += valor.getNoviembre();
+            suma += valor.getDiciembre();
+        }
+        return suma;
+    }
+
+    public Integer getAnioVigencia() {
+        return anioVigencia;
+    }
+
+    public void setAnioVigencia(Integer anioVigencia) {
+        this.anioVigencia = anioVigencia;
+    }
 }

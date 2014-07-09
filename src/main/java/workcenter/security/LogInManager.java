@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.Proyecto;
 import workcenter.negocio.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
-import workcenter.util.services.Idioma;
 
 /**
  * @author colivares
@@ -24,9 +23,6 @@ import workcenter.util.services.Idioma;
 public class LogInManager implements AuthenticationProvider, Serializable {
     @Autowired
     LogicaUsuario logicaUsuario;
-    
-    @Autowired
-    Idioma idioma;
 
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String rut = a.getName();
@@ -37,7 +33,7 @@ public class LogInManager implements AuthenticationProvider, Serializable {
         }
         UsuarioDto usuario = logicaUsuario.logIn(rut, password);
         if (usuario == null) {
-            throw new BadCredentialsException(idioma.obtenerMensaje("validador.usuarioInvalido"));
+            throw new BadCredentialsException("Usuario y/o Contraseña Inválidos");
         }
         return new UsernamePasswordAuthenticationToken(usuario.getRut(), a.getCredentials(), getAcceso(usuario));
     }

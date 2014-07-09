@@ -23,13 +23,15 @@
                             <h:outputLabel value="Detalle"/>:
                             <h:inputTextarea value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
                         </h:panelGrid>
-                        <p:commandButton value="Guardar gestión" action="#{mantenedorAlarmasGps.guardarGestion()}" update=":fDetalle" oncomplete="PF('mDetalle').hide()"/>
+                        <p:commandButton value="Guardar gestión" action="#{mantenedorAlarmasGps.guardarGestion()}" update=":fDetalle"/>
                     </p:panel>
                 </ui:fragment>
                 <ui:fragment rendered="#{mantenedorAlarmasGps.puedeVerGestion()}">
                     <p:commandButton value="Ver gestión" action="#{mantenedorAlarmasGps.verGestion()}" update=":fDetalle"/>
                     <p:panel style="border: 0" id="pVerGestion" rendered="#{mantenedorAlarmasGps.indicarGestionActivado}">
                         <h:panelGrid columns="3">
+                            <h:outputLabel value="Gestión realizada por"/>:
+                            <h:outputText value="#{mantenedorAlarmasGps.gestionAlarma.idUsuario.personal.nombreCompleto}"/>
                             <h:outputLabel value="Detalle"/>:
                             <h:inputTextarea readonly="true" style="width: 800px; height: 120px" value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
                         </h:panelGrid>
