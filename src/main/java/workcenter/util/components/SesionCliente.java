@@ -44,8 +44,15 @@ public class SesionCliente implements Serializable {
     }
     
     public boolean esEditor(String modulo) {
-        if (tieneNivel((Integer)constantes.getAccesos().get("Editor"), constantes.getModuloAlarmasGPS())
-                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), constantes.getModuloAlarmasGPS())) {
+        if (tieneNivel((Integer)constantes.getAccesos().get("Editor"), modulo)
+                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), modulo)) {
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean tieneAccesoEspecial(String modulo) {
+        if (tieneNivel((Integer)constantes.getAccesos().get("Privilegios Especiales"), modulo)) {
             return true;
         }
         return false;

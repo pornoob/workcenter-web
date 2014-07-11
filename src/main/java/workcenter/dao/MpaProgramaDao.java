@@ -38,7 +38,7 @@ public class MpaProgramaDao {
         }
     }
 
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable) {
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable, Integer anioSeleccionado) {
         StringBuilder sql = new StringBuilder();
         
         sql.append("select t1.* from mpa_plan_programa t1 ");
@@ -52,14 +52,16 @@ public class MpaProgramaDao {
         sql.append("and t1.fecha=t2.fecha ");
         sql.append("where t1.id_programa=:programa ");
         sql.append("and t1.rut_responsable=:responsable ");
+        sql.append("and t1.anio_vigencia=:anio ");
         
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("programa", programa.getId())
                 .setParameter("responsable", responsable.getRut())
+                .setParameter("anio", anioSeleccionado)
                 .getResultList();
     }
 
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa) {
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Integer anioSeleccionado) {
         StringBuilder sql = new StringBuilder();
         
         sql.append("select t1.* from mpa_plan_programa t1 ");
@@ -72,13 +74,15 @@ public class MpaProgramaDao {
         sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
         sql.append("and t1.fecha=t2.fecha ");
         sql.append("where t1.id_programa=:programa ");
+        sql.append("and t1.anio_vigencia=:anio ");
         
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("programa", programa.getId())
+                .setParameter("anio", anioSeleccionado)
                 .getResultList();
     }
 
-    public List<MpaPlanPrograma> obtenerPlanes(Personal responsable) {
+    public List<MpaPlanPrograma> obtenerPlanes(Personal responsable, Integer anioSeleccionado) {
         StringBuilder sql = new StringBuilder();
         
         sql.append("select t1.* from mpa_plan_programa t1 ");
@@ -91,13 +95,15 @@ public class MpaProgramaDao {
         sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
         sql.append("and t1.fecha=t2.fecha ");
         sql.append("where t1.rut_responsable=:responsable ");
+        sql.append("and t1.anio_vigencia=:anio ");
         
         return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class)
                 .setParameter("responsable", responsable.getRut())
+                .setParameter("anio", anioSeleccionado)
                 .getResultList();
     }
     
-    public List<MpaPlanPrograma> obtenerPlanes() {
+    public List<MpaPlanPrograma> obtenerPlanes(Integer anioSeleccionado) {
         StringBuilder sql = new StringBuilder();
         sql.append("select t1.* from mpa_plan_programa t1 ");
         sql.append("inner join ( ");
@@ -108,6 +114,7 @@ public class MpaProgramaDao {
         sql.append("on t1.id_programa = t2.id_programa and t1.id_actividad=t2.id_actividad ");
         sql.append("and t1.rut_responsable=t2.rut_responsable and t1.rut_creador=t2.rut_creador ");
         sql.append("and t1.fecha=t2.fecha ");
-        return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class).getResultList();
+        sql.append("and t1.anio_vigencia=:anio ");
+        return em.createNativeQuery(sql.toString(), MpaPlanPrograma.class).setParameter("anio", anioSeleccionado).getResultList();
     }
 }

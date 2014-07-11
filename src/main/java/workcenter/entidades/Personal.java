@@ -51,6 +51,7 @@ import org.springframework.util.StringUtils;
     @NamedQuery(name = "Personal.findByContactoe", query = "SELECT p FROM Personal p WHERE p.contactoe = :contactoe"),
     @NamedQuery(name = "Personal.findByEdomicilio", query = "SELECT p FROM Personal p WHERE p.edomicilio = :edomicilio")})
 public class Personal implements Serializable {
+
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
     private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCreador")
@@ -118,9 +119,9 @@ public class Personal implements Serializable {
         this.rut = rut;
         this.digitoverificador = digitoverificador;
     }
-    
+
     public String getNombreCompleto() {
-        String string = getNombres()+" "+getApellidos();
+        String string = getNombres() + " " + getApellidos();
         StringBuilder sb = new StringBuilder();
         for (String s : string.split(" ")) {
             sb.append(StringUtils.capitalize(s));
@@ -256,7 +257,9 @@ public class Personal implements Serializable {
             return false;
         }
         Personal other = (Personal) object;
-        if ((this.rut == null && other.rut != null) || (this.rut != null && !this.rut.equals(other.rut))) {
+        if (this.getRut() == null || other.getRut() == null) {
+            return false;
+        } else if (this.getRut().intValue() != other.getRut().intValue()) {
             return false;
         }
         return true;

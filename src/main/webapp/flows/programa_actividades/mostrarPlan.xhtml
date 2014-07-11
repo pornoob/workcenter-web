@@ -9,31 +9,47 @@
         <h2>Programa de Actividades</h2>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmProAct">
-            <h:panelGrid columns="3">
-                <h:outputLabel value="Programa"/>:
-                <p:selectOneMenu id="sProgramas" value="#{mantenedorProgramaActividades.programa}" filter="true" filterMatchMode="contains" converter="entityConverter">
-                    <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
-                    <f:selectItems value="#{mantenedorProgramaActividades.programas}" var="p" itemLabel="#{p.nombre}"/>
-                </p:selectOneMenu>
-                <h:outputLabel value="Responsable"/>:
-                <p:selectOneMenu id="sResponsables" value="#{mantenedorProgramaActividades.responsable}" filter="true" filterMatchMode="contains" converter="entityConverter">
-                    <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
-                    <f:selectItems value="#{mantenedorProgramaActividades.responsables}" var="r" itemLabel="#{r.nombreCompleto}"/>
-                </p:selectOneMenu>
-                <h:panelGroup>
-                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}" value="Crear" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
-                    <p:commandButton value="Consultar" action="#{mantenedorProgramaActividades.consultar()}"
-                                     process="@this, :frmProAct:sResponsables, :frmProAct:sProgramas" update=":frmProAct:pPlanes"/>
-                </h:panelGroup>
-            </h:panelGrid>
+            <ui:fragment rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades) or sesionCliente.tieneAccesoEspecial(constantes.moduloProgramaActividades)}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Programa"/>:
+                    <p:selectOneMenu id="sProgramas" value="#{mantenedorProgramaActividades.programa}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                        <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                        <f:selectItems value="#{mantenedorProgramaActividades.programas}" var="p" itemLabel="#{p.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Responsable"/>:
+                    <p:selectOneMenu id="sResponsables" value="#{mantenedorProgramaActividades.responsable}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                        <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                        <f:selectItems value="#{mantenedorProgramaActividades.responsables}" var="r" itemLabel="#{r.nombreCompleto}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Vigencia"/>:
+                    <p:spinner id="anio" required="true" requiredMessage="Debes especificar el año a consultar" min="2014" value="#{mantenedorProgramaActividades.anioSeleccionado}"/>
+                </h:panelGrid>
+            </ui:fragment>
+            <ui:fragment rendered="#{!(sesionCliente.esEditor(constantes.moduloProgramaActividades) or sesionCliente.tieneAccesoEspecial(constantes.moduloProgramaActividades))}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Programa"/>:
+                    <p:selectOneMenu id="sProgramasConsulta" value="#{mantenedorProgramaActividades.programa}" filter="true" filterMatchMode="contains" converter="entityConverter">
+                        <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                        <f:selectItems value="#{mantenedorProgramaActividades.programas}" var="p" itemLabel="#{p.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Vigencia"/>:
+                    <p:spinner id="anioConsulta" required="true" requiredMessage="Debes especificar el año a consultar" min="2014" value="#{mantenedorProgramaActividades.anioSeleccionado}"/>
+                </h:panelGrid>
+            </ui:fragment>
+            <h:panelGroup>
+                <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}" value="Crear" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
+                <p:commandButton value="Consultar" action="#{mantenedorProgramaActividades.consultar()}"
+                                 process="@this, :frmProAct:sResponsables, :frmProAct:sProgramas" update=":frmProAct:pPlanes"/>
+            </h:panelGroup>
 
-            <p:panel id="pPlanes" style="border:0">
+            <br/>
+            <p:scrollPanel id="pPlanes" style="border:0">
                 <ui:fragment rendered="#{mantenedorProgramaActividades.haConsultado and mantenedorProgramaActividades.ordenarPorPrograma}">
                     <ui:repeat value="#{mantenedorProgramaActividades.programas}" var="p">
                         <ui:fragment rendered="#{mantenedorProgramaActividades.correspondeDibujar(p)}">
                             <h3>PROGRAMA - #{p.nombre}</h3>
                         </ui:fragment>
-                        <p:dataTable rendered="#{mantenedorProgramaActividades.correspondeDibujar(p)}" style="font-size: 8pt" value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
+                        <p:dataTable emptyMessage="No tienes planificaciones" rendered="#{mantenedorProgramaActividades.correspondeDibujar(p)}" style="font-size: 8pt" value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column rowspan="2" headerText="Actividad"/>
@@ -67,14 +83,14 @@
                                     <p:commandLink value="#{mantenedorProgramaActividades.obtenerCantEjecuciones(plan, mes)}" action="#{mantenedorProgramaActividades.ingresarEjecuciones(plan, mes)}"/>
                                 </p:column>
                                 <p:column>
-                                    <h:outputText value="#{mantenedorProgramaActividades.obtenerCumplimiento(plan, mes)}"/>
+                                    <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoMesResponsable(plan, mes))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoMesResponsable(plan, mes)}"/>
                                 </p:column>
                             </c:forEach>
                             <p:column>
-                                <h:outputText value="#{mantenedorProgramaActividades.obtenerCumplimiento(plan)}"/>
+                                <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoResponsable(plan))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoResponsable(plan)}"/>
                             </p:column>
                             <p:column>
-                                <h:outputText value="..."/>
+                                <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoGlobal(plan.idPrograma))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoGlobal(plan.idPrograma)}"/>
                             </p:column>
                         </p:dataTable>
                     </ui:repeat>
@@ -82,7 +98,7 @@
                 <ui:fragment rendered="#{mantenedorProgramaActividades.haConsultado and !mantenedorProgramaActividades.ordenarPorPrograma}">
                     <h3>RESPONSABLE - #{mantenedorProgramaActividades.responsable.nombreCompleto}</h3>
                     <ui:repeat value="#{mantenedorProgramaActividades.programas}" var="p">
-                        <p:dataTable style="font-size: 8pt" value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
+                        <p:dataTable rendered="#{mantenedorProgramaActividades.correspondeDibujar(p)}" style="font-size: 8pt" value="#{mantenedorProgramaActividades.obtenerPlanes(p)}" var="plan">
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column rowspan="2" headerText="Programa"/>
@@ -116,19 +132,20 @@
                                     <p:commandLink value="#{mantenedorProgramaActividades.obtenerCantEjecuciones(plan, mes)}" action="#{mantenedorProgramaActividades.ingresarEjecuciones(plan, mes)}"/>
                                 </p:column>
                                 <p:column>
-                                    <h:outputText value="#{mantenedorProgramaActividades.obtenerCumplimiento(plan, mes)}"/>
+                                    <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoMesResponsable(plan, mes))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoMesResponsable(plan, mes)}"/>
                                 </p:column>
                             </c:forEach>
                             <p:column>
-                                <h:outputText value="#{mantenedorProgramaActividades.obtenerCumplimiento(plan)}"/>
+                                <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoResponsable(plan))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoResponsable(plan)}"/>
                             </p:column>
                             <p:column>
-                                <h:outputText value="..."/>
+                                <h:outputText style="color: #{mantenedorProgramaActividades.obtenerColor(mantenedorProgramaActividades.obtenerCumplimientoGlobal(plan.idPrograma))}" value="#{mantenedorProgramaActividades.obtenerCumplimientoGlobal(plan.idPrograma)}"/>
                             </p:column>
                         </p:dataTable>
+                        <br/>
                     </ui:repeat>
                 </ui:fragment>
-            </p:panel>
+            </p:scrollPanel>
         </h:form>
     </ui:define>
 </ui:composition>

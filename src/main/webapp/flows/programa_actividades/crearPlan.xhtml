@@ -138,8 +138,8 @@
             </p:dataTable>
 
             <h:panelGroup>
-                <p:commandButton value="Volver" action="#{mantenedorProgramaActividades.irMostrarPlan()}"/>
-                <p:commandButton value="Guardar" action="#{mantenedorProgramaActividades.guardarPlan()}"/>
+                <p:commandButton value="Volver" immediate="true" ajax="false" action="#{mantenedorProgramaActividades.irMostrarPlan()}"/>
+                <p:commandButton value="Guardar" immediate="false" action="#{mantenedorProgramaActividades.guardarPlan()}"/>
             </h:panelGroup>
         </h:form>
     </ui:define>

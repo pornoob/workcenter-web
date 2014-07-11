@@ -52,6 +52,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     private List<MpaPlanPrograma> planes;
     private boolean ordenarPorPrograma;
     private boolean haConsultado;
+    private Integer anioSeleccionado;
 
     @Autowired
     LogicaPersonal logicaPersonal;
@@ -77,6 +78,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         obtenerResponsables();
         obtenerProgramas();
         obtenerActividades();
+        anioSeleccionado = Calendar.getInstance().get(Calendar.YEAR);
         return irMostrarPlan();
     }
 
@@ -135,8 +137,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
 
     public List<Descargable> obtenerDescargables() {
         List<Descargable> descargables = new ArrayList<Descargable>();
-        List<MpaEjecucionPlan> ejecuciones = logicaProgramaActividades.obtenerEjecuciones(planSeleccionado, mesSeleccionado, sesionCliente.getUsuario().getRut());
-        System.err.println("ENCUENTRO: " + ejecuciones);
+        List<MpaEjecucionPlan> ejecuciones = logicaProgramaActividades.obtenerEjecuciones(planSeleccionado, mesSeleccionado);
         for (MpaEjecucionPlan e : ejecuciones) {
             List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(e);
             for (Documento doc : docs) {
@@ -149,33 +150,64 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     }
 
     public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Mes mes) {
-        return logicaProgramaActividades.obtenerCantEjecuciones(plan, mes, sesionCliente.getUsuario().getRut());
+        return logicaProgramaActividades.obtenerCantEjecuciones(plan, mes);
     }
 
-    public String obtenerCumplimiento(MpaPlanPrograma plan, Mes mes) {
-        Integer real = logicaProgramaActividades.obtenerCantEjecuciones(plan, mes, sesionCliente.getUsuario().getRut());
-        Integer planeado = plan.obtenerPorMes(mes);
-        float cumplimiento = 0;
-        if (planeado > 0) {
-            cumplimiento = (float) real / planeado;
-        }
+    public String obtenerCumplimientoMesResponsable(MpaPlanPrograma plan, Mes mes) {
+        float cumplimiento = logicaProgramaActividades.obtenerCumplimientoResponsable(plan, mes);
         NumberFormat nf = NumberFormat.getPercentInstance();
         return nf.format(cumplimiento);
     }
 
-    public String obtenerCumplimiento(MpaPlanPrograma plan) {
-        Integer real = logicaProgramaActividades.obtenerCantEjecuciones(plan, sesionCliente.getUsuario().getRut());
-        Integer planeado = plan.obtenerAnual();
+    public String obtenerCumplimientoResponsable(MpaPlanPrograma plan) {
         float cumplimiento = 0;
-        if (planeado > 0) {
-            cumplimiento = (float) real / planeado;
+        int contador = 0;
+        Calendar c = Calendar.getInstance();
+
+        for (Mes mes : constantes.getMeses()) {
+            if (Integer.parseInt(mes.getId()) >= c.get(Calendar.MONTH)) {
+                break;
+            }
+            cumplimiento += logicaProgramaActividades.obtenerCumplimientoResponsable(plan, mes);
+            contador++;
         }
         NumberFormat nf = NumberFormat.getPercentInstance();
-        return nf.format(cumplimiento);
+        return nf.format(cumplimiento / contador);
+    }
+
+    public String obtenerCumplimientoGlobal(MpaPrograma programa) {
+        float cumplimientoPersonal;
+        int contadorPersonal;
+
+        float cumplimientoGlobal = 0;
+        int contadorGlobal = 0;
+
+        Calendar c = Calendar.getInstance();
+        for (MpaPlanPrograma p : planes) {
+            if (!p.getIdPrograma().equals(programa)) {
+                continue;
+            }
+            contadorPersonal = 0;
+            cumplimientoPersonal = 0;
+            for (Mes mes : constantes.getMeses()) {
+                if (Integer.parseInt(mes.getId()) >= c.get(Calendar.MONTH)) {
+                    break;
+                }
+                cumplimientoPersonal += logicaProgramaActividades.obtenerCumplimientoResponsable(p, mes);
+                contadorPersonal++;
+            }
+            cumplimientoGlobal += (cumplimientoPersonal / contadorPersonal);
+            contadorGlobal++;
+        }
+        NumberFormat nf = NumberFormat.getPercentInstance();
+        return nf.format(cumplimientoGlobal / contadorGlobal);
     }
 
     public boolean correspondeDibujar(MpaPrograma p) {
         if (programa != null && !programa.equals(p)) {
+            return false;
+        }
+        if (obtenerPlanes(p).isEmpty()) {
             return false;
         }
         return true;
@@ -194,20 +226,41 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     }
 
     public void consultar() {
+        if (!sesionCliente.esEditor(constantes.getModuloProgramaActividades())) {
+            responsable = logicaPersonal.obtener(sesionCliente.getUsuario().getRut());
+        }
+        
         if (programa != null && responsable != null) {
             ordenarPorPrograma = false;
-            planes = logicaProgramaActividades.obtenerPlanes(programa, responsable);
+            planes = logicaProgramaActividades.obtenerPlanes(programa, responsable, anioSeleccionado);
         } else if (programa != null) {
             ordenarPorPrograma = true;
-            planes = logicaProgramaActividades.obtenerPlanes(programa);
+            planes = logicaProgramaActividades.obtenerPlanes(programa, anioSeleccionado);
         } else if (responsable != null) {
             ordenarPorPrograma = false;
-            planes = logicaProgramaActividades.obtenerPlanes(responsable);
+            planes = logicaProgramaActividades.obtenerPlanes(responsable, anioSeleccionado);
         } else {
             ordenarPorPrograma = true;
-            planes = logicaProgramaActividades.obtenerPlanes();
+            planes = logicaProgramaActividades.obtenerPlanes(anioSeleccionado);
         }
         haConsultado = true;
+    }
+
+    public String obtenerColor(String s) {
+        NumberFormat nf = NumberFormat.getPercentInstance();
+        float porcentaje;
+        try {
+            porcentaje = ((Number) nf.parse(s)).floatValue();
+        } catch (Exception e) {
+            e.printStackTrace();
+            porcentaje = 0;
+        }
+
+        if (porcentaje >= 1) {
+            return "green";
+        } else {
+            return "red";
+        }
     }
 
     public void guardarPlan() {
@@ -233,7 +286,6 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     }
 
     public void obtenerActividades() {
-        System.out.println("LLEGA EL PROGRAMA: " + programa);
         if (programa == null || programa.getId() == null) {
             actividades = logicaProgramaActividades.obtenerActividades();
         } else {
@@ -439,6 +491,14 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
 
     public void setMesSeleccionado(Mes mesSeleccionado) {
         this.mesSeleccionado = mesSeleccionado;
+    }
+
+    public Integer getAnioSeleccionado() {
+        return anioSeleccionado;
+    }
+
+    public void setAnioSeleccionado(Integer anioSeleccionado) {
+        this.anioSeleccionado = anioSeleccionado;
     }
 
     public void subir(FileUploadEvent fue) {

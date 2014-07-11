@@ -63,33 +63,33 @@ public class LogicaProgramaActividades {
     }
 
     @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable) {
-        return mpaProgramaDao.obtenerPlanes(programa, responsable);
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(programa, responsable, anioSeleccionado);
     }
 
     @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa) {
-        return mpaProgramaDao.obtenerPlanes(programa);
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(programa, anioSeleccionado);
     }
 
     @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(Personal responsable) {
-        return mpaProgramaDao.obtenerPlanes(responsable);
+    public List<MpaPlanPrograma> obtenerPlanes(Personal responsable, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(responsable, anioSeleccionado);
     }
     
     @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes() {
-        return mpaProgramaDao.obtenerPlanes();
+    public List<MpaPlanPrograma> obtenerPlanes(Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(anioSeleccionado);
     }
 
     @Transactional(readOnly = true)
-    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Mes mes, Integer responsable) {
-        return mpaPlanDao.obtenerCantEjecuciones(plan, mes, responsable);
+    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Mes mes) {
+        return mpaPlanDao.obtenerCantEjecuciones(plan, mes);
     }
     
     @Transactional(readOnly = true)
-    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan, Integer responsable) {
-        return mpaPlanDao.obtenerCantEjecuciones(plan, responsable);
+    public Integer obtenerCantEjecuciones(MpaPlanPrograma plan) {
+        return mpaPlanDao.obtenerCantEjecuciones(plan);
     }
 
     @Transactional(readOnly = false)
@@ -98,7 +98,17 @@ public class LogicaProgramaActividades {
     }
 
     @Transactional(readOnly = true)
-    public List<MpaEjecucionPlan> obtenerEjecuciones(MpaPlanPrograma plan, Mes mes, Integer responsable) {
-        return mpaPlanDao.obtenerEjecuciones(plan, mes, responsable);
+    public List<MpaEjecucionPlan> obtenerEjecuciones(MpaPlanPrograma plan, Mes mes) {
+        return mpaPlanDao.obtenerEjecuciones(plan, mes);
+    }
+
+    @Transactional(readOnly = true)
+    public float obtenerCumplimientoResponsable(MpaPlanPrograma plan, Mes mes) {
+        return mpaPlanDao.obtenerCumplimientoResponsable(plan, mes);
+    }
+
+    @Transactional(readOnly = true)
+    public float obtenerCumplimientoPrograma(MpaPlanPrograma plan, Mes mes) {
+        return mpaPlanDao.obtenerCumplimientoPrograma(plan, mes);
     }
 }

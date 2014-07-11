@@ -8,31 +8,47 @@
     <ui:define name="contenido">
         <h2>Ingresar comprobante para realización de actividad</h2>
         <p:messages autoUpdate="true" showDetail="true" closable="true"/>
-        <h:form id="frmEjeAct">
-            <h:panelGrid columns="3">
-                <h:outputLabel value="Programa"/>:
-                <h:outputText value="#{mantenedorProgramaActividades.programa.nombre}"/>
-                <h:outputLabel value="Actividad"/>:
-                <h:outputText value="#{mantenedorProgramaActividades.actividad.nombre}"/>
-                <h:outputLabel value="Responsable"/>:
-                <h:outputText value="#{sesionCliente.nombreCompleto}"/>
-                <h:outputLabel value="Mes"/>:
-                <p:selectOneMenu id="sMeses" value="#{mantenedorProgramaActividades.mesSeleccionado}">
-                    <f:selectItems value="#{constantes.meses}" var="mes" itemLabel="#{mes.nombre}"/>
-                    <p:ajax event="change" process="@this" update="pDescargables"/>
-                </p:selectOneMenu>
-            </h:panelGrid>
-            <p:commandButton value="Volver" action="#{mantenedorProgramaActividades.irMostrarPlan()}" immediate="true" ajax="false"/>
-            <p:panel id="pDescargables">
-                <ui:repeat value="#{mantenedorProgramaActividades.obtenerDescargables()}" var="d">
-                    <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
-                        <p:fileDownload value="#{d.streamedContent}"/>
-                    </p:commandButton>
-                </ui:repeat>
-            </p:panel>
-        </h:form>
-        <ui:include src="/components/cargadorArchivos.xhtml">
-            <ui:param name="padre" value="#{mantenedorProgramaActividades}"/>
-        </ui:include>
+        <ui:fragment rendered="#{sesionCliente.usuario.rut == mantenedorProgramaActividades.planSeleccionado.rutResponsable.rut}">
+            <h3>NOTA: Cada archivo enlazado implica una actividad</h3>
+            <h:form id="frmEjeAct">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Programa"/>:
+                    <h:outputText value="#{mantenedorProgramaActividades.programa.nombre}"/>
+                    <h:outputLabel value="Actividad"/>:
+                    <h:outputText value="#{mantenedorProgramaActividades.actividad.nombre}"/>
+                    <h:outputLabel value="Responsable"/>:
+                    <h:outputText value="#{sesionCliente.nombreCompleto}"/>
+                    <h:outputLabel value="Mes"/>:
+                    <p:selectOneMenu id="sMeses" value="#{mantenedorProgramaActividades.mesSeleccionado}">
+                        <f:selectItems value="#{constantes.meses}" var="mes" itemLabel="#{mes.nombre}"/>
+                        <p:ajax event="change" process="@this" update="pDescargables"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:commandButton value="Volver" action="#{mantenedorProgramaActividades.irMostrarPlan()}" immediate="true" ajax="false"/>
+                <p:panel id="pDescargables">
+                    <ui:repeat value="#{mantenedorProgramaActividades.obtenerDescargables()}" var="d">
+                        <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                            <p:fileDownload value="#{d.streamedContent}"/>
+                        </p:commandButton>
+                    </ui:repeat>
+                </p:panel>
+            </h:form>
+            <ui:include src="/components/cargadorArchivos.xhtml">
+                <ui:param name="padre" value="#{mantenedorProgramaActividades}"/>
+            </ui:include>
+        </ui:fragment>
+        <ui:fragment rendered="#{!(sesionCliente.usuario.rut == mantenedorProgramaActividades.planSeleccionado.rutResponsable.rut)}">
+            <h3>Comprobantes</h3>
+            <h:form id="frmEjeActRestringido">
+                <p:commandButton value="Volver" action="#{mantenedorProgramaActividades.irMostrarPlan()}" immediate="true" ajax="false"/>
+                <p:panel id="pDescargables">
+                    <ui:repeat value="#{mantenedorProgramaActividades.obtenerDescargables()}" var="d">
+                        <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
+                            <p:fileDownload value="#{d.streamedContent}"/>
+                        </p:commandButton>
+                    </ui:repeat>
+                </p:panel>
+            </h:form>
+        </ui:fragment>
     </ui:define>
 </ui:composition>
