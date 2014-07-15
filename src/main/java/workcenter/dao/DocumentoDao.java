@@ -36,10 +36,8 @@ public class DocumentoDao {
 
     public void guardarAsociacion(AsociacionDocumento ad) {
         if (ad.getId() == null) {
-            System.err.println("PERSISTO!!!");
             em.persist(ad);
         } else {
-            System.err.println("MEZCLO!!!");
             em.merge(ad);
         }
     }

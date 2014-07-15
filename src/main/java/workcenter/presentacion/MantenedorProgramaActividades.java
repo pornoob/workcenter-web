@@ -279,6 +279,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         plan.setFecha(new Date());
         logicaProgramaActividades.guardarPlan(plan);
         FacesUtil.mostrarMensajeInformativo("Se ha guardado correctamente el plan", "Plan guardado con ID: " + plan.getId());
+        irGenerarPlan();
     }
 
     private void obtenerProgramas() {

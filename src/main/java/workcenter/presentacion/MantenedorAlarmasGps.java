@@ -154,8 +154,13 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
             ga.setIdUsuario(new Usuario(sesionCliente.getUsuario().getRut()));
             ga.setFecha(fecha);
             ga.setIdAlarma(a);
+            if (documentosSubidos == null || documentosSubidos.isEmpty()) {
+                FacesUtil.mostrarMensajeError("No se han guardado los cambios", "Para cada gestión es necesario adjuntar un comprobante");
+                ga = null;
+                return;
+            }
             logicaAlarmasGps.guardarGestionAlarma(ga);
-//            documentosSubidos.get(fechaSeleccionada + "|" + conductorSeleccionado);
+            
             List<Documento> docs = documentosSubidos.get(formatoTabla.format(a.getFecha()) + "|" + a.getChofer());
             if (docs != null && !docs.isEmpty()) {
                 logicaDocumentos.asociarDocumentos(docs, ga);
@@ -275,6 +280,15 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
 
     public boolean noEsCero(String conductor, String columna) {
         return !obtenerValorCelda(conductor, columna).equals("0");
+    }
+    
+    public String obtenerAnchoColumna(String conductor, String columna) {
+        try {
+            Date fecha = sdf.parse(columna + " 00:00:00");
+            return "38px";
+        } catch (ParseException e) {
+            return "auto";
+        }
     }
 
     public String obtenerValorCelda(String conductor, String columna) {

@@ -45,26 +45,38 @@
                         </h:panelGrid>
                     </p:panel>
                 </ui:fragment>
+                <br/>
+                <h:commandLink>
+                    <h:graphicImage style="float: right" value="/img/icons/excel.png"/>
+                    <p:dataExporter target="tDetalle" type="xls" fileName="alarmas" />
+                </h:commandLink>
                 <p:dataTable id="tDetalle" value="#{mantenedorAlarmasGps.detalleAlarmas}" var="a" rows="20" paginator="true">
-                    <p:column headerText="N°">
+                    <p:column>
+                        <f:facet name="header">N°</f:facet>
                         <h:outputText value="#{a.numero}"/>
                     </p:column>
-                    <p:column headerText="Fecha">
+                    <p:column>
+                        <f:facet name="header">Fecha</f:facet>
                         <h:outputText value="#{a.fecha}" converter="fechaConverter"/>
                     </p:column>
-                    <p:column headerText="Patente">
+                    <p:column>
+                        <f:facet name="header">Patente</f:facet>
                         <h:outputText value="#{a.patente}"/>
                     </p:column>
-                    <p:column headerText="Alarma">
+                    <p:column>
+                        <f:facet name="header">Alarma</f:facet>
                         <h:outputText value="#{a.alarma}"/>
                     </p:column>
-                    <p:column headerText="Velocidad">
+                    <p:column>
+                        <f:facet name="header">Velocidad</f:facet>
                         <h:outputText value="#{a.velocidad}"/>
                     </p:column>
-                    <p:column headerText="Ruta">
+                    <p:column>
+                        <f:facet name="header">Ruta</f:facet>
                         <h:outputText value="#{a.ruta}"/>
                     </p:column>
-                    <p:column headerText="Ubicación">
+                    <p:column>
+                        <f:facet name="header">Ubicación</f:facet>
                         <h:outputText value="#{a.ubicacion}"/>
                     </p:column>
                 </p:dataTable>

@@ -139,7 +139,7 @@
 
             <h:panelGroup>
                 <p:commandButton value="Volver" immediate="true" ajax="false" action="#{mantenedorProgramaActividades.irMostrarPlan()}"/>
-                <p:commandButton value="Guardar" immediate="false" action="#{mantenedorProgramaActividades.guardarPlan()}"/>
+                <p:commandButton value="Guardar" immediate="false" action="#{mantenedorProgramaActividades.guardarPlan()}" update=":frmCrearProAct"/>
             </h:panelGroup>
         </h:form>
     </ui:define>
