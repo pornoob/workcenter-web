@@ -26,8 +26,8 @@
                 <h3>
                     <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
                 </h3>
-                <p:dataTable style="font-size: 8pt; margin-bottom: 30px" emptyMessage="No hay alarmas" class="datos" id="tabla" widgetVar="tAlarmas" rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="#{mantenedorAlarmasGps.conductores}" var="conductor">
-                    <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" rowspan="1" exportable="true">
+                <p:dataTable style="font-size: 8pt;" emptyMessage="No hay alarmas" id="tabla" widgetVar="tAlarmas" rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="#{mantenedorAlarmasGps.conductores}" var="conductor">
+                    <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" width="100px">
                         <f:facet name="header">
                             <h:outputText value="#{col.header}"/>
                         </f:facet>
@@ -39,7 +39,7 @@
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
                                                style="white-space: nowrap; display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')}"
+                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')}  #{col.id}"
                                                >
                                     <h:graphicImage style="float: right" value="/img/icons/luz_verde.png"/>
                                 </h:commandLink>
@@ -48,7 +48,7 @@
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
                                                style="white-space: nowrap; display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')}"
+                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} #{col.id}"
                                                >
                                     <h:graphicImage style="float: right" value="/img/icons/luz_roja.png"/>
                                 </h:commandLink>

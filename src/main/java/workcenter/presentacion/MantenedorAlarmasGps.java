@@ -84,7 +84,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         descargables = new ArrayList<Descargable>();
         return "flowListarAlarmas";
     }
-    
+
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
         if (documentosSubidos == null) {
@@ -160,7 +160,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
                 return;
             }
             logicaAlarmasGps.guardarGestionAlarma(ga);
-            
+
             List<Documento> docs = documentosSubidos.get(formatoTabla.format(a.getFecha()) + "|" + a.getChofer());
             if (docs != null && !docs.isEmpty()) {
                 logicaDocumentos.asociarDocumentos(docs, ga);
@@ -281,7 +281,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
     public boolean noEsCero(String conductor, String columna) {
         return !obtenerValorCelda(conductor, columna).equals("0");
     }
-    
+
     public String obtenerAnchoColumna(String conductor, String columna) {
         try {
             Date fecha = sdf.parse(columna + " 00:00:00");
@@ -320,11 +320,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
             obtenerConductores();
             indicarGestionActivado = false;
             indicadorCumplimiento = "Calculando...";
-            if (!servicioSeleccionado.equals(constantes.getServicioGeneral())) {
-                alarmas = logicaAlarmasGps.obtenerPorMes(mesSeleccionado, anioSeleccionado, servicioSeleccionado);
-            } else {
-                alarmas = logicaAlarmasGps.obtenerPorMes(mesSeleccionado, anioSeleccionado);
-            }
+            alarmas = logicaAlarmasGps.obtenerPorMes(mesSeleccionado, anioSeleccionado, servicioSeleccionado);
             Date dia = sdf.parse("01/" + mesSeleccionado + "/" + anioSeleccionado + " 00:00:00");
             Date diaSiguiente;
             Calendar c = Calendar.getInstance();
@@ -396,11 +392,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
             c.setTime(dia);
             int cantDiasMes = c.getActualMaximum(Calendar.DAY_OF_MONTH);
             Date diaSiguiente = sdf.parse(cantDiasMes + "/" + mesSeleccionado + "/" + anioSeleccionado + " 00:00:00");
-            if (!servicioSeleccionado.equals(constantes.getServicioGeneral())) {
-                conductores = logicaAlarmasGps.obtenerConductores(dia, diaSiguiente, servicioSeleccionado);
-            } else {
-                conductores = logicaAlarmasGps.obtenerConductores(dia, diaSiguiente);
-            }
+            conductores = logicaAlarmasGps.obtenerConductores(dia, diaSiguiente, servicioSeleccionado);
         } catch (ParseException ex) {
             Logger.getLogger(MantenedorAlarmasGps.class.getName()).log(Level.SEVERE, null, ex);
             conductores = new ArrayList<String>();

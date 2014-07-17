@@ -36,7 +36,13 @@ public class Constantes implements Serializable {
     private int cantidadFilasTablas = 15;
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
-    private Servicio servicioGeneral;
+    
+    // cliente de correo
+    private String usuarioCorreo = "colivares@transportesventanas.cl";
+    private String contrasennaCorreo = "colivares1";
+    private String servidorCorreo = "imap.googlemail.com";
+    private Integer puertoCorreo = 993;
+    private String protocoloCorreo = "imaps";
     
     // modulos
     private String moduloAlarmasGPS = "Modulo Alarmas GPS";
@@ -65,7 +71,6 @@ public class Constantes implements Serializable {
         meses.add(new Mes("10", "Octubre"));
         meses.add(new Mes("11", "Noviembre"));
         meses.add(new Mes("12", "Diciembre"));
-        servicioGeneral = new Servicio(4);
         
         horarios = new ArrayList<Horario>();
         horarios.add(new Horario(0, "00:00"));
@@ -133,10 +138,6 @@ public class Constantes implements Serializable {
         return paginadorTemplate;
     }
 
-    public Servicio getServicioGeneral() {
-        return servicioGeneral;
-    }
-
     public List<Horario> getHorarios() {
         return horarios;
     }
@@ -151,5 +152,25 @@ public class Constantes implements Serializable {
 
     public String getModuloProgramaActividades() {
         return moduloProgramaActividades;
+    }
+
+    public String getUsuarioCorreo() {
+        return usuarioCorreo;
+    }
+
+    public String getContrasennaCorreo() {
+        return contrasennaCorreo;
+    }
+
+    public String getServidorCorreo() {
+        return servidorCorreo;
+    }
+
+    public Integer getPuertoCorreo() {
+        return puertoCorreo;
+    }
+
+    public String getProtocoloCorreo() {
+        return protocoloCorreo;
     }
 }
