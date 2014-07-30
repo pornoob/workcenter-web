@@ -34,6 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Variable.findAll", query = "SELECT v FROM Variable v"),
     @NamedQuery(name = "Variable.findById", query = "SELECT v FROM Variable v WHERE v.id = :id"),
     @NamedQuery(name = "Variable.findByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave"),
+    @NamedQuery(name = "Variable.findActualByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave ORDER BY v.fecha DESC"),
     @NamedQuery(name = "Variable.findByFecha", query = "SELECT v FROM Variable v WHERE v.fecha = :fecha"),
     @NamedQuery(name = "Variable.findByValor", query = "SELECT v FROM Variable v WHERE v.valor = :valor"),
     @NamedQuery(name = "Variable.findByAmbito", query = "SELECT v FROM Variable v WHERE v.ambito = :ambito"),

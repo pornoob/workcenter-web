@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="
+        http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <on-start>
+        <evaluate expression="mantenedorPersonal.inicio()" />
+    </on-start>
+    
+    <view-state id="personal">
+        <transition on="flowMostrarFicha" to="verFicha"/>
+        <transition on="flowVerContratos" to="contratos"/>
+        <transition on="flowBloquear" to="bloquearPersonal"/>
+        <transition on="flowDesbloquear" to="desbloquearPersonal"/>
+    </view-state>
+    
+    <view-state id="bloquearPersonal">
+        <transition on="flowListarPersonal" to="personal"/>
+    </view-state>
+    
+    <view-state id="desbloquearPersonal">
+        <transition on="flowListarPersonal" to="personal"/>
+    </view-state>
+    
+    <view-state id="verFicha">
+        <transition on="flowListarPersonal" to="personal"/>
+        <transition on="flowVerContratos" to="contratos"/>
+    </view-state>
+    
+    <view-state id="contratos">
+        <transition on="flowMostrarFicha" to="verFicha"/>
+        <transition on="flowListarPersonal" to="personal"/>
+        <transition on="flowEditarContrato" to="editarContrato"/>
+    </view-state>
+    
+    <view-state id="editarContrato">
+        <transition on="flowVerContratos" to="contratos"/>
+    </view-state>
+</flow>

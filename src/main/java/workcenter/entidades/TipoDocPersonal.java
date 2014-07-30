@@ -101,7 +101,9 @@ public class TipoDocPersonal implements Serializable {
             return false;
         }
         TipoDocPersonal other = (TipoDocPersonal) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (this.getId() == null || other.getId() == null) {
+            return false;
+        } else if (this.getId().intValue() != other.getId().intValue()) {
             return false;
         }
         return true;

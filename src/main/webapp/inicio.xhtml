@@ -8,6 +8,53 @@
     <ui:define name="contenido">
 
         <h2>Transportes Ventanas / Puchuncaví</h2>
-        
+
+        <h:form rendered="#{sesionCliente.estaAutentificado()}" id="frmWorkcenter">
+            <h3>Módulos Mantenedores</h3>
+            <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}" action="#{facesUtil.redirigir('/spring/personal')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_personal.png"/>
+                    <h:outputLabel value="Mantenedor de Personal"/>
+                </h:commandLink>
+
+                <h:commandLink rendered="false" action="#{facesUtil.redirigir('/spring/equipos')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_camiones.png"/>
+                    <h:outputLabel value="Mantenedor de Equipos"/>
+                </h:commandLink>
+
+                <h:commandLink rendered="false" action="#{facesUtil.redirigir('/spring/empresas')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_empresas.png"/>
+                    <h:outputLabel value="Mantenedor de Empresas"/>
+                </h:commandLink>
+
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_USUARIOS')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/usuarios')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_usuarios.png"/>
+                    <h:outputLabel value="Mantenedor de Usuarios"/>
+                </h:commandLink>
+                
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/remuneraciones')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_remuneraciones.png"/>
+                    <h:outputLabel value="Libro de Remuneraciones"/>
+                </h:commandLink>
+            </h:panelGrid>
+
+            <h3>Módulos Gestión</h3>
+            <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}" action="#{facesUtil.redirigir('/spring/alarmas_gps')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_alarmas_gps.png"/>
+                    <h:outputLabel value="Alarmas GPS"/>
+                </h:commandLink>
+
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/informe_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_informe_actividades.png"/>
+                    <h:outputLabel value="Informe de Actividades"/>
+                </h:commandLink>
+
+                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/programa_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_programa_actividades.png"/>
+                    <h:outputLabel value="Programa de Actividades"/>
+                </h:commandLink>
+            </h:panelGrid>
+        </h:form>
     </ui:define>
 </ui:composition>

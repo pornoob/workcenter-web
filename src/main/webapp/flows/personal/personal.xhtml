@@ -1,0 +1,84 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Listado de Personal</h2>
+        <p:growl autoUpdate="true" showDetail="true"/>
+        <h:form id="frmPersonal">
+            <p:dataTable value="#{mantenedorPersonal.listaPersonal}"
+                         filteredValue="#{mantenedorPersonal.listaFiltradaPersonal}"
+                         emptyMessage="No se han encontrado registros"
+                         filterEvent="enter"
+                         paginator="true"
+                         paginatorAlwaysVisible="true"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         paginatorPosition="both"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}"
+                         widgetVar="tablaPersonal"
+                         var="personal"
+                         >
+
+                <p:column filterBy="rut" headerText="Rut" filterMatchMode="startsWith">
+                    <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>
+                </p:column>
+
+                <p:column filterBy="nombres" headerText="Nombres" filterMatchMode="contains">
+                    <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
+                </p:column>
+
+                <p:column filterBy="apellidos" headerText="Apellidos" filterMatchMode="contains">
+                    <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
+                </p:column>
+
+                <p:column filterBy="celular" headerText="Celular" filterMatchMode="contains">
+                    <h:outputText value="#{personal.celular}" />
+                </p:column>
+
+                <p:column filterMatchMode="contains">
+                    <f:facet name="header">
+                        Empleador<br/>
+                        <p:inputText value="#{mantenedorPersonal.filtroEmpleador}" onkeypress="if (event.keyCode == 13) {
+                                    this.change();
+                                    return false;
+                                }">
+                            <p:ajax event="change" listener="#{mantenedorPersonal.filtraPorEmpleadores()}" process="@this" update="@form"/>
+                        </p:inputText>
+                    </f:facet>
+                    <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}" />
+                </p:column>
+
+                <p:column style="text-align: center">
+                    <f:facet name="header">
+                        Estado<br/>
+                        <p:selectOneMenu value="#{mantenedorPersonal.filtroEstado}" valueChangeListener="#{mantenedorPersonal.filtrarPorEstado()}">
+                            <f:selectItems value="#{mantenedorPersonal.opcionesFiltroEstado}" var="filtro" itemLabel="#{filtro.label}" itemValue="#{filtro.value}"/>
+                            <p:ajax event="change" listener="#{mantenedorPersonal.filtrarPorEstado()}" process="@this" update="@form"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:graphicImage rendered="#{!mantenedorPersonal.estaBloqueado(personal)}" value="/img/icons/luz_verde.png"/>
+                    <h:graphicImage title="#{personal.sancion.motivo}" rendered="#{mantenedorPersonal.estaBloqueado(personal)}" value="/img/icons/luz_roja.png"/>
+                </p:column>
+
+                <p:column headerText="Acciones" width="65">
+                    <h:panelGroup class="opcionesFila">
+                        <p:commandLink title="Ver ficha" action="#{mantenedorPersonal.irVerFicha(personal)}"
+                                       styleClass="ui-icon ui-icon-search"/>
+                        <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" 
+                                       title="Administrar contratos" action="#{mantenedorPersonal.irContratosPersonal(personal)}"
+                                       styleClass="ui-icon ui-icon-pencil"/>
+                        <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" 
+                                       title="Bloquear" action="#{mantenedorPersonal.irBloqueoPersonal(personal)}"
+                                       styleClass="ui-icon ui-icon-locked"/>
+                        <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                       title="Desbloquear" action="#{mantenedorPersonal.irDesbloqueoPersonal(personal)}"
+                                       styleClass="ui-icon ui-icon-unlocked"/>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package workcenter.util;
+package workcenter.util.servlets;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -51,7 +51,6 @@ public class ImagenesServlet extends HttpServlet {
 
         // Decode the file name (might contain spaces and on) and prepare file object.
         File image = new File(pathImagenes, URLDecoder.decode(requestedImage, "UTF-8"));
-        System.out.println("IMAGEN: "+image.getAbsolutePath());
 
         // Check if file actually exists in filesystem.
         if (!image.exists()) {

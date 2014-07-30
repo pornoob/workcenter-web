@@ -16,7 +16,8 @@
         </h:head>
         <h:body>
             <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
-            <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"  />
+            <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
+            <h:outputScript library="js" name="webcenter.js" target="head"/>
             <p:ajaxStatus onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
 
             <p:dialog header="" closable="false" resizable="false" widgetVar="idleDialog" modal="true" width="400" dynamic="true">  

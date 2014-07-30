@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
@@ -34,6 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Prevision.findByTipo", query = "SELECT p FROM Prevision p WHERE p.tipo = :tipo"),
     @NamedQuery(name = "Prevision.findByUnico", query = "SELECT p FROM Prevision p WHERE p.unico = :unico")})
 public class Prevision implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -107,12 +107,13 @@ public class Prevision implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Prevision)) {
             return false;
         }
         Prevision other = (Prevision) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (this.getId() == null || other.getId() == null) {
+            return false;
+        } else if (this.getId().intValue() != other.getId().intValue()) {
             return false;
         }
         return true;
@@ -122,5 +123,5 @@ public class Prevision implements Serializable {
     public String toString() {
         return "workcenter.entities.Prevision[ id=" + id + " ]";
     }
-    
+
 }

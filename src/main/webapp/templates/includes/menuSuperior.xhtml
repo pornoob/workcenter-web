@@ -1,27 +1,59 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:ui="http://java.sun.com/jsf/facelets">
-    <h:panelGroup>
-        <h:outputLink value="#{request.contextPath}/inicio.jsf">
-            <h:outputText value="Inicio" />
-        </h:outputLink>
-        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}">
-            <h:outputText value=" | "/>
-            <h:outputLink value="#{request.contextPath}/spring/alarmas_gps">
-                <h:outputText value="Gestión Alarmas GPS" />
-            </h:outputLink>
-        </ui:fragment>
-        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}">
-            <h:outputText value=" | "/>
-            <h:outputLink value="#{request.contextPath}/spring/informe_actividades">
-                <h:outputText value="Informe de Actividades" />
-            </h:outputLink>
-        </ui:fragment>
-        <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}">
-            <h:outputText value=" | "/>
-            <h:outputLink value="#{request.contextPath}/spring/programa_actividades">
-                <h:outputText value="Programa de Actividades" />
-            </h:outputLink>
-        </ui:fragment>
-    </h:panelGroup>
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui">
+    <h:form>
+        <p:panel>
+            <ul class="navBar">
+                <li>
+                    <h:commandLink action="#{facesUtil.redirigir('/inicio.jsf')}" title="Inicio" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                        <h:graphicImage value="/img/icons/24/inicio.png"/>
+                    </h:commandLink>
+                </li>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/personal')}" title="Módulo de Personal" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_personal.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_USUARIOS')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/usuarios')}" title="Módulo de Usuarios" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_usuarios.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/remuneraciones')}" title="Gestión de Alarmas GPS" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_remuneraciones.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/alarmas_gps')}" title="Gestión de Alarmas GPS" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_alarmas_gps.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/informe_actividades')}" title="Informe de Actividades" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_informe_actividades.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/spring/programa_actividades')}" title="Programa de Actividades" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_programa_actividades.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
+            </ul>
+            <div style="clear: both"></div>
+        </p:panel>
+    </h:form>
 </ui:composition>

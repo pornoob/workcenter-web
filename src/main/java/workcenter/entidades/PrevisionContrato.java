@@ -11,11 +11,14 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -43,14 +46,12 @@ public class PrevisionContrato implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "contrato")
-    private int contrato;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "prevision")
-    private int prevision;
+    @JoinColumn(name = "contrato", referencedColumnName = "numero")
+    @OneToOne(fetch = FetchType.LAZY)
+    private ContratoPersonal contrato;
+    @JoinColumn(name = "prevision", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.EAGER)
+    private Prevision prevision;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechainicio")
@@ -67,13 +68,6 @@ public class PrevisionContrato implements Serializable {
         this.id = id;
     }
 
-    public PrevisionContrato(Integer id, int contrato, int prevision, Date fechainicio) {
-        this.id = id;
-        this.contrato = contrato;
-        this.prevision = prevision;
-        this.fechainicio = fechainicio;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -82,19 +76,19 @@ public class PrevisionContrato implements Serializable {
         this.id = id;
     }
 
-    public int getContrato() {
+    public ContratoPersonal getContrato() {
         return contrato;
     }
 
-    public void setContrato(int contrato) {
+    public void setContrato(ContratoPersonal contrato) {
         this.contrato = contrato;
     }
 
-    public int getPrevision() {
+    public Prevision getPrevision() {
         return prevision;
     }
 
-    public void setPrevision(int prevision) {
+    public void setPrevision(Prevision prevision) {
         this.prevision = prevision;
     }
 

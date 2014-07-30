@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
@@ -11,9 +10,12 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -39,6 +41,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "DocumentoPersonal.findByPersonal", query = "SELECT d FROM DocumentoPersonal d WHERE d.personal = :personal"),
     @NamedQuery(name = "DocumentoPersonal.findByArchivo", query = "SELECT d FROM DocumentoPersonal d WHERE d.archivo = :archivo")})
 public class DocumentoPersonal implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,14 +54,12 @@ public class DocumentoPersonal implements Serializable {
     @Column(name = "vencimiento")
     @Temporal(TemporalType.DATE)
     private Date vencimiento;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tipo")
-    private int tipo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "personal")
-    private int personal;
+    @JoinColumn(name = "tipo", referencedColumnName = "id")
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    private TipoDocPersonal tipo;
+    @JoinColumn(name = "personal", referencedColumnName = "rut")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private Personal personal;
     @Size(max = 300)
     @Column(name = "archivo")
     private String archivo;
@@ -68,12 +69,6 @@ public class DocumentoPersonal implements Serializable {
 
     public DocumentoPersonal(Integer id) {
         this.id = id;
-    }
-
-    public DocumentoPersonal(Integer id, int tipo, int personal) {
-        this.id = id;
-        this.tipo = tipo;
-        this.personal = personal;
     }
 
     public Integer getId() {
@@ -100,19 +95,19 @@ public class DocumentoPersonal implements Serializable {
         this.vencimiento = vencimiento;
     }
 
-    public int getTipo() {
+    public TipoDocPersonal getTipo() {
         return tipo;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(TipoDocPersonal tipo) {
         this.tipo = tipo;
     }
 
-    public int getPersonal() {
+    public Personal getPersonal() {
         return personal;
     }
 
-    public void setPersonal(int personal) {
+    public void setPersonal(Personal personal) {
         this.personal = personal;
     }
 
@@ -138,7 +133,9 @@ public class DocumentoPersonal implements Serializable {
             return false;
         }
         DocumentoPersonal other = (DocumentoPersonal) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (this.getId() == null || other.getId() == null) {
+            return false;
+        } else if (this.getId().intValue() != other.getId().intValue()) {
             return false;
         }
         return true;
@@ -148,5 +145,5 @@ public class DocumentoPersonal implements Serializable {
     public String toString() {
         return "workcenter.entities.DocumentoPersonal[ id=" + id + " ]";
     }
-    
+
 }

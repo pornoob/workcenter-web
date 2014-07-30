@@ -3,12 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -19,6 +20,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -49,14 +51,14 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ContratoPersonal.findByLocomocion", query = "SELECT c FROM ContratoPersonal c WHERE c.locomocion = :locomocion"),
     @NamedQuery(name = "ContratoPersonal.findByBonopactado", query = "SELECT c FROM ContratoPersonal c WHERE c.bonopactado = :bonopactado")})
 public class ContratoPersonal implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "numero")
     private Integer numero;
-    @Basic(optional = false)
-    @NotNull
+    @JoinColumn(name = "rut", referencedColumnName = "rut")
     @ManyToOne(optional = false)
     private Personal rut;
     @Basic(optional = false)
@@ -93,6 +95,8 @@ public class ContratoPersonal implements Serializable {
     private Integer locomocion;
     @Column(name = "bonopactado")
     private Integer bonopactado;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato", fetch = FetchType.LAZY)
+    private List<PrevisionContrato> previsiones;
 
     public ContratoPersonal() {
     }
@@ -100,6 +104,7 @@ public class ContratoPersonal implements Serializable {
     public ContratoPersonal(Integer numero) {
         this.numero = numero;
     }
+
     public Integer getNumero() {
         return numero;
     }
@@ -221,12 +226,13 @@ public class ContratoPersonal implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ContratoPersonal)) {
             return false;
         }
         ContratoPersonal other = (ContratoPersonal) object;
-        if ((this.numero == null && other.numero != null) || (this.numero != null && !this.numero.equals(other.numero))) {
+        if (this.getNumero() == null || other.getNumero() == null) {
+            return false;
+        } else if (this.getNumero().intValue() != other.getNumero().intValue()) {
             return false;
         }
         return true;
@@ -236,5 +242,13 @@ public class ContratoPersonal implements Serializable {
     public String toString() {
         return "workcenter.entities.ContratoPersonal[ numero=" + numero + " ]";
     }
-    
+
+    public List<PrevisionContrato> getPrevisiones() {
+        return previsiones;
+    }
+
+    public void setPrevisiones(List<PrevisionContrato> previsiones) {
+        this.previsiones = previsiones;
+    }
+
 }

@@ -52,7 +52,8 @@ public class SesionCliente implements Serializable {
     }
     
     public boolean tieneAccesoEspecial(String modulo) {
-        if (tieneNivel((Integer)constantes.getAccesos().get("Privilegios Especiales"), modulo)) {
+        if (tieneNivel((Integer)constantes.getAccesos().get("Privilegios Especiales"), modulo)
+                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), modulo)) {
             return true;
         }
         return false;

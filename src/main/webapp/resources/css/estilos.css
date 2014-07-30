@@ -5,10 +5,6 @@ html,body {
     padding: 0;
 }
 
-label {
-    font-weight: bold;
-}
-
 .fondo {
     background: url("./img/theme/bg.svg") no-repeat right fixed;
     width: 100%;
@@ -34,32 +30,50 @@ label {
     width: 100%;
     alignment-adjust: central;
     text-align: center;
+    margin-top: 5px;
 }
 
-
-.datos {
-    border-collapse: collapse;
+.ui-datatable, .ui-widget {
     font-size: 8pt;
-} .datos thead {
-    text-align: center
-} .datos thead td {
-    border: 1px solid gray;
-    -moz-border-radius-topleft: 3px;
-    -webkit-border-top-left-radius: 3px;
-    border-top-left-radius: 3px;
-    -moz-border-radius-topright: 3px;
-    -webkit-border-top-right-radius: 3px;
-    border-top-right-radius: 3px;
-} .datos tbody td {
-    border: 1px solid gray;
-    padding-left: 2px;
-    padding-right: 2px;
 }
 
-.ui-datatable .ui-column-filter {
-    //display:none;
+.ui-row-editor {
+    float: left;
 }
 
-.ui-datatable-data .ui-widget-content {
+.ui-panel {
+    border: 0;
+}
+
+.menuWorkcenter {
     font-size: 8pt;
+    text-align: center;
+    display: block;
+    margin-right: 15px;
+} .menuWorkcenter:hover {
+    color: #cc0000;
+    /*background-color: black;*/
+} .menuWorkcenter label {
+    cursor: pointer;
+    display: block;
+} .menuWorkcenter img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+ul.navBar {
+    list-style: none;  
+} ul.navBar li {
+    float: left;
+}
+
+.opcionesFila {
+    text-align: center;
+} .opcionesFila a {
+    float: left;
+}
+
+table {
+    width: 100%;
 }

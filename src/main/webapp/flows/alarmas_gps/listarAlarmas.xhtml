@@ -22,12 +22,15 @@
                 </p:selectOneMenu>
                 <p:commandButton value="Cargar panel de gestión" action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas" />
             </h:panelGrid>
-            <p:scrollPanel id="pAlarmas" style="border:0">
+            <p:panel id="pAlarmas" style="border:0">
                 <h3>
                     <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
                 </h3>
-                <p:dataTable style="font-size: 8pt;" emptyMessage="No hay alarmas" id="tabla" widgetVar="tAlarmas" rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="#{mantenedorAlarmasGps.conductores}" var="conductor">
-                    <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" width="100px">
+                <p:dataTable style="font-size: 8pt; width: 100%" emptyMessage="No hay alarmas" id="tabla" widgetVar="tAlarmas" 
+                             rendered="#{mantenedorAlarmasGps.alarmas ne null}" 
+                             value="#{mantenedorAlarmasGps.conductores}" var="conductor"
+                             scrollable="true">
+                    <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" width="70">
                         <f:facet name="header">
                             <h:outputText value="#{col.header}"/>
                         </f:facet>
@@ -38,8 +41,8 @@
                                 </f:facet>
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
-                                               style="white-space: nowrap; display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')}  #{col.id}"
+                                               style="display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
+                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} - [Alarmas: #{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)} Día: #{col.id}]"
                                                >
                                     <h:graphicImage style="float: right" value="/img/icons/luz_verde.png"/>
                                 </h:commandLink>
@@ -47,8 +50,8 @@
                             <ui:fragment rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
-                                               style="white-space: nowrap; display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} #{col.id}"
+                                               style="display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
+                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} - [Alarmas: #{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)} Día: #{col.id}]"
                                                >
                                     <h:graphicImage style="float: right" value="/img/icons/luz_roja.png"/>
                                 </h:commandLink>
@@ -56,7 +59,7 @@
                         </ui:fragment>
                     </p:columns>
                 </p:dataTable>
-            </p:scrollPanel>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

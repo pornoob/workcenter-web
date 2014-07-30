@@ -50,7 +50,7 @@ public class CronService {
         testQueryDao.run();
     }
 
-    @Scheduled(cron = "0 7 * * *")
+    @Scheduled(cron = "0 0 7 * * *")
     public void descargarFicheroAlarmaGPS() {
         Properties props = new Properties();
         props.setProperty("mail.store.protocol", constantes.getProtocoloCorreo());

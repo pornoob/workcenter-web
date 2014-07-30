@@ -11,11 +11,15 @@ import java.util.Date;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -47,14 +51,12 @@ public class SancionRetiradaPersonal implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "sancionado")
-    private int sancionado;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "perdonadapor")
-    private int perdonadapor;
+    @JoinColumn(name = "sancionado", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Personal sancionado;
+    @JoinColumn(name = "perdonadapor", referencedColumnName = "rut")
+    @OneToOne(fetch = FetchType.LAZY)
+    private Personal perdonadapor;
     @Size(max = 200)
     @Column(name = "motivosancion")
     private String motivosancion;
@@ -83,15 +85,6 @@ public class SancionRetiradaPersonal implements Serializable {
         this.id = id;
     }
 
-    public SancionRetiradaPersonal(Integer id, int sancionado, int perdonadapor, String motivolevantada, Date fechasancion, int nivel) {
-        this.id = id;
-        this.sancionado = sancionado;
-        this.perdonadapor = perdonadapor;
-        this.motivolevantada = motivolevantada;
-        this.fechasancion = fechasancion;
-        this.nivel = nivel;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -100,19 +93,19 @@ public class SancionRetiradaPersonal implements Serializable {
         this.id = id;
     }
 
-    public int getSancionado() {
+    public Personal getSancionado() {
         return sancionado;
     }
 
-    public void setSancionado(int sancionado) {
+    public void setSancionado(Personal sancionado) {
         this.sancionado = sancionado;
     }
 
-    public int getPerdonadapor() {
+    public Personal getPerdonadapor() {
         return perdonadapor;
     }
 
-    public void setPerdonadapor(int perdonadapor) {
+    public void setPerdonadapor(Personal perdonadapor) {
         this.perdonadapor = perdonadapor;
     }
 

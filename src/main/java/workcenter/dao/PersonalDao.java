@@ -5,15 +5,21 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.ContratoPersonal;
+import workcenter.entidades.DocumentoPersonal;
+import workcenter.entidades.Empresa;
 import workcenter.entidades.Personal;
+import workcenter.entidades.SancionRetiradaPersonal;
+import workcenter.entidades.Sancionado;
 import workcenter.entidades.Usuario;
+import workcenter.entidades.ValorPrevisionPersonal;
 
 /**
  * @author colivares
  */
 @Repository
 public class PersonalDao {
-    
+
     @PersistenceContext
     private EntityManager em;
 
@@ -64,5 +70,63 @@ public class PersonalDao {
 
     public Personal obtener(Integer rut) {
         return em.find(Personal.class, rut);
+    }
+
+    public Empresa obtenerEmpleador(Personal p) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select e.* from empresas e ");
+        sb.append("inner join contratospersonal cp on (cp.empleador = e.id) ");
+        sb.append("where cp.rut=:rut ");
+        sb.append("order by cp.numero desc limit 1");
+        Query q = em.createNativeQuery(sb.toString(), Empresa.class);
+        q.setParameter("rut", p.getRut());
+        try {
+            return (Empresa) q.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<DocumentoPersonal> obtenerDocumentos(Personal personal) {
+        return em.createNamedQuery("DocumentoPersonal.findByPersonal").setParameter("personal", personal).getResultList();
+    }
+
+    public List<ContratoPersonal> obtenerContratos(Personal personal) {
+        return em.createNamedQuery("ContratoPersonal.findByRut").setParameter("rut", personal).getResultList();
+    }
+
+    public ValorPrevisionPersonal obtenerValorPrevisionSaludActual(ContratoPersonal cp) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select vpp.* from valoresprevisionpersonal vpp ");
+        sb.append("inner join prevision p on (vpp.prevision = p.id and p.tipo='salud') ");
+        sb.append("inner join previsionescontratos pc on (vpp.contrato= pc.contrato and vpp.prevision=pc.prevision) ");
+        sb.append("where vpp.contrato=:contrato and pc.fechatermino is null ");
+        sb.append("order by vpp.fechavigencia desc ");
+        sb.append("limit 1 ");
+        try {
+            return (ValorPrevisionPersonal) em.createNativeQuery(sb.toString(), ValorPrevisionPersonal.class).setParameter("contrato", cp.getNumero()).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public void guardar(Personal personal) {
+        if (personal.getRut() == null) {
+            em.persist(personal);
+        } else {
+            em.merge(personal);
+        }
+    }
+
+    public List<SancionRetiradaPersonal> obtenerSancionesRetiradas(Personal p) {
+        return em.createNamedQuery("SancionRetiradaPersonal.findBySancionado").setParameter("sancionado", p).getResultList();
+    }
+
+    public Sancionado obtenerSancion(Personal p) {
+        try {
+            return (Sancionado) em.createNamedQuery("Sancionado.findBySancionado").setParameter("sancionado", p).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

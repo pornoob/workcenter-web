@@ -1,0 +1,100 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Ficha de Personal</h2>
+        <h:form id="frmPersonal">
+            <h3>Antecedentes Personales</h3>
+            <h:panelGrid columns="2">
+                <h:panelGroup>
+                    <h:panelGrid columns="6">
+                        <h:outputLabel value="Nombres"/>:
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.nombres}" converter="nombreConverter"/>
+                        <h:outputText/><h:outputText/><h:outputText/>
+
+                        <h:outputLabel value="Apellidos"/>:
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.apellidos}" converter="nombreConverter"/>
+                        <h:outputText/><h:outputText/><h:outputText/>
+
+                        <h:outputLabel value="RUT"/>:
+                        <h:inputText value="#{mantenedorPersonal.rutIngresado}" converter="rutConverter"/>
+                        <h:outputLabel value="Celular"/>:
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.celular}"/>
+
+                        <h:outputLabel value="Estado Civil"/>:
+                        <p:selectOneMenu value="#{mantenedorPersonal.personalSeleccionado.ecivil}">
+                            <f:selectItems value="#{constantes.estadosCiviles}" var="estado" itemLabel="#{estado}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Fecha de nacimiento"/>:
+                        <p:calendar value="#{mantenedorPersonal.personalSeleccionado.nacimiento}" pattern="dd-MM-yyyy"
+                                    navigator="true" locale="es" placeholder="Haga click para seleccionar una fecha"/>
+
+                        <h:outputLabel value="Domicilio"/>:
+                        <h:inputTextarea style="width: 320px" value="#{mantenedorPersonal.personalSeleccionado.domicilio}"/>
+                        <h:outputText/><h:outputText/><h:outputText/>
+
+                        <h:outputLabel value="Contacto de Emergencia"/>:
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.contactoe}"/>
+                        <h:outputText/><h:outputText/><h:outputText/>
+
+                        <h:outputLabel value="Domicilio de Emergencia"/>:
+                        <h:inputTextarea style="width: 320px" value="#{mantenedorPersonal.personalSeleccionado.edomicilio}"/>
+                        <h:outputText/><h:outputText/><h:outputText/>
+
+                        <h:outputLabel value="Teléfono de Emergencia"/>:
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.telefono}"/>
+                    </h:panelGrid>
+                </h:panelGroup>
+                <h:panelGroup>
+                    <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}" value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
+                    <br/>
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" value="Cambiar Foto"/>
+                </h:panelGroup>
+            </h:panelGrid>
+            <h3>Documentos de Carpeta</h3>
+            <p:panel id="pDocumentos">
+                <p:commandButton value="Agregar documento"/>
+                <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.documentosActualizados}" var="doc">
+                    <p:column headerText="Nombre">
+                        #{doc.tipo.etiqueta}
+                    </p:column>
+
+                    <p:column headerText="Fecha de vencimiento">
+                        <h:outputText value="#{doc.vencimiento}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Código de documento">
+                        #{doc.numero}
+                    </p:column>
+                    <p:column headerText="Código interno">
+                        #{doc.id}
+                    </p:column>
+
+                    <p:column headerText="Acciones">
+                        <h:panelGroup class="opcionesFila">
+                            <p:commandLink title="Descargar"
+                                           styleClass="ui-icon ui-icon-arrowthickstop-1-s"
+                                           ajax="false">
+                                <p:fileDownload value="#{mantenedorPersonal.generaDescargable(doc)}"/>
+                            </p:commandLink>
+                            <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" title="Actualizar"
+                                           styleClass="ui-icon ui-icon-arrowthickstop-1-n"/>
+                            <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" title="Editar"
+                                           styleClass="ui-icon ui-icon-pencil"/>
+                        </h:panelGroup>
+                    </p:column>
+
+                </p:dataTable>
+                <p:panel class="actionPanel">
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Guardar"/>
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Ver contratos" action="#{mantenedorPersonal.irContratosPersonal()}"/>
+                    <p:commandButton value="Volver" action="#{mantenedorPersonal.irListaPersonal()}"/>
+                </p:panel>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

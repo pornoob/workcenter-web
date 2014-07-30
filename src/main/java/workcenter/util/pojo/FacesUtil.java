@@ -8,10 +8,14 @@ import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
 
 /**
  * @author colivares
  */
+@Component
+@Scope("application")
 public class FacesUtil {
     public static String obtenerContextPath() {
         return obtenerHttpServletRequest().getContextPath();

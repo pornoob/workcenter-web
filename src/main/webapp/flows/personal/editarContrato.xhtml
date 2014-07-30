@@ -1,0 +1,204 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Edición de contrato</h2>
+        <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
+
+        <h:form id="frmPersonal">
+
+            <table>
+                <tr>
+                    <td colspan="9">
+                        <h4>1.- Contrato de trabajo N° #{mantenedorPersonal.contratoSeleccionado.numero}</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h:outputLabel value="Cargo"/></td>
+                    <td>:</td>
+                    <td>
+                        <p:selectOneMenu value="#{mantenedorPersonal.cargoSeleccionado}" converter="entityConverter"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{mantenedorPersonal.cargos}" var="c" itemLabel="#{c.nombrecargo}"/>
+                        </p:selectOneMenu>
+                    </td>
+
+                    <td><h:outputLabel value="Suedo base"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText value="#{mantenedorPersonal.contratoSeleccionado.sueldoBase}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+
+                    <td><h:outputLabel value="% Variable"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText value="#{mantenedorPersonal.contratoSeleccionado.porcentaje}">
+                            <f:convertNumber type="percent" currencySymbol="%" maxFractionDigits="2"/>
+                        </h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Fecha contrato</td>
+                    <td>:</td>
+                    <td><p:calendar value="#{mantenedorPersonal.contratoSeleccionado.fecha}" pattern="dd-MM-yyyy"/></td>
+
+                    <td>Fecha de inicio</td>
+                    <td>:</td>
+                    <td><p:calendar value="#{mantenedorPersonal.contratoSeleccionado.inicio}" pattern="dd-MM-yyyy"/></td>
+
+                    <td>Fecha de término</td>
+                    <td>:</td>
+                    <td><p:calendar value="#{mantenedorPersonal.contratoSeleccionado.vencimiento}" pattern="dd-MM-yyyy"/></td>
+                </tr>
+                <tr>
+                    <td><h:outputLabel value="Contrato indefinido"/></td>
+                    <td>:</td>
+                    <td><p:selectBooleanCheckbox value="#{mantenedorPersonal.contratoSeleccionado.vigente}"/></td>
+
+                    <td><h:outputLabel value="Empleador"/></td>
+                    <td>:</td>
+                    <td colspan="4">
+                        <p:selectOneMenu filter="true" filterMatchMode="contains" 
+                                         value="#{mantenedorPersonal.empleadorSeleccionado}" converter="entityConverter">
+                            <f:selectItems value="#{mantenedorPersonal.empleadores}" var="e" itemLabel="#{e.nombre}"/>
+                        </p:selectOneMenu>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9">
+                        <h4>2.- Valores fijos</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h:outputLabel value="Hrs. de espera"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText disabled="#{mantenedorPersonal.hrsEspera == null}" value="#{mantenedorPersonal.hrsEspera}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+
+                    <td><h:outputLabel value="Semana corrida"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText disabled="#{mantenedorPersonal.hrsEspera == null}" value="#{mantenedorPersonal.semanaCorrida}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+
+                    <td><h:outputLabel value="Gratificación"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText readonly="true" value="#{mantenedorPersonal.gratificacionCalculada}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9">
+                        <h4>3.- Valores acordados</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td><h:outputLabel value="Colación"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText value="#{mantenedorPersonal.contratoSeleccionado.colacion}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+
+                    <td><h:outputLabel value="Locomoción"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText value="#{mantenedorPersonal.contratoSeleccionado.locomocion}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+
+                    <td><h:outputLabel value="Bono pactado"/></td>
+                    <td>:</td>
+                    <td>
+                        <h:inputText value="#{mantenedorPersonal.contratoSeleccionado.bonopactado}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:inputText>
+                    </td>
+                </tr>
+                <tr>
+                    <td colspan="9">
+                        <h4>4.- Antecedentes Previsionales</h4>
+                    </td>
+                </tr>
+                <tr>
+                    <td>AFP</td>
+                    <td>:</td>
+                    <td>
+                        <p:selectOneMenu value="#{mantenedorPersonal.afpSeleccionada}" converter="entityConverter"
+                                         filter="true" filterMatchMode="contains">
+                            <f:selectItems value="#{mantenedorPersonal.afps}" var="a" itemLabel="#{a.nombre}"/>
+                        </p:selectOneMenu>
+                    </td>
+
+                    <td>Salud</td>
+                    <td>:</td>
+                    <td>
+                        <p:selectOneRadio id="sTipoSalud" value="#{mantenedorPersonal.tipoSalud}">
+                            <f:selectItems value="#{mantenedorPersonal.opcionesSalud}" var="i" itemLabel="#{i.label}" itemValue="#{i.value}"/>
+                            <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoSalud()}" process="@this" update="@form"/>
+                        </p:selectOneRadio>
+                    </td>
+
+                    <ui:fragment id="pIsapres" rendered="#{!mantenedorPersonal.esFonasa()}">
+                        <td>Institución</td>
+                        <td>:</td>
+                        <td>
+                            <p:selectOneMenu value="#{mantenedorPersonal.isapreSeleccionada}" converter="entityConverter"
+                                             filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{mantenedorPersonal.isapres}" var="i" itemLabel="#{i.nombre}"/>
+                            </p:selectOneMenu>
+                        </td>
+                    </ui:fragment>
+                </tr>
+
+                <tr>
+                    <td>Empart</td>
+                    <td>:</td>
+                    <td><p:selectBooleanCheckbox/></td>
+
+                    <ui:fragment id="pTiposUnidad" rendered="#{!mantenedorPersonal.esFonasa()}">
+                        <td>Tipo moneda</td>
+                        <td>:</td>
+                        <td>
+                            <p:selectOneRadio id="sTipoUnidad" value="#{mantenedorPersonal.valorSalud.unidad}" converter="entityConverter">
+                                <f:selectItems value="#{constantes.tiposUnidad}" var="tu" itemLabel="#{tu.etiqueta}"/>
+                                <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidad()}" process="@this" update=":frmPersonal:pValorTipoUnidad"/>
+                            </p:selectOneRadio>
+                        </td>
+
+                        <td>Valor Isapre</td>
+                        <td>:</td>
+                        <td>
+                            <p:panel id="pValorTipoUnidad">
+                                <h:inputText rendered="#{constantes.unidadUf eq mantenedorPersonal.valorSalud.unidad.id}" value="#{mantenedorPersonal.valorSalud.valor}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
+                                </h:inputText>
+                                <h:inputText rendered="#{constantes.unidadUf ne mantenedorPersonal.valorSalud.unidad.id}" value="#{mantenedorPersonal.valorSalud.valor}">
+                                    <f:convertNumber  type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:inputText>
+                            </p:panel>
+                        </td>
+                    </ui:fragment>
+                </tr>
+            </table>
+            <p:panel class="actionPanel">
+                <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Guardar"/>
+                <p:commandButton value="Volver" action="#{mantenedorPersonal.irContratosPersonal()}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,6 +1,7 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -58,6 +59,13 @@ public class Personal implements Serializable {
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection1;
+    @OneToOne(cascade = CascadeType.ALL, mappedBy = "sancionado", fetch = FetchType.LAZY, orphanRemoval = true)
+    private Sancionado sancion;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "sancionado", fetch = FetchType.LAZY, orphanRemoval = true)
+    private List<SancionRetiradaPersonal> sancionesRetiradas;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "personal", fetch = FetchType.LAZY)
+    private List<DocumentoPersonal> documentos;
+    
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -106,7 +114,7 @@ public class Personal implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "personal", cascade = CascadeType.ALL)
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rut")
-    private Collection<ContratoPersonal> contratospersonalCollection;
+    private List<ContratoPersonal> contratospersonalCollection;
 
     public Personal() {
     }
@@ -278,11 +286,11 @@ public class Personal implements Serializable {
         this.usuario = usuario;
     }
 
-    public Collection<ContratoPersonal> getContratospersonalCollection() {
+    public List<ContratoPersonal> getContratospersonalCollection() {
         return contratospersonalCollection;
     }
 
-    public void setContratospersonalCollection(Collection<ContratoPersonal> contratospersonalCollection) {
+    public void setContratospersonalCollection(List<ContratoPersonal> contratospersonalCollection) {
         this.contratospersonalCollection = contratospersonalCollection;
     }
 
@@ -311,5 +319,50 @@ public class Personal implements Serializable {
 
     public void setMpaEjecucionPlanCollection(Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection) {
         this.mpaEjecucionPlanCollection = mpaEjecucionPlanCollection;
+    }
+
+    public Sancionado getSancion() {
+        return sancion;
+    }
+
+    public void setSancion(Sancionado sancion) {
+        this.sancion = sancion;
+    }
+    
+    public List<DocumentoPersonal> getDocumentosActualizados() {
+        List<DocumentoPersonal> docs = new ArrayList<DocumentoPersonal>();
+        List<TipoDocPersonal> tip = new ArrayList<TipoDocPersonal>();
+        for (int i = 0; documentos != null && i < documentos.size(); i++) {
+            DocumentoPersonal doc = documentos.get(i);
+            if (tip.contains(doc.getTipo())) {
+                for (int j = 0; j < docs.size(); j++) {
+                    if (doc.getTipo() == docs.get(j).getTipo()) {
+                        if ((doc.getVencimiento() == null || docs.get(j).getVencimiento() == null) || doc.getVencimiento().after(docs.get(j).getVencimiento())) {
+                            docs.set(j, doc);
+                        }
+                    }
+                }
+            } else {
+                docs.add(doc);
+                tip.add(doc.getTipo());
+            }
+        }
+        return docs;
+    }
+
+    public List<DocumentoPersonal> getDocumentos() {
+        return documentos;
+    }
+
+    public void setDocumentos(List<DocumentoPersonal> documentos) {
+        this.documentos = documentos;
+    }
+
+    public List<SancionRetiradaPersonal> getSancionesRetiradas() {
+        return sancionesRetiradas;
+    }
+
+    public void setSancionesRetiradas(List<SancionRetiradaPersonal> sancionesRetiradas) {
+        this.sancionesRetiradas = sancionesRetiradas;
     }
 }

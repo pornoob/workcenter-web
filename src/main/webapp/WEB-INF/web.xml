@@ -1,27 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<web-app xmlns="http://java.sun.com/xml/ns/javaee"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
-         version="3.0">
+<web-app version="3.0" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
     <display-name>Capa Servicios Workcenter</display-name>
-    
     <!--Cargamos JSF-->
     <servlet>
         <servlet-name>Faces Servlet</servlet-name>
         <servlet-class>javax.faces.webapp.FacesServlet</servlet-class>
         <load-on-startup>1</load-on-startup>
     </servlet>
-
     <servlet-mapping>
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>*.jsf</url-pattern>
     </servlet-mapping>
-    
     <context-param>
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
-    
     <!--Cargamos Spring Security-->
     <filter>
         <filter-name>springSecurityFilterChain</filter-name>
@@ -35,13 +28,11 @@
         <dispatcher>REQUEST</dispatcher>
         <dispatcher>FORWARD</dispatcher>
     </filter-mapping>
-    
     <!--Donde estarán las configuraciones de Spring-->
     <context-param>
         <param-name>contextConfigLocation</param-name>
         <param-value>/WEB-INF/spring/*.xml</param-value>
     </context-param>
-    
     <!--Iniciamos Spring-->
     <listener>
         <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
@@ -49,7 +40,6 @@
     <listener>
         <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
     </listener>
-    
     <!--Controlador Spring MVC-->
     <servlet>
         <servlet-name>dispatcher</servlet-name>
@@ -64,11 +54,10 @@
         <servlet-name>dispatcher</servlet-name>
         <url-pattern>/spring/*</url-pattern>
     </servlet-mapping>
-    
     <!-- Controlador para dibujar imagenes desde JSF -->
     <servlet>
         <servlet-name>imagenServlet</servlet-name>
-        <servlet-class>workcenter.util.ImagenesServlet</servlet-class>
+        <servlet-class>workcenter.util.servlets.ImagenesServlet</servlet-class>
         <init-param>
             <param-name>pathImagenes</param-name>
             <param-value>/resources/css/img</param-value>
@@ -79,7 +68,15 @@
         <servlet-name>imagenServlet</servlet-name>
         <url-pattern>/img/*</url-pattern>
     </servlet-mapping>
-    
+    <servlet>
+        <servlet-name>workcenterDesktopServlet</servlet-name>
+        <servlet-class>workcenter.util.servlets.WorkcenterDesktopServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>workcenterDesktopServlet</servlet-name>
+        <url-pattern>/oldFiles/*</url-pattern>
+    </servlet-mapping>
     <filter>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <filter-class>org.primefaces.webapp.filter.FileUploadFilter</filter-class>
@@ -88,13 +85,11 @@
             <param-value>51200</param-value>
         </init-param>
     </filter>
-
     <filter-mapping>
         <filter-name>PrimeFaces FileUpload Filter</filter-name>
         <servlet-name>FacesServlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-    
     <context-param>
         <param-name>primefaces.UPLOADER</param-name>
         <param-value>commons</param-value>

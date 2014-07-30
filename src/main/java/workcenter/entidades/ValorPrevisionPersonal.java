@@ -47,14 +47,15 @@ public class ValorPrevisionPersonal implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "contrato")
-    private Integer contrato;
+    @JoinColumn(name = "contrato", referencedColumnName = "numero")
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    private ContratoPersonal contrato;
     @JoinColumn(name = "prevision", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Prevision prevision;
     @Basic(optional = false)
     @JoinColumn(name = "unidad", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private TipoUnidad unidad;
     @Basic(optional = false)
     @NotNull
@@ -81,11 +82,11 @@ public class ValorPrevisionPersonal implements Serializable {
         this.id = id;
     }
 
-    public Integer getContrato() {
+    public ContratoPersonal getContrato() {
         return contrato;
     }
 
-    public void setContrato(Integer contrato) {
+    public void setContrato(ContratoPersonal contrato) {
         this.contrato = contrato;
     }
 

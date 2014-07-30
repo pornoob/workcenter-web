@@ -14,6 +14,7 @@ public class RutConverter implements Converter {
             return null;
         }
         String rut = string.split("-")[0];
+        rut = rut.replaceAll("\\.", "");
         char dv = string.split("-")[1].charAt(0);
         dv = dv == 'k' ? 'K' : dv;
         StringBuilder sb = new StringBuilder();

@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
@@ -31,6 +30,7 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "TipoUnidad.findByCaracter", query = "SELECT t FROM TipoUnidad t WHERE t.caracter = :caracter"),
     @NamedQuery(name = "TipoUnidad.findByEtiqueta", query = "SELECT t FROM TipoUnidad t WHERE t.etiqueta = :etiqueta")})
 public class TipoUnidad implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
@@ -84,12 +84,13 @@ public class TipoUnidad implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof TipoUnidad)) {
             return false;
         }
         TipoUnidad other = (TipoUnidad) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (this.getId() == null || other.getId() == null) {
+            return false;
+        } else if (this.getId().intValue() != other.getId().intValue()) {
             return false;
         }
         return true;
@@ -99,5 +100,5 @@ public class TipoUnidad implements Serializable {
     public String toString() {
         return "workcenter.entities.TipoUnidad[ id=" + id + " ]";
     }
-    
+
 }

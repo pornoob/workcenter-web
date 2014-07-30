@@ -8,9 +8,12 @@ import java.util.Map;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Servicio;
+import org.springframework.transaction.annotation.Transactional;
+import workcenter.entidades.TipoUnidad;
+import workcenter.negocio.LogicaVariables;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 
@@ -29,6 +32,13 @@ public class Constantes implements Serializable {
     
     // Zona de personal
     private int cargoConductor=3;
+    private List<String> estadosCiviles;
+    private int fonasa = 0;
+    private int isapre = 1;
+    private int unidadPesos = 1;
+    private int unidadUf = 2;
+    private int unidadPorcentaje = 3;
+    private List<TipoUnidad> tiposUnidad;
     
     // Genericos
     private List<Mes> meses;
@@ -47,8 +57,17 @@ public class Constantes implements Serializable {
     // modulos
     private String moduloAlarmasGPS = "Modulo Alarmas GPS";
     private String moduloProgramaActividades = "Modulo Programa Actividades";
+    private String moduloPersonal = "Mantenedor Personal App";
+    
+    @Autowired
+    LogicaVariables logicaVariables;
 
     public Constantes() {
+        iniciaConstantes();
+    }
+
+    @Transactional(readOnly = true)
+    private void iniciaConstantes() {
         ProxyFactory pf = new ProxyFactory(this);
         pf.addAdvice(new MethodInterceptor() {
 
@@ -108,6 +127,14 @@ public class Constantes implements Serializable {
         accesos.put("Consultor", new Integer(2));
         accesos.put("Editor", new Integer(1));
         accesos.put("Privilegios Especiales", new Integer(3));
+        
+        estadosCiviles = new ArrayList<String>();
+        estadosCiviles.add("Soltero");
+        estadosCiviles.add("Casado");
+        estadosCiviles.add("Viudo");
+        estadosCiviles.add("Separado");
+        
+        tiposUnidad = null;
     }
 
     public int getCargoConductor() {
@@ -172,5 +199,40 @@ public class Constantes implements Serializable {
 
     public String getProtocoloCorreo() {
         return protocoloCorreo;
+    }
+
+    public List<String> getEstadosCiviles() {
+        return estadosCiviles;
+    }
+
+    public String getModuloPersonal() {
+        return moduloPersonal;
+    }
+
+    public int getFonasa() {
+        return fonasa;
+    }
+
+    public int getIsapre() {
+        return isapre;
+    }
+
+    public int getUnidadPesos() {
+        return unidadPesos;
+    }
+
+    public int getUnidadUf() {
+        return unidadUf;
+    }
+
+    public int getUnidadPorcentaje() {
+        return unidadPorcentaje;
+    }
+
+    public List<TipoUnidad> getTiposUnidad() {
+        if (tiposUnidad == null) {
+            tiposUnidad = logicaVariables.obtenerTiposUnidad();
+        }
+        return tiposUnidad;
     }
 }

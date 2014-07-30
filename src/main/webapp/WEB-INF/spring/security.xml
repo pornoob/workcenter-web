@@ -17,6 +17,9 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                    entry-point-ref="authenticationEntryPoint" >
   
         <security:intercept-url pattern="/spring/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
+        <security:intercept-url pattern="/spring/usuarios" access="hasRole('MODULO_USUARIOS')"/>
+        <security:intercept-url pattern="/spring/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
+        <security:intercept-url pattern="/spring/personal" access="hasRole('MANTENEDOR_PERSONAL_APP')"/>
         <security:intercept-url pattern="/spring/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
         <security:intercept-url pattern="/spring/programa_actividades" access="hasRole('MODULO_PROGRAMA_ACTIVIDADES')"/>
     

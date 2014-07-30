@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Contratos</h2>
+        <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
+        <h:form id="frmPersonal">
+            <p:commandButton value="Crear nuevo contrato"/>
+            <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.contratospersonalCollection}" var="contrato"
+                         rowKey="#{contrato.numero}">
+                <p:column headerText="N° Contrato">
+                    #{contrato.numero}
+                </p:column>
+
+                <p:column headerText="Fecha creación">
+                    <h:outputText value="#{contrato.fecha}">
+                        <f:convertDateTime parent="dd MM yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Fecha de termino">
+                    <h:outputText value="#{contrato.vencimiento}">
+                        <f:convertDateTime parent="dd MM yyyy"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Sueldo base">
+                    <h:outputText value="#{contrato.sueldoBase}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </h:outputText>
+                </p:column>
+
+                <p:column headerText="Cargo">
+                    #{contrato.cargo.nombrecargo}
+                </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:panel class="opcionesFila">
+                        <p:commandLink title="Editar" action="#{mantenedorPersonal.irEditarContrato(contrato)}"
+                                       styleClass="ui-icon ui-icon-pencil"/>
+                        <p:commandLink title="Eliminar"
+                                       styleClass="ui-icon ui-icon-trash"/>
+                    </p:panel>
+                </p:column>
+            </p:dataTable>
+            <p:panel class="actionPanel">
+                <p:commandButton value="Volver" action="#{mantenedorPersonal.irAtras()}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,55 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Listado de usuarios</h2>
+        <h:form>
+
+            <p:dataTable value="#{mantenedorUsuarios.listaPersonal}"
+                         filteredValue="#{mantenedorUsuarios.listaFiltradaPersonal}"
+                         emptyMessage="No se han encontrado registros"
+                         filterEvent="enter"
+                         paginator="true"
+                         paginatorAlwaysVisible="true"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         paginatorPosition="both"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}"
+                         widgetVar="tablaPersonal"
+                         var="personal"
+                         >
+
+                <p:column filterBy="rut" headerText="Rut" filterMatchMode="startsWith">
+                    <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter">
+                    </h:outputText>
+                </p:column>
+                
+                <p:column filterBy="nombres" headerText="Nombres" filterMatchMode="contains">
+                    <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
+                </p:column>
+
+                <p:column filterBy="apellidos" headerText="Apellidos" filterMatchMode="contains">
+                    <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
+                </p:column>
+
+                <p:column headerText="Acceso a workcenter">
+                    <h:outputText value="Sí" rendered="#{personal.usuario.habilitado}"/>
+                    <h:outputText value="No" rendered="#{!personal.usuario.habilitado}"/>
+                </p:column>
+                
+                <p:column headerText="Acciones">
+                    <h:panelGroup>
+                        <p:commandLink title="Administrar Accesos"
+                                       styleClass="ui-icon ui-icon-pencil"
+                                       action="#{mantenedorUsuarios.administrarAccesos(personal)}"/>
+                    </h:panelGroup>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

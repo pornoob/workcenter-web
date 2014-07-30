@@ -1,0 +1,22 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Bloquear Personal</h2>
+        <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frmPersonal">
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Motivo"/>:
+                <h:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.sancion.motivo}"/>
+            </h:panelGrid>
+            <p:panel class="actionPanel">
+                <p:commandButton action="#{mantenedorPersonal.sancionar()}" value="Proceder"/>
+                <p:commandButton action="#{mantenedorPersonal.volverDesdeBloqueo()}" value="Volver"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
