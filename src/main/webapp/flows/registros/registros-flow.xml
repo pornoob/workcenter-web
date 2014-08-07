@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+     xsi:schemaLocation="
+        http://www.springframework.org/schema/webflow
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+        start-state="listarRegistros">
+
+    <on-start>
+        <evaluate expression="mantenedorRegistros.inicio()" />
+    </on-start>
+    
+    <view-state id="listarRegistros">
+        <transition on="flowListarR112" to="R112"/>
+    </view-state>
+    
+    <subflow-state id="R112" subflow="R112">
+        <transition on="finSubflow" to="listarRegistros"/>
+    </subflow-state>
+</flow>

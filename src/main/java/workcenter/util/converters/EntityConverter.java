@@ -15,7 +15,6 @@ import javax.faces.model.SelectItem;
 
 public class EntityConverter implements Converter {
 
-    @Override
     public Object getAsObject(FacesContext context, UIComponent component, String value) {
         if (value == null || value.trim().length() == 0) {
             return null;
@@ -42,6 +41,11 @@ public class EntityConverter implements Converter {
             throw new IllegalArgumentException("No es javax.persistence.Entity!");
         }
 
+        Method getterMethod = null;
+        Method setterMethod = null;
+        Class<?> classId = null;
+        String nombreSetterField = null;
+
         for (Field field : classEntity.getDeclaredFields()) {
             Annotation annotationId = field.getAnnotation(javax.persistence.Id.class);
             if (annotationId == null) {
@@ -51,21 +55,37 @@ public class EntityConverter implements Converter {
                 continue;
             }
 
-           //tiene el field que esta anotado como id. 
+            //tiene el field que esta anotado como id.
             //obtener el nombre del field
             String nombreGetterField = "get" + field.getName().substring(0, 1).toUpperCase() + (field.getName().length() > 1 ? field.getName().substring(1) : "");
-            String nombreSetterField = "set" + field.getName().substring(0, 1).toUpperCase() + (field.getName().length() > 1 ? field.getName().substring(1) : "");
+            nombreSetterField = "set" + field.getName().substring(0, 1).toUpperCase() + (field.getName().length() > 1 ? field.getName().substring(1) : "");
 
-            Method getterMethod = null;
-            Method setterMethod = null;
             try {
                 getterMethod = classEntity.getMethod(nombreGetterField, null);
+                break;
             } catch (NoSuchMethodException ex) {
                 throw new RuntimeException(ex);
             }
+        }
 
-            //del getter obtener la Class del Id 
-            Class<?> classId = getterMethod.getReturnType();
+        if (getterMethod == null)
+            for (Method m : classEntity.getDeclaredMethods()) {
+                if (!m.getName().startsWith("get")) continue;
+                Annotation a = m.getAnnotation(javax.persistence.Id.class);
+                if (a == null) {
+                    a = m.getAnnotation(javax.persistence.EmbeddedId.class);
+                }
+                if (a == null) {
+                    continue;
+                }
+                getterMethod = m;
+                nombreSetterField = "s" + m.getName().substring(1);
+                break;
+            }
+
+        if (getterMethod != null) {
+            //del getter obtener la Class del Id
+            classId = getterMethod.getReturnType();
 
             try {
                 setterMethod = classEntity.getMethod(nombreSetterField, classId);
@@ -93,13 +113,12 @@ public class EntityConverter implements Converter {
             } catch (InvocationTargetException ex) {
                 throw new RuntimeException("error al instanciar objeto");
             }
-
         }
 
-        throw new IllegalArgumentException("No se encontre ID en la Entidad!");
+
+        throw new IllegalArgumentException("No se encontró ID en la Entidad!");
     }
 
-    @Override
     public String getAsString(FacesContext context, UIComponent component, Object value) {
         if (value == null) {
             return "";
@@ -123,6 +142,8 @@ public class EntityConverter implements Converter {
             throw new IllegalArgumentException("No es javax.persistence.Entity!");
         }
 
+        Method getterMethod = null;
+
         for (Field field : classEntity.getDeclaredFields()) {
             Annotation annotationId = field.getAnnotation(javax.persistence.Id.class);
             if (annotationId == null) {
@@ -132,19 +153,32 @@ public class EntityConverter implements Converter {
                 continue;
             }
 
-           //tiene el field que esta anotado como id. 
+            //tiene el field que esta anotado como id.
             //obtener el nombre del field
             String nombreGetterField = "get" + field.getName().substring(0, 1).toUpperCase() + (field.getName().length() > 1 ? field.getName().substring(1) : "");
-            Method getterMethod = null;
             try {
                 getterMethod = classEntity.getMethod(nombreGetterField, null);
+                break;
             } catch (NoSuchMethodException ex) {
                 throw new RuntimeException(ex);
             }
+        }
 
-            //del getter obtener la Class del Id 
-            Class<?> classId = getterMethod.getReturnType();
+        if (getterMethod == null)
+            for (Method m : classEntity.getDeclaredMethods()) {
+                if (!m.getName().startsWith("get")) continue;
+                Annotation a = m.getAnnotation(javax.persistence.Id.class);
+                if (a == null) {
+                    a = m.getAnnotation(javax.persistence.EmbeddedId.class);
+                }
+                if (a == null) {
+                    continue;
+                }
+                getterMethod = m;
+                break;
+            }
 
+        if (getterMethod != null) {
             //del getter obtener el valor del Id
             Object objectId;
             try {
@@ -165,7 +199,7 @@ public class EntityConverter implements Converter {
             return objectId.toString();
         }
 
-        throw new IllegalArgumentException("No se encontre ID en la Entidad!");
+        throw new IllegalArgumentException("No se encontró ID en la Entidad!");
     }
 
     // Gets the class corresponding to the context in jsf page

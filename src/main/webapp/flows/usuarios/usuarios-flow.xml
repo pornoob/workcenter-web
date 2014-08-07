@@ -10,11 +10,15 @@
     </on-start>
     
     <view-state id="listarUsuarios">
-        <transition on="flowListarPersonal" to="listarUsuarios"/>
         <transition on="flowEditarAccesos" to="editarUsuario"/>
     </view-state>
     
     <view-state id="editarUsuario">
         <transition on="flowListarPersonal" to="listarUsuarios"/>
+        <transition on="flowEditarPermiso" to="modificarPermiso"/>
+    </view-state>
+
+    <view-state id="modificarPermiso">
+        <transition on="flowEditarAccesos" to="editarUsuario"/>
     </view-state>
 </flow>

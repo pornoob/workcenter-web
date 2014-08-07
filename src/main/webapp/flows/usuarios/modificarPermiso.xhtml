@@ -1,0 +1,61 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>
+            <h:outputText rendered="#{mantenedorUsuarios.permisoSeleccionado != null}" value="Modificar Permiso"/>
+            <h:outputText rendered="#{mantenedorUsuarios.permisoSeleccionado == null}" value="Agregar Permiso"/>
+        </h2>
+
+        <h3>#{mantenedorUsuarios.personalSeleccionado.nombreCompleto}</h3>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="formEditarUsuario">
+            <ui:fragment rendered="#{mantenedorUsuarios.permisoSeleccionado == null}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="* Módulo"/>:
+                    <p:selectOneMenu required="true" id="sPermisos" converter="entityConverter"
+                                     requiredMessage="Debes seleccionar un  módulo"
+                                     value="#{mantenedorUsuarios.proyectoSeleccionado}" filter="true"
+                                     filterMatchMode="contains">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorUsuarios.proyectosDisponibles}" var="p"
+                                       itemLabel="#{p.titulo}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="* Acceso" style="width: 130px"/>:
+                    <p:selectOneMenu value="#{mantenedorUsuarios.acceso}" required="true" id="smAcceso"
+                                     requiredMessage="Debes indicar el nivel de acceso">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{mantenedorUsuarios.accesos}" var="acceso" itemLabel="#{acceso}"
+                                       itemValue="#{acceso}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </ui:fragment>
+            <ui:fragment rendered="#{mantenedorUsuarios.permisoSeleccionado != null}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="* Módulo"/>:
+                    <p:selectOneMenu converter="entityConverter" disabled="true"
+                                     value="#{mantenedorUsuarios.proyectoSeleccionado}">
+                        <f:selectItem itemLabel="#{mantenedorUsuarios.proyectoSeleccionado.titulo}"
+                                      itemValue="#{mantenedorUsuarios.proyectoSeleccionado}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="* Acceso" style="width: 130px"/>:
+                    <p:selectOneMenu value="#{mantenedorUsuarios.acceso}" required="true" id="scAcceso"
+                                     requiredMessage="Debes indicar el nivel de acceso">
+                        <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                        <f:selectItems value="#{mantenedorUsuarios.accesos}" var="acceso" itemLabel="#{acceso}"
+                                       itemValue="#{acceso}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </ui:fragment>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Guardar" action="#{mantenedorUsuarios.guardarPermiso()}"/>
+                <p:commandButton value="Volver" action="#{mantenedorUsuarios.irEditarUsuario()}" ajax="false"
+                                 immediate="true"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

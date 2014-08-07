@@ -1,8 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
@@ -12,7 +10,7 @@
         <h:form rendered="#{sesionCliente.estaAutentificado()}" id="frmWorkcenter">
             <h3>Módulos Mantenedores</h3>
             <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}" action="#{facesUtil.redirigir('/spring/personal')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}" action="#{facesUtil.redirigir('/spring/personal')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_personal.png"/>
                     <h:outputLabel value="Mantenedor de Personal"/>
                 </h:commandLink>
@@ -27,12 +25,17 @@
                     <h:outputLabel value="Mantenedor de Empresas"/>
                 </h:commandLink>
 
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_USUARIOS')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/usuarios')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/usuarios')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_usuarios.png"/>
                     <h:outputLabel value="Mantenedor de Usuarios"/>
                 </h:commandLink>
                 
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/remuneraciones')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/registros')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                    <h:graphicImage value="/img/icons/64/m_formularios.png"/>
+                    <h:outputLabel value="Administrador de Registros"/>
+                </h:commandLink>
+                
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}" class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/remuneraciones')}" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_remuneraciones.png"/>
                     <h:outputLabel value="Libro de Remuneraciones"/>
                 </h:commandLink>
@@ -40,17 +43,17 @@
 
             <h3>Módulos Gestión</h3>
             <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}" action="#{facesUtil.redirigir('/spring/alarmas_gps')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}" action="#{facesUtil.redirigir('/spring/alarmas_gps')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_alarmas_gps.png"/>
                     <h:outputLabel value="Alarmas GPS"/>
                 </h:commandLink>
 
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/informe_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/informe_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_informe_actividades.png"/>
                     <h:outputLabel value="Informe de Actividades"/>
                 </h:commandLink>
 
-                <h:commandLink rendered="#{sesionCliente.estaAutentificado() and sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/programa_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
+                <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}" action="#{facesUtil.redirigir('/spring/programa_actividades')}" class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)" onmouseout="WebCenter.Menu.mouseout(this)">
                     <h:graphicImage value="/img/icons/64/m_programa_actividades.png"/>
                     <h:outputLabel value="Programa de Actividades"/>
                 </h:commandLink>

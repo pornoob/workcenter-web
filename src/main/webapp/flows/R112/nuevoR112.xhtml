@@ -1,0 +1,114 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Nueva Actividad [R-112]</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h3>Documentos</h3>
+        <ui:include src="/components/cargadorArchivos.xhtml">
+            <ui:param name="padre" value="#{registroR112}"/>
+        </ui:include>
+        <h3>Detalle</h3>
+        <h:form id="formR112">
+            <p:commandButton icon="ui-icon-plus" immediate="true" value="Agregar Tipo de Actividad"
+                             rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
+                             action="#{registroR112.preparaCreacionTipoActividad()}"/>
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Tipo"/>:
+                <p:selectOneMenu id="sTipoActividad" filter="true" filterMatchMode="contains"
+                                 value="#{registroR112.tipoActividad}" converter="entityConverter"
+                                 required="true" requiredMessage="Debes especificar el tipo de actividad">
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{registroR112.tipoActividades}" var="ta" itemLabel="#{ta.nombre}" itemValue="#{ta}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel value="Nombre"/>:
+                <p:inputText required="true" requiredMessage="Debes especificar el nombre de actividad"
+                             value="#{registroR112.actividad.nombre}" id="iptNombre"/>
+
+                <h:outputLabel value="Encargado"/>:
+                <p:selectOneMenu filter="true" filterMatchMode="contains" id="sEncargado"
+                                 required="true" requiredMessage="Debes especificar un encargado"
+                                 value="#{registroR112.actividad.encargado}" converter="entityConverter">
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{registroR112.personal}" var="p" itemLabel="#{p.nombreCompleto}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel value="Fecha"/>:
+                <p:calendar required="true" requiredMessage="Debes especificar una fecha para la actividad"
+                            id="pcFecha"
+                            value="#{registroR112.actividad.fecha}" pattern="dd-MM-yyyy"/>
+
+                <h:outputLabel value="Hora de inicio"/>:
+                <h:panelGroup>
+                    <p:spinner value="#{registroR112.hrInicio}" size="2" min="0" max="23"/>:
+                    <p:spinner value="#{registroR112.minInicio}" size="2" min="0" max="59"/>
+                </h:panelGroup>
+
+                <h:outputLabel value="Hora de termino"/>:
+                <h:panelGroup>
+                    <p:spinner value="#{registroR112.hrFin}" size="2" min="0" max="23"/>:
+                    <p:spinner value="#{registroR112.minFin}" size="2" min="0" max="59"/>
+                </h:panelGroup>
+
+                <h:outputLabel value="Descripción"/>:
+                <p:inputTextarea id="iDescripcion" style="width: 350px" required="true"
+                                 requiredMessage="Debes indicar una descripción de la actividad"
+                                 value="#{registroR112.actividad.descripcion}"/>
+            </h:panelGrid>
+
+            <h3>Participantes</h3>
+            <p:panel id="pParticipantes">
+                <h:panelGrid columns="4">
+                    <h:outputLabel value="Nuevo participante"/>:
+                    <p:selectOneMenu filter="true" filterMatchMode="contains" id="sNuevoParticipante"
+                                     value="#{registroR112.participante}" converter="entityConverter">
+                        <f:selectItems value="#{registroR112.personal}" var="p" itemLabel="#{p.nombreCompleto}"/>
+                    </p:selectOneMenu>
+                    <p:commandButton ajax="true" update=":formR112:pParticipantes" value="Agregar" process="@form" immediate="true"
+                                     action="#{registroR112.agregarParticipante()}"/>
+                </h:panelGrid>
+
+                <p:dataTable value="#{registroR112.participantes}" var="p"
+                             emptyMessage="No se han agregado participantes">
+                    <p:column headerText="RUT">
+                        <h:outputText value="#{p.participante.rut}-#{p.participante.digitoverificador}" converter="rutConverter"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{p.participante.nombreCompleto}"/>
+                    </p:column>
+                    <p:column headerText="Nota">
+                        <h:outputText value="#{p.participante}"/>
+                    </p:column>
+
+                    <p:column>
+                        <p:commandLink styleClass="ui-icon ui-icon-trash" title="Eliminar"
+                                       action="#{registroR112.setParticipante(p)}" ajax="true"
+                                       oncomplete="PF('pDialogConfirmar').show()" immediate="true"
+                                       update=":formR112:pParticipantes" process="@form"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:panel styleClass="actionPanel">
+                <p:commandButton value="Guardar" ajax="false" process="@form" action="#{registroR112.guardarActividad()}"/>
+                <p:commandButton value="Volver" action="#{registroR112.irListarR112}" immediate="true"/>
+            </p:panel>
+
+            <p:confirmDialog widgetVar="pDialogConfirmar"
+                             closable="true" header="Confirmar"
+                             message="¿Seguro que desea quitar el participante?">
+                <p:panel styleClass="actionPanel">
+                    <p:commandButton value="Sí" action="#{registroR112.quitarParticipante()}" ajax="true" immediate="true"
+                                     update=":formR112:pParticipantes" oncomplete="PF('pDialogConfirmar').hide()"/>
+                    <p:commandButton value="No" immediate="true" onclick="PF('pDialogConfirmar').hide()"/>
+                </p:panel>
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

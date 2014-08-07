@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>R-112</h2>
+        <h:form id="formFormularios">
+            <p:commandButton icon="ui-icon-plus" value="Nueva Actividad" action="#{registroR112.preparaCreacionR112()}"/>
+            <p:dataTable value="#{registroR112.actividades}" var="a" emptyMessage="No se han encontrado Actividades"
+                         filterEvent="enter"
+                         paginator="true"
+                         paginatorAlwaysVisible="true"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         paginatorPosition="both"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}">
+                <p:column headerText="Folio">
+                    <h:outputText value="#{a.id}"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    <h:outputText value="#{a.nombre}"/>
+                </p:column>
+                <p:column headerText="Encargado">
+                    <h:outputText value="#{a.encargado.nombreCompleto}"/>
+                </p:column>
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{a.fecha}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Tipo">
+                    <h:outputText value="#{a.tipoActividad.nombre}"/>
+                </p:column>
+                <p:column headerText="Asistentes">
+                    <h:commandLink value="#{registroR112.obtenerCantAsistentes(a)}" action="#{registroR112.verParticipantes(a)}"/>
+                </p:column>
+            </p:dataTable>
+            <p:panel class="actionPanel">
+                <p:commandButton action="#{registroR112.irListarRegistros()}" value="Volver"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

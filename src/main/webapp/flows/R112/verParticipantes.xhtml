@@ -1,0 +1,29 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Participantes Actividad [R-112]</h2>
+        <h3>#{registroR112.actividad.nombre}</h3>
+        <h:form id="formR112">
+            <p:dataTable value="#{registroR112.actividad.participantes}" var="p">
+                <p:column headerText="RUT">
+                    <h:outputText value="#{p.participante.rut}-#{p.participante.digitoverificador}" converter="rutConverter"/>
+                </p:column>
+                <p:column headerText="Nombre">
+                    #{p.participante.nombreCompleto}
+                </p:column>
+                <p:column headerText="Nota">
+                    ...
+                </p:column>
+            </p:dataTable>
+            <p:panel styleClass="actionPanel">
+                <p:commandButton value="Volver" action="#{registroR112.irListarR112}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

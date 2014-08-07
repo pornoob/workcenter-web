@@ -10,7 +10,6 @@
     </on-start>
     
     <view-state id="mostrarPlan">
-        <transition on="flowMostrarPlan" to="mostrarPlan"/>
         <transition on="flowCrearPlan" to="crearPlan"/>
         <transition on="flowRealizarActividad" to="ingresarRealizacion"/>
     </view-state>

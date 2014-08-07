@@ -138,6 +138,9 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         List<Documento> docs = documentosSubidos.get(sesionCliente.getUsuario().getRut() + "|actividad_diaria" + screenFlow);
         if (docs != null && !docs.isEmpty()) {
             logicaDocumentos.asociarDocumentos(docs, actividadDiaria);
+        } else {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "Debes Adjuntar al menos un documento");
+            return;
         }
         FacesUtil.mostrarMensajeInformativo("Actividad guardada exitosamente", "ID de actividad " + actividadDiaria.getId());
         actividadDiaria = new ActividadDiaria();

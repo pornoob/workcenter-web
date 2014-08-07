@@ -51,6 +51,7 @@ public class WorkcenterDesktopServlet extends HttpServlet {
 
         // Decode the file name (might contain spaces and on) and prepare file object.
         File image = new File(pathBase+request.getContextPath(), URLDecoder.decode(requestedImage, "UTF-8"));
+        System.out.println("WORKCENTER DESKTOP SERVLET PATH: "+image.getAbsolutePath());
 
         // Check if file actually exists in filesystem.
         if (!image.exists()) {

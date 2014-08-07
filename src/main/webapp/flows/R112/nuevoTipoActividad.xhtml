@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Nuevo Tipo Actividad [R-112]</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h3>Archivos asociados al Tipo de Actividad</h3>
+        <ui:include src="/components/cargadorArchivos.xhtml">
+            <ui:param name="padre" value="#{registroR112}"/>
+        </ui:include>
+        <h3>Detalle Tipo de Actividad</h3>
+        <h:form id="formR112">
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Nombre"/>:
+                <p:inputText value="#{registroR112.tipoActividad.nombre}"/>
+
+                <h:outputLabel value="Debe ser evaluada"/>:
+                <p:selectBooleanCheckbox value="#{registroR112.tipoActividad.requiereNota}"/>
+
+                <h:outputLabel value="Duración"/>:
+                <h:panelGroup>
+                    <p:spinner value="#{registroR112.hrDuracion}" size="2" min="0" max="23"/>:
+                    <p:spinner value="#{registroR112.minDuracion}" size="2" min="0" max="59"/>
+                </h:panelGroup>
+            </h:panelGrid>
+
+            <p:panel styleClass="actionPanel">
+                <p:commandButton value="Guardar" action="#{registroR112.guardarTipoActividad()}"/>
+                <p:commandButton value="Volver" action="#{registroR112.irNuevoR112()}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -8,85 +8,62 @@
     <ui:define name="contenido">
         <h2>Editar Usuario</h2>
         <h:form id="formEditarUsuario">
-            <p:messages autoUpdate="true" closable="true" />
+            <p:messages autoUpdate="true" closable="true"/>
             <h:panelGrid columns="3">
                 <h:outputLabel value="Rut"/>:
-                <h:outputText value="#{mantenedorUsuarios.personalSeleccionado.rut}-#{mantenedorUsuarios.personalSeleccionado.digitoverificador}" converter="rutConverter"/>
+                <h:outputText
+                        value="#{mantenedorUsuarios.personalSeleccionado.rut}-#{mantenedorUsuarios.personalSeleccionado.digitoverificador}"
+                        converter="rutConverter"/>
                 <h:outputLabel value="Nombres"/>:
                 <h:outputText value="#{mantenedorUsuarios.personalSeleccionado.nombres}" converter="nombreConverter"/>
                 <h:outputLabel value="Apellidos"/>:
                 <h:outputText value="#{mantenedorUsuarios.personalSeleccionado.apellidos}" converter="nombreConverter"/>
                 <h:outputLabel value="Habilitado en WorkCenter"/>:
-                <p:selectBooleanCheckbox value="#{mantenedorUsuarios.personalSeleccionado.usuario.habilitado}" />
+                <p:selectBooleanCheckbox value="#{mantenedorUsuarios.personalSeleccionado.usuario.habilitado}"/>
             </h:panelGrid>
+
             <h3>Permisos</h3>
-            <p:commandButton value="Agregar" onclick="PF('agrPermisosDialog').show()"/>
+            <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorUsuarios.irCrearPermiso()}"/>
             <p:dataTable id="tablaPermisos"
-                         emptyMessage="No tienen permisos"
+                         emptyMessage="No tiene permisos asignados"
+                         rows="#{constantes.cantidadFilasTablas}"
+                         paginator="true"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
                          value="#{mantenedorUsuarios.permisosUsuario}"
                          filterEvent="enter"
-                         editable="true"
                          var="permiso">
                 <p:column headerText="Módulo" filterBy="#{permiso.proyecto.titulo}" filterMatchMode="contains">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{permiso.proyecto.titulo}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <h:outputText value="#{permiso.proyecto.titulo}"/>
-                        </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{permiso.proyecto.titulo}"/>
                 </p:column>
                 <p:column headerText="Nivel" filterBy="#{permiso.nivel}" filterMatchMode="startsWith">
-                    <p:cellEditor>
-                        <f:facet name="output">
-                            <h:outputText value="#{constantes.accesos.get(permiso.nivel)}"/>
-                        </f:facet>
-                        <f:facet name="input">
-                            <p:selectOneMenu>
-                                <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
-                                <f:selectItems value="#{mantenedorUsuarios.accesos}" var="acceso" itemLabel="#{acceso}" itemValue="#{acceso}"/>
-                            </p:selectOneMenu>
-                        </f:facet>
-                    </p:cellEditor>
+                    <h:outputText value="#{constantes.accesos.get(permiso.nivel)}"/>
                 </p:column>
                 <p:column>
-                    <p:rowEditor/>
-                    <p:commandLink ajax="true"
-                                   styleClass="ui-icon ui-icon-trash"
-                                   immediate="true"
-                                   action="#{mantenedorUsuarios.quitarPermiso(permiso)}"
-                                   update=":formEditarUsuario:tablaPermisos"
-                                   process="@this"
-                                   />
+                    <p:panel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-pencil"
+                                       action="#{mantenedorUsuarios.irEditarPermiso(permiso)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-trash"
+                                       action="#{mantenedorUsuarios.setProyectoSeleccionado(permiso.proyecto)}"
+                                       immediate="true" ajax="true"
+                                       oncomplete="PF('pDialogConfirmar').show()"
+                                       process="@form"
+                                />
+                    </p:panel>
                 </p:column>
             </p:dataTable>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton value="Guardar" action="#{mantenedorUsuarios.guardarUsuario()}"/>
-                <p:commandButton value="Volver" action="#{mantenedorUsuarios.inicio()}" ajax="false" immediate="true"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w"
+                                 value="Volver" action="#{mantenedorUsuarios.inicio()}" ajax="false" immediate="true"/>
             </p:outputPanel>
+            <p:confirmDialog widgetVar="pDialogConfirmar"
+                             closable="true" header="Confirmar"
+                             message="¿Seguro que desea quitar el permiso?">
+                <p:panel styleClass="actionPanel">
+                    <p:commandButton icon="ui-icon-check" value="Sí" action="#{mantenedorUsuarios.quitarPermiso()}" ajax="true" immediate="true"
+                                     update=":formEditarUsuario:tablaPermisos" oncomplete="PF('pDialogConfirmar').hide()"/>
+                    <p:commandButton icon="ui-icon-close" value="No" immediate="true" onclick="PF('pDialogConfirmar').hide()"/>
+                </p:panel>
+            </p:confirmDialog>
         </h:form>
-        <p:dialog dynamic="true" modal="true" closable="false" draggable="false" resizable="false"
-                  widgetVar="agrPermisosDialog"
-                  header="Agregar Permiso">
-            <h:form id="formEditarPermisos">
-                <h:panelGrid columns="3">
-                    <h:outputLabel value="* Módulo"/>:
-                    <p:selectOneMenu value="#{mantenedorUsuarios.proyectoSeleccionado}" converter="entityConverter" filter="true" filterMatchMode="contains">
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{mantenedorUsuarios.proyectosDisponibles}" var="proyecto" itemLabel="#{proyecto.titulo}"/>
-                    </p:selectOneMenu>
-                    <h:outputLabel value="* Acceso" style="width: 130px"/>:
-                    <p:selectOneMenu>
-                        <f:selectItem itemLabel="Seleccione" itemValue="#{null}" noSelectionOption="true" />
-                        <f:selectItems value="#{mantenedorUsuarios.accesos}" var="acceso" itemLabel="#{acceso}" itemValue="#{acceso}"/>
-                    </p:selectOneMenu>
-                </h:panelGrid>
-                <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton value="Agregar" action="#{mantenedorUsuarios.agregarPermiso()}" process="@form" update=":formEditarUsuario:tablaPermisos, :formEditarPermisos" ajax="true" oncomplete="PF('agrPermisosDialog').hide()"/>
-                    <p:commandButton value="Cancelar" actionListener="#{mantenedorUsuarios.limpiarAgrPermiso()}" ajax="true" immediate="true" oncomplete="PF('agrPermisosDialog').hide()" update=":formEditarPermisos"/>
-                </p:outputPanel>
-            </h:form>
-        </p:dialog>
     </ui:define>
 </ui:composition>

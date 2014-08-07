@@ -39,6 +39,9 @@ public class Constantes implements Serializable {
     private int unidadUf = 2;
     private int unidadPorcentaje = 3;
     private List<TipoUnidad> tiposUnidad;
+
+    // Zona registros
+    private int registroR112 = 1;
     
     // Genericos
     private List<Mes> meses;
@@ -58,6 +61,7 @@ public class Constantes implements Serializable {
     private String moduloAlarmasGPS = "Modulo Alarmas GPS";
     private String moduloProgramaActividades = "Modulo Programa Actividades";
     private String moduloPersonal = "Mantenedor Personal App";
+    private String moduloAdministradorRegistros = "Administrador de Registros";
     
     @Autowired
     LogicaVariables logicaVariables;
@@ -234,5 +238,13 @@ public class Constantes implements Serializable {
             tiposUnidad = logicaVariables.obtenerTiposUnidad();
         }
         return tiposUnidad;
+    }
+
+    public String getModuloAdministradorRegistros() {
+        return moduloAdministradorRegistros;
+    }
+
+    public int getRegistroR112() {
+        return registroR112;
     }
 }

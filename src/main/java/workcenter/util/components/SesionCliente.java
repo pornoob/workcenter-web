@@ -22,7 +22,7 @@ public class SesionCliente implements Serializable {
 
     @Autowired
     UsuarioDao usuarioDao;
-    
+
     @Autowired
     Constantes constantes;
 
@@ -42,28 +42,31 @@ public class SesionCliente implements Serializable {
         }
         return usuario;
     }
-    
+
     public boolean esEditor(String modulo) {
-        if (tieneNivel((Integer)constantes.getAccesos().get("Editor"), modulo)
-                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), modulo)) {
+        if (tieneNivel((Integer) constantes.getAccesos().get("Editor"), modulo)
+                || tieneNivel((Integer) constantes.getAccesos().get("Administrador"), modulo)) {
             return true;
         }
         return false;
     }
-    
+
     public boolean tieneAccesoEspecial(String modulo) {
-        if (tieneNivel((Integer)constantes.getAccesos().get("Privilegios Especiales"), modulo)
-                || tieneNivel((Integer)constantes.getAccesos().get("Administrador"), modulo)) {
+        if (tieneNivel((Integer) constantes.getAccesos().get("Privilegios Especiales"), modulo)
+                || tieneNivel((Integer) constantes.getAccesos().get("Administrador"), modulo)) {
             return true;
         }
         return false;
     }
 
     public boolean tienePermiso(String permiso) {
+        if (!this.estaAutentificado()) {
+            return false;
+        }
         HttpServletRequest request = (HttpServletRequest) FacesUtil.obtenerHttpServletRequest();
         return request.isUserInRole(permiso);
     }
-    
+
     public boolean tieneNivel(Integer nivel, String permiso) {
         Permiso p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
         return p != null;

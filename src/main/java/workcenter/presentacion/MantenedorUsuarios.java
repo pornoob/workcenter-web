@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map.Entry;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -30,13 +31,13 @@ public class MantenedorUsuarios implements Serializable {
 
     @Autowired
     LogicaProyecto logicaProyecto;
-    
+
     @Autowired
     LogicaPermiso logicaPermiso;
-    
+
     @Autowired
     Constantes constantes;
-    
+
     @Autowired
     Idioma idioma;
 
@@ -48,75 +49,87 @@ public class MantenedorUsuarios implements Serializable {
     private Personal personalSeleccionado;
     private Proyecto proyectoSeleccionado;
     private Integer permisoSeleccionado;
-
-    private boolean habilitado;
+    private String acceso;
 
     public String inicio() {
         listaPersonal = logicaPersonal.obtenerTodosConUsuario();
         return "flowListarPersonal";
     }
 
-    public void guardarUsuario() {
-        personalSeleccionado.getUsuario().setPermisosCollection(permisosUsuario);
-        logicaPersonal.guardarUsuario(personalSeleccionado);
-        
-        FacesUtil.mostrarMensajeInformativo(idioma.obtenerMensaje("editarUsuario.operacionExitosa"), null);
-    }
-
     public String administrarAccesos(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setUsuario(personalSeleccionado.getUsuario() != null ? personalSeleccionado.getUsuario() : new Usuario());
-        proyectosDisponibles = logicaProyecto.obtenerTodos();
         permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
-        permisoSeleccionado = 0;
+        proyectosDisponibles = logicaProyecto.obtenerTodos();
+        return irEditarUsuario();
+    }
+
+    public String irCrearPermiso() {
+        permisoSeleccionado = null;
+        System.err.println("HICE PERMISO NULL");
+        for (Permiso permiso : permisosUsuario) {
+            if (proyectosDisponibles.contains(permiso.getProyecto())) {
+                proyectosDisponibles.remove(permiso.getProyecto());
+            }
+        }
+        acceso = null;
+        return "flowEditarPermiso";
+    }
+
+    public String irEditarPermiso(Permiso permiso) {
+        permisoSeleccionado = permiso.getId();
+        System.err.println("HICE PERMISO "+permisoSeleccionado);
+        proyectoSeleccionado = permiso.getProyecto();
+        acceso = constantes.getAccesos().get(permiso.getNivel()).toString();
+        return "flowEditarPermiso";
+    }
+
+    public String irEditarUsuario() {
         return "flowEditarAccesos";
     }
 
-    public void agregarPermiso() {
-        Permiso permiso = new Permiso();
-        Proyecto proyecto = new Proyecto();
+    public void guardarPermiso() {
+        Integer nivel = (Integer) constantes.getAccesos().get(acceso);
+        System.err.println("RECIBO PERMISO "+permisoSeleccionado);
 
-        proyecto.setDescripcion(proyectoSeleccionado.getDescripcion());
-        proyecto.setId(proyectoSeleccionado.getId());
-        proyecto.setTitulo(proyectoSeleccionado.getTitulo());
-        proyecto.setTipo(proyectoSeleccionado.getTipo());
+        Permiso permiso = null;
+        if (permisoSeleccionado != null) {
+            for (Permiso p : permisosUsuario)
+                if (p.getId().intValue() == permisoSeleccionado.intValue()) {
+                    permiso = p;
+                    break;
+                }
+        } else
+            permiso = new Permiso();
 
-        permiso.setNivel(permisoSeleccionado);
         permiso.setProyecto(proyectoSeleccionado);
         permiso.setUsuario(personalSeleccionado.getUsuario());
+        permiso.setNivel(nivel);
+        if (permiso.getId() == null)
+            personalSeleccionado.getUsuario().getPermisosCollection().add(permiso);
+        else
+            personalSeleccionado.getUsuario().setPermisosCollection(permisosUsuario);
 
-        permisosUsuario = permisosUsuario == null ? new ArrayList<Permiso>() : permisosUsuario;
-        if (permiso.getId() != null && permisosUsuario.contains(permiso)) {
-            return;
-        }
-        if (permiso.getId() == null) {
-            for (Permiso p : permisosUsuario) {
-                if (p.getProyecto().getTitulo().equals(permiso.getProyecto().getTitulo())) {
-                    return;
-                }
-            }
-        }
-        permisosUsuario.add(permiso);
-        limpiarAgrPermiso();
+        logicaPersonal.guardar(personalSeleccionado);
+        proyectoSeleccionado = null;
+        permisoSeleccionado = null;
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha guardado correctamente el permiso");
     }
 
-    public void quitarPermiso(Permiso permiso) {
-        if (permiso.getId() != null) {
-            permisosUsuario.remove(permiso);
-            return;
-        }
-
-        for (int i = 0; i < permisosUsuario.size(); i++) {
-            if (permisosUsuario.get(i).getProyecto().equals(permiso.getProyecto())) {
-                permisosUsuario.remove(i);
+    public void quitarPermiso() {
+        Permiso permiso = null;
+        for (Permiso p : permisosUsuario)
+            if (p.getProyecto().equals(proyectoSeleccionado)) {
+                permiso = p;
                 break;
             }
-        }
-    }
-
-    public void limpiarAgrPermiso() {
-        permisoSeleccionado = 0;
+        permisosUsuario.remove(permiso);
+        personalSeleccionado.getUsuario().setPermisosCollection(permisosUsuario);
+        proyectosDisponibles.add(permiso.getProyecto());
+        logicaPersonal.guardar(personalSeleccionado);
         proyectoSeleccionado = null;
+        permisoSeleccionado = null;
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha eliminado correctamente el permiso");
     }
 
     public List<Personal> getListaPersonal() {
@@ -141,14 +154,6 @@ public class MantenedorUsuarios implements Serializable {
 
     public void setPersonalSeleccionado(Personal personalSeleccionado) {
         this.personalSeleccionado = personalSeleccionado;
-    }
-
-    public boolean isHabilitado() {
-        return habilitado;
-    }
-
-    public void setHabilitado(boolean habilitado) {
-        this.habilitado = habilitado;
     }
 
     public List<Proyecto> getProyectosDisponibles() {
@@ -182,7 +187,7 @@ public class MantenedorUsuarios implements Serializable {
     public void setPermisosUsuario(List<Permiso> permisosUsuario) {
         this.permisosUsuario = permisosUsuario;
     }
-    
+
     public List<String> getAccesos() {
         List<String> accesos = new ArrayList<String>();
         for (Entry<Object, Object> e : constantes.getAccesos().entrySet()) {
@@ -191,5 +196,13 @@ public class MantenedorUsuarios implements Serializable {
             }
         }
         return accesos;
+    }
+
+    public String getAcceso() {
+        return acceso;
+    }
+
+    public void setAcceso(String acceso) {
+        this.acceso = acceso;
     }
 }

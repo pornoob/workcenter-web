@@ -36,9 +36,6 @@
                         </f:facet>
                         <ui:fragment rendered="#{mantenedorAlarmasGps.noEsCero(conductor, col.id)}">
                             <ui:fragment rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
-                                <f:facet name="exportedValue">
-                                    <h:outputText value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"/>
-                                </f:facet>
                                 <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
                                                value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
                                                style="display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
