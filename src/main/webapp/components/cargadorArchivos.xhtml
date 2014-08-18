@@ -3,36 +3,39 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui">
     <h:form id="fEnlazadorFichero">
-        <p:commandButton value="Enlazar archivo" action="#{enlazadorFichero.reset()}" update=":fEnlazadorFichero" />
-        <p:panel id="dEnlazarFichero" rendered="#{enlazadorFichero.puedeEnlazar}">
-            <h:panelGrid columns="1">
-                <p:commandLink value="Archivo existente en el WorkCenter" action="#{enlazadorFichero.seleccionExistente()}" update=":fEnlazadorFichero:pEnlazarFichero"/>
-                <p:commandLink value="Archivo nuevo" action="#{enlazadorFichero.seleccionNuevo()}" update=":fEnlazadorFichero:pEnlazarFichero"/>
-            </h:panelGrid>
-            <p:panel id="pEnlazarFichero">
-                <ui:fragment rendered="#{enlazadorFichero.cargarNuevo}">
-                    <h3>Enlazar ficheros nuevos</h3>
-                    <p:fileUpload rendered="true" immediate="true" auto="false" multiple="true" mode="advanced" fileUploadListener="#{padre.subir}" uploadLabel="Subir" cancelLabel="Cancelar" allowTypes="/(\.|\/)(xlsx|docx|doc|xls|pdf|jpg|png)$/i" label="Cargar nuevo archivo" />
-                </ui:fragment>
-                <br/>
-                <ui:fragment rendered="#{enlazadorFichero.buscarExistente}">
+        <p:commandButton icon="ui-icon-folder-open" value="Enlazar archivo" action="#{enlazadorFichero.reset()}"
+                         update=":fEnlazadorFichero" />
+        <p:panel id="dEnlazarFichero" rendered="#{enlazadorFichero.puedeEnlazar and !enlazadorFichero.ocultar}">
+            <p:tabView id="pTabs">
+                <p:tab id="pTab1" title="Archivo existente en el WorkCenter">
+                    <h3>Enlazar ficheros existentes</h3>
                     <h:panelGrid columns="3">
                         <h:outputLabel value="Código de documento" />:
                         <h:inputText value="#{enlazadorFichero.filtroArchivo}"/>
                     </h:panelGrid>
-                    <p:commandButton value="Buscar" action="#{enlazadorFichero.buscarArchivosCodigo()}" update=":fEnlazadorFichero:pEnlazarFichero"/>
-                </ui:fragment>
-                <ui:fragment rendered="#{enlazadorFichero.mostrarResultados}">
-                    <h:panelGrid columns="2">
-                        <ui:repeat value="#{enlazadorFichero.descargables}" var="d">
-                            <p:commandButton value="#{d.nombre}" ajax="false" icon="ui-icon-arrowthick-1-s">
-                                <p:fileDownload value="#{d.streamedContent}"/>
-                            </p:commandButton>
-                            <p:commandLink value="Asociar" action="#{padre.enlazar(d)}"/>
-                        </ui:repeat>
-                    </h:panelGrid>
-                </ui:fragment>
-            </p:panel>
+                    <p:commandButton icon="ui-icon-search" value="Buscar" ajax="true"
+                                     action="#{enlazadorFichero.buscarArchivosCodigo()}"
+                                     update=":fEnlazadorFichero"/>
+                    <p:panel id="pEnlazarFichero">
+                        <ui:fragment rendered="#{enlazadorFichero.mostrarResultados}">
+                            <h:panelGrid columns="2">
+                                <ui:repeat value="#{enlazadorFichero.descargables}" var="d">
+                                    <p:commandLink value="#{d.nombre}" ajax="false">
+                                        <p:fileDownload value="#{d.streamedContent}"/>
+                                    </p:commandLink>
+                                    <p:commandButton icon="ui-icon-plus" value="Asociar" action="#{padre.enlazar(d)}"/>
+                                </ui:repeat>
+                            </h:panelGrid>
+                        </ui:fragment>
+                    </p:panel>
+                </p:tab>
+                <p:tab title="Archivo nuevo">
+                    <h3>Enlazar ficheros nuevos</h3>
+                    <p:fileUpload rendered="true" immediate="true" auto="false" multiple="true" mode="advanced"
+                                  fileUploadListener="#{padre.subir}" uploadLabel="Subir" cancelLabel="Cancelar"
+                                  allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png)$/i" label="Cargar nuevo archivo" />
+                </p:tab>
+            </p:tabView>
         </p:panel>
     </h:form>
 </ui:composition>

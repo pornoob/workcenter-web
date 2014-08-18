@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
@@ -15,11 +16,20 @@
         <h3>Detalle Tipo de Actividad</h3>
         <h:form id="formR112">
             <h:panelGrid columns="3">
+                <h:outputLabel for="sTipoActividad" value="Tipo Actividad"/>:
+                <p:selectOneMenu id="sTipoActividad" filter="true" filterMatchMode="contains"
+                                 value="#{registroR112.tipoActividad}" converter="entityConverter"
+                                 required="true" requiredMessage="Debes especificar el tipo de actividad">
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{registroR112.tipoActividades}" var="ta" itemLabel="#{ta.nombre}" itemValue="#{ta}"/>
+                </p:selectOneMenu>
+
                 <h:outputLabel value="Nombre"/>:
-                <p:inputText value="#{registroR112.tipoActividad.nombre}"/>
+                <p:inputText required="true" requiredMessage="Debes especificar un nombre"
+                             id="iNombre" value="#{registroR112.subTipoActividad.nombre}"/>
 
                 <h:outputLabel value="Debe ser evaluada"/>:
-                <p:selectBooleanCheckbox value="#{registroR112.tipoActividad.requiereNota}"/>
+                <p:selectBooleanCheckbox value="#{registroR112.subTipoActividad.requiereNota}"/>
 
                 <h:outputLabel value="Duración"/>:
                 <h:panelGroup>
@@ -29,7 +39,7 @@
             </h:panelGrid>
 
             <p:panel styleClass="actionPanel">
-                <p:commandButton value="Guardar" action="#{registroR112.guardarTipoActividad()}"/>
+                <p:commandButton value="Guardar" ajax="false" action="#{registroR112.guardarTipoActividad()}"/>
                 <p:commandButton value="Volver" action="#{registroR112.irNuevoR112()}"/>
             </p:panel>
         </h:form>

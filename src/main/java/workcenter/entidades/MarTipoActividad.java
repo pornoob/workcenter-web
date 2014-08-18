@@ -7,10 +7,19 @@ import java.io.Serializable;
  * Created by claudio on 04-08-14.
  */
 @Entity
-@Table(name = "mar_tipo_actividad", schema = "", catalog = "TransportesVentanas")
+@Table(name = "mar_tipo_actividad", schema = "", catalog = "")
 @NamedQueries(
         value = {
-            @NamedQuery(name = "MarTipoActividad.findByIdRegistro", query = "SELECT m FROM MarTipoActividad m WHERE m.marRegistrosByIdRegistro.id = :idRegistro")
+            @NamedQuery(
+                    name = "MarTipoActividad.findByIdRegistro",
+                    query = "SELECT m FROM MarTipoActividad m WHERE m.marRegistrosByIdRegistro.id = :idRegistro " +
+                            "AND m.marTipoActividadByIdTipoPadre IS NULL ORDER BY m.nombre"
+            ),
+            @NamedQuery(
+                    name = "MarTipoActividad.findSubTiposByActividad",
+                    query = "SELECT m FROM MarTipoActividad  m WHERE m.marTipoActividadByIdTipoPadre = :tipoActividad " +
+                            "ORDER BY m.nombre"
+            )
         }
 )
 public class MarTipoActividad implements Serializable {
@@ -22,7 +31,7 @@ public class MarTipoActividad implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false, updatable = true)
+    @Column(name = "id", nullable = false, updatable = true, insertable = true)
     public Integer getId() {
         return id;
     }
@@ -84,12 +93,22 @@ public class MarTipoActividad implements Serializable {
     }
 
     @Basic
-    @Column(name = "duracion", insertable = true, updatable = true)
+    @Column(name = "duracion", insertable = true, updatable = true, nullable = true, length = 5)
     public String getDuracion() {
         return duracion;
     }
 
     public void setDuracion(String duracion) {
         this.duracion = duracion;
+    }    private MarTipoActividad marTipoActividadByIdTipoPadre;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_tipo_padre", referencedColumnName = "id")
+    public MarTipoActividad getMarTipoActividadByIdTipoPadre() {
+        return marTipoActividadByIdTipoPadre;
+    }
+
+    public void setMarTipoActividadByIdTipoPadre(MarTipoActividad marTipoActividadByIdTipoPadre) {
+        this.marTipoActividadByIdTipoPadre = marTipoActividadByIdTipoPadre;
     }
 }

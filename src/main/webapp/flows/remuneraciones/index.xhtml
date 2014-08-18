@@ -7,20 +7,21 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="contenido">
         <h2>Libro de Remuneraciones</h2>
+        <p:growl autoUpdate="true" showDetail="true"/>
 
         <h:form id="formRemuneraciones">
             <p:commandButton action="#{mantenedorRemuneraciones.criterioEmpleador()}" update="filtros" value="Según Empleador"/>
             <p:commandButton action="#{mantenedorRemuneraciones.criterioConductor()}" update="filtros" value="Según Conductor"/>
 
-            <p:panel id="filtros">
+            <p:panel id="filtros" styleClass="sinBordes">
                 <ui:fragment rendered="#{constantes.filtroEmpleador eq mantenedorRemuneraciones.criterio}">
                     <h:panelGrid columns="3">
                         <h:outputLabel value="Empleador"/>:
-                        <p:selectOneMenu value="#{mantenedorRemuneraciones.empleadorSeleccionado}" converter="entityConverter" 
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.empleadorSeleccionado}" converter="entityConverter"
                                          filter="true" filterMatchMode="contains">
                             <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Todos --"/>
-                            <f:selectItems value="#{mantenedorRemuneraciones.empleadores}" var="e" 
-                                           itemLabel="#{e.nombre}" itemValue="#{e}"/> 
+                            <f:selectItems value="#{mantenedorRemuneraciones.empleadores}" var="e"
+                                           itemLabel="#{e.nombre}" itemValue="#{e}"/>
                         </p:selectOneMenu>
                         <h:outputLabel value="Mes"/>:
                         <p:selectOneMenu value="#{mantenedorRemuneraciones.mesSeleccionado}">
@@ -35,11 +36,11 @@
                 <ui:fragment rendered="#{constantes.filtroConductor eq mantenedorRemuneraciones.criterio}">
                     <h:panelGrid columns="3">
                         <h:outputLabel value="Conductor"/>:
-                        <p:selectOneMenu value="#{mantenedorRemuneraciones.conductorSeleccionado}" converter="entityConverter" 
+                        <p:selectOneMenu value="#{mantenedorRemuneraciones.conductorSeleccionado}" converter="entityConverter"
                                          filter="true" filterMatchMode="contains" >
                             <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Todos --"/>
-                            <f:selectItems value="#{mantenedorRemuneraciones.conductores}" var="c" 
-                                           itemLabel="#{c.getNombreCompleto()}" itemValue="#{c}"/> 
+                            <f:selectItems value="#{mantenedorRemuneraciones.conductores}" var="c"
+                                           itemLabel="#{c.getNombreCompleto()}" itemValue="#{c}"/>
                         </p:selectOneMenu>
                         <h:outputLabel value="Mes"/>:
                         <p:selectOneMenu value="#{mantenedorRemuneraciones.mesSeleccionado}">
@@ -52,16 +53,16 @@
                 </ui:fragment>
                 <p:commandButton value="Filtrar" ajax="true" update="resultados" actionListener="#{mantenedorRemuneraciones.filtrarRemuneraciones()}"/>
             </p:panel>
-            <p:panel id="resultados">
-                <p:hotkey bind="left" handler="console.log(scroll)"/>
-                <p:hotkey bind="right" handler="console.log(scroll)"/>
-                <p:scrollPanel widgetVar="scroll" rendered="#{mantenedorRemuneraciones.criterio ne null}">
+            <p:panel id="resultados" styleClass="sinBordes">
+                <p:scrollPanel rendered="#{mantenedorRemuneraciones.criterio ne null}">
                     <h:commandLink>
                         <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
                         <p:dataExporter target="tRemuneraciones" type="xls" fileName="libroRemuneraciones" />
                     </h:commandLink>
                     <p:dataTable value="#{mantenedorRemuneraciones.remuneraciones}"
-                                 var="r" id="tRemuneraciones" paginator="true" rows="15">
+                                 emptyMessage="No hay remuneraciones registradas para estos criterios"
+                                 paginator="true" paginatorPosition="top" style="margin-bottom: 18px"
+                                 var="r" id="tRemuneraciones" rows="15">
                         <p:columnGroup type="header">
                             <p:row>
                                 <p:column rowspan="3" headerText="Fecha"/>
@@ -126,7 +127,9 @@
                         </p:column>
                         <p:column>
                             <f:facet name="header">Nombre conductor</f:facet>
-                            <p:commandLink action="#{mantenedorRemuneraciones.generaLiquidacion(r)}" update=":dlgImagen" oncomplete="PF('dlgImagen').show()" value="#{r.idPersonal.nombreCompleto}"/>
+                            <p:commandLink value="#{r.idPersonal.nombreCompleto}" ajax="false">
+                                <p:fileDownload value="#{mantenedorRemuneraciones.generaLiquidacion(r)}"/>
+                            </p:commandLink>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Rut conductor</f:facet>
@@ -141,18 +144,33 @@
                             <h:outputText value="#{r.sueldoBase}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalBase}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Gratificación</f:facet>
                             <h:outputText value="#{r.gratificacion}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalGratificacion}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Hrs. de espera</f:facet>
                             <h:outputText value="#{r.horaEspera}" >
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalHrsEspera}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Semana corrida - atrasos</f:facet>
@@ -163,12 +181,22 @@
                             <h:outputText value="#{r.semanaCorrida}" >
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalSemanaCorrida}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Total viajes/Hrs. extra</f:facet>
                             <h:outputText value="#{r.totalViajes+r.horasExtras}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalHrsExtra}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <c:forEach items="#{mantenedorRemuneraciones.obtenerBonos(r)}" var="b">
                             <p:column>
@@ -176,6 +204,11 @@
                                 <h:outputText value="#{b.monto}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
+                                <f:facet name="footer">
+                                    <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalBono(b.descripcion)}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
                             </p:column>
                         </c:forEach>
                         <p:column>
@@ -183,12 +216,22 @@
                             <h:outputText value="#{r.totalImponible}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.sumaImponibles}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Viáticos</f:facet>
                             <h:outputText value="#{r.viatico}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalViaticos}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Otros</f:facet>
@@ -199,6 +242,11 @@
                             <h:outputText value="#{r.totalHaberes}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.sumaHaberes}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Organismo previsión</f:facet>
@@ -213,6 +261,11 @@
                             <h:outputText value="#{r.dectoAFP}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalDctoAfp}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">APV y/o Cta. Ahorro</f:facet>
@@ -223,6 +276,11 @@
                             <h:outputText value="#{r.aporteTrabajador}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalAporteTrabajador}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Organismo salud</f:facet>
@@ -233,12 +291,22 @@
                             <h:outputText value="#{r.dctoPrevision}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalDctoPrevision}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Impuesto de renta</f:facet>
                             <h:outputText value="#{r.impUnico}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalImpUnico}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <c:forEach items="#{mantenedorRemuneraciones.obtenerDescuentos(r)}" var="d">
                             <p:column>
@@ -246,6 +314,11 @@
                                 <h:outputText value="#{d.monto}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
+                                <f:facet name="footer">
+                                    <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalDescuento(d.descripcion)}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
                             </p:column>
                         </c:forEach>
                         <p:column>
@@ -253,43 +326,59 @@
                             <h:outputText value="#{r.totalDctos}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.sumaTotalDescuentos}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Alcance líquido</f:facet>
                             <h:outputText value="#{r.alcanceLiquido}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalAlcanceLiquido}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Anticipos</f:facet>
                             <h:outputText value="#{r.anticipoSueldo}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalAnticipoSueldo}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Dif. caja</f:facet>
                             <h:outputText value="#{r.difCaja}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalDifCaja}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
                         <p:column>
                             <f:facet name="header">Saldo líquido</f:facet>
                             <h:outputText value="#{r.liqPagar}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorRemuneraciones.totalLiqPagar}">
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
                         </p:column>
-                        <p:summaryRow>
-                            
-                        </p:summaryRow>
                     </p:dataTable>
                 </p:scrollPanel>
             </p:panel>
         </h:form>
-        <p:dialog id="dlgImagen" widgetVar="dlgImagen" closable="true" width="800px" height="600px" resizable="false" modal="true" dynamic="true">
-            <f:facet name="header">
-                <h:outputText value="#{mantenedorRemuneraciones.remuneracionSeleccionada.idPersonal.nombreCompleto}"/>
-            </f:facet>
-            <p:graphicImage width="100%" url="#{mantenedorRemuneraciones.urlLiquidacion}" />
-        </p:dialog>
     </ui:define>
 </ui:composition>

@@ -22,6 +22,7 @@ import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaInformeActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
+import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Semana;
@@ -47,6 +48,9 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     @Autowired
     LogicaDocumentos logicaDocumentos;
+
+    @Autowired
+    Constantes constantes;
 
     private Semana semana;
     private String linkAnterior;
@@ -88,7 +92,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(ad);
         List<Descargable> descargables = new ArrayList<Descargable>();
         for (Documento d : docs) {
-            Descargable descargable = new Descargable(new File(System.getProperty("catalina.base") + "/static/workcenter/" + d.getId()));
+            Descargable descargable = new Descargable(new File(constantes.getPathArchivos() + d.getId()));
             descargable.setNombre(d.getNombreOriginal());
             descargables.add(descargable);
         }
@@ -129,8 +133,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     }
 
     public void guardar() {
-        HttpServletRequest request = FacesUtil.obtenerHttpServletRequest();
-        String screenFlow = request.getParameter("javax.faces.ViewState");
+        String screenFlow = FacesUtil.obtenerScreenFlow();
         logicaInformeActividades.guardar(actividadDiaria);
         if (documentosSubidos == null) {
             documentosSubidos = new HashMap<String, List<Documento>>();
@@ -144,6 +147,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         }
         FacesUtil.mostrarMensajeInformativo("Actividad guardada exitosamente", "ID de actividad " + actividadDiaria.getId());
         actividadDiaria = new ActividadDiaria();
+        documentosSubidos = new HashMap<String, List<Documento>>();
     }
 
     private void obtenerTiposActividades() {
@@ -345,8 +349,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         if (d == null) {
             return;
         }
-        HttpServletRequest request = FacesUtil.obtenerHttpServletRequest();
-        String screenFlow = request.getParameter("javax.faces.ViewState");
+        String screenFlow = FacesUtil.obtenerScreenFlow();
         if (documentosSubidos == null) {
             documentosSubidos = new HashMap<String, List<Documento>>();
         }
@@ -364,8 +367,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     public void enlazar(Descargable descargable) {
         Documento d = logicaDocumentos.obtenerPorCodigo(descargable.getArchivo().getName());
-        HttpServletRequest request = FacesUtil.obtenerHttpServletRequest();
-        String screenFlow = request.getParameter("javax.faces.ViewState");
+        String screenFlow = FacesUtil.obtenerScreenFlow();
         if (documentosSubidos == null) {
             documentosSubidos = new HashMap<String, List<Documento>>();
         }

@@ -27,6 +27,11 @@
     <view-state id="verFicha">
         <transition on="flowListarPersonal" to="personal"/>
         <transition on="flowVerContratos" to="contratos"/>
+        <transition on="flowActualizarDocumento" to="actualizarDocCarpeta"/>
+    </view-state>
+
+    <view-state id="actualizarDocCarpeta">
+        <transition on="flowMostrarFicha" to="verFicha"/>
     </view-state>
     
     <view-state id="contratos">

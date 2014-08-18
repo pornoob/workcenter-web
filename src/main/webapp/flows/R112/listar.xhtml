@@ -9,38 +9,55 @@
 
         <h2>R-112</h2>
         <h:form id="formFormularios">
+            <iframe id="pdfDocument" style="display: none"></iframe>
             <p:commandButton icon="ui-icon-plus" value="Nueva Actividad" action="#{registroR112.preparaCreacionR112()}"/>
+            <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario">
+                <p:fileDownload value="#{registroR112.obtenerFormulario()}"/>
+            </p:commandButton>
             <p:dataTable value="#{registroR112.actividades}" var="a" emptyMessage="No se han encontrado Actividades"
-                         filterEvent="enter"
+                         filterEvent="enter" filteredValue="#{registroR112.actividadesFiltradas}"
                          paginator="true"
                          paginatorAlwaysVisible="true"
                          paginatorTemplate="#{constantes.paginadorTemplate}"
                          paginatorPosition="both"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          rows="#{constantes.cantidadFilasTablas}">
-                <p:column headerText="Folio">
+                <p:column headerText="Folio" filterBy="id" filterMatchMode="startsWith" width="30">
                     <h:outputText value="#{a.id}"/>
                 </p:column>
-                <p:column headerText="Nombre">
+                <p:column headerText="Nombre" filterBy="nombre" filterMatchMode="contains">
                     <h:outputText value="#{a.nombre}"/>
                 </p:column>
-                <p:column headerText="Encargado">
+                <p:column headerText="Encargado" filterBy="#{a.encargado.nombreCompleto}" filterMatchMode="contains">
                     <h:outputText value="#{a.encargado.nombreCompleto}"/>
                 </p:column>
-                <p:column headerText="Fecha">
+                <p:column headerText="Fecha" filterBy="fecha" filterMatchMode="contains">
                     <h:outputText value="#{a.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Tipo">
+                <p:column headerText="Tipo" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
+                </p:column>
+                <p:column headerText="Subtipo" filterBy="#{a.tipoActividad.nombre}" filterMatchMode="contains">
                     <h:outputText value="#{a.tipoActividad.nombre}"/>
                 </p:column>
                 <p:column headerText="Asistentes">
                     <h:commandLink value="#{registroR112.obtenerCantAsistentes(a)}" action="#{registroR112.verParticipantes(a)}"/>
                 </p:column>
+
+                <p:column headerText="Acciones">
+                    <p:panel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-pencil" title="Editar" action="#{registroR112.preparaEdicionR112(a)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false" title="Descargar documento">
+                            <p:fileDownload value="#{registroR112.obtenerFormulario(a)}"/>
+                        </p:commandLink>
+                    </p:panel>
+                </p:column>
             </p:dataTable>
             <p:panel class="actionPanel">
-                <p:commandButton action="#{registroR112.irListarRegistros()}" value="Volver"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{registroR112.irListarRegistros()}" value="Volver"/>
             </p:panel>
         </h:form>
     </ui:define>

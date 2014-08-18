@@ -33,18 +33,11 @@
     <application>
         <message-bundle>JsfMessageResources</message-bundle>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>
-   
-<!--        <locale-config>
+
+        <locale-config>
             <default-locale>es</default-locale>
             <supported-locale>es</supported-locale>
-            <supported-locale>en</supported-locale>
         </locale-config>
-        
-        <resource-bundle>
-            <base-name>idiomas/idioma</base-name>
-            <var>lang</var>
-        </resource-bundle>-->
-        
     </application>
 </faces-config>
  

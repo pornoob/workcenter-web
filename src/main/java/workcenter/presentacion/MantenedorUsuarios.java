@@ -17,7 +17,6 @@ import workcenter.negocio.LogicaProyecto;
 import workcenter.negocio.LogicaPermiso;
 import workcenter.util.components.Constantes;
 import workcenter.util.pojo.FacesUtil;
-import workcenter.util.services.Idioma;
 
 /**
  * @author colivares
@@ -37,9 +36,6 @@ public class MantenedorUsuarios implements Serializable {
 
     @Autowired
     Constantes constantes;
-
-    @Autowired
-    Idioma idioma;
 
     private List<Personal> listaPersonal;
     private List<Personal> listaFiltradaPersonal;

@@ -67,6 +67,7 @@ public class MantenedorPersonal implements Serializable {
     private Integer semanaCorrida;
     private SancionRetiradaPersonal retiroSancion;
     private Sancionado sancion;
+    private DocumentoPersonal docSeleccionado;
 
     @Autowired
     LogicaPersonal logicaPersonal;
@@ -167,6 +168,11 @@ public class MantenedorPersonal implements Serializable {
         personalSeleccionado.setSancionesRetiradas(logicaPersonal.obtenerSancionesRetiradas(personalSeleccionado));
         personalSeleccionado.getSancionesRetiradas().add(retiroSancion);
         return "flowDesbloquear";
+    }
+
+    public String irActualizarDocCarpeta(DocumentoPersonal dp) {
+        docSeleccionado = dp;
+        return "flowActualizarDocumento";
     }
 
     public String irListaPersonal() {
@@ -317,13 +323,8 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public StreamedContent generaDescargable(DocumentoPersonal dp) {
-        try {
-            Descargable d = new Descargable(new File(System.getProperty("catalina.base") + "/static" + FacesUtil.obtenerContextPath() + "/" + dp.getArchivo()));
-            return d.getStreamedContent();
-        } catch (FileNotFoundException ex) {
-            Logger.getLogger(MantenedorPersonal.class.getName()).log(Level.SEVERE, null, ex);
-        }
-        return null;
+        Descargable d = new Descargable(new File(System.getProperty("catalina.base") + "/static" + FacesUtil.obtenerContextPath() + "/" + dp.getArchivo()));
+        return d.getStreamedContent();
     }
 
     public List<Personal> getListaPersonal() {
@@ -516,5 +517,13 @@ public class MantenedorPersonal implements Serializable {
 
     public void setSancion(Sancionado sancion) {
         this.sancion = sancion;
+    }
+
+    public DocumentoPersonal getDocSeleccionado() {
+        return docSeleccionado;
+    }
+
+    public void setDocSeleccionado(DocumentoPersonal docSeleccionado) {
+        this.docSeleccionado = docSeleccionado;
     }
 }

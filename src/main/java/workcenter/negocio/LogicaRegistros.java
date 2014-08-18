@@ -56,4 +56,9 @@ public class LogicaRegistros {
     public List<MarParticipantesAct> obtenerParticipantes(MarActividad a) {
         return registroDao.obtenerParticipantes(a);
     }
+
+    @Transactional(readOnly = true)
+    public List<MarTipoActividad> obtenerSubTiposActividades(MarTipoActividad tipoActividad) {
+        return registroDao.obtenerSubTiposActividades(tipoActividad);
+    }
 }

@@ -37,8 +37,10 @@
                 </h:panelGrid>
             </ui:fragment>
             <h:panelGroup>
-                <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}" value="Crear" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
-                <p:commandButton value="Consultar" action="#{mantenedorProgramaActividades.consultar()}"
+                <p:commandButton icon="ui-icon-play" rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}"
+                                 value="Crear" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
+                <p:commandButton value="Consultar" icon="ui-icon-search"
+                                 action="#{mantenedorProgramaActividades.consultar()}"
                                  process="@this, :frmProAct:sResponsables, :frmProAct:sProgramas" update=":frmProAct:pPlanes"/>
             </h:panelGroup>
 

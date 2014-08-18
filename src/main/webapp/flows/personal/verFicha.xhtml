@@ -12,11 +12,13 @@
                 <h:panelGroup>
                     <h:panelGrid columns="6">
                         <h:outputLabel value="Nombres"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.nombres}" converter="nombreConverter"/>
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.nombres}"
+                                     converter="nombreConverter"/>
                         <h:outputText/><h:outputText/><h:outputText/>
 
                         <h:outputLabel value="Apellidos"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.apellidos}" converter="nombreConverter"/>
+                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.apellidos}"
+                                     converter="nombreConverter"/>
                         <h:outputText/><h:outputText/><h:outputText/>
 
                         <h:outputLabel value="RUT"/>:
@@ -33,7 +35,8 @@
                                     navigator="true" locale="es" placeholder="Haga click para seleccionar una fecha"/>
 
                         <h:outputLabel value="Domicilio"/>:
-                        <h:inputTextarea style="width: 320px" value="#{mantenedorPersonal.personalSeleccionado.domicilio}"/>
+                        <p:inputTextarea style="width: 320px"
+                                         value="#{mantenedorPersonal.personalSeleccionado.domicilio}"/>
                         <h:outputText/><h:outputText/><h:outputText/>
 
                         <h:outputLabel value="Contacto de Emergencia"/>:
@@ -41,7 +44,8 @@
                         <h:outputText/><h:outputText/><h:outputText/>
 
                         <h:outputLabel value="Domicilio de Emergencia"/>:
-                        <h:inputTextarea style="width: 320px" value="#{mantenedorPersonal.personalSeleccionado.edomicilio}"/>
+                        <p:inputTextarea style="width: 320px"
+                                         value="#{mantenedorPersonal.personalSeleccionado.edomicilio}"/>
                         <h:outputText/><h:outputText/><h:outputText/>
 
                         <h:outputLabel value="Teléfono de Emergencia"/>:
@@ -49,14 +53,18 @@
                     </h:panelGrid>
                 </h:panelGroup>
                 <h:panelGroup>
-                    <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}" value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
+                    <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}"
+                                    value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
                     <br/>
-                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" value="Cambiar Foto"/>
+                    <p:commandButton icon="ui-icon-person"
+                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                     value="Cambiar Foto"/>
                 </h:panelGroup>
             </h:panelGrid>
+
             <h3>Documentos de Carpeta</h3>
-            <p:panel id="pDocumentos">
-                <p:commandButton value="Agregar documento"/>
+            <p:panel id="pDocumentos" styleClass="sinBordes">
+                <p:commandButton icon="ui-icon-plus" value="Agregar documento"/>
                 <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.documentosActualizados}" var="doc">
                     <p:column headerText="Nombre">
                         #{doc.tipo.etiqueta}
@@ -81,18 +89,23 @@
                                            ajax="false">
                                 <p:fileDownload value="#{mantenedorPersonal.generaDescargable(doc)}"/>
                             </p:commandLink>
-                            <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" title="Actualizar"
-                                           styleClass="ui-icon ui-icon-arrowthickstop-1-n"/>
-                            <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" title="Editar"
-                                           styleClass="ui-icon ui-icon-pencil"/>
+                            <p:commandLink
+                                    rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                    title="Actualizar" action="#{mantenedorPersonal.irActualizarDocCarpeta(doc)}"
+                                    styleClass="ui-icon ui-icon-arrowthickstop-1-n"/>
+                            <p:commandLink
+                                    rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                    title="Editar"
+                                    styleClass="ui-icon ui-icon-pencil"/>
                         </h:panelGroup>
                     </p:column>
 
                 </p:dataTable>
                 <p:panel class="actionPanel">
-                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Guardar"/>
-                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Ver contratos" action="#{mantenedorPersonal.irContratosPersonal()}"/>
-                    <p:commandButton value="Volver" action="#{mantenedorPersonal.irListaPersonal()}"/>
+                    <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Guardar"/>
+                    <p:commandButton icon="ui-icon-document" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
+                                     value="Ver contratos" action="#{mantenedorPersonal.irContratosPersonal()}"/>
+                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{mantenedorPersonal.irListaPersonal()}"/>
                 </p:panel>
             </p:panel>
         </h:form>

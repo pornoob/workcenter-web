@@ -5,6 +5,9 @@
  */
 package workcenter.util.servlets;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import workcenter.util.components.Constantes;
+
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.Closeable;
@@ -23,17 +26,15 @@ import javax.servlet.http.HttpServletResponse;
  * @author colivares
  */
 public class WorkcenterDesktopServlet extends HttpServlet {
+    @Autowired
+    Constantes  constantes;
 
     // Constants ----------------------------------------------------------------------------------
     private static final int DEFAULT_BUFFER_SIZE = 10240; // 10KB.
 
-    // Properties ---------------------------------------------------------------------------------
-    private String pathBase;
-
     // Actions ------------------------------------------------------------------------------------
     public void init(ServletConfig config) throws ServletException {
         super.init(config);
-        pathBase = System.getProperty("catalina.base") + "/static";
     }
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
@@ -50,7 +51,7 @@ public class WorkcenterDesktopServlet extends HttpServlet {
         }
 
         // Decode the file name (might contain spaces and on) and prepare file object.
-        File image = new File(pathBase+request.getContextPath(), URLDecoder.decode(requestedImage, "UTF-8"));
+        File image = new File(constantes.getPathArchivos(), URLDecoder.decode(requestedImage, "UTF-8"));
         System.out.println("WORKCENTER DESKTOP SERVLET PATH: "+image.getAbsolutePath());
 
         // Check if file actually exists in filesystem.

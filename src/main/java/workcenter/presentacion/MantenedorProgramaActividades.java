@@ -141,7 +141,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         for (MpaEjecucionPlan e : ejecuciones) {
             List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(e);
             for (Documento doc : docs) {
-                Descargable d = new Descargable(new File(System.getProperty("catalina.base") + "/static/workcenter/" + doc.getId()));
+                Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
                 d.setNombre(doc.getNombreOriginal());
                 descargables.add(d);
             }

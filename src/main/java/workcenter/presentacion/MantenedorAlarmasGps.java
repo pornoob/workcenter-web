@@ -127,7 +127,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
             gestionAlarma = new ArrayList<GestionAlarmaGps>(detalleAlarmas.get(0).getGestionAlarmasGpsCollection()).get(0);
             List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(gestionAlarma);
             for (Documento d : docs) {
-                Descargable descargable = new Descargable(new File(System.getProperty("catalina.base") + "/static/workcenter/" + d.getId()));
+                Descargable descargable = new Descargable(new File(constantes.getPathArchivos() + d.getId()));
                 descargable.setNombre(d.getNombreOriginal());
                 descargables.add(descargable);
             }
@@ -167,6 +167,7 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
             }
         }
         FacesUtil.mostrarMensajeInformativo("Gestión guardada exitosamente", "Se han enlazado los ficheros respectivos");
+        documentosSubidos = new HashMap<String, List<Documento>>();
     }
 
     public boolean puedeGestionar() {

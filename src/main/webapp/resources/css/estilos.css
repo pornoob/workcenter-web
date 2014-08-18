@@ -1,15 +1,8 @@
-html,body {
+html, body {
     font-family: Arial, helvetica, sans-serif;
     font-size: 10pt;
     margin: 0;
     padding: 0;
-}
-
-.fondo {
-    background: url("./img/theme/bg.svg") no-repeat right fixed;
-    width: 100%;
-    height: 100%;
-    position: fixed;
 }
 
 .esqueleto {
@@ -18,35 +11,67 @@ html,body {
     margin-right: auto;
 }
 
-.logoSuperior {
-    background: url('./img/theme/logoSuperior.png') no-repeat left;
+.imagenSuperior {
+    background: url('./img/theme/panorama.jpg') no-repeat;
     width: 1024px;
-    height: 135px;
+    height: 145px;
     padding: 0;
-    margin: 0 auto;
+    margin-left: auto;
+    margin-right: auto;
+    border: 0;
 }
 
-.actionPanel{
+.logoSuperior {
+    background: url('./img/theme/logoSuperior.png') no-repeat left;
+    height: 135px;
+    border: 0;
+}
+
+.tituloEmpresa {
+    height: 60px;
+    width: 500px;
+    background-color: yellow;
+}
+
+.panelBarraAutentificacion {
+    background-color: black;
+    /*-webkit-opacity: 0.8;*/
+    /*-moz-opacity: 0.8;*/
+    /*-ms-filter: alpha(opacity=80);*/
+    /*filter: alpha(opacity=80);*/
+    width: 1020px;
+    color: white;
+    text-align: right;
+    border: 0;
+}
+
+.panelBarraAutentificacion a {
+    color: white;
+}
+
+.panelBarraAutentificacion * {
+    color: white;
+}
+
+.pNavBar {
+    margin-top: 12px;
+    background-color: yellow;
+}
+
+ul.navBar {
+    list-style: none;
+}
+
+ul.navBar li {
+    float: left;
+}
+
+.actionPanel {
     width: 100%;
     alignment-adjust: central;
     text-align: center;
     margin-top: 5px;
-}
-
-.ui-datatable, .ui-widget {
-    font-size: 8pt;
-}
-
-.ui-row-editor {
-    float: left;
-}
-
-.ui-panel {
     border: 0;
-}
-
-.ui-datatable-empty-message {
-    text-align: center;
 }
 
 .menuWorkcenter {
@@ -54,30 +79,48 @@ html,body {
     text-align: center;
     display: block;
     margin-right: 15px;
-} .menuWorkcenter:hover {
+}
+
+.menuWorkcenter:hover {
     color: #cc0000;
-    /*background-color: black;*/
-} .menuWorkcenter label {
+}
+
+.menuWorkcenter label {
     cursor: pointer;
     display: block;
-} .menuWorkcenter img {
+}
+
+.menuWorkcenter img {
     margin-left: auto;
     margin-right: auto;
     display: block;
 }
 
-ul.navBar {
-    list-style: none;  
-} ul.navBar li {
+.opcionesFila {
+    text-align: center;
+    border: 0;
+}
+
+.opcionesFila a {
     float: left;
 }
 
-.opcionesFila {
-    text-align: center;
-} .opcionesFila a {
-    float: left;
+.sinBordes {
+    border: 0;
 }
 
 table {
     width: 100%;
+}
+
+.ui-datatable, .ui-widget {
+    font-size: 8pt;
+}
+
+.ui-datatable-empty-message {
+    text-align: center;
+}
+
+.ui-paginator-top {
+    height: 25px;
 }

@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.persistence.Table;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -20,7 +21,6 @@ import workcenter.entidades.Documento;
 import workcenter.entidades.MpaPlanPrograma;
 
 /**
- *
  * @author colivares
  */
 @Service
@@ -43,11 +43,10 @@ public class LogicaDocumentos {
     @Transactional(readOnly = false)
     public void asociarDocumentos(List<Documento> docs, Object entidad) {
         Class clase = entidad.getClass();
-        System.err.println("LLEGA: "+docs);
-        System.err.println("CON: "+entidad);
         for (Documento d : docs) {
             AsociacionDocumento ad = new AsociacionDocumento();
             ad.setIdDocumento(d);
+            ad.setIdEnTabla(-1);
             ad.setNombreTabla(((Table) clase.getAnnotation(Table.class)).name());
             for (Field f : clase.getDeclaredFields()) {
                 try {
@@ -75,9 +74,32 @@ public class LogicaDocumentos {
                     Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
-            System.err.println("AD: "+ad);
+            if (ad.getIdEnTabla() == -1) {
+                for (Method m : clase.getDeclaredMethods()) {
+                    if (!m.getName().startsWith("get")) continue;
+                    try {
+                        Annotation annotationId = m.getAnnotation(javax.persistence.Id.class);
+                        if (annotationId == null) {
+                            annotationId = m.getAnnotation(javax.persistence.EmbeddedId.class);
+                        }
+                        if (annotationId == null) {
+                            continue;
+                        }
+                        Object objectId = m.invoke(entidad, null);
+                        ad.setIdEnTabla(Integer.valueOf(objectId.toString()));
+                        break;
+                    } catch (IllegalAccessException ex) {
+                        Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (IllegalArgumentException ex) {
+                        Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (InvocationTargetException ex) {
+                        Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                    } catch (SecurityException ex) {
+                        Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                    }
+                }
+            }
             documentoDao.guardarAsociacion(ad);
-            System.err.println("AD2: "+ad);
         }
     }
 
@@ -112,6 +134,30 @@ public class LogicaDocumentos {
                 Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
             } catch (SecurityException ex) {
                 Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        if (objectId == null) {
+            for (Method m : clase.getDeclaredMethods()) {
+                if (!m.getName().startsWith("get")) continue;
+                try {
+                    Annotation annotationId = m.getAnnotation(javax.persistence.Id.class);
+                    if (annotationId == null) {
+                        annotationId = m.getAnnotation(javax.persistence.EmbeddedId.class);
+                    }
+                    if (annotationId == null) {
+                        continue;
+                    }
+                    objectId = m.invoke(entidad, null);
+                    break;
+                } catch (IllegalAccessException ex) {
+                    Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (IllegalArgumentException ex) {
+                    Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InvocationTargetException ex) {
+                    Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SecurityException ex) {
+                    Logger.getLogger(LogicaDocumentos.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
         }
         return documentoDao.obtenerDocumentos(nombreTabla, objectId.toString());

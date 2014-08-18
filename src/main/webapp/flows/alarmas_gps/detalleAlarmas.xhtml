@@ -21,7 +21,7 @@
                     <p:panel style="border:0;" id="pGestion" rendered="#{mantenedorAlarmasGps.indicarGestionActivado}">
                         <h:panelGrid columns="3">
                             <h:outputLabel value="Detalle"/>:
-                            <h:inputTextarea value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
+                            <p:inputTextarea value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
                         </h:panelGrid>
                         <p:commandButton value="Guardar gestión" action="#{mantenedorAlarmasGps.guardarGestion()}" update=":fDetalle"/>
                     </p:panel>
@@ -33,7 +33,7 @@
                             <h:outputLabel value="Gestión realizada por"/>:
                             <h:outputText value="#{mantenedorAlarmasGps.gestionAlarma.idUsuario.personal.nombreCompleto}"/>
                             <h:outputLabel value="Detalle"/>:
-                            <h:inputTextarea readonly="true" style="width: 800px; height: 120px" value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
+                            <p:inputTextarea readonly="true" style="width: 800px; height: 120px" value="#{mantenedorAlarmasGps.gestionAlarma.detalle}" />
                         </h:panelGrid>
                         <h3>Descargables</h3>
                         <h:panelGrid columns="1">

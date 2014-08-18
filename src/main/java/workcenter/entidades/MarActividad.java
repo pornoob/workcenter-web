@@ -106,7 +106,7 @@ public class MarActividad implements Serializable {
         this.tipoActividad = tipoActividad;
     }
 
-    @OneToMany(mappedBy = "marActividadByIdActividad", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "marActividadByIdActividad", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     public List<MarParticipantesAct> getParticipantes() {
         return participantes;
     }

@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -23,12 +25,9 @@ import workcenter.entidades.Personal;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaLibroRemuneraciones;
 import workcenter.negocio.LogicaPersonal;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.pojo.*;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
-import workcenter.util.pojo.BonosTablaRemuneracion;
-import workcenter.util.pojo.DescuentosTablaRemuneracion;
-import workcenter.util.pojo.StaticContext;
 
 /**
  * @author colivares
@@ -62,17 +61,11 @@ public class MantenedorRemuneraciones implements Serializable {
     private Integer anioIngresado;
     private BonosTablaRemuneracion bonosTablaRemuneracion;
     private DescuentosTablaRemuneracion descuentosTablaRemuneracion;
-    private final String[] claseTablas = {
-        "ui-datatable-even", "ui-datatable-odd"
-    };
-    private int colorFila;
-    private String urlLiquidacion;
     private Remuneracion remuneracionSeleccionada;
 
     public String inicio() {
         conductores = obtenerConductores();
         empleadores = obtenerEmpleadores();
-        colorFila = 0;
         anioIngresado = Calendar.getInstance().get(Calendar.YEAR);
         return "flowInicio";
     }
@@ -82,35 +75,30 @@ public class MantenedorRemuneraciones implements Serializable {
         return sdf.format(f);
     }
 
-    public void generaLiquidacion(Remuneracion r) {
+    public StreamedContent generaLiquidacion(Remuneracion r) {
         try {
             if (r.getArchivo() == null) {
-                return;
+                FacesUtil.mostrarMensajeError("Operación fallida", "No se adjuntó la liquidación de "+r.getIdPersonal().getNombreCompleto());
+                return null;
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");
-            String dir = System.getProperty("catalina.base");
-            String liquidacion = "/static" + FacesUtil.obtenerHttpServletRequest().getContextPath() + "/" + sesionCliente.getUsuario().getRut() + "/liq_" + r.getIdPersonal().getRut() + "_" + sdf.format(r.getFechaLiquidacion()) + "." + r.getExtension();
-//            String liquidacion = "";
-            new File(dir+liquidacion.substring(0, liquidacion.lastIndexOf('/'))).mkdirs();
+            String liquidacion = constantes.getPathArchivos() + "/tmp/" + sesionCliente.getUsuario().getRut() + "/liq_" + r.getIdPersonal().getRut() + "_" + sdf.format(r.getFechaLiquidacion()) + "." + r.getExtension();
+            new File(liquidacion.substring(0, liquidacion.lastIndexOf('/'))).mkdirs();
 
-            File archivo = new File(dir + liquidacion);
-            if (archivo.exists() && new Date(archivo.lastModified()).after(r.getFechaLiquidacion())
-                    && r.equals(remuneracionSeleccionada)) {
-                remuneracionSeleccionada = r;
-                urlLiquidacion = StaticContext.obtenerUrlServidor() + liquidacion;
-                System.out.println("URL: " + urlLiquidacion);
-                return;
+            File archivo = new File(liquidacion);
+            if (archivo.exists() && new Date(archivo.lastModified()).after(r.getFechaLiquidacion())) {
+                return new Descargable(archivo).getStreamedContent();
             }
-            FileOutputStream fos = new FileOutputStream(dir + liquidacion);
+            FileOutputStream fos = new FileOutputStream(liquidacion);
             fos.write(r.getArchivo());
-            urlLiquidacion = StaticContext.obtenerUrlServidor() + liquidacion;
-            remuneracionSeleccionada = r;
-            System.out.println("URL: " + urlLiquidacion);
+            return new Descargable(archivo).getStreamedContent();
         } catch (FileNotFoundException ex) {
             Logger.getLogger(MantenedorRemuneraciones.class.getName()).log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
             Logger.getLogger(MantenedorRemuneraciones.class.getName()).log(Level.SEVERE, null, ex);
         }
+        FacesUtil.mostrarMensajeError("Operación fallida", "Ha ocurrido un error interno inténtelo más tarde");
+        return null;
     }
 
     public void filtrarRemuneraciones() {
@@ -121,11 +109,166 @@ public class MantenedorRemuneraciones implements Serializable {
         }
         bonosTablaRemuneracion = new BonosTablaRemuneracion(remuneraciones);
         descuentosTablaRemuneracion = new DescuentosTablaRemuneracion(remuneraciones);
-        colorFila = 0;
     }
 
-    public String obtenerColorFila() {
-        return claseTablas[(colorFila++ % claseTablas.length)];
+    public Integer getTotalBase() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getSueldoBase();
+        }
+        return total;
+    }
+
+    public Integer getTotalGratificacion() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getGratificacion();
+        }
+        return total;
+    }
+
+    public Integer getTotalHrsEspera() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getHoraEspera();
+        }
+        return total;
+    }
+
+    public Integer getTotalSemanaCorrida() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getSemanaCorrida();
+        }
+        return total;
+    }
+
+    public Integer getTotalHrsExtra() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getSemanaCorrida();
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalBono(String nombreBono) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            for (BonoDescuentoRemuneracion b : obtenerBonos(r)) {
+                if (b.getDescripcion().equals(nombreBono)) {
+                    total += b.getMonto().intValue();
+                }
+            }
+        }
+        return total;
+    }
+
+    public Integer getSumaImponibles() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getTotalImponible();
+        }
+        return total;
+    }
+
+    public Integer getTotalViaticos() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getViatico();
+        }
+        return total;
+    }
+
+    public Integer getSumaHaberes() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getTotalHaberes();
+        }
+        return total;
+    }
+
+    public Integer getTotalDctoAfp() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getDectoAFP();
+        }
+        return total;
+    }
+
+    public Integer getTotalAporteTrabajador() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getAporteTrabajador();
+        }
+        return total;
+    }
+
+    public Integer getTotalDctoPrevision() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getDctoPrevision();
+        }
+        return total;
+    }
+
+    public Integer getTotalImpUnico() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getImpUnico();
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalDescuento(String nombreDescuento) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            for (BonoDescuentoRemuneracion d : obtenerDescuentos(r)) {
+                if (d.getDescripcion().equals(nombreDescuento)) {
+                    total += d.getMonto().intValue();
+                }
+            }
+        }
+        return total;
+    }
+
+    public Integer getSumaTotalDescuentos() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getTotalDctos();
+        }
+        return total;
+    }
+
+    public Integer getTotalAlcanceLiquido() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getAlcanceLiquido();
+        }
+        return total;
+    }
+
+    public Integer getTotalAnticipoSueldo() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getAnticipoSueldo();
+        }
+        return total;
+    }
+
+    public Integer getTotalDifCaja() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getDifCaja();
+        }
+        return total;
+    }
+
+    public Integer getTotalLiqPagar() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getLiqPagar();
+        }
+        return total;
     }
 
     public List<BonoDescuentoRemuneracion> obtenerBonos(Remuneracion r) {
@@ -274,14 +417,6 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public void setDescuentosTablaRemuneracion(DescuentosTablaRemuneracion descuentosTablaRemuneracion) {
         this.descuentosTablaRemuneracion = descuentosTablaRemuneracion;
-    }
-
-    public String getUrlLiquidacion() {
-        return urlLiquidacion;
-    }
-
-    public void setUrlLiquidacion(String urlLiquidacion) {
-        this.urlLiquidacion = urlLiquidacion;
     }
 
     public Remuneracion getRemuneracionSeleccionada() {

@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class MarRegistro implements Serializable {
     private int id;
     private String nombre;
+    private String pathFormulario;
 
     @Id
     @Column(name = "id", nullable = false, insertable = true, updatable = true)
@@ -30,6 +31,16 @@ public class MarRegistro implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    @Basic
+    @Column(name = "path_formulario", nullable = true, length = 300)
+    public String getPathFormulario() {
+        return pathFormulario;
+    }
+
+    public void setPathFormulario(String pathFormulario) {
+        this.pathFormulario = pathFormulario;
     }
 
     @Override

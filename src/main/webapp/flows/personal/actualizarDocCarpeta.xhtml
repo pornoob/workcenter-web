@@ -1,0 +1,24 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Actualizar Documento de Carpeta</h2>
+
+        <h3>#{mantenedorPersonal.docSeleccionado.tipo.etiqueta} - #{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
+        <h:form id="frmPersonal">
+            <p:fileUpload label="Seleccionar nuevo" cancelLabel="Cancelar" uploadLabel="Subir" auto="false"
+                          mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(pdf|jpg|png)$/i"
+                          rendered="#{mantenedorPersonal.docSeleccionado.id != null}"/>
+            <p:fileUpload label="Seleccionar nuevo" cancelLabel="Cancelar" uploadLabel="Subir" auto="false"
+                          mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(pdf|jpg|png)$/i"
+                          rendered="#{mantenedorPersonal.docSeleccionado.id == null}"/>
+            <p:panel styleClass="actionPanel">
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-w"
+                                 action="#{mantenedorPersonal.irVerFicha(mantenedorPersonal.personalSeleccionado)}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

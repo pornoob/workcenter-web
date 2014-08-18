@@ -66,7 +66,7 @@ public class MarParticipantesAct implements Serializable {
         this.marActividadByIdActividad = marActividadByIdActividad;
     }
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "rut_participante", referencedColumnName = "rut")
     public Personal getParticipante() {
         return participante;

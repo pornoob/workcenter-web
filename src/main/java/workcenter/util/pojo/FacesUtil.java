@@ -48,4 +48,8 @@ public class FacesUtil {
             Logger.getLogger(FacesUtil.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+
+    public static String obtenerScreenFlow() {
+        return obtenerHttpServletRequest().getParameter("javax.faces.ViewState");
+    }
 }

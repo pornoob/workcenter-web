@@ -34,11 +34,16 @@ public class Descargable implements Serializable {
         this.nombre = nombre;
     }
 
-    public StreamedContent getStreamedContent() throws FileNotFoundException {
-        InputStream is = new BufferedInputStream(new FileInputStream(archivo));
-        DefaultStreamedContent dsc = new DefaultStreamedContent(is);
-        dsc.setName(getNombre());
-        return dsc;
+    public StreamedContent getStreamedContent() {
+        try {
+            InputStream is = new BufferedInputStream(new FileInputStream(archivo));
+            DefaultStreamedContent dsc = new DefaultStreamedContent(is);
+            dsc.setName(getNombre());
+            return dsc;
+        } catch (FileNotFoundException fnfe) {
+            System.err.println(fnfe.getMessage());
+            return null;
+        }
     }
 
     public File getArchivo() {

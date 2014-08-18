@@ -1,7 +1,6 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml">
 
@@ -18,11 +17,11 @@
                     #{p.participante.nombreCompleto}
                 </p:column>
                 <p:column headerText="Nota">
-                    ...
+                    #{p.nota}
                 </p:column>
             </p:dataTable>
             <p:panel styleClass="actionPanel">
-                <p:commandButton value="Volver" action="#{registroR112.irListarR112}"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{registroR112.irListarR112}"/>
             </p:panel>
         </h:form>
     </ui:define>

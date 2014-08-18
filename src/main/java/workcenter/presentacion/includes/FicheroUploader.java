@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 import workcenter.entidades.Documento;
 import workcenter.negocio.LogicaDocumentos;
+import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.FacesUtil;
 
@@ -27,9 +28,12 @@ public class FicheroUploader {
     @Autowired
     LogicaDocumentos logicaDocumentos;
 
+    @Autowired
+    Constantes constantes;
+
     public Documento subir(FileUploadEvent fue) {
         try {
-            String ruta = System.getProperty("catalina.base") + "/static/workcenter/";
+            String ruta = constantes.getPathArchivos();
             Documento d = new Documento();
             d.setFecha(new Date());
             d.setNombreOriginal(fue.getFile().getFileName());

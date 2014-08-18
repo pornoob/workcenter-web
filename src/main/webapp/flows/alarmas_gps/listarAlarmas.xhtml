@@ -20,7 +20,8 @@
                 <p:selectOneMenu filter="true" id="sServicios" value="#{mantenedorAlarmasGps.servicioSeleccionado}" converter="entityConverter">
                     <f:selectItems value="#{mantenedorAlarmasGps.servicios}" var="s" itemLabel="#{s.nombre}" itemValue="#{s}"/>
                 </p:selectOneMenu>
-                <p:commandButton value="Cargar panel de gestión" action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas" />
+                <p:commandButton icon="ui-icon-refresh" value="Cargar panel de gestión"
+                                 action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas" />
             </h:panelGrid>
             <p:panel id="pAlarmas" style="border:0">
                 <h3>

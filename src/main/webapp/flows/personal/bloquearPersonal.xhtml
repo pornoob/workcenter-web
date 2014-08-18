@@ -11,7 +11,7 @@
         <h:form id="frmPersonal">
             <h:panelGrid columns="3">
                 <h:outputLabel value="Motivo"/>:
-                <h:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.sancion.motivo}"/>
+                <p:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.sancion.motivo}"/>
             </h:panelGrid>
             <p:panel class="actionPanel">
                 <p:commandButton action="#{mantenedorPersonal.sancionar()}" value="Proceder"/>

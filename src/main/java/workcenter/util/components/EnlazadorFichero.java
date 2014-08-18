@@ -19,13 +19,11 @@ import workcenter.util.pojo.FacesUtil;
 @Component
 @Scope("view")
 public class EnlazadorFichero implements Serializable {
-
-    private boolean buscarExistente;
-    private boolean cargarNuevo;
     private boolean puedeEnlazar;
     private boolean mostrarResultados;
     private String filtroArchivo;
     private List<Descargable> descargables;
+    private boolean ocultar = true;
 
     @Autowired
     Constantes constantes;
@@ -37,7 +35,7 @@ public class EnlazadorFichero implements Serializable {
         Documento documento = logicaDocumentos.obtenerPorCodigo(filtroArchivo);
         descargables = new ArrayList<Descargable>();
         if (documento != null) {
-            Descargable d = new Descargable(new File(System.getProperty("catalina.base") + "/static/workcenter/" + documento.getId()));
+            Descargable d = new Descargable(new File(constantes.getPathArchivos() + documento.getId()));
             d.setNombre(documento.getNombreOriginal());
             descargables.add(d);
         }
@@ -47,47 +45,10 @@ public class EnlazadorFichero implements Serializable {
     }
 
     public void reset() {
-        buscarExistente = false;
-        cargarNuevo = false;
         mostrarResultados = false;
         descargables = new ArrayList<Descargable>();
         puedeEnlazar = true;
-    }
-
-    public void seleccionExistente() {
-        buscarExistente = true;
-        mostrarResultados = false;
-        cargarNuevo = false;
-    }
-
-    public void seleccionNuevo() {
-        buscarExistente = false;
-        cargarNuevo = true;
-        mostrarResultados = false;
-    }
-
-    public boolean getBuscarExistente() {
-        return isBuscarExistente();
-    }
-
-    public boolean isBuscarExistente() {
-        return buscarExistente;
-    }
-
-    public void setBuscarExistente(boolean buscarExistente) {
-        this.buscarExistente = buscarExistente;
-    }
-
-    public boolean getCargarNuevo() {
-        return isCargarNuevo();
-    }
-
-    public boolean isCargarNuevo() {
-        return cargarNuevo;
-    }
-
-    public void setCargarNuevo(boolean cargarNuevo) {
-        this.cargarNuevo = cargarNuevo;
+        ocultar = !ocultar;
     }
 
     public boolean isPuedeEnlazar() {
@@ -120,5 +81,13 @@ public class EnlazadorFichero implements Serializable {
 
     public void setDescargables(List<Descargable> descargables) {
         this.descargables = descargables;
+    }
+
+    public boolean isOcultar() {
+        return ocultar;
+    }
+
+    public void setOcultar(boolean ocultar) {
+        this.ocultar = ocultar;
     }
 }

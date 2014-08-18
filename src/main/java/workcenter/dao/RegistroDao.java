@@ -23,7 +23,7 @@ public class RegistroDao {
     public List<MarActividad> obtenerActividadesSegunRegistro(Integer idRegistro) {
         StringBuilder query = new StringBuilder();
         query.append("select ma.* from mar_actividad ma ");
-        query.append("inner join mar_tipo_actividad mta ");
+        query.append("inner join mar_tipo_actividad mta on ma.id_tipo_actividad = mta.id ");
         query.append("where mta.id_registro = :idRegistro ");
 //        System.err.println("QUERY: "+query.toString().replace(":idRegistro", ""+idRegistro));
         Query q = em.createNativeQuery(query.toString(), MarActividad.class);
@@ -65,5 +65,9 @@ public class RegistroDao {
 
     public List<MarParticipantesAct> obtenerParticipantes(MarActividad a) {
         return em.createNamedQuery("MarParticipantesAct.findByActividad").setParameter("actividad", a).getResultList();
+    }
+
+    public List<MarTipoActividad> obtenerSubTiposActividades(MarTipoActividad tipoActividad) {
+        return em.createNamedQuery("MarTipoActividad.findSubTiposByActividad").setParameter("tipoActividad", tipoActividad).getResultList();
     }
 }

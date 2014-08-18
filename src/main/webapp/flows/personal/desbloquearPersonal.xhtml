@@ -11,9 +11,9 @@
         <h:form id="frmPersonal">
             <h:panelGrid columns="3">
                 <h:outputLabel value="Motivo Bloqueo"/>:
-                <h:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.retiroSancion.motivosancion}"/>
+                <p:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.retiroSancion.motivosancion}"/>
                 <h:outputLabel value="Motivo Desbloqueo"/>:
-                <h:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.retiroSancion.motivolevantada}"/>
+                <p:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.retiroSancion.motivolevantada}"/>
             </h:panelGrid>
             <p:panel class="actionPanel">
                 <p:commandButton action="#{mantenedorPersonal.quitarSancion()}" value="Proceder"/>
