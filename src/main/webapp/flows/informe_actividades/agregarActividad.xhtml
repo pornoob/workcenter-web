@@ -42,8 +42,10 @@
                 <h:outputLabel value="Detalle"/>:
                 <p:inputTextarea id="iDetalle" required="true" requiredMessage="Debes indicar un detalle de la actividad" value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000" style="width: 800px;height: 100px"/>
             </h:panelGrid>
-            <p:commandButton value="Volver" action="#{mantenedorInformeActividades.volver()}" immediate="true"/>
-            <p:commandButton value="Guardar" action="#{mantenedorInformeActividades.guardar()}" immediate="false" process="@form" update=":frmAct"/>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{mantenedorInformeActividades.volver()}" immediate="true"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{mantenedorInformeActividades.guardar()}" immediate="false" process="@form" update=":frmAct"/>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

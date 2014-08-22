@@ -24,6 +24,10 @@ public class FacesUtil {
     public static HttpServletRequest obtenerHttpServletRequest() {
         return (HttpServletRequest)FacesContext.getCurrentInstance().getExternalContext().getRequest();
     }
+
+    public static String obtenerParametroRequest(String id) {
+        return obtenerHttpServletRequest().getParameter(id);
+    }
     
     public static HttpServletResponse obtenerHttpServletResponse() {
         return (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();

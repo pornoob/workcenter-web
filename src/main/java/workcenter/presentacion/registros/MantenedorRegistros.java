@@ -18,4 +18,6 @@ public class MantenedorRegistros implements Serializable {
     public String irFormularioR112() {
         return "flowListarR112";
     }
+
+    public String irInspeccionAvanzada() { return "flowListarInspeccionesAvanzadas"; }
 }

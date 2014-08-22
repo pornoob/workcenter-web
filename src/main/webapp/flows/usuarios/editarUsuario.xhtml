@@ -39,7 +39,7 @@
                     <h:outputText value="#{constantes.accesos.get(permiso.nivel)}"/>
                 </p:column>
                 <p:column>
-                    <p:panel styleClass="opcionesFila">
+                    <p:outputPanel styleClass="opcionesFila">
                         <p:commandLink styleClass="ui-icon ui-icon-pencil"
                                        action="#{mantenedorUsuarios.irEditarPermiso(permiso)}"/>
                         <p:commandLink styleClass="ui-icon ui-icon-trash"
@@ -48,7 +48,7 @@
                                        oncomplete="PF('pDialogConfirmar').show()"
                                        process="@form"
                                 />
-                    </p:panel>
+                    </p:outputPanel>
                 </p:column>
             </p:dataTable>
             <p:outputPanel styleClass="actionPanel">

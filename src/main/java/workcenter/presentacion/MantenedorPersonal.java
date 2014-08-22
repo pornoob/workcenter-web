@@ -323,7 +323,7 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public StreamedContent generaDescargable(DocumentoPersonal dp) {
-        Descargable d = new Descargable(new File(System.getProperty("catalina.base") + "/static" + FacesUtil.obtenerContextPath() + "/" + dp.getArchivo()));
+        Descargable d = new Descargable(new File(constantes.getPathArchivos() + "/" + dp.getArchivo()));
         return d.getStreamedContent();
     }
 

@@ -9,7 +9,6 @@
 
         <h2>R-112</h2>
         <h:form id="formFormularios">
-            <iframe id="pdfDocument" style="display: none"></iframe>
             <p:commandButton icon="ui-icon-plus" value="Nueva Actividad" action="#{registroR112.preparaCreacionR112()}"/>
             <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario">
                 <p:fileDownload value="#{registroR112.obtenerFormulario()}"/>
@@ -25,8 +24,12 @@
                 <p:column headerText="Folio" filterBy="id" filterMatchMode="startsWith" width="30">
                     <h:outputText value="#{a.id}"/>
                 </p:column>
-                <p:column headerText="Nombre" filterBy="nombre" filterMatchMode="contains">
-                    <h:outputText value="#{a.nombre}"/>
+                <p:column headerText="Tipo" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
+                          filterMatchMode="contains">
+                    <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
+                </p:column>
+                <p:column headerText="Subtipo" filterBy="#{a.tipoActividad.nombre}" filterMatchMode="contains">
+                    <h:outputText value="#{a.tipoActividad.nombre}"/>
                 </p:column>
                 <p:column headerText="Encargado" filterBy="#{a.encargado.nombreCompleto}" filterMatchMode="contains">
                     <h:outputText value="#{a.encargado.nombreCompleto}"/>
@@ -35,13 +38,6 @@
                     <h:outputText value="#{a.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
-                </p:column>
-                <p:column headerText="Tipo" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
-                          filterMatchMode="contains">
-                    <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
-                </p:column>
-                <p:column headerText="Subtipo" filterBy="#{a.tipoActividad.nombre}" filterMatchMode="contains">
-                    <h:outputText value="#{a.tipoActividad.nombre}"/>
                 </p:column>
                 <p:column headerText="Asistentes">
                     <h:commandLink value="#{registroR112.obtenerCantAsistentes(a)}" action="#{registroR112.verParticipantes(a)}"/>

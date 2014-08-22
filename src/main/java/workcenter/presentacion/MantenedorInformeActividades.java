@@ -10,6 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
+
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -30,7 +31,6 @@ import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FacesUtil;
 
 /**
- *
  * @author colivares
  */
 @Component
@@ -134,17 +134,16 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     public void guardar() {
         String screenFlow = FacesUtil.obtenerScreenFlow();
-        logicaInformeActividades.guardar(actividadDiaria);
         if (documentosSubidos == null) {
             documentosSubidos = new HashMap<String, List<Documento>>();
         }
         List<Documento> docs = documentosSubidos.get(sesionCliente.getUsuario().getRut() + "|actividad_diaria" + screenFlow);
-        if (docs != null && !docs.isEmpty()) {
-            logicaDocumentos.asociarDocumentos(docs, actividadDiaria);
-        } else {
+        if (docs == null || docs.isEmpty()) {
             FacesUtil.mostrarMensajeError("Operación Fallida", "Debes Adjuntar al menos un documento");
             return;
         }
+        logicaInformeActividades.guardar(actividadDiaria);
+        logicaDocumentos.asociarDocumentos(docs, actividadDiaria);
         FacesUtil.mostrarMensajeInformativo("Actividad guardada exitosamente", "ID de actividad " + actividadDiaria.getId());
         actividadDiaria = new ActividadDiaria();
         documentosSubidos = new HashMap<String, List<Documento>>();
@@ -165,12 +164,12 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         actividadesDetalladas = new ArrayList<ActividadDiaria>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         for (ActividadDiaria ad : actividades) {
-            System.out.println("COMPARANDO: "+dia+" vs "+ad.getFecha()+" Hora: "+ad.getHora()+" vs "+Integer.valueOf(h.getHora().split(":")[0]));
+            System.out.println("COMPARANDO: " + dia + " vs " + ad.getFecha() + " Hora: " + ad.getHora() + " vs " + Integer.valueOf(h.getHora().split(":")[0]));
             if (sdf.format(ad.getFecha()).equals(sdf.format(dia)) && ad.getHora().intValue() == Integer.valueOf(h.getHora().split(":")[0])) {
                 actividadesDetalladas.add(ad);
             }
         }
-        System.out.println("EN TOTAL AGREGAMOS: "+actividadesDetalladas.size());
+        System.out.println("EN TOTAL AGREGAMOS: " + actividadesDetalladas.size());
         return "flowDetalleActividades";
     }
 

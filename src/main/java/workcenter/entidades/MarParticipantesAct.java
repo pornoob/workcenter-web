@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by claudio on 04-08-14.
+ * Created by colivares on 04-08-14.
  */
 @Entity
-@Table(name = "mar_participantes_act", schema = "", catalog = "")
+@Table(name = "mar_participantes_act", schema = "")
 @NamedQueries(
         @NamedQuery(
                 name = "MarParticipantesAct.findByActividad",

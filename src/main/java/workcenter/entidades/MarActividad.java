@@ -6,13 +6,12 @@ import java.util.Date;
 import java.util.List;
 
 /**
- * Created by claudio on 04-08-14.
+ * Created by colivares on 04-08-14.
  */
 @Entity
-@Table(name = "mar_actividad", schema = "", catalog = "")
+@Table(name = "mar_actividad", schema = "")
 public class MarActividad implements Serializable {
     private Integer id;
-    private String nombre;
     private String descripcion;
     private String horaInicio;
     private String horaFin;
@@ -30,16 +29,6 @@ public class MarActividad implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    @Basic
-    @Column(name = "nombre", nullable = false, insertable = true, updatable = true, length = 300)
-    public String getNombre() {
-        return nombre;
-    }
-
-    public void setNombre(String nombre) {
-        this.nombre = nombre;
     }
 
     @Basic

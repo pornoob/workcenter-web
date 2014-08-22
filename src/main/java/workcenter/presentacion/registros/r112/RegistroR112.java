@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaPersonal;
-import workcenter.negocio.LogicaRegistros;
+import workcenter.negocio.LogicaRegistroActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
@@ -51,7 +51,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
     private List<Descargable> materiales;
 
     @Autowired
-    LogicaRegistros logicaRegistros;
+    LogicaRegistroActividades logicaRegistroActividades;
 
     @Autowired
     Constantes constantes;
@@ -69,8 +69,8 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
     SesionCliente sesionCliente;
 
     public String inicio() {
-        actividades = logicaRegistros.obtenerActividadesSegunRegistro(constantes.getRegistroR112());
-        formulario = logicaRegistros.obtenerRegistro(constantes.getRegistroR112());
+        actividades = logicaRegistroActividades.obtenerActividadesSegunRegistro(constantes.getRegistroR112());
+        formulario = logicaRegistroActividades.obtenerRegistro(constantes.getRegistroR112());
         return irListarR112();
     }
 
@@ -112,7 +112,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         actividad.setHoraInicio((hrInicio < 10 ? "0" + hrInicio : hrInicio) + ":" + (minInicio < 10 ? "0" + minInicio : minInicio));
         actividad.setHoraFin((hrFin < 10 ? "0" + hrFin : hrFin) + ":" + (minFin < 10 ? "0" + minFin : minFin));
         actividad.setTipoActividad(subTipoActividad);
-        logicaRegistros.guardarActividad(actividad);
+        logicaRegistroActividades.guardarActividad(actividad);
 
         if (comprobantesActividad != null) {
             List<Documento> docs = comprobantesActividad.get(sesionCliente.getUsuario().getRut() + "|actividad");
@@ -122,14 +122,14 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         }
         if (!esEdicion) {
             actividades.add(actividad);
-            FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha creado la actividad \"" + actividad.getNombre() + "\"");
+            FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha creado la actividad [ID: " + actividad.getId() + "]");
         } else {
-            FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha editado la actividad \"" + actividad.getNombre() + "\"");
+            FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha editado la actividad [ID: " + actividad.getId() + "]");
         }
     }
 
     public String verParticipantes(MarActividad a) {
-        a.setParticipantes(logicaRegistros.obtenerParticipantes(a));
+        a.setParticipantes(logicaRegistroActividades.obtenerParticipantes(a));
         actividad = a;
         return "flowVerParticipantes";
     }
@@ -144,8 +144,8 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         minInicio = a.getHoraInicio() != null ? Integer.valueOf(a.getHoraInicio().split(":")[1]) : 0;
         minFin = a.getHoraFin() != null ? Integer.valueOf(a.getHoraFin().split(":")[1]) : 0;
 
-        tipoActividades = logicaRegistros.obtenerTiposActividades(constantes.getRegistroR112());
-        subTipoActividades = logicaRegistros.obtenerSubTiposActividades(tipoActividad);
+        tipoActividades = logicaRegistroActividades.obtenerTiposActividades(constantes.getRegistroR112());
+        subTipoActividades = logicaRegistroActividades.obtenerSubTiposActividades(tipoActividad);
         personal = logicaPersonal.obtenerTodos();
         cargaMaterialesApoyo();
         return irNuevoR112();
@@ -161,7 +161,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         minInicio = fechaActual.get(Calendar.MINUTE);
         minFin = minInicio.intValue();
 
-        tipoActividades = logicaRegistros.obtenerTiposActividades(constantes.getRegistroR112());
+        tipoActividades = logicaRegistroActividades.obtenerTiposActividades(constantes.getRegistroR112());
         tipoActividad = null;
         subTipoActividades = null;
         subTipoActividad = null;
@@ -172,7 +172,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
     }
 
     public void cargaSubTipoActividades() {
-        subTipoActividades = logicaRegistros.obtenerSubTiposActividades(tipoActividad);
+        subTipoActividades = logicaRegistroActividades.obtenerSubTiposActividades(tipoActividad);
         subTipoActividad = null;
     }
 
@@ -190,7 +190,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         minDuracion = minDuracion == null ? 0 : minDuracion;
         subTipoActividad.setMarTipoActividadByIdTipoPadre(tipoActividad);
         subTipoActividad.setDuracion((hrDuracion < 10 ? "0" + hrDuracion : hrDuracion) + ":" + (minDuracion < 10 ? "0" + minDuracion : minDuracion));
-        logicaRegistros.guardarTipoActividad(subTipoActividad);
+        logicaRegistroActividades.guardarTipoActividad(subTipoActividad);
 
         List<Documento> docs = materialesApoyo.get(sesionCliente.getUsuario().getRut() + "|tipo_actividad");
         if (docs != null && !docs.isEmpty()) {
@@ -243,7 +243,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
     }
 
     public Integer obtenerCantAsistentes(MarActividad a) {
-        return logicaRegistros.obtenerAsistentesSegunActividad(a);
+        return logicaRegistroActividades.obtenerAsistentesSegunActividad(a);
     }
 
     public String irListarR112() {

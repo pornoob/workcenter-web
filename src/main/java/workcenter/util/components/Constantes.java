@@ -40,8 +40,13 @@ public class Constantes implements Serializable {
     private int unidadPorcentaje = 3;
     private List<TipoUnidad> tiposUnidad;
 
+    // Zona equipos
+    private int equipoTipoTracto = 1;
+    private int equipoTipoBatea = 2;
+
     // Zona registros
     private int registroR112 = 1;
+    private int registroInspeccionAvanzada = 2;
     
     // Genericos
     private List<Mes> meses;
@@ -251,5 +256,17 @@ public class Constantes implements Serializable {
 
     public String getPathArchivos() {
         return pathArchivos;
+    }
+
+    public int getEquipoTipoTracto() {
+        return equipoTipoTracto;
+    }
+
+    public int getEquipoTipoBatea() {
+        return equipoTipoBatea;
+    }
+
+    public Integer getRegistroInspeccionAvanzada() {
+        return registroInspeccionAvanzada;
     }
 }

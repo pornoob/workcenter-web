@@ -9,10 +9,17 @@ import java.io.Serializable;
 public class DynamicColumnDataTable implements Serializable {
     private String id;
     private String header;
+    private String ancho;
 
     public DynamicColumnDataTable(String id, String header) {
         this.id = id;
         this.header = header;
+    }
+
+    public DynamicColumnDataTable(String id, String header, String ancho) {
+        this.id = id;
+        this.header = header;
+        this.ancho = ancho;
     }
 
     public String getId() {
@@ -29,6 +36,14 @@ public class DynamicColumnDataTable implements Serializable {
 
     public void setHeader(String header) {
         this.header = header;
+    }
+
+    public String getAncho() {
+        return ancho;
+    }
+
+    public void setAncho(String ancho) {
+        this.ancho = ancho;
     }
 
     @Override

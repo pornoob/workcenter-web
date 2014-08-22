@@ -1,0 +1,91 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:P="http://java.sun.com/jsf/html"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Inspección Avanzada</h2>
+        <h:form id="formFormularios">
+            <p:tabView>
+                <p:tab title="Listado Inspecciones">
+                    <p:commandButton icon="ui-icon-plus" value="Agregar"
+                                     action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
+                    <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
+                        <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario()}"/>
+                    </p:commandButton>
+                    <p:dataTable emptyMessage="No se han encontrado inspecciones" paginator="true" rows="20"
+                                 filterEvent="enter" value="#{mantenedorInspeccionAvanzada.inspeccionesAvanzadas}"
+                                 var="i"
+                                 paginatorTemplate="#{constantes.paginadorTemplate}" paginatorPosition="both">
+                        <p:column headerText="Folio">
+                            #{i.id}
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            #{i.fecha}
+                        </p:column>
+                        <p:column headerText="Patente Tracto/Camión">
+                            #{i.tracto.patente}
+                        </p:column>
+                        <p:column headerText="Patente Batea/Acoplado">
+                            #{i.batea.patente}
+                        </p:column>
+                        <p:column headerText="Conductor">
+                            #{i.conductor.nombreCompleto}
+                        </p:column>
+                        <p:column headerText="Ejecutor">
+                            #{i.ejecutor.nombreCompleto}
+                        </p:column>
+                        <p:column headerText="Indicador">
+                            <h:graphicImage rendered="#{mantenedorInspeccionAvanzada.pasaInspeccion(i)}11"
+                                            value="/img/icons/luz_verde.png"/>
+                            <h:graphicImage title="#{i.observacion}"
+                                            rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
+                                            value="/img/icons/luz_roja.png"/>
+                            <h:graphicImage title="#{i.observacion}"
+                                            rendered="#{!mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
+                                            value="/img/icons/luz_amarilla.png"/>
+                        </p:column>
+                        <p:column headerText="Acciones">
+                            <p:outputPanel styleClass="opcionesFila">
+                                <p:commandLink styleClass="ui-icon ui-icon-pencil"/>
+                            </p:outputPanel>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Calendario Inspecciones">
+                    <h:panelGrid columns="7" width="auto">
+                        <h:outputLabel value="Mes"/>:
+                        <p:selectOneMenu value="#{mantenedorInspeccionAvanzada.mes}">
+                            <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"
+                                           itemValue="#{m.id}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel value="Año"/>:
+                        <p:spinner min="2014" value="#{mantenedorInspeccionAvanzada.anio}"/>
+                        <p:commandButton icon="ui-icon-refresh" value="Actualizar"/>
+                    </h:panelGrid>
+                    <p:dataTable emptyMessage="No se han encontrado inspecciones" scrollable="true"
+                                 var="e" selectionMode="single" rowKey="#{e.patente}" filterEvent="enter"
+                                 value="#{mantenedorInspeccionAvanzada.equipos}" widgetVar="calendario"
+                                 frozenColumns="1">
+                        <p:column headerText="Equipo" filterBy="patente" filterMatchMode="contains" width="110">
+                            #{e.patente}
+                        </p:column>
+                        <c:forEach items="#{mantenedorInspeccionAvanzada.obtenerCalendario()}" var="columna">
+                            <p:column width="#{columna.ancho}" headerText="#{columna.header}">
+                                #{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}
+                            </p:column>
+                        </c:forEach>
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+            <p:panel styleClass="actionPanel">
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-s" value="Volver" ajax="false"
+                                 action="#{mantenedorInspeccionAvanzada.irListarRegistros()}"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

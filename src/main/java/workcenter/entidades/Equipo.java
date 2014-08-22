@@ -7,13 +7,7 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -43,7 +37,6 @@ import javax.xml.bind.annotation.XmlRootElement;
 public class Equipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 7)
     @Column(name = "patente")
@@ -52,10 +45,9 @@ public class Equipo implements Serializable {
     @NotNull
     @Column(name = "duenio")
     private int duenio;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tipo")
-    private int tipo;
+    @ManyToOne
+    @JoinColumn(name = "tipo", referencedColumnName = "id")
+    private TipoEquipo tipo;
     @Column(name = "subtipo")
     private Integer subtipo;
     @Column(name = "marca")
@@ -91,14 +83,6 @@ public class Equipo implements Serializable {
         this.patente = patente;
     }
 
-    public Equipo(String patente, int duenio, int tipo, int modelo, int anio) {
-        this.patente = patente;
-        this.duenio = duenio;
-        this.tipo = tipo;
-        this.modelo = modelo;
-        this.anio = anio;
-    }
-
     public String getPatente() {
         return patente;
     }
@@ -115,11 +99,11 @@ public class Equipo implements Serializable {
         this.duenio = duenio;
     }
 
-    public int getTipo() {
+    public TipoEquipo getTipo() {
         return tipo;
     }
 
-    public void setTipo(int tipo) {
+    public void setTipo(TipoEquipo tipo) {
         this.tipo = tipo;
     }
 

@@ -14,11 +14,11 @@ import workcenter.entidades.MarTipoActividad;
 import java.util.List;
 
 /**
- * Created by claudio on 04-08-14.
+ * Created by colivares on 04-08-14.
  */
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
-public class LogicaRegistros {
+public class LogicaRegistroActividades {
     @Autowired
     private RegistroDao registroDao;
 

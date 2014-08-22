@@ -159,11 +159,13 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
                 ga = null;
                 return;
             }
-            logicaAlarmasGps.guardarGestionAlarma(ga);
 
             List<Documento> docs = documentosSubidos.get(formatoTabla.format(a.getFecha()) + "|" + a.getChofer());
             if (docs != null && !docs.isEmpty()) {
+                logicaAlarmasGps.guardarGestionAlarma(ga);
                 logicaDocumentos.asociarDocumentos(docs, ga);
+            } else {
+                FacesUtil.mostrarMensajeError("No se han guardado los cambios", "Para cada gestión es necesario adjuntar un comprobante");
             }
         }
         FacesUtil.mostrarMensajeInformativo("Gestión guardada exitosamente", "Se han enlazado los ficheros respectivos");
@@ -402,7 +404,6 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
 
     public List<DynamicColumnDataTable> obtenerColumnas() {
         List<DynamicColumnDataTable> columnas = new ArrayList<DynamicColumnDataTable>();
-        columnas.add(new DynamicColumnDataTable("conductor", "Conductor"));
         try {
             Date fechaGenerada = sdf.parse("01/" + mesSeleccionado + "/" + anioSeleccionado + " 00:00:00");
             Calendar c = Calendar.getInstance();

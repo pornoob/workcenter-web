@@ -4,10 +4,10 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 /**
- * Created by claudio on 04-08-14.
+ * Created by colivares on 04-08-14.
  */
 @Entity
-@Table(name = "mar_tipo_actividad", schema = "", catalog = "")
+@Table(name = "mar_tipo_actividad", schema = "")
 @NamedQueries(
         value = {
             @NamedQuery(

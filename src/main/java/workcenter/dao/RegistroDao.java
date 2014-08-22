@@ -13,7 +13,7 @@ import java.math.BigInteger;
 import java.util.List;
 
 /**
- * Created by claudio on 04-08-14.
+ * Created by colivares on 04-08-14.
  */
 @Repository
 public class RegistroDao {

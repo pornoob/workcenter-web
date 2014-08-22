@@ -5,7 +5,7 @@
     <h:form id="fEnlazadorFichero">
         <p:commandButton icon="ui-icon-folder-open" value="Enlazar archivo" action="#{enlazadorFichero.reset()}"
                          update=":fEnlazadorFichero" />
-        <p:panel id="dEnlazarFichero" rendered="#{enlazadorFichero.puedeEnlazar and !enlazadorFichero.ocultar}">
+        <p:outputPanel id="dEnlazarFichero" rendered="#{enlazadorFichero.puedeEnlazar and !enlazadorFichero.ocultar}">
             <p:tabView id="pTabs">
                 <p:tab id="pTab1" title="Archivo existente en el WorkCenter">
                     <h3>Enlazar ficheros existentes</h3>
@@ -16,7 +16,7 @@
                     <p:commandButton icon="ui-icon-search" value="Buscar" ajax="true"
                                      action="#{enlazadorFichero.buscarArchivosCodigo()}"
                                      update=":fEnlazadorFichero"/>
-                    <p:panel id="pEnlazarFichero">
+                    <p:outputPanel id="pEnlazarFichero">
                         <ui:fragment rendered="#{enlazadorFichero.mostrarResultados}">
                             <h:panelGrid columns="2">
                                 <ui:repeat value="#{enlazadorFichero.descargables}" var="d">
@@ -27,7 +27,7 @@
                                 </ui:repeat>
                             </h:panelGrid>
                         </ui:fragment>
-                    </p:panel>
+                    </p:outputPanel>
                 </p:tab>
                 <p:tab title="Archivo nuevo">
                     <h3>Enlazar ficheros nuevos</h3>
@@ -36,6 +36,6 @@
                                   allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png)$/i" label="Cargar nuevo archivo" />
                 </p:tab>
             </p:tabView>
-        </p:panel>
+        </p:outputPanel>
     </h:form>
 </ui:composition>

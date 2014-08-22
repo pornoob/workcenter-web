@@ -1,0 +1,98 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h:outputStylesheet>
+            .miaPregunta {
+                width: 45%;
+            }
+        </h:outputStylesheet>
+
+        <h2>Ingreso de Inspección Avanzada</h2>
+        <h4>(*) Punto Obligatorio dentro de la revisión. Si el Tracto o Batea no cumple con algun punto obligatorio queda suspendido de salir a circulacion.</h4>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <p:panel header="Documentos">
+            <ui:include src="/components/cargadorArchivos.xhtml">
+                <ui:param name="padre" value="#{mantenedorInspeccionAvanzada}"/>
+            </ui:include>
+        </p:panel>
+        <h:form id="formFormularios">
+            <p:panel header="Detalle">
+                <h:panelGrid columns="6">
+                    <h:outputLabel value="Conductor"/>:
+                    <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                     value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.conductor}"
+                                     converter="entityConverter">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorInspeccionAvanzada.conductores}" var="c" itemValue="#{c}"
+                                       itemLabel="#{c.nombreCompleto}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Ejecutor"/>:
+                    <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                     value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.ejecutor}"
+                                     converter="entityConverter">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorInspeccionAvanzada.encargados}" var="e" itemValue="#{e}"
+                                       itemLabel="#{e.nombreCompleto}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Patente Tracto/Camión"/>:
+                    <p:selectOneMenu converter="entityConverter" filter="true" filterMatchMode="startsWith"
+                                     value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.tracto}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorInspeccionAvanzada.tractos}" var="e"
+                                       itemLabel="#{e.patente}"/>
+                        <p:ajax event="change" update=":formFormularios:iCodCamion"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Fecha"/>:
+                    <p:calendar value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.fecha}" pattern="dd-MM-yyyy"/>
+                    <h:outputLabel value="Patente Batea/Acoplado"/>:
+                    <p:selectOneMenu converter="entityConverter" filter="true" filterMatchMode="contains"
+                                     value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.batea}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorInspeccionAvanzada.bateas}" var="e"
+                                       itemLabel="#{e.patente}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Código Camión"/>:
+                    <p:inputText id="iCodCamion" value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.tracto.numero}"
+                                 readonly="true"/>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Camión">
+                <h:panelGrid columnClasses="nada,miaPregunta" columns="8">
+                    <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasCamion}" var="p">
+                        <b>#{p.numero}</b>
+                        <h:outputLabel style="width: 45%" rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
+                        <h:outputLabel style="width: 45%" rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
+                        :
+                        <p:selectBooleanCheckbox id="pregunta#{p.id}"/>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Semi Remolque">
+                <h:panelGrid columnClasses="nada,miaPregunta" columns="8">
+                    <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasBatea}" var="p">
+                        <b>#{p.numero}</b>
+                        <h:outputLabel rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
+                        <h:outputLabel rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
+                        :
+                        <p:selectBooleanCheckbox id="pregunta#{p.id}"/>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Observaciones">
+                <p:inputTextarea value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.observacion}"
+                                 style="width: 100%; height: 60px;"/>
+            </p:panel>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton icon="ui-icon-disk" value="Guardar"
+                                 action="#{mantenedorInspeccionAvanzada.guardar()}"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-s" value="Volver" ajax="false"
+                                 action="#{mantenedorInspeccionAvanzada.inicio()}"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

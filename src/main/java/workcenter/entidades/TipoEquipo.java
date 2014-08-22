@@ -36,7 +36,6 @@ public class TipoEquipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -93,15 +92,13 @@ public class TipoEquipo implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof TipoEquipo)) {
             return false;
         }
-        TipoEquipo other = (TipoEquipo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        TipoEquipo that = (TipoEquipo) object;
+        if (this.getId() == null || that.getId() == null) return false;
+        else if (this.getId().intValue() != that.getId().intValue()) return false;
+        else return true;
     }
 
     @Override
