@@ -33,17 +33,23 @@ public class LogInManager implements AuthenticationProvider, Serializable {
         }
         UsuarioDto usuario = logicaUsuario.logIn(rut, password);
         if (usuario == null) {
+            usuario = logicaUsuario.logInExterno(rut, password);
+        }
+        if (usuario == null) {
             throw new BadCredentialsException("Usuario y/o Contraseña Inválidos");
         }
-        return new UsernamePasswordAuthenticationToken(usuario.getRut(), a.getCredentials(), getAcceso(usuario));
+        return new UsernamePasswordAuthenticationToken(usuario.getIdentificador(), a.getCredentials(), getAcceso(usuario));
     }
 
     private List<GrantedAuthority> getAcceso(UsuarioDto u) {
         List<GrantedAuthority> listaRoles = new ArrayList<GrantedAuthority>();
-        List<Proyecto> permisos = logicaUsuario.obtenerPermisos(u.getRut());
-//        System.out.println("PERMISOS PARA "+u.getNombres());
+        List<Proyecto> permisos = null;
+
+        if (!u.isExterno())
+            permisos = logicaUsuario.obtenerPermisos(u.getRut());
+        else
+            permisos = logicaUsuario.obtenerPermisos(u.getUsuario());
         for (Proyecto p : permisos) {
-//            System.out.println("P: "+p.getTitulo().toUpperCase().replaceAll(" ", "_"));
             listaRoles.add(new SimpleGrantedAuthority(p.getTitulo().toUpperCase().replaceAll(" ", "_")));
         }
         listaRoles.add(new SimpleGrantedAuthority("USUARIO_WEB"));

@@ -193,10 +193,8 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         String strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
         try {
             Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-            System.err.println("SON: "+logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e).intValue());
             return logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e).intValue() > 0;
         } catch (Exception ex) {
-            ex.printStackTrace();
             return false;
         }
     }
@@ -216,7 +214,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     }
 
     public List<MiaPregunta> getPreguntasBatea() {
-        int[] preguntasBatea = {20, 27, 21, 28, 22, 29, 23, 30, 24, 31, 25};
+        int[] preguntasBatea = {20, 26, 21, 27, 22, 28, 23, 29, 24, 30, 25};
         List<MiaPregunta> retorno = new ArrayList<MiaPregunta>();
         for (int i = 0; i < preguntasBatea.length; i++) {
             for (MiaPregunta p : preguntas) {

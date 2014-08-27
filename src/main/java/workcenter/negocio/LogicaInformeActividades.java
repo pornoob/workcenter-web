@@ -12,6 +12,7 @@ import workcenter.entidades.ActividadDiaria;
 import workcenter.entidades.Servicio;
 import workcenter.entidades.TipoActividadDiaria;
 import workcenter.util.dto.Semana;
+import workcenter.util.dto.UsuarioDto;
 
 /**
  *
@@ -27,8 +28,11 @@ public class LogicaInformeActividades {
     InformeActividadesDao informeActividadesDao;
     
     @Transactional(readOnly = true)
-    public List<Servicio> obtenerServicios(Integer rut) {
-        return alarmasGpsDao.obtenerServicios(rut);
+    public List<Servicio> obtenerServicios(UsuarioDto u) {
+        if (!u.isExterno())
+            return alarmasGpsDao.obtenerServicios(u.getRut());
+        else
+            return alarmasGpsDao.obtenerServicios(u.getUsuario());
     }
 
     @Transactional(readOnly = true)

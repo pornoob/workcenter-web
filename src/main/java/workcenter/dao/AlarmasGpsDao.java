@@ -97,4 +97,14 @@ public class AlarmasGpsDao {
         q.setParameter("rut", rut);
         return q.getResultList();
     }
+
+    public List<Servicio> obtenerServicios(String usuario) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select s.* from servicio s ");
+        sql.append("inner join mue_usuario_externo ue on (ue.usuario = :usuario) ");
+        sql.append("inner join usuario_servicio_ruta usr on (s.id = usr.id_servicio and usr.usuario_externo = ue.id)");
+        Query q = em.createNativeQuery(sql.toString(), Servicio.class);
+        q.setParameter("usuario", usuario);
+        return q.getResultList();
+    }
 }

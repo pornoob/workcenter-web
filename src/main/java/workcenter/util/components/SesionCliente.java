@@ -2,6 +2,7 @@ package workcenter.util.components;
 
 import java.io.Serializable;
 import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -38,8 +39,13 @@ public class SesionCliente implements Serializable {
 
         if (a == null || "anonymousUser".equals(a.getName())) {
             usuario = null;
-        } else if (!a.getName().equals("anonymousUser") && (usuario == null || !usuario.getRut().equals(Integer.valueOf(a.getName())))) {
-            usuario = usuarioDao.obtenerUsuario(Integer.valueOf(a.getName()));
+        } else if (!a.getName().equals("anonymousUser")) {
+            try {
+                if (usuario == null || !usuario.getRut().equals(Integer.valueOf(a.getName())))
+                    usuario = usuarioDao.obtenerUsuario(Integer.valueOf(a.getName()));
+            } catch (NumberFormatException nfe) {
+                usuario = usuarioDao.obtenerUsuario(a.getName());
+            }
         }
         return usuario;
     }
@@ -85,20 +91,18 @@ public class SesionCliente implements Serializable {
         if (!estaAutentificado()) {
             return null;
         }
-        String string = usuario.getNombres() + " " + usuario.getApellidos();
+        String string = null;
+        if (!usuario.isExterno())
+            string = usuario.getNombres() + " " + usuario.getApellidos();
+        else
+            string = usuario.getNombres();
+
         StringBuilder sb = new StringBuilder();
         for (String s : string.split(" ")) {
             sb.append(StringUtils.capitalize(s));
             sb.append(' ');
         }
         return sb.toString().trim();
-    }
-
-    public void verificaSesion() {
-        if (isInicioSesion() && getUsuario() == null) {
-            inicioSesion = false;
-            FacesUtil.redirigir("/logOut");
-        }
     }
 
     public boolean isInicioSesion() {

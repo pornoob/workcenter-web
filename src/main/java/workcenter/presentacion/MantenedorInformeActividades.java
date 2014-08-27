@@ -74,6 +74,8 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
             servicioSeleccionado = servicios.get(0);
         } catch (NullPointerException e) {
             servicioSeleccionado = null;
+        } catch (IndexOutOfBoundsException ioe) {
+            servicioSeleccionado = null;
         }
         obtenerSemana();
         obtenerTiposActividades();
@@ -174,7 +176,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     }
 
     private void obtenerServicios() {
-        servicios = logicaInformeActividades.obtenerServicios(sesionCliente.getUsuario().getRut());
+        servicios = logicaInformeActividades.obtenerServicios(sesionCliente.getUsuario());
     }
 
     public void obtenerSemanaAnterior() {

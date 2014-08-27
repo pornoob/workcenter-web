@@ -8,6 +8,7 @@ import java.io.Serializable;
 public class UsuarioDto implements Serializable {
     private boolean externo;
     private Integer rut;
+    private String usuario;
     private String nombres;
     private String apellidos;
 
@@ -46,5 +47,17 @@ public class UsuarioDto implements Serializable {
 
     public void setApellidos(String apellidos) {
         this.apellidos = apellidos;
+    }
+
+    public String getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(String usuario) {
+        this.usuario = usuario;
+    }
+
+    public Object getIdentificador() {
+        return externo ? usuario : rut;
     }
 }

@@ -9,7 +9,8 @@
 
         <h2>R-112</h2>
         <h:form id="formFormularios">
-            <p:commandButton icon="ui-icon-plus" value="Nueva Actividad" action="#{registroR112.preparaCreacionR112()}"/>
+            <p:commandButton rendered="#{!sesionCliente.usuario.externo}" icon="ui-icon-plus" value="Nueva Actividad"
+                             action="#{registroR112.preparaCreacionR112()}"/>
             <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario">
                 <p:fileDownload value="#{registroR112.obtenerFormulario()}"/>
             </p:commandButton>
@@ -40,20 +41,24 @@
                     </h:outputText>
                 </p:column>
                 <p:column headerText="Asistentes">
-                    <h:commandLink value="#{registroR112.obtenerCantAsistentes(a)}" action="#{registroR112.verParticipantes(a)}"/>
+                    <h:commandLink value="#{registroR112.obtenerCantAsistentes(a)}"
+                                   action="#{registroR112.verParticipantes(a)}"/>
                 </p:column>
 
                 <p:column headerText="Acciones">
                     <p:outputPanel styleClass="opcionesFila">
-                        <p:commandLink styleClass="ui-icon ui-icon-pencil" title="Editar" action="#{registroR112.preparaEdicionR112(a)}"/>
-                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false" title="Descargar documento">
+                        <p:commandLink styleClass="ui-icon ui-icon-pencil" title="Editar"
+                                       action="#{registroR112.preparaEdicionR112(a)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false"
+                                       title="Descargar documento">
                             <p:fileDownload value="#{registroR112.obtenerFormulario(a)}"/>
                         </p:commandLink>
                     </p:outputPanel>
                 </p:column>
             </p:dataTable>
             <p:panel class="actionPanel">
-                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{registroR112.irListarRegistros()}" value="Volver"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{registroR112.irListarRegistros()}"
+                                 value="Volver"/>
             </p:panel>
         </h:form>
     </ui:define>

@@ -12,7 +12,7 @@
         <h:form id="formFormularios">
             <p:tabView id="tabsView">
                 <p:tab title="Listado Inspecciones" id="tabs">
-                    <p:commandButton icon="ui-icon-plus" value="Agregar"
+                    <p:commandButton icon="ui-icon-plus" value="Agregar" rendered="#{!sesionCliente.usuario.externo}"
                                      action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
                         <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario()}"/>

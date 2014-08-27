@@ -28,7 +28,7 @@
                     <p:commandButton icon="ui-icon-refresh" value="Actualizar tabla"
                                      action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
                     <p:commandButton icon="ui-icon-plus" ajax="false" immediate="true"
-                                     value="Agregar Actividad"
+                                     value="Agregar Actividad" rendered="#{!sesionCliente.usuario.externo}"
                                      action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
                 </h:panelGroup>
             </h:panelGrid>

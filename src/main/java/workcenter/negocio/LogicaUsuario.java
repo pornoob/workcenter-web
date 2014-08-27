@@ -26,10 +26,22 @@ public class LogicaUsuario {
         } catch(Exception e) {
             return null;
         }
-//        return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), pass);
     }
 
     public List<Proyecto> obtenerPermisos(Integer rut) {
         return usuarioDao.obtenerPermisos(rut);
+    }
+
+    public UsuarioDto logInExterno(String usuario, String password) {
+        try {
+            return usuarioDao.obtenerUsuario(usuario, Md5.hash(password));
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<Proyecto> obtenerPermisos(String usuario) {
+        System.err.println(usuarioDao.obtenerPermisos(usuario));
+        return usuarioDao.obtenerPermisos(usuario);
     }
 }
