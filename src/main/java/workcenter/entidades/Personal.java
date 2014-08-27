@@ -68,7 +68,6 @@ public class Personal implements Serializable {
     
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @NotNull
     @Column(name = "rut")
     private Integer rut;

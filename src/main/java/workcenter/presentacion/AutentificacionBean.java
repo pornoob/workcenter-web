@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.security.LogInManager;
+import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.FacesUtil;
 
 /**
@@ -22,10 +23,14 @@ public class AutentificacionBean implements Serializable {
     @Autowired
     LogInManager logInManager;
 
+    @Autowired
+    SesionCliente sesionCliente;
+
     public String logIn() {
         try {
             HttpServletRequest request = FacesUtil.obtenerHttpServletRequest();
             request.login(rut, pass);
+            sesionCliente.setInicioSesion(true);
             FacesUtil.redirigir("/inicio.jsf");
         } catch (ServletException ex) {
             FacesUtil.mostrarMensajeError(ex.getMessage(), null);

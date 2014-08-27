@@ -44,12 +44,12 @@
                 </p:column>
 
                 <p:column headerText="Acciones">
-                    <p:panel styleClass="opcionesFila">
+                    <p:outputPanel styleClass="opcionesFila">
                         <p:commandLink styleClass="ui-icon ui-icon-pencil" title="Editar" action="#{registroR112.preparaEdicionR112(a)}"/>
                         <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false" title="Descargar documento">
                             <p:fileDownload value="#{registroR112.obtenerFormulario(a)}"/>
                         </p:commandLink>
-                    </p:panel>
+                    </p:outputPanel>
                 </p:column>
             </p:dataTable>
             <p:panel class="actionPanel">

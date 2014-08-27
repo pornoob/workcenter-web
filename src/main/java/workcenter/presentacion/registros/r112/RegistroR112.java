@@ -76,7 +76,6 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
 
     public StreamedContent obtenerFormulario() {
         Descargable d = new Descargable(new File(constantes.getPathArchivos()+formulario.getPathFormulario()));
-        d.setNombre("R112.pdf");
         return d.getStreamedContent();
     }
 

@@ -6,10 +6,12 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.InspeccionAvanzadaDao;
+import workcenter.entidades.Equipo;
 import workcenter.entidades.MiaInspeccionAvanzada;
 import workcenter.entidades.MiaPregunta;
 import workcenter.entidades.MiaRespuesta;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -39,5 +41,15 @@ public class LogicaInspeccionAvanzada {
     @Transactional(readOnly = true)
     public List<MiaRespuesta> obtenerRespuestas(MiaInspeccionAvanzada i) {
         return inspeccionAvanzadaDao.obtenerRespuestas(i);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MiaInspeccionAvanzada> obtenerInspecciones(Date fecha, Equipo e) {
+        return inspeccionAvanzadaDao.obtenerInspecciones(fecha, e);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer obtenerCantInspecciones(Date fecha, Equipo e) {
+        return inspeccionAvanzadaDao.obtenerCantInspecciones(fecha, e);
     }
 }

@@ -1,12 +1,16 @@
 package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Equipo;
 import workcenter.entidades.MiaInspeccionAvanzada;
 import workcenter.entidades.MiaPregunta;
 import workcenter.entidades.MiaRespuesta;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.math.BigInteger;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -51,5 +55,27 @@ public class InspeccionAvanzadaDao {
 
     public List<MiaInspeccionAvanzada> obtenerInspecciones() {
         return em.createNamedQuery("MiaInspeccionAvanzada.findAll").getResultList();
+    }
+
+    public List<MiaInspeccionAvanzada> obtenerInspecciones(Date fecha, Equipo e) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from mia_inspeccion_avanzada i ");
+        sql.append("where i.fecha = :fecha ");
+        sql.append("and (i.tracto = :patente or i.batea = :patente)");
+        Query q = em.createNativeQuery(sql.toString(), MiaInspeccionAvanzada.class);
+        q.setParameter("fecha", fecha);
+        q.setParameter("patente", e.getPatente());
+        return q.getResultList();
+    }
+
+    public Integer obtenerCantInspecciones(Date fecha, Equipo e) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select count(*) from mia_inspeccion_avanzada i ");
+        sql.append("where i.fecha = :fecha ");
+        sql.append("and (i.tracto = :patente or i.batea = :patente)");
+        Query q = em.createNativeQuery(sql.toString());
+        q.setParameter("fecha", fecha);
+        q.setParameter("patente", e.getPatente());
+        return ((BigInteger) q.getSingleResult()).intValue();
     }
 }

@@ -8,54 +8,65 @@
         <h2>Listado de Alarmas</h2>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmAlarmas" enctype="multipart/form-data">
-            <p:fileUpload rendered="#{sesionCliente.esEditor(constantes.moduloAlarmasGPS)}" immediate="true" auto="false" multiple="true" oncomplete="#{mantenedorAlarmasGps.inicio()}" mode="advanced" fileUploadListener="#{alarmasUploader.subir}" uploadLabel="Subir" cancelLabel="Cancelar" allowTypes="/(\.|\/)(xlsx|XLSX)$/i" label="Cargar nuevo archivo" />
+            <p:fileUpload rendered="#{sesionCliente.esEditor(constantes.moduloAlarmasGPS)}" immediate="true"
+                          auto="false" multiple="true" oncomplete="#{mantenedorAlarmasGps.inicio()}" mode="advanced"
+                          fileUploadListener="#{alarmasUploader.subir}" uploadLabel="Subir" cancelLabel="Cancelar"
+                          allowTypes="/(\.|\/)(xlsx|XLSX)$/i" label="Cargar nuevo archivo"/>
             <h:panelGrid columns="3">
                 <p:outputLabel for=":frmAlarmas:sMeses" value="Mes"/>:
                 <p:selectOneMenu id="sMeses" value="#{mantenedorAlarmasGps.mesSeleccionado}">
                     <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}" itemValue="#{m.id}"/>
                 </p:selectOneMenu>
                 <p:outputLabel for=":frmAlarmas:ianio" value="Año"/>:
-                <p:inputText value="#{mantenedorAlarmasGps.anioSeleccionado}" id="ianio" />
+                <p:inputText value="#{mantenedorAlarmasGps.anioSeleccionado}" id="ianio"/>
                 <p:outputLabel for=":frmAlarmas:sServicios" value="Servicio"/>:
-                <p:selectOneMenu filter="true" id="sServicios" value="#{mantenedorAlarmasGps.servicioSeleccionado}" converter="entityConverter">
-                    <f:selectItems value="#{mantenedorAlarmasGps.servicios}" var="s" itemLabel="#{s.nombre}" itemValue="#{s}"/>
+                <p:selectOneMenu filter="true" id="sServicios" value="#{mantenedorAlarmasGps.servicioSeleccionado}"
+                                 converter="entityConverter">
+                    <f:selectItems value="#{mantenedorAlarmasGps.servicios}" var="s" itemLabel="#{s.nombre}"
+                                   itemValue="#{s}"/>
                 </p:selectOneMenu>
                 <p:commandButton icon="ui-icon-refresh" value="Cargar panel de gestión"
-                                 action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas" />
+                                 action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas"/>
             </h:panelGrid>
             <p:panel id="pAlarmas" style="border:0">
                 <h3>
-                    <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}" value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
+                    <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}"
+                                  value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
                 </h3>
-                <p:dataTable style="font-size: 8pt; width: 100%" emptyMessage="No hay alarmas" id="tabla" widgetVar="tAlarmas" 
-                             rendered="#{mantenedorAlarmasGps.alarmas ne null}" 
+                <p:dataTable style="font-size: 8pt; width: 100%" emptyMessage="No hay alarmas" id="tabla"
+                             widgetVar="tAlarmas" filterEvent="enter"
+                             rendered="#{mantenedorAlarmasGps.alarmas ne null}" selectionMode="single"
+                             rowKey="#{conductor}"
                              value="#{mantenedorAlarmasGps.conductores}" var="conductor"
                              scrollable="true">
-                    <p:columns value="#{mantenedorAlarmasGps.obtenerColumnas()}" var="col" width="70">
-                        <f:facet name="header">
-                            <h:outputText value="#{col.header}"/>
-                        </f:facet>
-                        <ui:fragment rendered="#{mantenedorAlarmasGps.noEsCero(conductor, col.id)}">
-                            <ui:fragment rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
-                                <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
-                                               value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
-                                               style="display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} - [Alarmas: #{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)} Día: #{col.id}]"
-                                               >
-                                    <h:graphicImage style="float: right" value="/img/icons/luz_verde.png"/>
-                                </h:commandLink>
-                            </ui:fragment>
-                            <ui:fragment rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, col.id)}">
-                                <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, col.id)}" 
-                                               value="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)}"
-                                               style="display: block; width: #{mantenedorAlarmasGps.obtenerAnchoColumna(conductor, col.id)}" target="_blank" 
-                                               title="#{mantenedorAlarmasGps.obtenerValorCelda(conductor, 'conductor')} - [Alarmas: #{mantenedorAlarmasGps.obtenerValorCelda(conductor, col.id)} Día: #{col.id}]"
-                                               >
-                                    <h:graphicImage style="float: right" value="/img/icons/luz_roja.png"/>
-                                </h:commandLink>
-                            </ui:fragment>
-                        </ui:fragment>
-                    </p:columns>
+                    <p:column headerText="Conductor" width="300">
+                        <h:outputText rendered="false" value="#{conductor}"/>
+                        <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, 'conductor')}" target="_blank">
+                            #{mantenedorAlarmasGps.obtenerValorCelda(conductor, conductor)}
+                            <h:graphicImage style="float: right"
+                                            rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, 'conductor')}"
+                                            value="/img/icons/luz_roja.png"/>
+                            <h:graphicImage style="float: right"
+                                            rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, 'conductor')}"
+                                            value="/img/icons/luz_verde.png"/>
+                        </h:commandLink>
+                    </p:column>
+                    <c:forEach items="#{mantenedorAlarmasGps.obtenerColumnas()}" var="c">
+                        <p:column headerText="#{c.header}" width="85">
+                            <h:commandLink rendered="#{mantenedorAlarmasGps.noEsCero(conductor, c.id)}"
+                                           style="display: block; width: 45px"
+                                           action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, c.id)}"
+                                           target="_blank">
+                                #{mantenedorAlarmasGps.obtenerValorCelda(conductor, c.id)}
+                                <h:graphicImage style="float: right"
+                                                rendered="#{!mantenedorAlarmasGps.obtenerColorCelda(conductor, c.id)}"
+                                                value="/img/icons/luz_roja.png"/>
+                                <h:graphicImage style="float: right"
+                                                rendered="#{mantenedorAlarmasGps.obtenerColorCelda(conductor, c.id)}"
+                                                value="/img/icons/luz_verde.png"/>
+                            </h:commandLink>
+                        </p:column>
+                    </c:forEach>
                 </p:dataTable>
             </p:panel>
         </h:form>

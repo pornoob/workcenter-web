@@ -57,7 +57,8 @@
                                        itemLabel="#{e.patente}"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="Código Camión"/>:
-                    <p:inputText id="iCodCamion" value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.tracto.numero}"
+                    <p:inputText id="iCodCamion"
+                                 value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.tracto.numero}"
                                  readonly="true"/>
                 </h:panelGrid>
             </p:panel>
@@ -65,10 +66,12 @@
                 <h:panelGrid columnClasses="nada,miaPregunta" columns="8">
                     <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasCamion}" var="p">
                         <b>#{p.numero}</b>
-                        <h:outputLabel style="width: 45%" rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
-                        <h:outputLabel style="width: 45%" rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
+                        <h:outputLabel rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
+                        <h:outputLabel rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
                         :
-                        <p:selectBooleanCheckbox id="pregunta#{p.id}"/>
+                        <p:selectBooleanCheckbox
+                                id="pregunta#{p.id}"
+                                value="#{mantenedorInspeccionAvanzada.obtenerRespuesta(p).cumple}"/>
                     </c:forEach>
                 </h:panelGrid>
             </p:panel>
@@ -79,7 +82,9 @@
                         <h:outputLabel rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
                         <h:outputLabel rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
                         :
-                        <p:selectBooleanCheckbox id="pregunta#{p.id}"/>
+                        <p:selectBooleanCheckbox
+                                id="pregunta#{p.id}"
+                                value="#{mantenedorInspeccionAvanzada.obtenerRespuesta(p).cumple}"/>
                     </c:forEach>
                 </h:panelGrid>
             </p:panel>

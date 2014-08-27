@@ -10,8 +10,8 @@
 
         <h2>Inspección Avanzada</h2>
         <h:form id="formFormularios">
-            <p:tabView>
-                <p:tab title="Listado Inspecciones">
+            <p:tabView id="tabsView">
+                <p:tab title="Listado Inspecciones" id="tabs">
                     <p:commandButton icon="ui-icon-plus" value="Agregar"
                                      action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
@@ -51,12 +51,16 @@
                         </p:column>
                         <p:column headerText="Acciones">
                             <p:outputPanel styleClass="opcionesFila">
-                                <p:commandLink styleClass="ui-icon ui-icon-pencil"/>
+                                <p:commandLink styleClass="ui-icon ui-icon-pencil"
+                                               action="#{mantenedorInspeccionAvanzada.irEditar(i)}"/>
+                                <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false">
+                                    <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario(i)}"/>
+                                </p:commandLink>
                             </p:outputPanel>
                         </p:column>
                     </p:dataTable>
                 </p:tab>
-                <p:tab title="Calendario Inspecciones">
+                <p:tab title="Calendario Inspecciones" id="tab2">
                     <h:panelGrid columns="7" width="auto">
                         <h:outputLabel value="Mes"/>:
                         <p:selectOneMenu value="#{mantenedorInspeccionAvanzada.mes}">
@@ -65,9 +69,11 @@
                         </p:selectOneMenu>
                         <h:outputLabel value="Año"/>:
                         <p:spinner min="2014" value="#{mantenedorInspeccionAvanzada.anio}"/>
-                        <p:commandButton icon="ui-icon-refresh" value="Actualizar"/>
+                        <p:commandButton icon="ui-icon-refresh" value="Actualizar"
+                                         action="#{mantenedorInspeccionAvanzada.dummy()}"
+                                         update=":formFormularios:tabsView:tCalendario"/>
                     </h:panelGrid>
-                    <p:dataTable emptyMessage="No se han encontrado inspecciones" scrollable="true"
+                    <p:dataTable emptyMessage="No se han encontrado inspecciones" scrollable="true" id="tCalendario"
                                  var="e" selectionMode="single" rowKey="#{e.patente}" filterEvent="enter"
                                  value="#{mantenedorInspeccionAvanzada.equipos}" widgetVar="calendario"
                                  frozenColumns="1">
@@ -76,16 +82,25 @@
                         </p:column>
                         <c:forEach items="#{mantenedorInspeccionAvanzada.obtenerCalendario()}" var="columna">
                             <p:column width="#{columna.ancho}" headerText="#{columna.header}">
-                                #{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}
+                                <h:commandLink rendered="#{mantenedorInspeccionAvanzada.noEsCero(columna.id, e)}">
+                                    #{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}
+                                    <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.pasaInspecciones()}"
+                                                    value="/img/icons/luz_verde.png"/>
+                                    <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante()}"
+                                                    value="/img/icons/luz_roja.png"/>
+                                    <h:graphicImage style="float: right"
+                                            rendered="#{!mantenedorInspeccionAvanzada.pasaInspecciones() and !mantenedorInspeccionAvanzada.esCausaBloqueante()}"
+                                            value="/img/icons/luz_amarilla.png"/>
+                                </h:commandLink>
                             </p:column>
                         </c:forEach>
                     </p:dataTable>
                 </p:tab>
             </p:tabView>
-            <p:panel styleClass="actionPanel">
+            <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-s" value="Volver" ajax="false"
                                  action="#{mantenedorInspeccionAvanzada.irListarRegistros()}"/>
-            </p:panel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

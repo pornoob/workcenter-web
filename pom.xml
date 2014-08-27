@@ -14,7 +14,7 @@
             <name>Maven</name>
             <url>http://maven.apache.org</url>
         </repository>
-        
+
     </repositories>
     
     <properties>

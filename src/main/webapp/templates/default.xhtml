@@ -1,52 +1,57 @@
-<?xml version="1.0" encoding="UTF-8"?> 
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:ui="http://java.sun.com/jsf/facelets"
       xmlns:h="http://java.sun.com/jsf/html"
       xmlns:f="http://java.sun.com/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 
-    <f:view contentType="text/html">
+<f:view contentType="text/html">
 
-        <h:head>
-            <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-            <title>Transportes Ventanas / Puchuncaví</title>
-            <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/estilos.css" />
-        </h:head>
-        <h:body>
-            <h:outputScript library="primefaces" name="jquery/jquery.js" target="head" />
-            <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
-            <h:outputScript library="js" name="webcenter.js" target="head"/>
-            <p:ajaxStatus onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+    <h:head>
+        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+        <title>Transportes Ventanas / Puchuncaví</title>
+        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/estilos.css"/>
+    </h:head>
+    <h:body>
+        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
+        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
+        <h:outputScript library="js" name="webcenter.js" target="head"/>
+        <p:ajaxStatus onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+        <p:idleMonitor timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>
+        <p:dialog widgetVar="sesionExpired" modal="true">
+            <h:form>
+                Su sesión ha expirado
+                <p:outputPanel styleClass="actionPanel">
+                    <p:commandButton value="Aceptar" action="#{facesUtil.redirigir('/logIn.jsf')}" ajax="false"/>
+                </p:outputPanel>
+            </h:form>
+        </p:dialog>
 
-            <p:dialog header="" closable="false" resizable="false" widgetVar="idleDialog" modal="true" width="400" dynamic="true">  
-                <h:outputText value="" />
-                <p:commandButton/>
-            </p:dialog>  
-
-            <p:panel styleClass="imagenSuperior">
-                <p:panel styleClass="logoSuperior">
-                    <!--<div class="tituloEmpresa">-->
-                        <!--<h1>Transportes Ventanas/Puchuncaví</h1>-->
-                    <!--</div>-->
-                </p:panel>
+        <p:panel styleClass="imagenSuperior">
+            <p:panel styleClass="logoSuperior">
+                <!--<div class="tituloEmpresa">-->
+                <!--<h1>Transportes Ventanas/Puchuncaví</h1>-->
+                <!--</div>-->
             </p:panel>
-            <div class="esqueleto">
-                <ui:include src="/templates/includes/barraAutentificacion.xhtml" />
-                <ui:include src="/templates/includes/menuSuperior.xhtml" />
+        </p:panel>
 
-                <div class="contenido">
-                    <ui:insert name="contenido"></ui:insert>
-                </div>
+        <div class="esqueleto">
+            <ui:include src="/templates/includes/barraAutentificacion.xhtml"/>
+            <ui:include src="/templates/includes/menuSuperior.xhtml"/>
 
-                <ui:include src="/templates/includes/piePagina.xhtml" />
-
-                <p:dialog widgetVar="statusDialog" modal="true" closable="false" showHeader="false">
-                    <img src="#{request.contextPath}/resources/css/img/theme/ajax-loader.gif" alt="" />
-                </p:dialog>
+            <div class="contenido">
+                <ui:insert name="contenido"></ui:insert>
             </div>
 
-        </h:body>
-    </f:view>
+            <ui:include src="/templates/includes/piePagina.xhtml"/>
+
+            <p:dialog widgetVar="statusDialog" modal="true" closable="false" showHeader="false">
+                <img src="#{request.contextPath}/resources/css/img/theme/ajax-loader.gif" alt=""/>
+            </p:dialog>
+        </div>
+
+    </h:body>
+</f:view>
 </html>

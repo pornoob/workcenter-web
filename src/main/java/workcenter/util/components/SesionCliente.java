@@ -27,6 +27,7 @@ public class SesionCliente implements Serializable {
     Constantes constantes;
 
     private UsuarioDto usuario;
+    private boolean inicioSesion;
 
     public SesionCliente() {
         usuario = null;
@@ -91,5 +92,20 @@ public class SesionCliente implements Serializable {
             sb.append(' ');
         }
         return sb.toString().trim();
+    }
+
+    public void verificaSesion() {
+        if (isInicioSesion() && getUsuario() == null) {
+            inicioSesion = false;
+            FacesUtil.redirigir("/logOut");
+        }
+    }
+
+    public boolean isInicioSesion() {
+        return inicioSesion;
+    }
+
+    public void setInicioSesion(boolean inicioSesion) {
+        this.inicioSesion = inicioSesion;
     }
 }

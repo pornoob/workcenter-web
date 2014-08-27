@@ -142,6 +142,8 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
             FacesUtil.mostrarMensajeError("Operación Fallida", "Debes Adjuntar al menos un documento");
             return;
         }
+        actividadDiaria.setIdServicio(servicioSeleccionado);
+        actividadDiaria.setIdUsuario(sesionCliente.getUsuario().getRut());
         logicaInformeActividades.guardar(actividadDiaria);
         logicaDocumentos.asociarDocumentos(docs, actividadDiaria);
         FacesUtil.mostrarMensajeInformativo("Actividad guardada exitosamente", "ID de actividad " + actividadDiaria.getId());
@@ -155,8 +157,6 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     public String irAgregarActividad() {
         actividadDiaria = new ActividadDiaria();
-        actividadDiaria.setIdUsuario(sesionCliente.getUsuario().getRut());
-        actividadDiaria.setIdServicio(servicioSeleccionado);
         return "flowAgregarActividad";
     }
 

@@ -65,6 +65,8 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
 
     // Zona de "caché"
     private List<MiaRespuesta> ultimasRespuestas;
+    private MiaRespuesta cacheRespuesta;
+    private List<MiaInspeccionAvanzada> cacheInspecciones;
 
     public String inicio() {
         inspeccionesAvanzadas = logicaInspeccionAvanzada.obtenerTodas();
@@ -87,6 +89,26 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return "flowAgregar";
     }
 
+    public String irEditar(MiaInspeccionAvanzada i) {
+        preguntas = logicaInspeccionAvanzada.obtenerPreguntas();
+        inspeccionAvanzada = i;
+        ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(inspeccionAvanzada);
+        comprobantesInspeccion = new HashMap<String, List<Documento>>();
+        return "flowAgregar";
+    }
+
+    public MiaRespuesta obtenerRespuesta(MiaPregunta p) {
+        if (inspeccionAvanzada.getId() != null)
+            for (MiaRespuesta r : ultimasRespuestas) {
+                if (r.getMiaPreguntasByIdPregunta().equals(p)) {
+                    return r;
+                }
+            }
+        if (cacheRespuesta == null) cacheRespuesta = new MiaRespuesta();
+        cacheRespuesta.setCumple(false);
+        return cacheRespuesta;
+    }
+
     public void obtenerConductores() {
         conductores = logicaPersonal.obtenerConductores();
     }
@@ -105,8 +127,9 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         if (comprobantesInspeccion == null) {
             comprobantesInspeccion = new HashMap<String, List<Documento>>();
         }
+        boolean editar = inspeccionAvanzada.getId() != null;
         List<Documento> docs = comprobantesInspeccion.get(sesionCliente.getUsuario().getRut() + "|inspeccion");
-        if (docs == null || docs.isEmpty()) {
+        if ((docs == null || docs.isEmpty()) && !editar) {
             FacesUtil.mostrarMensajeError("Operación Fallida", "Debes Adjuntar al menos un documento");
             return;
         }
@@ -120,7 +143,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
             respuestas.add(respuesta);
         }
         logicaInspeccionAvanzada.guardar(inspeccionAvanzada, respuestas);
-        logicaDocumentos.asociarDocumentos(docs, inspeccionAvanzada);
+        if (!editar) logicaDocumentos.asociarDocumentos(docs, inspeccionAvanzada);
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la inspección avanzada [ID: " + inspeccionAvanzada.getId() + "]");
         comprobantesInspeccion = null;
         inspeccionAvanzada = new MiaInspeccionAvanzada();
@@ -152,7 +175,29 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
             case -1:
                 return "0";
             default:
-                return "0";
+                String strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+//                System.err.println("FECHA FORMADA: " + strFecha);
+                try {
+                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    cacheInspecciones = logicaInspeccionAvanzada.obtenerInspecciones(fecha, e);
+                    return String.valueOf(cacheInspecciones.size());
+                } catch (ParseException e1) {
+                    System.err.println("FALLA FECHA");
+                    return "0";
+                }
+        }
+    }
+
+    public boolean noEsCero(String idCol, Equipo e) {
+        int id = Integer.parseInt(idCol);
+        String strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+        try {
+            Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+            System.err.println("SON: "+logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e).intValue());
+            return logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e).intValue() > 0;
+        } catch (Exception ex) {
+            ex.printStackTrace();
+            return false;
         }
     }
 
@@ -185,8 +230,14 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     }
 
     public StreamedContent obtenerFormulario() {
-        Descargable d = new Descargable(new File(constantes.getPathArchivos()+formulario.getPathFormulario()));
-        d.setNombre("InspeccionAvanzada.pdf");
+        Descargable d = new Descargable(new File(constantes.getPathArchivos() + formulario.getPathFormulario()));
+        return d.getStreamedContent();
+    }
+
+    public StreamedContent obtenerFormulario(MiaInspeccionAvanzada i) {
+        List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(i);
+        Descargable d = new Descargable(new File(constantes.getPathArchivos() + docs.get(0).getId()));
+        d.setNombre(docs.get(0).getNombreOriginal());
         return d.getStreamedContent();
     }
 
@@ -198,12 +249,34 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return true;
     }
 
+    public boolean pasaInspecciones() {
+        for (MiaInspeccionAvanzada i : cacheInspecciones) {
+            ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
+            for (MiaRespuesta r : ultimasRespuestas) {
+                if (!r.getCumple()) return false;
+            }
+        }
+        return true;
+    }
+
     public boolean esCausaBloqueante(MiaInspeccionAvanzada i) {
         for (MiaRespuesta r : ultimasRespuestas) {
             if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) return true;
         }
         return false;
     }
+
+    public boolean esCausaBloqueante() {
+        for (MiaInspeccionAvanzada i : cacheInspecciones) {
+            ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
+            for (MiaRespuesta r : ultimasRespuestas) {
+                if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) return true;
+            }
+        }
+        return false;
+    }
+
+    public void dummy(){}
 
     public List<Personal> getConductores() {
         return conductores;

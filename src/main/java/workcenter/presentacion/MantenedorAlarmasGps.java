@@ -285,15 +285,6 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
         return !obtenerValorCelda(conductor, columna).equals("0");
     }
 
-    public String obtenerAnchoColumna(String conductor, String columna) {
-        try {
-            Date fecha = sdf.parse(columna + " 00:00:00");
-            return "38px";
-        } catch (ParseException e) {
-            return "auto";
-        }
-    }
-
     public String obtenerValorCelda(String conductor, String columna) {
         try {
             Date fecha = sdf.parse(columna + " 00:00:00");
