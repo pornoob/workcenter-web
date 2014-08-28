@@ -1,4 +1,4 @@
-package workcenter.presentacion;
+package workcenter.presentacion.usuarios;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -82,6 +82,10 @@ public class MantenedorUsuarios implements Serializable {
 
     public String irEditarUsuario() {
         return "flowEditarAccesos";
+    }
+
+    public String irPerfil() {
+        return "flowVerPerfil";
     }
 
     public void guardarPermiso() {

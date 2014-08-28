@@ -8,7 +8,7 @@
         <h2>Listado de Alarmas</h2>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmAlarmas" enctype="multipart/form-data">
-            <p:fileUpload rendered="#{sesionCliente.esEditor(constantes.moduloAlarmasGPS)}" immediate="true"
+            <p:fileUpload rendered="#{sesionCliente.esAdministrador(constantes.moduloAlarmasGPS)}" immediate="true"
                           auto="false" multiple="true" oncomplete="#{mantenedorAlarmasGps.inicio()}" mode="advanced"
                           fileUploadListener="#{alarmasUploader.subir}" uploadLabel="Subir" cancelLabel="Cancelar"
                           allowTypes="/(\.|\/)(xlsx|XLSX)$/i" label="Cargar nuevo archivo"/>

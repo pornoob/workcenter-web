@@ -165,36 +165,58 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         for (int i = 1; i <= cantDiasMes; i++) {
             retorno.add(new DynamicColumnDataTable(String.valueOf(i), String.valueOf(i), "40"));
         }
-        retorno.add(new DynamicColumnDataTable("-1", "Total", "100"));
+        retorno.add(new DynamicColumnDataTable("-1", "Total", "40"));
         return retorno;
     }
 
     public String obtenerValorCalendario(String idColumna, Equipo e) {
         int id = Integer.parseInt(idColumna);
-        switch (id) {
-            case -1:
-                return "0";
-            default:
-                String strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-//                System.err.println("FECHA FORMADA: " + strFecha);
-                try {
+        String strFecha;
+        try {
+            switch (id) {
+                case -1:
+                    strFecha = "01/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+                    Date fechaInf = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(fechaInf);
+                    strFecha = c.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+                    Date fechaSup = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    cacheInspecciones = logicaInspeccionAvanzada.obtenerInspecciones(fechaInf, fechaSup, e);
+                    return String.valueOf(cacheInspecciones.size());
+                default:
+                    strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
                     Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
                     cacheInspecciones = logicaInspeccionAvanzada.obtenerInspecciones(fecha, e);
                     return String.valueOf(cacheInspecciones.size());
-                } catch (ParseException e1) {
-                    System.err.println("FALLA FECHA");
-                    return "0";
-                }
+
+            }
+        } catch (ParseException e1) {
+            System.err.println("FALLA FECHA");
+            return "0";
         }
     }
 
     public boolean noEsCero(String idCol, Equipo e) {
         int id = Integer.parseInt(idCol);
-        String strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+        String strFecha;
         try {
-            Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-            return logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e).intValue() > 0;
-        } catch (Exception ex) {
+            switch (id) {
+                case -1:
+                    strFecha = "01/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+                    Date fechaInf = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    Calendar c = Calendar.getInstance();
+                    c.setTime(fechaInf);
+                    strFecha = c.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+                    Date fechaSup = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    return logicaInspeccionAvanzada.obtenerCantInspecciones(fechaInf, fechaSup, e) > 0;
+                default:
+                    strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
+                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    return logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e) > 0;
+
+            }
+        } catch (ParseException e1) {
+            System.err.println("FALLA FECHA");
             return false;
         }
     }
@@ -274,7 +296,8 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return false;
     }
 
-    public void dummy(){}
+    public void dummy() {
+    }
 
     public List<Personal> getConductores() {
         return conductores;

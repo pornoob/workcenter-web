@@ -78,4 +78,28 @@ public class InspeccionAvanzadaDao {
         q.setParameter("patente", e.getPatente());
         return ((BigInteger) q.getSingleResult()).intValue();
     }
+
+    public List<MiaInspeccionAvanzada> obtenerInspecciones(Date fechaInf, Date fechaSup, Equipo e) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select * from mia_inspeccion_avanzada i ");
+        sql.append("where i.fecha >= :fechaInf and i.fecha <= :fechaSup ");
+        sql.append("and (i.tracto = :patente or i.batea = :patente)");
+        Query q = em.createNativeQuery(sql.toString(), MiaInspeccionAvanzada.class);
+        q.setParameter("fechaInf", fechaInf);
+        q.setParameter("fechaSup", fechaSup);
+        q.setParameter("patente", e.getPatente());
+        return q.getResultList();
+    }
+
+    public Integer obtenerCantInspecciones(Date fechaInf, Date fechaSup, Equipo e) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select count(*) from mia_inspeccion_avanzada i ");
+        sql.append("where i.fecha >= :fechaInf and i.fecha <= :fechaSup ");
+        sql.append("and (i.tracto = :patente or i.batea = :patente)");
+        Query q = em.createNativeQuery(sql.toString());
+        q.setParameter("fechaInf", fechaInf);
+        q.setParameter("fechaSup", fechaSup);
+        q.setParameter("patente", e.getPatente());
+        return ((BigInteger) q.getSingleResult()).intValue();
+    }
 }

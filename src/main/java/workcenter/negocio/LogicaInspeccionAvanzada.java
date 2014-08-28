@@ -52,4 +52,14 @@ public class LogicaInspeccionAvanzada {
     public Integer obtenerCantInspecciones(Date fecha, Equipo e) {
         return inspeccionAvanzadaDao.obtenerCantInspecciones(fecha, e);
     }
+
+    @Transactional(readOnly = true)
+    public List<MiaInspeccionAvanzada> obtenerInspecciones(Date fechaInf, Date fechaSup, Equipo e) {
+        return inspeccionAvanzadaDao.obtenerInspecciones(fechaInf, fechaSup, e);
+    }
+
+    @Transactional(readOnly = true)
+    public Integer obtenerCantInspecciones(Date fechaInf, Date fechaSup, Equipo e) {
+        return inspeccionAvanzadaDao.obtenerCantInspecciones(fechaInf, fechaSup, e);
+    }
 }

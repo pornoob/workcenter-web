@@ -119,4 +119,23 @@ public class UsuarioDao implements Serializable {
         q.setParameter("usuario", usuario);
         return q.getResultList();
     }
+
+    public Permiso obtenerPermiso(String usuario, String permiso, Integer acceso) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select per.* from mue_permisos_usuarios per ");
+        sb.append("inner join proyectos pro on (pro.tipo='app' and per.id_modulo=pro.id) ");
+        sb.append("inner join mue_usuario_externo u on (u.id = per.id_usuario) ");
+        sb.append("where u.usuario = :usuario ");
+        sb.append("and pro.titulo = :permiso ");
+        sb.append("and per.nivel = :acceso ");
+        Query q = em.createNativeQuery(sb.toString(), Permiso.class);
+        q.setParameter("usuario", usuario);
+        q.setParameter("permiso", permiso);
+        q.setParameter("acceso", acceso);
+        try {
+            return (Permiso) q.getSingleResult();
+        } catch(Exception e) {
+            return null;
+        }
+    }
 }

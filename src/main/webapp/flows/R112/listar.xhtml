@@ -9,7 +9,7 @@
 
         <h2>R-112</h2>
         <h:form id="formFormularios">
-            <p:commandButton rendered="#{!sesionCliente.usuario.externo}" icon="ui-icon-plus" value="Nueva Actividad"
+            <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}" icon="ui-icon-plus" value="Nueva Actividad"
                              action="#{registroR112.preparaCreacionR112()}"/>
             <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario">
                 <p:fileDownload value="#{registroR112.obtenerFormulario()}"/>

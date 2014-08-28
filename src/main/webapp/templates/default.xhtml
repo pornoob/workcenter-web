@@ -18,13 +18,13 @@
         <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
         <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
         <h:outputScript library="js" name="webcenter.js" target="head"/>
-        <p:ajaxStatus onstart="statusDialog.show()" oncomplete="statusDialog.hide()"/>
+        <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
         <p:idleMonitor timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>
         <p:dialog widgetVar="sesionExpired" modal="true">
             <h:form>
                 Su sesión ha expirado
                 <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton value="Aceptar" action="#{facesUtil.redirigir('/logIn.jsf')}" ajax="false"/>
+                    <p:button value="Aceptar" outcome="/inicio.jsf"/>
                 </p:outputPanel>
             </h:form>
         </p:dialog>
@@ -41,9 +41,9 @@
             <ui:include src="/templates/includes/barraAutentificacion.xhtml"/>
             <ui:include src="/templates/includes/menuSuperior.xhtml"/>
 
-            <div class="contenido">
+            <p:panel styleClass="contenido">
                 <ui:insert name="contenido"></ui:insert>
-            </div>
+            </p:panel>
 
             <ui:include src="/templates/includes/piePagina.xhtml"/>
 

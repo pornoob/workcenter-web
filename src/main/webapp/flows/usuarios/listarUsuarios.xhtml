@@ -6,7 +6,6 @@
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
-
         <h2>Listado de usuarios</h2>
         <h:form>
 
@@ -24,16 +23,15 @@
                          var="personal"
                          >
 
-                <p:column filterBy="rut" headerText="Rut" filterMatchMode="startsWith">
-                    <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter">
-                    </h:outputText>
+                <p:column filterBy="#{personal.rut}" headerText="Rut" filterMatchMode="startsWith">
+                    <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>
                 </p:column>
                 
-                <p:column filterBy="nombres" headerText="Nombres" filterMatchMode="contains">
+                <p:column filterBy="#{personal.nombres}" headerText="Nombres" filterMatchMode="contains">
                     <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
                 </p:column>
 
-                <p:column filterBy="apellidos" headerText="Apellidos" filterMatchMode="contains">
+                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos" filterMatchMode="contains">
                     <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
                 </p:column>
 

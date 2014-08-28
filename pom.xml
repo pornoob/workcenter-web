@@ -19,7 +19,7 @@
     
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <primefaces-version>4.0</primefaces-version>
+        <primefaces-version>5.0</primefaces-version>
         <hibernate-version>4.3.1.Final</hibernate-version>
         <hibernate-validator-version>5.0.3.Final</hibernate-validator-version>
         <spring-version>3.2.8.RELEASE</spring-version>

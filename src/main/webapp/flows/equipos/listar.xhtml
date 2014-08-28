@@ -1,0 +1,59 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>Listado de equipos</h2>
+        <h:form id="perfil">
+            <p:dataTable value="#{mantenedorEquipos.equipos}" var="e" rows="15" filterEvent="enter"
+                         filteredValue="#{mantenedorEquipos.equiposFiltrados}" widgetVar="tEquipos"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         emptyMessage="No se han encontrado equipos"
+                         paginatorTemplate="#{constantes.paginadorTemplate}" paginator="true" paginatorPosition="both">
+                <p:column headerText="Patente" filterBy="#{e.patente}"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    #{e.patente}
+                </p:column>
+                <p:column headerText="N°" filterBy="#{e.numero}" filterMatchMode="startsWith">
+                    #{e.numero}
+                </p:column>
+                <p:column headerText="Tipo" filterBy="#{e.tipo.etiqueta}" filterMatchMode="exact">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('tEquipos').filter()">
+                            <f:selectItem itemValue="#{null}" itemLabel="-- Todos --" noSelectionOption="true"/>
+                            <f:selectItems value="#{mantenedorEquipos.tiposEquipos}" var="t" itemValue="#{t.etiqueta}"
+                                           itemLabel="#{t.etiqueta}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    #{e.tipo.etiqueta}
+                </p:column>
+                <p:column headerText="Dueño" filterBy="#{e.duenio.nombre}"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    #{e.duenio.nombre}
+                </p:column>
+                <p:column headerText="Marca" filterBy="#{e.marca.nombre}"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    #{e.marca.nombre}
+                </p:column>
+                <p:column headerText="Modelo" filterBy="#{e.modelo.nombre}"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    #{e.modelo.nombre}
+                </p:column>
+                <p:column headerText="Año" filterBy="#{e.anio}" filterMatchMode="startsWith">
+                    #{e.anio}
+                </p:column>
+                <p:column headerText="Estado">
+                    <h:graphicImage rendered="#{mantenedorEquipos.estaHabilitado(e)}" value="/img/icons/luz_verde.png"/>
+                    <h:graphicImage rendered="#{!mantenedorEquipos.estaHabilitado(e)}" value="/img/icons/luz_roja.png"/>
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:outputPanel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-pencil" action="#{mantenedorEquipos.irEditar(e)}"/>
+                    </p:outputPanel>
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

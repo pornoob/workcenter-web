@@ -1,4 +1,4 @@
-package workcenter.presentacion;
+package workcenter.presentacion.personal;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -316,10 +316,6 @@ public class MantenedorPersonal implements Serializable {
         } else {
             return true;
         }
-    }
-
-    public boolean esUF(TipoUnidad unidad) {
-        return unidad.getId().intValue() == constantes.getUnidadUf();
     }
 
     public StreamedContent generaDescargable(DocumentoPersonal dp) {

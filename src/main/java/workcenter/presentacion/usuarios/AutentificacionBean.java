@@ -1,4 +1,4 @@
-package workcenter.presentacion;
+package workcenter.presentacion.usuarios;
 
 import java.io.Serializable;
 import javax.servlet.ServletException;

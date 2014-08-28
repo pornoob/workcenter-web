@@ -22,23 +22,23 @@
                          var="personal"
                          >
 
-                <p:column filterBy="rut" headerText="Rut" filterMatchMode="startsWith">
+                <p:column filterBy="#{personal.rut}" headerText="Rut" filterMatchMode="startsWith">
                     <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>
                 </p:column>
 
-                <p:column filterBy="nombres" headerText="Nombres" filterMatchMode="contains">
+                <p:column filterBy="#{personal.nombres}" headerText="Nombres" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
                 </p:column>
 
-                <p:column filterBy="apellidos" headerText="Apellidos" filterMatchMode="contains">
+                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
                 </p:column>
 
-                <p:column filterBy="celular" headerText="Celular" filterMatchMode="contains">
+                <p:column filterBy="#{personal.celular}" headerText="Celular" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{personal.celular}" />
                 </p:column>
 
-                <p:column filterMatchMode="contains">
+                <p:column filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <f:facet name="header">
                         Empleador<br/>
                         <p:inputText value="#{mantenedorPersonal.filtroEmpleador}" onkeypress="if (event.keyCode == 13) {

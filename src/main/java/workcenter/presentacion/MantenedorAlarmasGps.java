@@ -16,6 +16,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -37,7 +38,6 @@ import workcenter.util.pojo.DynamicColumnDataTable;
 import workcenter.util.pojo.FacesUtil;
 
 /**
- *
  * @author colivares
  */
 @Component
@@ -252,7 +252,10 @@ public class MantenedorAlarmasGps implements Serializable, WorkcenterFileListene
     }
 
     public void obtenerServicios() {
-        servicios = logicaAlarmasGps.obtenerServicios(sesionCliente.getUsuario().getRut());
+        if (!sesionCliente.getUsuario().isExterno())
+            servicios = logicaAlarmasGps.obtenerServicios(sesionCliente.getUsuario().getRut());
+        else
+            servicios = logicaAlarmasGps.obtenerServicios(sesionCliente.getUsuario().getUsuario());
     }
 
     public boolean obtenerColorCelda(String conductor, String columna) {

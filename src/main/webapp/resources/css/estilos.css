@@ -11,6 +11,11 @@ html, body {
     margin-right: auto;
 }
 
+.contenido {
+    background-color: lightgray;
+    min-height: 350px;
+}
+
 .imagenSuperior {
     background: url('./img/theme/panorama.jpg') no-repeat;
     width: 1024px;
@@ -64,6 +69,16 @@ ul.navBar {
 
 ul.navBar li {
     float: left;
+}
+
+.piePagina {
+    background-color: black;
+    color: white;
+}
+
+.piePagina a {
+    color: white;
+    text-decoration: none;
 }
 
 .actionPanel {

@@ -28,7 +28,7 @@
                     <p:commandButton icon="ui-icon-refresh" value="Actualizar tabla"
                                      action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
                     <p:commandButton icon="ui-icon-plus" ajax="false" immediate="true"
-                                     value="Agregar Actividad" rendered="#{!sesionCliente.usuario.externo}"
+                                     value="Agregar Actividad" rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
                                      action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
                 </h:panelGroup>
             </h:panelGrid>
@@ -66,10 +66,10 @@
                             <ui:repeat value="#{mantenedorInformeActividades.semana.dias}" var="dia">
                                 <td style="text-align: center">
                                     <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="ta">
-                                        <p:panel style="border:0; float: left"
+                                        <p:outputPanel style="border:0; float: left"
                                                  rendered="#{mantenedorInformeActividades.hayActividadDelTipo(ta, dia.fecha, horario)}">
                                             <img style="width: 15px" src="#{request.contextPath}#{ta.icono}"/>
-                                        </p:panel>
+                                        </p:outputPanel>
                                     </ui:repeat>
 
                                     <div style="clear: both"></div>

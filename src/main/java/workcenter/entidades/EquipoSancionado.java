@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EquipoSancionado.findAll", query = "SELECT e FROM EquipoSancionado e"),
     @NamedQuery(name = "EquipoSancionado.findById", query = "SELECT e FROM EquipoSancionado e WHERE e.id = :id"),
-    @NamedQuery(name = "EquipoSancionado.findBySancionado", query = "SELECT e FROM EquipoSancionado e WHERE e.sancionado = :sancionado"),
+    @NamedQuery(name = "EquipoSancionado.findByEquipo", query = "SELECT e FROM EquipoSancionado e WHERE e.sancionado = :equipo"),
     @NamedQuery(name = "EquipoSancionado.findByNivel", query = "SELECT e FROM EquipoSancionado e WHERE e.nivel = :nivel"),
     @NamedQuery(name = "EquipoSancionado.findByMotivo", query = "SELECT e FROM EquipoSancionado e WHERE e.motivo = :motivo"),
     @NamedQuery(name = "EquipoSancionado.findByFecha", query = "SELECT e FROM EquipoSancionado e WHERE e.fecha = :fecha")})
@@ -41,14 +31,11 @@ public class EquipoSancionado implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 7)
-    @Column(name = "sancionado")
-    private String sancionado;
+    @OneToOne
+    @JoinColumn(name = "sancionado", referencedColumnName = "patente")
+    private Equipo sancionado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "nivel")
@@ -67,12 +54,6 @@ public class EquipoSancionado implements Serializable {
         this.id = id;
     }
 
-    public EquipoSancionado(Integer id, String sancionado, int nivel) {
-        this.id = id;
-        this.sancionado = sancionado;
-        this.nivel = nivel;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -81,11 +62,11 @@ public class EquipoSancionado implements Serializable {
         this.id = id;
     }
 
-    public String getSancionado() {
+    public Equipo getSancionado() {
         return sancionado;
     }
 
-    public void setSancionado(String sancionado) {
+    public void setSancionado(Equipo sancionado) {
         this.sancionado = sancionado;
     }
 

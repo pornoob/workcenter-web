@@ -62,4 +62,9 @@ public class LogicaAlarmasGps {
     public void guardarGestionAlarma(GestionAlarmaGps ga) {
         alarmasGpsDao.guardarGestion(ga);
     }
+
+    @Transactional(readOnly = true)
+    public List<Servicio> obtenerServicios(String usuario) {
+        return alarmasGpsDao.obtenerServicios(usuario);
+    }
 }

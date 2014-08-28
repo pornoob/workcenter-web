@@ -41,21 +41,20 @@ public class Equipo implements Serializable {
     @Size(min = 1, max = 7)
     @Column(name = "patente")
     private String patente;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "duenio")
-    private int duenio;
+    @ManyToOne
+    @JoinColumn(name = "duenio", referencedColumnName = "id")
+    private Empresa duenio;
     @ManyToOne
     @JoinColumn(name = "tipo", referencedColumnName = "id")
     private TipoEquipo tipo;
     @Column(name = "subtipo")
     private Integer subtipo;
-    @Column(name = "marca")
-    private Integer marca;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "modelo")
-    private int modelo;
+    @ManyToOne
+    @JoinColumn(name = "marca", referencedColumnName = "id")
+    private MarcaEquipo marca;
+    @ManyToOne
+    @JoinColumn(name = "modelo", referencedColumnName = "id")
+    private ModeloEquipo modelo;
     @Basic(optional = false)
     @NotNull
     @Column(name = "anio")
@@ -91,11 +90,11 @@ public class Equipo implements Serializable {
         this.patente = patente;
     }
 
-    public int getDuenio() {
+    public Empresa getDuenio() {
         return duenio;
     }
 
-    public void setDuenio(int duenio) {
+    public void setDuenio(Empresa duenio) {
         this.duenio = duenio;
     }
 
@@ -115,19 +114,19 @@ public class Equipo implements Serializable {
         this.subtipo = subtipo;
     }
 
-    public Integer getMarca() {
+    public MarcaEquipo getMarca() {
         return marca;
     }
 
-    public void setMarca(Integer marca) {
+    public void setMarca(MarcaEquipo marca) {
         this.marca = marca;
     }
 
-    public int getModelo() {
+    public ModeloEquipo getModelo() {
         return modelo;
     }
 
-    public void setModelo(int modelo) {
+    public void setModelo(ModeloEquipo modelo) {
         this.modelo = modelo;
     }
 

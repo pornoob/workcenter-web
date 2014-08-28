@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.EquipoDao;
 import workcenter.entidades.Equipo;
+import workcenter.entidades.EquipoSancionado;
+import workcenter.entidades.TipoEquipo;
 
 import java.util.List;
 
@@ -32,5 +34,15 @@ public class LogicaEquipos {
     @Transactional(readOnly = true)
     public List<Equipo> obtenerBateas() {
         return equipoDao.obtenerBateas();
+    }
+
+    @Transactional(readOnly = true)
+    public EquipoSancionado obtenerEquipoSancionado(Equipo e) {
+        return equipoDao.obtenerEquipoSancionado(e);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TipoEquipo> obtenerTipos() {
+        return equipoDao.obtenerTipos();
     }
 }

@@ -7,12 +7,23 @@
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
+        <h:outputStylesheet>
+            .ui-datatable-frozenlayout-left {
+                width: 140px;
+            }
+            td {
+                height: 22px;
+            }
+            th {
+                height: 44px;
+            }
+        </h:outputStylesheet>
 
         <h2>Inspección Avanzada</h2>
         <h:form id="formFormularios">
             <p:tabView id="tabsView">
                 <p:tab title="Listado Inspecciones" id="tabs">
-                    <p:commandButton icon="ui-icon-plus" value="Agregar" rendered="#{!sesionCliente.usuario.externo}"
+                    <p:commandButton icon="ui-icon-plus" value="Agregar" rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
                                      action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
                         <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario()}"/>
@@ -77,13 +88,14 @@
                                  var="e" selectionMode="single" rowKey="#{e.patente}" filterEvent="enter"
                                  value="#{mantenedorInspeccionAvanzada.equipos}" widgetVar="calendario"
                                  frozenColumns="1">
-                        <p:column headerText="Equipo" filterBy="patente" filterMatchMode="contains" width="110">
-                            #{e.patente}
+                        <p:column headerText="Equipo" filterBy="patente" filterMatchMode="contains" width="110" style="width: 110px">
+                            <h:outputText value="#{e.patente}"/>
                         </p:column>
                         <c:forEach items="#{mantenedorInspeccionAvanzada.obtenerCalendario()}" var="columna">
                             <p:column width="#{columna.ancho}" headerText="#{columna.header}">
+                                <h:outputText style="display: none" value="0"/>
                                 <h:commandLink rendered="#{mantenedorInspeccionAvanzada.noEsCero(columna.id, e)}">
-                                    #{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}
+                                    <h:outputText value="#{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}"/>
                                     <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.pasaInspecciones()}"
                                                     value="/img/icons/luz_verde.png"/>
                                     <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante()}"

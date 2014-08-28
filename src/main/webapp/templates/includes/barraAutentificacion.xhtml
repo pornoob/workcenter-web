@@ -4,14 +4,17 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:f="http://xmlns.jcp.org/jsf/core">
     <div style="float:right">
-        <p:panel styleClass="panelBarraAutentificacion" rendered="#{!sesionCliente.estaAutentificado()}">
-            <p:commandLink action="#{facesUtil.redirigir('/logIn.jsf')}"
-                           rendered="#{!sesionCliente.estaAutentificado()}" value="Iniciar Sesión"/>
-        </p:panel>
-        <p:panel styleClass="panelBarraAutentificacion" rendered="#{sesionCliente.estaAutentificado()}">
-            Bienvenido(a): <p:commandLink value="#{sesionCliente.nombreCompleto}"/>
-            - <p:commandLink value="Cerrar sesión" action="#{facesUtil.redirigir('/logOut')}"/>
-        </p:panel>
+        <h:form>
+            <p:panel styleClass="panelBarraAutentificacion" rendered="#{!sesionCliente.estaAutentificado()}">
+                <p:commandLink action="#{facesUtil.redirigir('/logIn.jsf')}" ajax="false"
+                               rendered="#{!sesionCliente.estaAutentificado()}" value="Iniciar Sesión"/>
+            </p:panel>
+            <p:panel styleClass="panelBarraAutentificacion" rendered="#{sesionCliente.estaAutentificado()}">
+                Bienvenido(a): <p:commandLink value="#{sesionCliente.nombreCompleto}"
+                                              action="#{facesUtil.redirigir('/spring/perfil')}"/>
+                - <p:commandLink value="Cerrar sesión" action="#{facesUtil.redirigir('/logOut')}" ajax="false"/>
+            </p:panel>
+        </h:form>
     </div>
     <br/>
 </ui:composition>

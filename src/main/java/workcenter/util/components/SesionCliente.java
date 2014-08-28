@@ -66,6 +66,13 @@ public class SesionCliente implements Serializable {
         return false;
     }
 
+    public boolean esAdministrador(String modulo) {
+        if (tieneNivel((Integer) constantes.getAccesos().get("Administrador"), modulo)) {
+            return true;
+        }
+        return false;
+    }
+
     public boolean tienePermiso(String permiso) {
         if (!this.estaAutentificado()) {
             return false;
@@ -75,7 +82,11 @@ public class SesionCliente implements Serializable {
     }
 
     public boolean tieneNivel(Integer nivel, String permiso) {
-        Permiso p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
+        Permiso p = null;
+        if (!this.getUsuario().isExterno())
+            p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
+        else
+            p = usuarioDao.obtenerPermiso(this.getUsuario().getUsuario(), permiso, nivel);
         return p != null;
     }
 
