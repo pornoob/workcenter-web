@@ -6,7 +6,7 @@
 
     <ui:define name="contenido">
         <h2>Listado de equipos</h2>
-        <h:form id="perfil">
+        <h:form id="formEquipos">
             <p:dataTable value="#{mantenedorEquipos.equipos}" var="e" rows="15" filterEvent="enter"
                          filteredValue="#{mantenedorEquipos.equiposFiltrados}" widgetVar="tEquipos"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"

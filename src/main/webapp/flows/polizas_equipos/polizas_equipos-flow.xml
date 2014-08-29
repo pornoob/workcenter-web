@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow" start-state="listar"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+
+    <input name="equipo" type="workcenter.entidades.Equipo"/>
+
+    <on-start>
+        <evaluate expression="mantenedorPolizas.inicio(equipo)"/>
+    </on-start>
+
+    <view-state id="listar">
+        <transition on="flowEditar" to="editarPoliza"/>
+        <transition on="flowFin" to="finSubFlow"/>
+    </view-state>
+
+    <view-state id="editarPoliza">
+        <transition on="flowListar" to="listar"/>
+    </view-state>
+
+    <end-state id="finSubFlow"/>
+</flow>

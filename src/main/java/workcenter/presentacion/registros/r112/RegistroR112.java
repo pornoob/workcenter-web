@@ -71,6 +71,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
     public String inicio() {
         actividades = logicaRegistroActividades.obtenerActividadesSegunRegistro(constantes.getRegistroR112());
         formulario = logicaRegistroActividades.obtenerRegistro(constantes.getRegistroR112());
+        System.err.println("APP PATH "+this.getClass().getResource(""));
         return irListarR112();
     }
 

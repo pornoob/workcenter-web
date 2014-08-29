@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -33,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "SeguroEquipo.findAll", query = "SELECT s FROM SeguroEquipo s"),
     @NamedQuery(name = "SeguroEquipo.findById", query = "SELECT s FROM SeguroEquipo s WHERE s.id = :id"),
-    @NamedQuery(name = "SeguroEquipo.findByEquipo", query = "SELECT s FROM SeguroEquipo s WHERE s.equipo = :equipo"),
+    @NamedQuery(name = "SeguroEquipo.findByEquipo", query = "SELECT s FROM SeguroEquipo s WHERE s.equipo = :equipo order by s.vencimiento desc"),
     @NamedQuery(name = "SeguroEquipo.findByTenedor", query = "SELECT s FROM SeguroEquipo s WHERE s.tenedor = :tenedor"),
     @NamedQuery(name = "SeguroEquipo.findByContratante", query = "SELECT s FROM SeguroEquipo s WHERE s.contratante = :contratante"),
     @NamedQuery(name = "SeguroEquipo.findByAseguradora", query = "SELECT s FROM SeguroEquipo s WHERE s.aseguradora = :aseguradora"),
@@ -45,26 +35,20 @@ public class SeguroEquipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 7)
-    @Column(name = "equipo")
-    private String equipo;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "tenedor")
-    private int tenedor;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "contratante")
-    private int contratante;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "aseguradora")
-    private int aseguradora;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "equipo", referencedColumnName = "patente")
+    private Equipo equipo;
+    @ManyToOne
+    @JoinColumn(name = "tenedor", referencedColumnName = "id")
+    private Empresa tenedor;
+    @ManyToOne
+    @JoinColumn(name = "contratante", referencedColumnName = "id")
+    private Empresa contratante;
+    @ManyToOne
+    @JoinColumn(name = "aseguradora", referencedColumnName = "id")
+    private Empresa aseguradora;
     @Size(max = 70)
     @Column(name = "numero")
     private String numero;
@@ -87,15 +71,6 @@ public class SeguroEquipo implements Serializable {
         this.id = id;
     }
 
-    public SeguroEquipo(Integer id, String equipo, int tenedor, int contratante, int aseguradora, Date vencimiento) {
-        this.id = id;
-        this.equipo = equipo;
-        this.tenedor = tenedor;
-        this.contratante = contratante;
-        this.aseguradora = aseguradora;
-        this.vencimiento = vencimiento;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -104,35 +79,35 @@ public class SeguroEquipo implements Serializable {
         this.id = id;
     }
 
-    public String getEquipo() {
+    public Equipo getEquipo() {
         return equipo;
     }
 
-    public void setEquipo(String equipo) {
+    public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
     }
 
-    public int getTenedor() {
+    public Empresa getTenedor() {
         return tenedor;
     }
 
-    public void setTenedor(int tenedor) {
+    public void setTenedor(Empresa tenedor) {
         this.tenedor = tenedor;
     }
 
-    public int getContratante() {
+    public Empresa getContratante() {
         return contratante;
     }
 
-    public void setContratante(int contratante) {
+    public void setContratante(Empresa contratante) {
         this.contratante = contratante;
     }
 
-    public int getAseguradora() {
+    public Empresa getAseguradora() {
         return aseguradora;
     }
 
-    public void setAseguradora(int aseguradora) {
+    public void setAseguradora(Empresa aseguradora) {
         this.aseguradora = aseguradora;
     }
 

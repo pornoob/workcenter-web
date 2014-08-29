@@ -22,10 +22,10 @@
                          paginatorPosition="both"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          rows="#{constantes.cantidadFilasTablas}">
-                <p:column headerText="Folio" filterBy="id" filterMatchMode="startsWith" width="30">
+                <p:column headerText="Folio" filterBy="#{a.id}" filterMatchMode="startsWith" width="30">
                     <h:outputText value="#{a.id}"/>
                 </p:column>
-                <p:column headerText="Tipo" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
+                <p:column headerText="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
                           filterMatchMode="contains">
                     <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
                 </p:column>
@@ -35,7 +35,7 @@
                 <p:column headerText="Encargado" filterBy="#{a.encargado.nombreCompleto}" filterMatchMode="contains">
                     <h:outputText value="#{a.encargado.nombreCompleto}"/>
                 </p:column>
-                <p:column headerText="Fecha" filterBy="fecha" filterMatchMode="contains">
+                <p:column headerText="Fecha" filterBy="#{a.fecha}" filterMatchMode="contains">
                     <h:outputText value="#{a.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>

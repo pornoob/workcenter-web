@@ -20,11 +20,11 @@
         <h:outputScript library="js" name="webcenter.js" target="head"/>
         <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
         <p:idleMonitor timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>
-        <p:dialog widgetVar="sesionExpired" modal="true">
+        <p:dialog widgetVar="sesionExpired" modal="true" closable="false">
             <h:form>
                 Su sesión ha expirado
                 <p:outputPanel styleClass="actionPanel">
-                    <p:button value="Aceptar" outcome="/inicio.jsf"/>
+                    <p:commandButton ajax="false" value="Aceptar" onclick="WebCenter.Session.expired()"/>
                 </p:outputPanel>
             </h:form>
         </p:dialog>

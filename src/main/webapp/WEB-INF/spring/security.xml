@@ -26,7 +26,8 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/spring/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
         <security:intercept-url pattern="/spring/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
 
-        <security:logout invalidate-session="true" 
+        <security:logout invalidate-session="true"
+                         delete-cookies="jsessionid"
                          logout-success-url="/inicio.jsf"
                          logout-url="/logOut"/>
         

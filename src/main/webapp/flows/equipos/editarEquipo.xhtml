@@ -1,14 +1,77 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
         <h2>Editar Equipo</h2>
         <h:form id="formEquipo">
+            <p:panel header="Antecedentes Generales">
+                <h:panelGrid columns="6">
+                    <h:outputLabel value="Tipo Equipo"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.tipo}" converter="entityConverter">
+                        <f:selectItems value="#{mantenedorEquipos.tiposEquipos}" var="t" itemLabel="#{t.etiqueta}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="N° Interno"/>:
+                    <p:inputText value="#{mantenedorEquipos.equipo.numero}"/>
+
+                    <h:outputLabel value="Subtipo"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.subtipo}" converter="entityConverter">
+                        <f:selectItems value="#{mantenedorEquipos.subtiposEquipos}" var="st"
+                                       itemLabel="#{st.etiqueta}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Patente"/>:
+                    <p:inputText readonly="true" value="#{mantenedorEquipos.equipo.patente}"/>
+
+                    <h:outputLabel value="Marca"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.marca}" converter="entityConverter">
+                        <f:selectItems value="#{mantenedorEquipos.marcasEquipos}" var="m" itemLabel="#{m.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Número motor"/>:
+                    <p:inputText value="#{mantenedorEquipos.equipo.motor}"/>
+
+                    <h:outputLabel value="Modelo"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.modelo}" converter="entityConverter">
+                        <f:selectItems value="#{mantenedorEquipos.modelos}" var="m" itemLabel="#{m.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Número chasis"/>:
+                    <p:inputText value="#{mantenedorEquipos.equipo.chasis}"/>
+
+                    <h:outputLabel value="Año"/>:
+                    <p:inputText value="#{mantenedorEquipos.equipo.anio}"/>
+                    <h:outputLabel value="Color"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.color}">
+                        <f:selectItems value="#{mantenedorEquipos.colores}" var="c" itemLabel="#{c.label}"
+                                       itemValue="#{c.label}"/>
+                    </p:selectOneMenu>
+
+                    <h:outputLabel value="Bollo"/>:
+                    <p:selectBooleanCheckbox value="#{mantenedorEquipos.equipo.bollo}"/>
+                    <h:outputLabel value="Tenedor/Dueño"/>:
+                    <p:selectOneMenu value="#{mantenedorEquipos.equipo.duenio}" converter="entityConverter"
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItems value="#{mantenedorEquipos.empresas}" var="e" itemLabel="#{e.nombre}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Fotos Equipo">
+                <h:panelGrid columns="2">
+                    <p:selectOneMenu value="#{mantenedorEquipos.posicionFoto}">
+                        <f:selectItems value="#{mantenedorEquipos.posicionesFoto}" var="pf" itemLabel="#{pf.label}"
+                                       itemValue="#{pf.label}"/>
+                    </p:selectOneMenu><p:commandButton icon="ui-icon-plus" value="Agregar"/>
+                </h:panelGrid>
+                <p:galleria value="#{mantenedorEquipos.equipo.fotos}" var="f" autoPlay="true">
+                    <p:graphicImage value="#{mantenedorEquipos.generaStreamedContent(f)}"/>
+                </p:galleria>
+            </p:panel>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton value="Polizas de seguro"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar"/>
+                <p:commandButton icon="ui-icon-document" value="Documentos"/>
+                <p:commandButton icon="ui-icon-document" value="Polizas de seguro"
+                                 action="#{mantenedorEquipos.irPolizas}"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

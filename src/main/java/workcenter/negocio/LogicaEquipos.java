@@ -6,9 +6,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.EquipoDao;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.EquipoSancionado;
-import workcenter.entidades.TipoEquipo;
+import workcenter.entidades.*;
 
 import java.util.List;
 
@@ -44,5 +42,45 @@ public class LogicaEquipos {
     @Transactional(readOnly = true)
     public List<TipoEquipo> obtenerTipos() {
         return equipoDao.obtenerTipos();
+    }
+
+    @Transactional(readOnly = true)
+    public List<SubtipoEquipo> obtenerSubtipos() {
+        return equipoDao.obtenerSubtiposEquipos();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MarcaEquipo> obtenerMarcas() {
+        return equipoDao.obtenerMarcas();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ModeloEquipo> obtenerModelos() {
+        return equipoDao.obtenerModelos();
+    }
+
+    @Transactional(readOnly = true)
+    public List<FotoEquipo> obtenerFotos(Equipo e) {
+        return equipoDao.obtenerFotos(e);
+    }
+
+    @Transactional(readOnly = true)
+    public SeguroEquipo obtenerUltimoSeguro(Equipo equipo) {
+        return equipoDao.obtenerUltimoSeguro(equipo);
+    }
+
+    @Transactional(readOnly = true)
+    public List<SeguroEquipo> obtenerSeguros(Equipo equipo) {
+        return equipoDao.obtenerSeguros(equipo);
+    }
+
+    @Transactional(readOnly = true)
+    public Equipo obtenerEquipo(Equipo e) {
+        return equipoDao.obtenerEquipo(e);
+    }
+
+    @Transactional(readOnly = false)
+    public void guardarSeguro(SeguroEquipo seguro) {
+        equipoDao.guardarSeguro(seguro);
     }
 }

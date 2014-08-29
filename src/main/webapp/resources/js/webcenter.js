@@ -15,6 +15,12 @@ var WebCenter = {
         mouseclick: function(url) {
             location.href = url;
         }
+    },
+    Session: {
+        expired: function() {
+            PF('sesionExpired').hide();
+            location.href='/logIn.jsf';
+        }
     }
 }
 

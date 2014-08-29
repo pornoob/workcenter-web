@@ -4,13 +4,13 @@
                 xmlns:p="http://primefaces.org/ui">
     <h:form id="fEnlazadorFichero">
         <p:commandButton icon="ui-icon-folder-open" value="Enlazar archivo" action="#{enlazadorFichero.reset()}"
-                         update=":fEnlazadorFichero" />
+                         update=":fEnlazadorFichero"/>
         <p:outputPanel id="dEnlazarFichero" rendered="#{enlazadorFichero.puedeEnlazar and !enlazadorFichero.ocultar}">
             <p:tabView id="pTabs">
                 <p:tab id="pTab1" title="Archivo existente en el WorkCenter">
                     <h3>Enlazar ficheros existentes</h3>
                     <h:panelGrid columns="3">
-                        <h:outputLabel value="Código de documento" />:
+                        <h:outputLabel value="Código de documento"/>:
                         <h:inputText value="#{enlazadorFichero.filtroArchivo}"/>
                     </h:panelGrid>
                     <p:commandButton icon="ui-icon-search" value="Buscar" ajax="true"
@@ -33,7 +33,10 @@
                     <h3>Enlazar ficheros nuevos</h3>
                     <p:fileUpload rendered="true" immediate="true" auto="false" multiple="true" mode="advanced"
                                   fileUploadListener="#{padre.subir}" uploadLabel="Subir" cancelLabel="Cancelar"
-                                  allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png)$/i" label="Cargar nuevo archivo" />
+                                  allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png)$/i"
+                                  label="Cargar nuevo archivo"
+                                  fileLimit="#{enlazadorFichero.obtLimiteArchivos(cantFicheros)}"
+                                  fileLimitMessage="Solo se puede subir #{enlazadorFichero.obtLimiteArchivos(cantFicheros)} documento(s)"/>
                 </p:tab>
             </p:tabView>
         </p:outputPanel>

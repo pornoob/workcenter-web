@@ -90,4 +90,9 @@ public class EnlazadorFichero implements Serializable {
     public void setOcultar(boolean ocultar) {
         this.ocultar = ocultar;
     }
+
+    public Integer obtLimiteArchivos(String limite) {
+        if (limite == null || "".equals(limite)) return 5;
+        else return Integer.valueOf(limite);
+    }
 }

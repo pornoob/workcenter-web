@@ -2,13 +2,12 @@ package workcenter.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.EquipoSancionado;
-import workcenter.entidades.TipoEquipo;
+import workcenter.entidades.*;
 import workcenter.util.components.Constantes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -46,5 +45,45 @@ public class EquipoDao {
 
     public List<TipoEquipo> obtenerTipos() {
         return em.createNamedQuery("TipoEquipo.findAll").getResultList();
+    }
+
+    public List<SubtipoEquipo> obtenerSubtiposEquipos() {
+        return em.createNamedQuery("SubtipoEquipo.findAll").getResultList();
+    }
+
+    public List<MarcaEquipo> obtenerMarcas() {
+        return em.createNamedQuery("MarcaEquipo.findAll").getResultList();
+    }
+
+    public List<ModeloEquipo> obtenerModelos() {
+        return em.createNamedQuery("ModeloEquipo.findAll").getResultList();
+    }
+
+    public List<FotoEquipo> obtenerFotos(Equipo e) {
+        return em.createNamedQuery("FotoEquipo.findByEquipo").setParameter("equipo", e).getResultList();
+    }
+
+    public SeguroEquipo obtenerUltimoSeguro(Equipo equipo) {
+        try {
+            String sql = "select se.* from segurosequipos se where se.equipo = :equipo order by se.id desc limit 1";
+            Query q = em.createNativeQuery(sql, SeguroEquipo.class);
+            q.setParameter("equipo", equipo.getPatente());
+            return (SeguroEquipo) q.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public List<SeguroEquipo> obtenerSeguros(Equipo equipo) {
+        return em.createNamedQuery("SeguroEquipo.findByEquipo").setParameter("equipo", equipo).getResultList();
+    }
+
+    public Equipo obtenerEquipo(Equipo e) {
+        return em.find(Equipo.class, e.getPatente());
+    }
+
+    public void guardarSeguro(SeguroEquipo seguro) {
+        if (seguro.getId() == null) em.persist(seguro);
+        else em.merge(seguro);
     }
 }

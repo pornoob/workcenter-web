@@ -13,7 +13,7 @@
             <p:commandButton action="#{mantenedorRemuneraciones.criterioEmpleador()}" update="filtros" value="Según Empleador"/>
             <p:commandButton action="#{mantenedorRemuneraciones.criterioConductor()}" update="filtros" value="Según Conductor"/>
 
-            <p:panel id="filtros" styleClass="sinBordes">
+            <p:outputPanel id="filtros">
                 <ui:fragment rendered="#{constantes.filtroEmpleador eq mantenedorRemuneraciones.criterio}">
                     <h:panelGrid columns="3">
                         <h:outputLabel value="Empleador"/>:
@@ -52,8 +52,8 @@
                     </h:panelGrid>
                 </ui:fragment>
                 <p:commandButton value="Filtrar" ajax="true" update="resultados" actionListener="#{mantenedorRemuneraciones.filtrarRemuneraciones()}"/>
-            </p:panel>
-            <p:panel id="resultados" styleClass="sinBordes">
+            </p:outputPanel>
+            <p:outputPanel id="resultados" styleClass="sinBordes">
                 <p:scrollPanel rendered="#{mantenedorRemuneraciones.criterio ne null}">
                     <h:commandLink>
                         <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
@@ -378,7 +378,7 @@
                         </p:column>
                     </p:dataTable>
                 </p:scrollPanel>
-            </p:panel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

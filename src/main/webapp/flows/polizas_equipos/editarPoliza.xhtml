@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>
+            <h:outputText rendered="#{!mantenedorPolizas.esEdicion}" value="Crear Poliza"/>
+            <h:outputText rendered="#{mantenedorPolizas.esEdicion}" value="Editar Poliza"/>
+        </h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <p:panel header="Documentos de Respaldo Poliza #{mantenedorPolizas.seguroEquipo.equipo.patente}">
+            <ui:include src="/components/cargadorArchivos.xhtml">
+                <ui:param name="padre" value="#{mantenedorPolizas}"/>
+                <ui:param name="cantFicheros" value="1"/>
+            </ui:include>
+        </p:panel>
+        <h:form id="formPolizas">
+            <p:panel header="Datos Poliza #{mantenedorPolizas.seguroEquipo.equipo.patente}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Dueño o Tenedor"/>:
+                    <h:outputText value="#{mantenedorPolizas.seguroEquipo.equipo.duenio.nombre}"/>
+                    <h:outputLabel value="Propietario"/>:
+                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.tenedor}" converter="entityConverter"
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Contratante del Seguro"/>:
+                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.contratante}" converter="entityConverter"
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Compañia de seguros"/>:
+                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.aseguradora}" converter="entityConverter"
+                                     filter="true" filterMatchMode="contains">
+                        <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="N° Poliza"/>:
+                    <p:inputText value="#{mantenedorPolizas.seguroEquipo.numero}"/>
+                    <h:outputLabel value="Deducible"/>:
+                    <p:inputText value="#{mantenedorPolizas.seguroEquipo.cobertura}"/>
+                    <h:outputLabel value="Fecha de vencimiento"/>:
+                    <p:calendar pattern="dd-mm-yyyy" value="#{mantenedorPolizas.seguroEquipo.vencimiento}"/>
+                </h:panelGrid>
+            </p:panel>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Guardar" icon="ui-icon-disk" action="#{mantenedorPolizas.guardar()}"/>
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s"
+                                 action="#{mantenedorPolizas.irListar()}"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -7,7 +7,7 @@
     <ui:define name="contenido">
         <h2>Ficha de Personal</h2>
         <h:form id="frmPersonal">
-            <h3>Antecedentes Personales</h3>
+            <p:panel header="Antecedentes Personales">
             <h:panelGrid columns="2">
                 <h:panelGroup>
                     <h:panelGrid columns="6">
@@ -61,9 +61,9 @@
                                      value="Cambiar Foto"/>
                 </h:panelGroup>
             </h:panelGrid>
+            </p:panel>
 
-            <h3>Documentos de Carpeta</h3>
-            <p:panel id="pDocumentos" styleClass="sinBordes">
+            <p:panel header="Documentos de Carpeta" id="pDocumentos" styleClass="sinBordes">
                 <p:commandButton icon="ui-icon-plus" value="Agregar documento"/>
                 <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.documentosActualizados}" var="doc">
                     <p:column headerText="Nombre">
@@ -109,5 +109,6 @@
                 </p:panel>
             </p:panel>
         </h:form>
+
     </ui:define>
 </ui:composition>

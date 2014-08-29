@@ -7,6 +7,7 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
+import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -47,8 +48,9 @@ public class Equipo implements Serializable {
     @ManyToOne
     @JoinColumn(name = "tipo", referencedColumnName = "id")
     private TipoEquipo tipo;
-    @Column(name = "subtipo")
-    private Integer subtipo;
+    @ManyToOne
+    @JoinColumn(name = "subtipo", referencedColumnName = "id")
+    private SubtipoEquipo subtipo;
     @ManyToOne
     @JoinColumn(name = "marca", referencedColumnName = "id")
     private MarcaEquipo marca;
@@ -74,6 +76,8 @@ public class Equipo implements Serializable {
     private Integer kilometraje;
     @Column(name = "bollo")
     private Boolean bollo;
+    @OneToMany(mappedBy = "equipo", fetch = FetchType.LAZY)
+    private List<FotoEquipo> fotos;
 
     public Equipo() {
     }
@@ -106,11 +110,11 @@ public class Equipo implements Serializable {
         this.tipo = tipo;
     }
 
-    public Integer getSubtipo() {
+    public SubtipoEquipo getSubtipo() {
         return subtipo;
     }
 
-    public void setSubtipo(Integer subtipo) {
+    public void setSubtipo(SubtipoEquipo subtipo) {
         this.subtipo = subtipo;
     }
 
@@ -167,7 +171,7 @@ public class Equipo implements Serializable {
     }
 
     public void setColor(String color) {
-        this.color = color;
+        this.color = color != null ? color.toLowerCase() : color;
     }
 
     public Integer getKilometraje() {
@@ -195,14 +199,12 @@ public class Equipo implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Equipo)) {
             return false;
         }
         Equipo other = (Equipo) object;
-        if ((this.patente == null && other.patente != null) || (this.patente != null && !this.patente.equals(other.patente))) {
-            return false;
-        }
+        if (this.getPatente() == null || other.getPatente() == null) return false;
+        else if (!this.getPatente().equals(other.getPatente())) return false;
         return true;
     }
 
@@ -210,5 +212,12 @@ public class Equipo implements Serializable {
     public String toString() {
         return "workcenter.entities.Equipo[ patente=" + patente + " ]";
     }
-    
+
+    public List<FotoEquipo> getFotos() {
+        return fotos;
+    }
+
+    public void setFotos(List<FotoEquipo> fotos) {
+        this.fotos = fotos;
+    }
 }

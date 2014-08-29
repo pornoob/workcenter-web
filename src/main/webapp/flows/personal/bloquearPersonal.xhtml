@@ -13,10 +13,10 @@
                 <h:outputLabel value="Motivo"/>:
                 <p:inputTextarea  style="width: 320px" value="#{mantenedorPersonal.sancion.motivo}"/>
             </h:panelGrid>
-            <p:panel class="actionPanel">
+            <p:outputPanel class="actionPanel">
                 <p:commandButton action="#{mantenedorPersonal.sancionar()}" value="Proceder"/>
                 <p:commandButton action="#{mantenedorPersonal.volverDesdeBloqueo()}" value="Volver"/>
-            </p:panel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>
