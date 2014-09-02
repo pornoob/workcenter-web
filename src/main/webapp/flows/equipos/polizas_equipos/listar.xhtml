@@ -16,13 +16,13 @@
                     #{s.equipo.duenio.nombre}
                 </p:column>
                 <p:column headerText="Propietario">
-                    #{s.tenedor}
+                    #{s.tenedor.nombre}
                 </p:column>
                 <p:column headerText="Contratante">
-                    #{s.contratante}
+                    #{s.contratante.nombre}
                 </p:column>
                 <p:column headerText="Compañia">
-                    #{s.aseguradora}
+                    #{s.aseguradora.nombre}
                 </p:column>
                 <p:column headerText="N° Poliza">
                     #{s.numero}
@@ -35,7 +35,13 @@
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Acciones"></p:column>
+                <p:column headerText="Acciones">
+                    <p:outputPanel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false">
+                            <p:fileDownload value="#{mantenedorPolizas.generaDescargable(s)}"/>
+                        </p:commandLink>
+                    </p:outputPanel>
+                </p:column>
             </p:dataTable>
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s"

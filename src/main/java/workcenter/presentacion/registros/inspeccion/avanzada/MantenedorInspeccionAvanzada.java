@@ -257,7 +257,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     public StreamedContent obtenerFormulario(MiaInspeccionAvanzada i) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(i);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + docs.get(0).getId()));
-        d.setNombre(docs.get(0).getNombreOriginal());
+        d.setNombre(docs.get(docs.size()-1).getNombreOriginal());
         return d.getStreamedContent();
     }
 

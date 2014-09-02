@@ -1,6 +1,7 @@
 package workcenter.presentacion.equipos;
 
 import org.primefaces.event.FileUploadEvent;
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,10 +14,12 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaEquipos;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
+import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FacesUtil;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,6 +46,9 @@ public class MantenedorPolizas implements Serializable, WorkcenterFileListener {
 
     @Autowired
     private SesionCliente sesionCliente;
+
+    @Autowired
+    private Constantes constantes;
 
     private List<SeguroEquipo> segurosEquipo;
     private List<Empresa> empresas;
@@ -81,7 +87,17 @@ public class MantenedorPolizas implements Serializable, WorkcenterFileListener {
         for (Documento d : comprobante.get(sesionCliente.getUsuario().getRut() + "|poliza")) {
             logicaDocumentos.asociarDocumento(d, seguroEquipo);
         }
+        if (!esEdicion)
+            segurosEquipo.add(seguroEquipo);
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha guardado la poliza");
+    }
+
+    public StreamedContent generaDescargable(SeguroEquipo s) {
+        List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(s);
+        File f = new File(constantes.getPathArchivos() + docs.get(docs.size() - 1).getId());
+        Descargable d = new Descargable(f);
+        d.setNombre(docs.get(docs.size() - 1).getNombreOriginal());
+        return d.getStreamedContent();
     }
 
     public Equipo getEquipo() {
