@@ -9,8 +9,10 @@
 
         <h2>Listado de Formularios</h2>
         <h:form id="formFormularios">
-            <p:commandButton icon="ui-icon-document" value="R-112" action="#{mantenedorRegistros.irFormularioR112()}"/>
-            <p:commandButton icon="ui-icon-document" value="Inspección Avanzada" action="#{mantenedorRegistros.irInspeccionAvanzada()}"/>
+            <p:commandButton ajax="false" icon="ui-icon-document" value="R-112"
+                             action="#{mantenedorRegistros.irFormularioR112()}"/>
+            <p:commandButton ajax="false" icon="ui-icon-document" value="Inspección Avanzada"
+                             action="#{mantenedorRegistros.irInspeccionAvanzada()}"/>
         </h:form>
     </ui:define>
 </ui:composition>

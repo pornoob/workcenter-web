@@ -28,7 +28,7 @@
                 <p:commandButton icon="ui-icon-refresh" value="Cargar panel de gestión"
                                  action="#{mantenedorAlarmasGps.filtrar()}" update=":frmAlarmas:pAlarmas"/>
             </h:panelGrid>
-            <p:panel id="pAlarmas" style="border:0">
+            <p:outputPanel id="pAlarmas" style="border:0">
                 <h3>
                     <h:outputText rendered="#{mantenedorAlarmasGps.alarmas ne null}"
                                   value="Indicador de cumplimiento: #{mantenedorAlarmasGps.indicadorCumplimiento}"/>
@@ -38,7 +38,7 @@
                              rendered="#{mantenedorAlarmasGps.alarmas ne null}" selectionMode="single"
                              rowKey="#{conductor}"
                              value="#{mantenedorAlarmasGps.conductores}" var="conductor"
-                             scrollable="true">
+                             scrollable="true" frozenColumns="1">
                     <p:column headerText="Conductor" width="300">
                         <h:outputText rendered="false" value="#{conductor}"/>
                         <h:commandLink action="#{mantenedorAlarmasGps.obtenerDetalleAlarmas(conductor, 'conductor')}" target="_blank">
@@ -68,7 +68,7 @@
                         </p:column>
                     </c:forEach>
                 </p:dataTable>
-            </p:panel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

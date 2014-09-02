@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import workcenter.dao.DocumentoDao;
 import workcenter.dao.EquipoDao;
 import workcenter.entidades.*;
 
@@ -82,5 +83,10 @@ public class LogicaEquipos {
     @Transactional(readOnly = false)
     public void guardarSeguro(SeguroEquipo seguro) {
         equipoDao.guardarSeguro(seguro);
+    }
+
+    @Transactional(readOnly = true)
+    public List<DocumentoEquipo> obtenerDocumentosActualizados(Equipo e) {
+        return equipoDao.obtenerDocumentosActualizados(e);
     }
 }

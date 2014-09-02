@@ -13,9 +13,15 @@
 
     <view-state id="editarEquipo">
         <transition on="flowPoliza" to="polizas"/>
+        <transition on="flowDocs" to="documentos"/>
     </view-state>
 
-    <subflow-state id="polizas" subflow="polizas_equipos">
+    <subflow-state id="polizas" subflow="equipos/polizas_equipos">
+        <input name="equipo" value="mantenedorEquipos.equipo" type="workcenter.entidades.Equipo"/>
+        <transition on="finSubFlow" to="editarEquipo"/>
+    </subflow-state>
+
+    <subflow-state id="documentos" subflow="equipos/documentos_equipos">
         <input name="equipo" value="mantenedorEquipos.equipo" type="workcenter.entidades.Equipo"/>
         <transition on="finSubFlow" to="editarEquipo"/>
     </subflow-state>

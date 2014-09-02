@@ -22,34 +22,43 @@
                     <h:outputLabel value="Dueño o Tenedor"/>:
                     <h:outputText value="#{mantenedorPolizas.seguroEquipo.equipo.duenio.nombre}"/>
                     <h:outputLabel value="Propietario"/>:
-                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.tenedor}" converter="entityConverter"
+                    <p:selectOneMenu id="sPropietario" required="true" requiredMessage="Debes indicar el propietario"
+                                     value="#{mantenedorPolizas.seguroEquipo.tenedor}" converter="entityConverter"
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="Contratante del Seguro"/>:
-                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.contratante}" converter="entityConverter"
+                    <p:selectOneMenu id="sContratante" required="true"
+                                     requiredMessage="Debes indicar el contratante del seguro"
+                                     value="#{mantenedorPolizas.seguroEquipo.contratante}" converter="entityConverter"
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="Compañia de seguros"/>:
-                    <p:selectOneMenu value="#{mantenedorPolizas.seguroEquipo.aseguradora}" converter="entityConverter"
+                    <p:selectOneMenu id="sAseguradora" required="true"
+                                     requiredMessage="Debes indicar la compañia de seguros"
+                                     value="#{mantenedorPolizas.seguroEquipo.aseguradora}" converter="entityConverter"
                                      filter="true" filterMatchMode="contains">
                         <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorPolizas.empresas}" var="e" itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="N° Poliza"/>:
-                    <p:inputText value="#{mantenedorPolizas.seguroEquipo.numero}"/>
+                    <p:inputText id="iPoliza" required="true" requiredMessage="Debes indicar el número de poliza"
+                                 value="#{mantenedorPolizas.seguroEquipo.numero}"/>
                     <h:outputLabel value="Deducible"/>:
-                    <p:inputText value="#{mantenedorPolizas.seguroEquipo.cobertura}"/>
+                    <p:inputText id="iDeducible" required="true" requiredMessage="Debes indicar el valor deducible"
+                                 value="#{mantenedorPolizas.seguroEquipo.cobertura}"/>
                     <h:outputLabel value="Fecha de vencimiento"/>:
-                    <p:calendar pattern="dd-mm-yyyy" value="#{mantenedorPolizas.seguroEquipo.vencimiento}"/>
+                    <p:calendar id="cVencimiento" required="true"
+                                requiredMessage="Debes indicar el vencimiento de la poliza" pattern="dd-mm-yyyy"
+                                value="#{mantenedorPolizas.seguroEquipo.vencimiento}"/>
                 </h:panelGrid>
             </p:panel>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton value="Guardar" icon="ui-icon-disk" action="#{mantenedorPolizas.guardar()}"/>
-                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s"
+                <p:commandButton value="Guardar" ajax="false" icon="ui-icon-disk" action="#{mantenedorPolizas.guardar()}"/>
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s" ajax="false"
                                  action="#{mantenedorPolizas.irListar()}"/>
             </p:outputPanel>
         </h:form>

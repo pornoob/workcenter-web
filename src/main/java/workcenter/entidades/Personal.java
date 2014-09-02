@@ -327,27 +327,6 @@ public class Personal implements Serializable {
     public void setSancion(Sancionado sancion) {
         this.sancion = sancion;
     }
-    
-    public List<DocumentoPersonal> getDocumentosActualizados() {
-        List<DocumentoPersonal> docs = new ArrayList<DocumentoPersonal>();
-        List<TipoDocPersonal> tip = new ArrayList<TipoDocPersonal>();
-        for (int i = 0; documentos != null && i < documentos.size(); i++) {
-            DocumentoPersonal doc = documentos.get(i);
-            if (tip.contains(doc.getTipo())) {
-                for (int j = 0; j < docs.size(); j++) {
-                    if (doc.getTipo() == docs.get(j).getTipo()) {
-                        if ((doc.getVencimiento() == null || docs.get(j).getVencimiento() == null) || doc.getVencimiento().after(docs.get(j).getVencimiento())) {
-                            docs.set(j, doc);
-                        }
-                    }
-                }
-            } else {
-                docs.add(doc);
-                tip.add(doc.getTipo());
-            }
-        }
-        return docs;
-    }
 
     public List<DocumentoPersonal> getDocumentos() {
         return documentos;

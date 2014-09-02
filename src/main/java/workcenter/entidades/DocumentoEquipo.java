@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -42,7 +32,6 @@ public class DocumentoEquipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -53,8 +42,9 @@ public class DocumentoEquipo implements Serializable {
     @Size(max = 25)
     @Column(name = "numero")
     private String numero;
-    @Column(name = "tipo")
-    private Integer tipo;
+    @ManyToOne
+    @JoinColumn(name = "tipo", referencedColumnName = "id")
+    private TipoDocumentoEquipo tipo;
     @Column(name = "vencimiento")
     @Temporal(TemporalType.DATE)
     private Date vencimiento;
@@ -98,11 +88,11 @@ public class DocumentoEquipo implements Serializable {
         this.numero = numero;
     }
 
-    public Integer getTipo() {
+    public TipoDocumentoEquipo getTipo() {
         return tipo;
     }
 
-    public void setTipo(Integer tipo) {
+    public void setTipo(TipoDocumentoEquipo tipo) {
         this.tipo = tipo;
     }
 

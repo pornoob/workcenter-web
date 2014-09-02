@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>Polizas #{mantenedorPolizas.equipo.patente}</h2>
+        <h:form id="formPolizas">
+            <p:commandButton value="Agregar" icon="ui-icon-plus" action="#{mantenedorPolizas.irCrearPoliza()}"/>
+            <p:dataTable value="#{mantenedorPolizas.segurosEquipo}" var="s" paginator="true" paginatorPosition="both"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         emptyMessage="No se han encontrado polizas">
+                <p:column headerText="Dueño o tenedor">
+                    #{s.equipo.duenio.nombre}
+                </p:column>
+                <p:column headerText="Propietario">
+                    #{s.tenedor}
+                </p:column>
+                <p:column headerText="Contratante">
+                    #{s.contratante}
+                </p:column>
+                <p:column headerText="Compañia">
+                    #{s.aseguradora}
+                </p:column>
+                <p:column headerText="N° Poliza">
+                    #{s.numero}
+                </p:column>
+                <p:column headerText="Deducible">
+                    #{s.cobertura}
+                </p:column>
+                <p:column headerText="Fecha Vencimiento">
+                    <h:outputText value="#{s.vencimiento}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Acciones"></p:column>
+            </p:dataTable>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s"
+                                 action="#{mantenedorPolizas.finalizarFlow()}" ajax="false"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

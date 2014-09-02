@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Documentos #{mantenedorDocsEquipos.equipo.patente}</h2>
+        <h:form id="formDocs">
+            <p:dataTable value="#{mantenedorDocsEquipos.documentos}" var="d"
+                         emptyMessage="No se han encontrado documentos" paginator="true" paginatorPosition="both"
+                         paginatorTemplate="#{constantes.paginadorTemplate}" rows="#{constantes.cantidadFilasTablas}"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+                <p:column headerText="Nombre Doc.">
+                    #{d.tipo.etiqueta}
+                </p:column>
+                <p:column headerText="Fecha de vencimiento">
+                    <h:outputText value="#{d.vencimiento}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Código Doc.">
+                    #{d.numero}
+                </p:column>
+                <p:column headerText="Código Interno">
+                    #{d.id}
+                </p:column>
+                <p:column headerText="Acciones">
+                    <p:outputPanel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s">
+                            <p:fileDownload value="#{mantenedorDocsEquipos.generaDescargable(d)}"/>
+                        </p:commandLink>
+                    </p:outputPanel>
+                </p:column>
+            </p:dataTable>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s" ajax="false"
+                                 action="#{mantenedorDocsEquipos.irEquipo()}"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -67,11 +67,12 @@
                 </p:galleria>
             </p:panel>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton icon="ui-icon-disk" value="Guardar"/>
-                <p:commandButton icon="ui-icon-document" value="Documentos"/>
-                <p:commandButton icon="ui-icon-document" value="Polizas de seguro"
-                                 action="#{mantenedorEquipos.irPolizas}"/>
-                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"/>
+                <p:commandButton ajax="false" icon="ui-icon-disk" value="Guardar"/>
+                <p:commandButton ajax="false" icon="ui-icon-document" value="Documentos"
+                                 action="#{mantenedorEquipos.irDocs()}"/>
+                <p:commandButton ajax="false" icon="ui-icon-document" value="Polizas de seguro"
+                                 action="#{mantenedorEquipos.irPolizas()}"/>
+                <p:commandButton ajax="false" icon="ui-icon-arrowreturnthick-1-w" value="Volver"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

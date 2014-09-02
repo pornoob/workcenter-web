@@ -1,29 +1,10 @@
 package workcenter.presentacion.personal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Cargo;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.DocumentoPersonal;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Prevision;
-import workcenter.entidades.PrevisionContrato;
-import workcenter.entidades.SancionRetiradaPersonal;
-import workcenter.entidades.Sancionado;
-import workcenter.entidades.TipoUnidad;
-import workcenter.entidades.ValorPrevisionPersonal;
-import workcenter.entidades.Variable;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaPersonal;
 import workcenter.negocio.LogicaPrevisiones;
@@ -33,6 +14,12 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FacesUtil;
 import workcenter.util.pojo.FilterOption;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -234,6 +221,10 @@ public class MantenedorPersonal implements Serializable {
             }
         }
         return "flowEditarContrato";
+    }
+
+    public List<DocumentoPersonal> obtenerDocumentosActualizados() {
+        return logicaPersonal.obtenerDocumentosActualizados(personalSeleccionado);
     }
 
     public void cambiaTipoUnidad() {

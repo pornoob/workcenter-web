@@ -72,6 +72,10 @@ public class MantenedorEquipos implements Serializable {
         return "flowPoliza";
     }
 
+    public String irDocs() {
+        return "flowDocs";
+    }
+
     public StreamedContent generaStreamedContent(FotoEquipo fe) {
         File archivo = new File(constantes.getPathArchivos() + fe.getFoto());
         Descargable d = new Descargable(archivo);

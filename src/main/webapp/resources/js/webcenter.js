@@ -18,7 +18,6 @@ var WebCenter = {
     },
     Session: {
         expired: function() {
-            PF('sesionExpired').hide();
             location.href='/logIn.jsf';
         }
     }

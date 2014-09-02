@@ -15,11 +15,11 @@
         <transition on="flowListarInspeccionesAvanzadas" to="inspeccionAvanzada"/>
     </view-state>
 
-    <subflow-state id="inspeccionAvanzada" subflow="inspeccion_avanzada">
+    <subflow-state id="inspeccionAvanzada" subflow="registros/inspeccion_avanzada">
         <transition on="finSubflow" to="listarRegistros"/>
     </subflow-state>
     
-    <subflow-state id="R112" subflow="R112">
+    <subflow-state id="R112" subflow="registros/R112">
         <transition on="finSubflow" to="listarRegistros"/>
     </subflow-state>
 </flow>

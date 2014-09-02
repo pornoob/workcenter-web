@@ -121,4 +121,9 @@ public class LogicaPersonal {
     public Sancionado obtenerSancion(Personal p) {
         return personalDao.obtenerSancion(p);
     }
+
+    @Transactional(readOnly = true)
+    public List<DocumentoPersonal> obtenerDocumentosActualizados(Personal p) {
+        return personalDao.obtenerDocumentosActualizados(p);
+    }
 }

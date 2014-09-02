@@ -65,7 +65,7 @@
 
             <p:panel header="Documentos de Carpeta" id="pDocumentos" styleClass="sinBordes">
                 <p:commandButton icon="ui-icon-plus" value="Agregar documento"/>
-                <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.documentosActualizados}" var="doc">
+                <p:dataTable value="#{mantenedorPersonal.obtenerDocumentosActualizados()}" var="doc">
                     <p:column headerText="Nombre">
                         #{doc.tipo.etiqueta}
                     </p:column>

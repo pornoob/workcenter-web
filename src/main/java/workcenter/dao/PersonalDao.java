@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.DocumentoPersonal;
@@ -128,5 +129,18 @@ public class PersonalDao {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public List<DocumentoPersonal> obtenerDocumentosActualizados(Personal p) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select max(dp.id) as id, dp.vencimiento, dp.numero, dp.personal, dp.tipo, dp.archivo from tiposdocpersonal tdp ");
+        sql.append("inner join documentospersonal dp on (tdp.id=dp.tipo) ");
+        sql.append("inner join (select max(vencimiento) as vencimiento, tipo from documentospersonal where personal=:personal group by tipo) dp2 ");
+        sql.append("on (dp2.tipo=dp.tipo and (dp2.vencimiento=dp.vencimiento or dp2.vencimiento is null)) ");
+        sql.append("where personal=:personal ");
+        sql.append("group by dp.tipo ");
+        return em.createNativeQuery(sql.toString(), DocumentoPersonal.class)
+                .setParameter("personal", p.getRut())
+                .getResultList();
     }
 }

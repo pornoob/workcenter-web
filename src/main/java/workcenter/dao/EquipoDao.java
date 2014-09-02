@@ -86,4 +86,16 @@ public class EquipoDao {
         if (seguro.getId() == null) em.persist(seguro);
         else em.merge(seguro);
     }
+
+    public List<DocumentoEquipo> obtenerDocumentosActualizados(Equipo e) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select d.* from tiposdocumentosequipos tde ");
+        sql.append("inner join documentosequipo d on (tde.id=d.tipo) ");
+        sql.append("inner join (select max(vencimiento) as fecha, tipo from documentosequipo where patente=:patente group by tipo) d2 ");
+        sql.append("on (d.tipo=d2.tipo and d.vencimiento=d2.fecha) ");
+        sql.append("where d.patente=:patente ");
+        return em.createNativeQuery(sql.toString(), DocumentoEquipo.class)
+                .setParameter("patente", e.getPatente())
+                .getResultList();
+    }
 }

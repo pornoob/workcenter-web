@@ -15,6 +15,7 @@ import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
+import workcenter.util.pojo.FacesUtil;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -72,7 +73,15 @@ public class MantenedorPolizas implements Serializable, WorkcenterFileListener {
     }
 
     public void guardar() {
+        if (comprobante == null || comprobante.get(sesionCliente.getUsuario().getRut() + "|poliza") == null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "Debes adjuntar la poliza involucrada");
+            return;
+        }
         logicaEquipos.guardarSeguro(seguroEquipo);
+        for (Documento d : comprobante.get(sesionCliente.getUsuario().getRut() + "|poliza")) {
+            logicaDocumentos.asociarDocumento(d, seguroEquipo);
+        }
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha guardado la poliza");
     }
 
     public Equipo getEquipo() {
