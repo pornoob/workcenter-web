@@ -25,6 +25,11 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
         <security:intercept-url pattern="/spring/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
         <security:intercept-url pattern="/spring/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+        <security:intercept-url pattern="/spring/inspeccion_avanzada" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+
+        <security:intercept-url pattern="/spring/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/spring/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/spring/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
 
         <security:logout invalidate-session="true"
                          delete-cookies="jsessionid"

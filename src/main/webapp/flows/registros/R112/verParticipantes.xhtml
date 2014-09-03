@@ -7,7 +7,7 @@
     <ui:define name="contenido">
 
         <h2>Participantes Actividad [R-112]</h2>
-        <h3>#{registroR112.actividad.nombre}</h3>
+        <h3>#{registroR112.actividad.tipoActividad.nombre}</h3>
         <h:form id="formR112">
             <p:dataTable value="#{registroR112.actividad.participantes}" var="p">
                 <p:column headerText="RUT">
@@ -20,9 +20,9 @@
                     #{p.nota}
                 </p:column>
             </p:dataTable>
-            <p:panel styleClass="actionPanel">
+            <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{registroR112.irListarR112}"/>
-            </p:panel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

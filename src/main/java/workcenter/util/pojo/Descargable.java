@@ -38,6 +38,7 @@ public class Descargable implements Serializable {
         try {
             InputStream is = new BufferedInputStream(new FileInputStream(archivo));
             DefaultStreamedContent dsc = new DefaultStreamedContent(is);
+            System.err.println("INTENTO: "+dsc);
             dsc.setName(getNombre());
             return dsc;
         } catch (FileNotFoundException fnfe) {

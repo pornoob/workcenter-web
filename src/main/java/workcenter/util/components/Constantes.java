@@ -54,7 +54,7 @@ public class Constantes implements Serializable {
     private int cantidadFilasTablas = 15;
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
-    private String pathArchivos = System.getProperty("catalina.base") + "/static/workcenter/";
+    private String pathArchivos = System.getProperty("catalina.home") + "/static/workcenter/";
     
     // cliente de correo
     private String usuarioCorreo = "colivares@transportesventanas.cl";

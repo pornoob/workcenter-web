@@ -113,6 +113,7 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public Integer getTotalBase() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
             total += r.getSueldoBase();
         }

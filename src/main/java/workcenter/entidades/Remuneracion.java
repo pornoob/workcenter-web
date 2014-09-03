@@ -106,7 +106,6 @@ public class Remuneracion implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "idMaestro")
     private Long idMaestro;
     @Column(name = "sueldoBase")
