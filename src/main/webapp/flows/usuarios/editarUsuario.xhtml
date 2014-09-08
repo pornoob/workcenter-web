@@ -32,10 +32,13 @@
                          value="#{mantenedorUsuarios.permisosUsuario}"
                          filterEvent="enter"
                          var="permiso">
-                <p:column headerText="Módulo" filterBy="#{permiso.proyecto.titulo}" filterMatchMode="contains">
+                <p:column headerText="ID Permiso">
+                    #{permiso.id}
+                </p:column>
+                <p:column headerText="Módulo" filterBy="#{permiso.proyecto.titulo}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{permiso.proyecto.titulo}"/>
                 </p:column>
-                <p:column headerText="Nivel" filterBy="#{permiso.nivel}" filterMatchMode="startsWith">
+                <p:column headerText="Nivel" filterBy="#{permiso.nivel}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{constantes.accesos.get(permiso.nivel)}"/>
                 </p:column>
                 <p:column>

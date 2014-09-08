@@ -44,6 +44,9 @@
                 <entry key="view">
                     <bean class="workcenter.util.scopes.ViewScope"/>
                 </entry>
+                <entry key="application">
+                    <bean class="workcenter.util.scopes.ApplicationScope"/>
+                </entry>
             </map>
         </property>
     </bean>

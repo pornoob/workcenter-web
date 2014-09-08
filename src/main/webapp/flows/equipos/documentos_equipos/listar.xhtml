@@ -9,9 +9,11 @@
 
         <h2>Documentos #{mantenedorDocsEquipos.equipo.patente}</h2>
         <h:form id="formDocs">
+            <p:commandButton value="Agregar" icon="ui-icon-plus" action="#{mantenedorDocsEquipos.irAgregar()}" />
             <p:dataTable value="#{mantenedorDocsEquipos.documentos}" var="d"
                          emptyMessage="No se han encontrado documentos" paginator="true" paginatorPosition="both"
-                         paginatorTemplate="#{constantes.paginadorTemplate}" rows="#{constantes.cantidadFilasTablas}"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
                 <p:column headerText="Nombre Doc.">
                     #{d.tipo.etiqueta}
@@ -29,9 +31,19 @@
                 </p:column>
                 <p:column headerText="Acciones">
                     <p:outputPanel styleClass="opcionesFila">
-                        <p:commandLink styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false">
+                        <p:commandLink title="Descargar"
+                                       rendered="#{sesionCliente.esEditor(constantes.moduloEquipos) || sesionCliente.tieneAccesoEspecial(constantes.moduloEquipos)}"
+                                       styleClass="ui-icon ui-icon-arrowthickstop-1-s" ajax="false">
                             <p:fileDownload value="#{mantenedorDocsEquipos.generaDescargable(d)}"/>
                         </p:commandLink>
+                        <p:commandLink
+                                rendered="#{sesionCliente.esEditor(constantes.moduloEquipos) || sesionCliente.tieneAccesoEspecial(constantes.moduloEquipos)}"
+                                title="Actualizar" action="#{mantenedorDocsEquipos.irActualizar(d.tipo)}"
+                                styleClass="ui-icon ui-icon-arrowthickstop-1-n"/>
+                        <p:commandLink
+                                rendered="#{sesionCliente.esEditor(constantes.moduloEquipos) || sesionCliente.tieneAccesoEspecial(constantes.moduloEquipos)}"
+                                title="Editar" action="#{mantenedorDocsEquipos.irEditar(d.tipo)}"
+                                styleClass="ui-icon ui-icon-pencil"/>
                     </p:outputPanel>
                 </p:column>
             </p:dataTable>

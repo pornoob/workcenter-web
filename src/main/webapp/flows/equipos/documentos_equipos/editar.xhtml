@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>
+            <h:outputText rendered="#{mantenedorDocsEquipos.esIngreso()}"
+                          value="Ingresar documento - #{mantenedorDocsEquipos.equipo.patente}"/>
+            <h:outputText rendered="#{mantenedorDocsEquipos.esEdicion()}"
+                          value="Editar documento #{mantenedorDocsEquipos.documentoSeleccionado.etiqueta} - #{mantenedorDocsEquipos.equipo.patente}"/>
+            <h:outputText rendered="#{mantenedorDocsEquipos.esActualizacion()}"
+                          value="Actualizar documento #{mantenedorDocsEquipos.documentoSeleccionado.etiqueta} - #{mantenedorDocsEquipos.equipo.patente}"/>
+        </h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="formDocs" enctype="multipart/form-data">
+            <p:outputPanel styleClass="actionPanel">
+                <h:panelGrid columns="3">
+                    <h:outputLabel rendered="#{mantenedorDocsEquipos.esIngreso()}" for="iTipoDoc"
+                                   value="Tipo Documento"/>
+                    <h:outputText rendered="#{mantenedorDocsEquipos.esIngreso()}" value=":"/>
+                    <p:selectOneMenu rendered="#{mantenedorDocsEquipos.esIngreso()}" id="iTipoDoc"
+                                     value="#{mantenedorDocsEquipos.documentoSeleccionado}"
+                                     filter="true" filterMatchMode="contains" required="true"
+                                     converter="entityConverter">
+                        <f:selectItems value="#{mantenedorDocsEquipos.tiposPendientes}" var="t"
+                                       itemLabel="#{t.etiqueta}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel for="iVencimiento" value="Vencimiento"/>:
+                    <p:calendar id="iVencimiento" navigator="true"
+                                value="#{mantenedorDocsEquipos.documentoEquipo.vencimiento}" pattern="dd-MM-yyyy"/>
+                    <h:outputLabel for="iNumero" value="Numero"/>:
+                    <p:inputText required="true" id="iNumero" value="#{mantenedorDocsEquipos.documentoEquipo.numero}"/>
+                    <h:outputLabel for="iArchivo" value="Fichero"/>:
+                    <p:fileUpload required="true" id="iArchivo" mode="simple" value="#{mantenedorDocsEquipos.archivo}"/>
+                </h:panelGrid>
+                <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-s" ajax="false" immediate="true"
+                                 action="#{mantenedorDocsEquipos.irListar()}"/>
+                <p:commandButton value="Guardar" icon="ui-icon-disk" ajax="false" process="@form"
+                                 action="#{mantenedorDocsEquipos.subir()}"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

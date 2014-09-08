@@ -14,6 +14,12 @@
     <view-state id="editarEquipo">
         <transition on="flowPoliza" to="polizas"/>
         <transition on="flowDocs" to="documentos"/>
+        <transition on="flowListar" to="listarEquipos"/>
+        <transition on="flowNuevaFoto" to="agregarFoto"/>
+    </view-state>
+
+    <view-state id="agregarFoto">
+        <transition on="flowEditar" to="editarEquipo"/>
     </view-state>
 
     <subflow-state id="polizas" subflow="equipos/polizas_equipos">

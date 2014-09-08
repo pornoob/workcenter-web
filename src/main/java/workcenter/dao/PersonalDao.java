@@ -133,12 +133,13 @@ public class PersonalDao {
 
     public List<DocumentoPersonal> obtenerDocumentosActualizados(Personal p) {
         StringBuilder sql = new StringBuilder();
+        sql.append("select * from (");
         sql.append("select max(dp.id) as id, dp.vencimiento, dp.numero, dp.personal, dp.tipo, dp.archivo from tiposdocpersonal tdp ");
         sql.append("inner join documentospersonal dp on (tdp.id=dp.tipo) ");
         sql.append("inner join (select max(vencimiento) as vencimiento, tipo from documentospersonal where personal=:personal group by tipo) dp2 ");
         sql.append("on (dp2.tipo=dp.tipo and (dp2.vencimiento=dp.vencimiento or dp2.vencimiento is null)) ");
-        sql.append("where personal=:personal ");
-        sql.append("group by dp.tipo ");
+        sql.append("where personal=:personal group by dp.tipo order by dp.id desc");
+        sql.append(") dp group by dp.tipo order by dp.tipo");
         return em.createNativeQuery(sql.toString(), DocumentoPersonal.class)
                 .setParameter("personal", p.getRut())
                 .getResultList();

@@ -1,0 +1,28 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>Agregar Foto - #{mantenedorEquipos.equipo.patente}</h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="formEquipo">
+            <h4>* Si el tipo de imagen ya existe, esta será sobreescrita</h4>
+            <h:panelGrid columns="3">
+                <h:outputLabel for="iTipo" value="Tipo de imagen"/>:
+                <p:selectOneMenu value="#{mantenedorEquipos.posicionFoto}" id="iTipo">
+                    <f:selectItems value="#{mantenedorEquipos.posicionesFoto}" var="pf" itemLabel="#{pf.label}"
+                                   itemValue="#{pf.label}"/>
+                </p:selectOneMenu>
+                <h:outputLabel for="iImagen" value="Imagen"/>:
+                <p:fileUpload id="iImagen" value="#{mantenedorEquipos.foto}" mode="simple"></p:fileUpload>
+            </h:panelGrid>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Volver" action="#{mantenedorEquipos.irEditar(mantenedorEquipos.equipo)}"
+                                 icon="ui-icon-arrowreturnthick-1-s"/>
+                <p:commandButton value="Guardar" action="#{mantenedorEquipos.subirFoto}" icon="ui-icon-disk"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

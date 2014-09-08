@@ -89,13 +89,55 @@ public class EquipoDao {
 
     public List<DocumentoEquipo> obtenerDocumentosActualizados(Equipo e) {
         StringBuilder sql = new StringBuilder();
+        sql.append("select * from ( ");
         sql.append("select d.* from tiposdocumentosequipos tde ");
         sql.append("inner join documentosequipo d on (tde.id=d.tipo) ");
         sql.append("inner join (select max(vencimiento) as fecha, tipo from documentosequipo where patente=:patente group by tipo) d2 ");
-        sql.append("on (d.tipo=d2.tipo and d.vencimiento=d2.fecha) ");
+        sql.append("on (d.tipo=d2.tipo and (d.vencimiento=d2.fecha or d2.fecha is null)) ");
         sql.append("where d.patente=:patente ");
+        sql.append("group by d.tipo order by d.id desc ");
+        sql.append(") d group by d.tipo order by d.tipo ");
         return em.createNativeQuery(sql.toString(), DocumentoEquipo.class)
                 .setParameter("patente", e.getPatente())
                 .getResultList();
+    }
+
+    public void guardar(Equipo equipo) {
+        if (equipo.getPatente() == null)
+            em.persist(equipo);
+        else
+            em.merge(equipo);
+    }
+
+    public List<TipoDocumentoEquipo> obtenerTiposPendientes(Equipo equipo) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select t.* from tiposdocumentosequipos t where t.id not in ( ");
+        sql.append("select distinct de.tipo from documentosequipo de where de.patente=:patente ");
+        sql.append(')');
+        return em.createNativeQuery(sql.toString(), TipoDocumentoEquipo.class)
+                .setParameter("patente", equipo.getPatente())
+                .getResultList();
+    }
+
+    public void guardarHistorialDocumento(HistorialDocumentoEquipo respaldo) {
+        System.err.println("LLEGA HISTORIAL : "+respaldo.getPatente());
+        if (respaldo.getId() == null)
+            em.persist(respaldo);
+        else
+            em.merge(respaldo);
+    }
+
+    public void guardarDocumento(DocumentoEquipo doc) {
+        if (doc.getPatente() == null)
+            em.persist(doc);
+        else
+            em.merge(doc);
+    }
+
+    public void guardarFoto(FotoEquipo foto) {
+        if (foto.getId() == null)
+            em.persist(foto);
+        else
+            em.merge(foto);
     }
 }

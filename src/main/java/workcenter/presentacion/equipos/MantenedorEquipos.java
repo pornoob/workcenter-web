@@ -1,6 +1,7 @@
 package workcenter.presentacion.equipos;
 
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,12 +10,16 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaEquipos;
 import workcenter.util.components.Constantes;
 import workcenter.util.pojo.Descargable;
+import workcenter.util.pojo.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 
 /**
  * Created by colivares on 28-08-14.
@@ -24,6 +29,9 @@ import java.util.List;
 public class MantenedorEquipos implements Serializable {
     @Autowired
     private LogicaEquipos logicaEquipos;
+
+    @Autowired
+    private LogicaEmpresas logicaEmpresas;
 
     @Autowired
     private Constantes constantes;
@@ -39,7 +47,8 @@ public class MantenedorEquipos implements Serializable {
     private List<Empresa> empresas;
     private Equipo equipo;
     private String posicionFoto;
-    private SeguroEquipo seguroEquipo;
+    private UploadedFile foto;
+    private FotoEquipo fotoEquipo;
 
     public void inicio() {
         equipos = logicaEquipos.obtenerTodos();
@@ -61,14 +70,23 @@ public class MantenedorEquipos implements Serializable {
         posicionesFoto.add(new FilterOption(4, "Derecha"));
     }
 
+    public String irListar() {
+        equipos = logicaEquipos.obtenerTodos();
+        tiposEquipos = logicaEquipos.obtenerTipos();
+        subtiposEquipos = logicaEquipos.obtenerSubtipos();
+        marcasEquipos = logicaEquipos.obtenerMarcas();
+        modelos = logicaEquipos.obtenerModelos();
+        return "flowListar";
+    }
+
     public String irEditar(Equipo e) {
         equipo = e;
         equipo.setFotos(logicaEquipos.obtenerFotos(e));
+        empresas = logicaEmpresas.obtenerEmpleadores();
         return "flowEditar";
     }
 
     public String irPolizas() {
-        seguroEquipo = logicaEquipos.obtenerUltimoSeguro(equipo);
         return "flowPoliza";
     }
 
@@ -76,10 +94,62 @@ public class MantenedorEquipos implements Serializable {
         return "flowDocs";
     }
 
-    public StreamedContent generaStreamedContent(FotoEquipo fe) {
-        File archivo = new File(constantes.getPathArchivos() + fe.getFoto());
-        Descargable d = new Descargable(archivo);
-        return d.getStreamedContent();
+    public String irAgregarFoto() {
+        fotoEquipo = new FotoEquipo();
+        return "flowNuevaFoto";
+    }
+
+    public void guardar() {
+        logicaEquipos.guardar(equipo);
+    }
+
+    public void subirFoto() {
+        try {
+            String path = constantes.getPathArchivos() + "Imagenes/equipos/" + equipo.getPatente();
+            path += "/" + posicionFoto + foto.getFileName().substring(foto.getFileName().lastIndexOf('.'));
+
+            List<FotoEquipo> existentes = obtenerFotosSegunPosicion();
+            for (FotoEquipo fe : existentes) {
+                Files.delete(Paths.get(constantes.getPathArchivos() + fe.getFoto()));
+                fotoEquipo = fe;
+                break;
+            }
+
+            fotoEquipo.setEquipo(equipo);
+            fotoEquipo.setEtiqueta(posicionFoto);
+            fotoEquipo.setFoto(path.substring(constantes.getPathArchivos().length()));
+            logicaEquipos.guardarFoto(fotoEquipo);
+
+            FileOutputStream fileOutputStream = new FileOutputStream(path);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bulk;
+            InputStream inputStream = foto.getInputstream();
+            while (true) {
+                bulk = inputStream.read(buffer);
+                if (bulk < 0) {
+                    break;
+                }
+                fileOutputStream.write(buffer, 0, bulk);
+                fileOutputStream.flush();
+            }
+            fileOutputStream.close();
+            inputStream.close();
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha agregado la nueva imagen");
+        } catch (IOException e) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "Ha ocurrido un error interno");
+            e.printStackTrace();
+        }
+    }
+
+    public List<FotoEquipo> obtenerFotosSegunPosicion() {
+        List<FotoEquipo> retorno = new ArrayList<FotoEquipo>();
+        if (posicionFoto == null) posicionFoto = "frontal";
+        for (FotoEquipo fe : equipo.getFotos()) {
+            if (fe.getEtiqueta().equals(posicionFoto)) {
+                retorno.add(fe);
+            }
+        }
+        return retorno;
     }
 
     public boolean estaHabilitado(Equipo e) {
@@ -174,11 +244,19 @@ public class MantenedorEquipos implements Serializable {
         this.posicionFoto = posicionFoto.toLowerCase();
     }
 
-    public SeguroEquipo getSeguroEquipo() {
-        return seguroEquipo;
+    public UploadedFile getFoto() {
+        return foto;
     }
 
-    public void setSeguroEquipo(SeguroEquipo seguroEquipo) {
-        this.seguroEquipo = seguroEquipo;
+    public void setFoto(UploadedFile foto) {
+        this.foto = foto;
+    }
+
+    public FotoEquipo getFotoEquipo() {
+        return fotoEquipo;
+    }
+
+    public void setFotoEquipo(FotoEquipo fotoEquipo) {
+        this.fotoEquipo = fotoEquipo;
     }
 }

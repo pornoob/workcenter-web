@@ -36,7 +36,6 @@ public class Usuario implements Serializable {
     private Collection<GestionAlarmaGps> gestionAlarmaGpsCollection;
     private static final long serialVersionUID = 1L;
     @Id
-    @Basic(optional = false)
     @NotNull
     @Column(name = "rut")
     private Integer rut;

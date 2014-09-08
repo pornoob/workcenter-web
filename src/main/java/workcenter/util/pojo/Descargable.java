@@ -1,13 +1,11 @@
 package workcenter.util.pojo;
 
-import java.io.BufferedInputStream;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
-import java.io.Serializable;
 import org.primefaces.model.DefaultStreamedContent;
 import org.primefaces.model.StreamedContent;
+
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 /**
  *
@@ -16,10 +14,22 @@ import org.primefaces.model.StreamedContent;
 public class Descargable implements Serializable {
 
     private File archivo;
+    private String contentType;
     private String nombre;
 
     public Descargable(File archivo) {
         this.archivo = archivo;
+        obtenerContentType();
+        System.err.println("Creando descargable: "+archivo.getName()+" del tipo: "+contentType);
+    }
+
+    private void obtenerContentType() {
+        try {
+            this.contentType = Files.probeContentType(Paths.get(archivo.getAbsolutePath()));
+        } catch (IOException e) {
+            System.err.println(e.getMessage());
+            this.contentType = "";
+        }
     }
 
     public String getNombre() {
@@ -37,8 +47,7 @@ public class Descargable implements Serializable {
     public StreamedContent getStreamedContent() {
         try {
             InputStream is = new BufferedInputStream(new FileInputStream(archivo));
-            DefaultStreamedContent dsc = new DefaultStreamedContent(is);
-            System.err.println("INTENTO: "+dsc);
+            DefaultStreamedContent dsc = new DefaultStreamedContent(is, contentType);
             dsc.setName(getNombre());
             return dsc;
         } catch (FileNotFoundException fnfe) {

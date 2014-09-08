@@ -8,59 +8,61 @@
         <h2>Ficha de Personal</h2>
         <h:form id="frmPersonal">
             <p:panel header="Antecedentes Personales">
-            <h:panelGrid columns="2">
-                <h:panelGroup>
-                    <h:panelGrid columns="6">
-                        <h:outputLabel value="Nombres"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.nombres}"
-                                     converter="nombreConverter"/>
-                        <h:outputText/><h:outputText/><h:outputText/>
+                <h:panelGrid columns="2">
+                    <h:panelGroup>
+                        <h:panelGrid columns="6">
+                            <h:outputLabel value="Nombres"/>:
+                            <h:inputText value="#{mantenedorPersonal.personalSeleccionado.nombres}"
+                                         converter="nombreConverter"/>
+                            <h:outputText/><h:outputText/><h:outputText/>
 
-                        <h:outputLabel value="Apellidos"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.apellidos}"
-                                     converter="nombreConverter"/>
-                        <h:outputText/><h:outputText/><h:outputText/>
+                            <h:outputLabel value="Apellidos"/>:
+                            <h:inputText value="#{mantenedorPersonal.personalSeleccionado.apellidos}"
+                                         converter="nombreConverter"/>
+                            <h:outputText/><h:outputText/><h:outputText/>
 
-                        <h:outputLabel value="RUT"/>:
-                        <h:inputText value="#{mantenedorPersonal.rutIngresado}" converter="rutConverter"/>
-                        <h:outputLabel value="Celular"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.celular}"/>
+                            <h:outputLabel value="RUT"/>:
+                            <h:inputText value="#{mantenedorPersonal.rutIngresado}" converter="rutConverter"/>
+                            <h:outputLabel value="Celular"/>:
+                            <h:inputText value="#{mantenedorPersonal.personalSeleccionado.celular}"/>
 
-                        <h:outputLabel value="Estado Civil"/>:
-                        <p:selectOneMenu value="#{mantenedorPersonal.personalSeleccionado.ecivil}">
-                            <f:selectItems value="#{constantes.estadosCiviles}" var="estado" itemLabel="#{estado}"/>
-                        </p:selectOneMenu>
-                        <h:outputLabel value="Fecha de nacimiento"/>:
-                        <p:calendar value="#{mantenedorPersonal.personalSeleccionado.nacimiento}" pattern="dd-MM-yyyy"
-                                    navigator="true" locale="es" placeholder="Haga click para seleccionar una fecha"/>
+                            <h:outputLabel value="Estado Civil"/>:
+                            <p:selectOneMenu value="#{mantenedorPersonal.personalSeleccionado.ecivil}">
+                                <f:selectItems value="#{constantes.estadosCiviles}" var="estado" itemLabel="#{estado}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel value="Fecha de nacimiento"/>:
+                            <p:calendar value="#{mantenedorPersonal.personalSeleccionado.nacimiento}"
+                                        pattern="dd-MM-yyyy"
+                                        navigator="true" locale="es"
+                                        placeholder="Haga click para seleccionar una fecha"/>
 
-                        <h:outputLabel value="Domicilio"/>:
-                        <p:inputTextarea style="width: 320px"
-                                         value="#{mantenedorPersonal.personalSeleccionado.domicilio}"/>
-                        <h:outputText/><h:outputText/><h:outputText/>
+                            <h:outputLabel value="Domicilio"/>:
+                            <p:inputTextarea style="width: 320px"
+                                             value="#{mantenedorPersonal.personalSeleccionado.domicilio}"/>
+                            <h:outputText/><h:outputText/><h:outputText/>
 
-                        <h:outputLabel value="Contacto de Emergencia"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.contactoe}"/>
-                        <h:outputText/><h:outputText/><h:outputText/>
+                            <h:outputLabel value="Contacto de Emergencia"/>:
+                            <h:inputText value="#{mantenedorPersonal.personalSeleccionado.contactoe}"/>
+                            <h:outputText/><h:outputText/><h:outputText/>
 
-                        <h:outputLabel value="Domicilio de Emergencia"/>:
-                        <p:inputTextarea style="width: 320px"
-                                         value="#{mantenedorPersonal.personalSeleccionado.edomicilio}"/>
-                        <h:outputText/><h:outputText/><h:outputText/>
+                            <h:outputLabel value="Domicilio de Emergencia"/>:
+                            <p:inputTextarea style="width: 320px"
+                                             value="#{mantenedorPersonal.personalSeleccionado.edomicilio}"/>
+                            <h:outputText/><h:outputText/><h:outputText/>
 
-                        <h:outputLabel value="Teléfono de Emergencia"/>:
-                        <h:inputText value="#{mantenedorPersonal.personalSeleccionado.telefono}"/>
-                    </h:panelGrid>
-                </h:panelGroup>
-                <h:panelGroup>
-                    <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}"
-                                    value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
-                    <br/>
-                    <p:commandButton icon="ui-icon-person"
-                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
-                                     value="Cambiar Foto"/>
-                </h:panelGroup>
-            </h:panelGrid>
+                            <h:outputLabel value="Teléfono de Emergencia"/>:
+                            <h:inputText value="#{mantenedorPersonal.personalSeleccionado.telefono}"/>
+                        </h:panelGrid>
+                    </h:panelGroup>
+                    <h:panelGroup>
+                        <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}"
+                                        value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
+                        <br/>
+                        <p:commandButton icon="ui-icon-person"
+                                         rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                         value="Cambiar Foto"/>
+                    </h:panelGroup>
+                </h:panelGrid>
             </p:panel>
 
             <p:panel header="Documentos de Carpeta" id="pDocumentos" styleClass="sinBordes">
@@ -85,6 +87,7 @@
                     <p:column headerText="Acciones">
                         <h:panelGroup class="opcionesFila">
                             <p:commandLink title="Descargar"
+                                           rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                            styleClass="ui-icon ui-icon-arrowthickstop-1-s"
                                            ajax="false">
                                 <p:fileDownload value="#{mantenedorPersonal.generaDescargable(doc)}"/>
@@ -102,10 +105,13 @@
 
                 </p:dataTable>
                 <p:panel class="actionPanel">
-                    <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" value="Guardar"/>
-                    <p:commandButton icon="ui-icon-document" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
+                    <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
+                                     value="Guardar"/>
+                    <p:commandButton icon="ui-icon-document"
+                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                                      value="Ver contratos" action="#{mantenedorPersonal.irContratosPersonal()}"/>
-                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{mantenedorPersonal.irListaPersonal()}"/>
+                    <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
+                                     action="#{mantenedorPersonal.irListaPersonal()}"/>
                 </p:panel>
             </p:panel>
         </h:form>

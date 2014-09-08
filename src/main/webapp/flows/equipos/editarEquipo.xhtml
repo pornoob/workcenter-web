@@ -6,12 +6,14 @@
 
     <ui:define name="contenido">
         <h2>Editar Equipo</h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
         <h:form id="formEquipo">
             <p:panel header="Antecedentes Generales">
                 <h:panelGrid columns="6">
                     <h:outputLabel value="Tipo Equipo"/>:
                     <p:selectOneMenu value="#{mantenedorEquipos.equipo.tipo}" converter="entityConverter">
                         <f:selectItems value="#{mantenedorEquipos.tiposEquipos}" var="t" itemLabel="#{t.etiqueta}"/>
+                        <p:ajax event="change" update=":formEquipo:pPatente"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="N° Interno"/>:
                     <p:inputText value="#{mantenedorEquipos.equipo.numero}"/>
@@ -22,7 +24,16 @@
                                        itemLabel="#{st.etiqueta}"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="Patente"/>:
-                    <p:inputText readonly="true" value="#{mantenedorEquipos.equipo.patente}"/>
+                    <p:outputPanel id="pPatente">
+                        <p:inputMask
+                                rendered="#{mantenedorEquipos.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
+                                mask="aaaa 99" value="#{mantenedorEquipos.equipo.patente}"
+                                style="text-transform: uppercase"/>
+                        <p:inputMask
+                                rendered="#{mantenedorEquipos.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
+                                mask="aa 9999" value="#{mantenedorEquipos.equipo.patente}"
+                                style="text-transform: uppercase"/>
+                    </p:outputPanel>
 
                     <h:outputLabel value="Marca"/>:
                     <p:selectOneMenu value="#{mantenedorEquipos.equipo.marca}" converter="entityConverter">
@@ -55,24 +66,25 @@
                     </p:selectOneMenu>
                 </h:panelGrid>
             </p:panel>
-            <p:panel header="Fotos Equipo">
-                <h:panelGrid columns="2">
-                    <p:selectOneMenu value="#{mantenedorEquipos.posicionFoto}">
-                        <f:selectItems value="#{mantenedorEquipos.posicionesFoto}" var="pf" itemLabel="#{pf.label}"
-                                       itemValue="#{pf.label}"/>
-                    </p:selectOneMenu><p:commandButton icon="ui-icon-plus" value="Agregar"/>
-                </h:panelGrid>
-                <p:galleria value="#{mantenedorEquipos.equipo.fotos}" var="f" autoPlay="true">
-                    <p:graphicImage value="#{mantenedorEquipos.generaStreamedContent(f)}"/>
+            <p:panel id="pGalleria" header="Fotos Equipo">
+                <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorEquipos.irAgregarFoto()}"/>
+                <p:galleria panelWidth="600" value="#{mantenedorEquipos.equipo.fotos}" var="f"
+                            autoPlay="true">
+                    <h:graphicImage width="600" value="/oldFiles/#{f.foto}" alt="#{f.etiqueta}"
+                                    title="#{mantenedorEquipos.equipo.patente}">
+                        <f:param name="id" value="fotoEquipo#{f.id}"/>
+                    </h:graphicImage>
                 </p:galleria>
             </p:panel>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton ajax="false" icon="ui-icon-disk" value="Guardar"/>
+                <p:commandButton ajax="false" icon="ui-icon-disk" value="Guardar"
+                                 action="#{mantenedorEquipos.guardar()}"/>
                 <p:commandButton ajax="false" icon="ui-icon-document" value="Documentos"
                                  action="#{mantenedorEquipos.irDocs()}"/>
                 <p:commandButton ajax="false" icon="ui-icon-document" value="Polizas de seguro"
                                  action="#{mantenedorEquipos.irPolizas()}"/>
-                <p:commandButton ajax="false" icon="ui-icon-arrowreturnthick-1-w" value="Volver"/>
+                <p:commandButton ajax="false" icon="ui-icon-arrowreturnthick-1-w" value="Volver"
+                                 action="#{mantenedorEquipos.irListar()}"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

@@ -11,6 +11,11 @@
 
     <view-state id="listar">
         <transition on="flowFin" to="finSubFlow"/>
+        <transition on="flowEditar" to="editar"/>
+    </view-state>
+
+    <view-state id="editar">
+        <transition on="flowListar" to="listar"/>
     </view-state>
 
     <end-state id="finSubFlow"/>

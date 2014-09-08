@@ -1,10 +1,5 @@
 package workcenter.util.components;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.springframework.aop.framework.ProxyFactory;
@@ -17,6 +12,12 @@ import workcenter.negocio.LogicaVariables;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 /**
  * @author colivares
  */
@@ -25,13 +26,13 @@ import workcenter.util.dto.Mes;
 public class Constantes implements Serializable {
     // Zona de usuarios
     private Map<Object, Object> accesos;
-    
+
     // Zona de remuneraciones
-    private int filtroEmpleador=1;
-    private int filtroConductor=2;
-    
+    private int filtroEmpleador = 1;
+    private int filtroConductor = 2;
+
     // Zona de personal
-    private int cargoConductor=3;
+    private int cargoConductor = 3;
     private List<String> estadosCiviles;
     private int fonasa = 0;
     private int isapre = 1;
@@ -47,28 +48,29 @@ public class Constantes implements Serializable {
     // Zona registros
     private int registroR112 = 1;
     private int registroInspeccionAvanzada = 2;
-    
+
     // Genericos
     private List<Mes> meses;
     private List<Horario> horarios;
     private int cantidadFilasTablas = 15;
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
-    private String pathArchivos = System.getProperty("catalina.home") + "/static/workcenter/";
-    
+    private String pathArchivos;
+
     // cliente de correo
     private String usuarioCorreo = "colivares@transportesventanas.cl";
     private String contrasennaCorreo = "colivares1";
     private String servidorCorreo = "imap.googlemail.com";
     private Integer puertoCorreo = 993;
     private String protocoloCorreo = "imaps";
-    
+
     // modulos
     private String moduloAlarmasGPS = "Modulo Alarmas GPS";
     private String moduloProgramaActividades = "Modulo Programa Actividades";
     private String moduloPersonal = "Mantenedor Personal App";
     private String moduloAdministradorRegistros = "Administrador de Registros";
-    
+    private String moduloEquipos = "Mantenedor Tractos";
+
     @Autowired
     LogicaVariables logicaVariables;
 
@@ -100,7 +102,7 @@ public class Constantes implements Serializable {
         meses.add(new Mes("10", "Octubre"));
         meses.add(new Mes("11", "Noviembre"));
         meses.add(new Mes("12", "Diciembre"));
-        
+
         horarios = new ArrayList<Horario>();
         horarios.add(new Horario(0, "00:00"));
         horarios.add(new Horario(1, "01:00"));
@@ -126,24 +128,24 @@ public class Constantes implements Serializable {
         horarios.add(new Horario(21, "21:00"));
         horarios.add(new Horario(22, "22:00"));
         horarios.add(new Horario(23, "23:00"));
-        
+
         accesos = new HashMap<Object, Object>();
         accesos.put(new Integer(0), "Administrador");
         accesos.put(new Integer(2), "Consultor");
         accesos.put(new Integer(1), "Editor");
         accesos.put(new Integer(3), "Privilegios Especiales");
-        
+
         accesos.put("Administrador", new Integer(0));
         accesos.put("Consultor", new Integer(2));
         accesos.put("Editor", new Integer(1));
         accesos.put("Privilegios Especiales", new Integer(3));
-        
+
         estadosCiviles = new ArrayList<String>();
         estadosCiviles.add("Soltero");
         estadosCiviles.add("Casado");
         estadosCiviles.add("Viudo");
         estadosCiviles.add("Separado");
-        
+
         tiposUnidad = null;
     }
 
@@ -255,6 +257,8 @@ public class Constantes implements Serializable {
     }
 
     public String getPathArchivos() {
+        if (pathArchivos == null)
+            pathArchivos = System.getProperty("catalina.home") + "/static/workcenter/";
         return pathArchivos;
     }
 
@@ -268,5 +272,9 @@ public class Constantes implements Serializable {
 
     public Integer getRegistroInspeccionAvanzada() {
         return registroInspeccionAvanzada;
+    }
+
+    public String getModuloEquipos() {
+        return moduloEquipos;
     }
 }
