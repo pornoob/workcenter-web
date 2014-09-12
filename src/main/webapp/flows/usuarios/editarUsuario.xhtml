@@ -57,6 +57,7 @@
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w"
                                  value="Volver" action="#{mantenedorUsuarios.inicio()}" ajax="false" immediate="true"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false" action="#{mantenedorUsuarios.guardarUsuario()}"/>
             </p:outputPanel>
             <p:confirmDialog widgetVar="pDialogConfirmar"
                              closable="true" header="Confirmar"

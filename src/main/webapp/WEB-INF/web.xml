@@ -69,7 +69,7 @@
     </servlet>
     <servlet-mapping>
         <servlet-name>dispatcher</servlet-name>
-        <url-pattern>/spring/*</url-pattern>
+        <url-pattern>/m/*</url-pattern>
     </servlet-mapping>
     <!-- Controlador para dibujar imagenes desde JSF -->
     <servlet>

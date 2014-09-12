@@ -1,4 +1,4 @@
-package workcenter.negocio;
+package workcenter.negocio.personal;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;

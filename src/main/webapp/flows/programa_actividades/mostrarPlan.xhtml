@@ -58,7 +58,7 @@
             </h:panelGroup>
 
             <br/>
-            <p:scrollPanel id="pPlanes" style="border:0">
+            <p:scrollPanel id="pPlanes" style="border:0; padding-bottom: 30px">
                 <ui:fragment
                         rendered="#{mantenedorProgramaActividades.haConsultado and mantenedorProgramaActividades.ordenarPorPrograma}">
                     <ui:repeat value="#{mantenedorProgramaActividades.programas}" var="p">
@@ -68,7 +68,7 @@
                         <p:dataTable emptyMessage="No tienes planificaciones"
                                      rendered="#{mantenedorProgramaActividades.correspondeDibujar(p)}"
                                      style="font-size: 8pt" value="#{mantenedorProgramaActividades.obtenerPlanes(p)}"
-                                     var="plan">
+                                     var="plan" rowKey="plan#{plan.id}" selectionMode="single">
                             <p:columnGroup type="header">
                                 <p:row>
                                     <p:column width="100" rowspan="2" headerText="Actividad"/>

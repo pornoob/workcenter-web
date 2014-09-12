@@ -1,6 +1,5 @@
 package workcenter.presentacion.equipos;
 
-import org.omg.PortableServer.SERVANT_RETENTION_POLICY_ID;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,7 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
-import workcenter.negocio.LogicaEquipos;
+import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;

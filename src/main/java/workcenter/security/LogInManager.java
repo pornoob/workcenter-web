@@ -13,7 +13,7 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.Proyecto;
-import workcenter.negocio.LogicaUsuario;
+import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
 
 /**

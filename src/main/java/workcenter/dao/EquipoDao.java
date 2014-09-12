@@ -120,7 +120,6 @@ public class EquipoDao {
     }
 
     public void guardarHistorialDocumento(HistorialDocumentoEquipo respaldo) {
-        System.err.println("LLEGA HISTORIAL : "+respaldo.getPatente());
         if (respaldo.getId() == null)
             em.persist(respaldo);
         else
@@ -139,5 +138,14 @@ public class EquipoDao {
             em.persist(foto);
         else
             em.merge(foto);
+    }
+
+    public Vuelta obtenerUltimaVuelta(Equipo e) {
+        String sql = "select * from vueltas where tracto=:equipo and (kmfinal > 0 or kminicial > 0) order by fecha desc limit 1";
+        try {
+            return (Vuelta) em.createNativeQuery(sql, Vuelta.class).setParameter("equipo", e.getPatente()).getSingleResult();
+        } catch (Exception ex) {
+            return null;
+        }
     }
 }

@@ -1,15 +1,13 @@
 package workcenter.presentacion.equipos;
 
-import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
-import workcenter.negocio.LogicaEquipos;
+import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
-import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 

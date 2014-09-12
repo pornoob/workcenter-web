@@ -12,11 +12,12 @@ import workcenter.entidades.Permiso;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Proyecto;
 import workcenter.entidades.Usuario;
-import workcenter.negocio.LogicaPersonal;
-import workcenter.negocio.LogicaProyecto;
-import workcenter.negocio.LogicaPermiso;
+import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.negocio.usuarios.LogicaProyecto;
+import workcenter.negocio.usuarios.LogicaPermiso;
 import workcenter.util.components.Constantes;
 import workcenter.util.pojo.FacesUtil;
+import workcenter.util.pojo.Md5;
 
 /**
  * @author colivares
@@ -54,7 +55,12 @@ public class MantenedorUsuarios implements Serializable {
 
     public String administrarAccesos(Personal p) {
         personalSeleccionado = p;
-        personalSeleccionado.setUsuario(personalSeleccionado.getUsuario() != null ? personalSeleccionado.getUsuario() : new Usuario());
+        if (personalSeleccionado.getUsuario() == null) {
+            Usuario u = new Usuario();
+            u.setRut(personalSeleccionado.getRut());
+            u.setPassword(Md5.hash(String.valueOf(personalSeleccionado.getRut())));
+            personalSeleccionado.setUsuario(u);
+        }
         permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
         proyectosDisponibles = logicaProyecto.obtenerTodos();
         return irEditarUsuario();
@@ -62,25 +68,26 @@ public class MantenedorUsuarios implements Serializable {
 
     public String irCrearPermiso() {
         permisoSeleccionado = null;
-        System.err.println("HICE PERMISO NULL");
-        for (Permiso permiso : permisosUsuario) {
-            if (proyectosDisponibles.contains(permiso.getProyecto())) {
-                proyectosDisponibles.remove(permiso.getProyecto());
+        if (permisosUsuario != null)
+            for (Permiso permiso : permisosUsuario) {
+                if (proyectosDisponibles.contains(permiso.getProyecto())) {
+                    proyectosDisponibles.remove(permiso.getProyecto());
+                }
             }
-        }
         acceso = null;
         return "flowEditarPermiso";
     }
 
     public String irEditarPermiso(Permiso permiso) {
         permisoSeleccionado = permiso.getId();
-        System.err.println("HICE PERMISO "+permisoSeleccionado);
         proyectoSeleccionado = permiso.getProyecto();
         acceso = constantes.getAccesos().get(permiso.getNivel()).toString();
         return "flowEditarPermiso";
     }
 
     public String irEditarUsuario() {
+        personalSeleccionado = logicaPersonal.obtenerConAccesos(personalSeleccionado.getRut());
+        permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
         return "flowEditarAccesos";
     }
 
@@ -90,7 +97,6 @@ public class MantenedorUsuarios implements Serializable {
 
     public void guardarPermiso() {
         Integer nivel = (Integer) constantes.getAccesos().get(acceso);
-        System.err.println("RECIBO PERMISO "+permisoSeleccionado);
 
         Permiso permiso = null;
         if (permisoSeleccionado != null) {
@@ -105,10 +111,11 @@ public class MantenedorUsuarios implements Serializable {
         permiso.setProyecto(proyectoSeleccionado);
         permiso.setUsuario(personalSeleccionado.getUsuario());
         permiso.setNivel(nivel);
-        if (permiso.getId() == null)
+        if (permiso.getId() == null) {
+            if (personalSeleccionado.getUsuario().getPermisosCollection() == null)
+                personalSeleccionado.getUsuario().setPermisosCollection(new ArrayList<Permiso>());
             personalSeleccionado.getUsuario().getPermisosCollection().add(permiso);
-        else
-            personalSeleccionado.getUsuario().setPermisosCollection(permisosUsuario);
+        }
 
         logicaPersonal.guardar(personalSeleccionado);
         proyectoSeleccionado = null;
@@ -124,12 +131,15 @@ public class MantenedorUsuarios implements Serializable {
                 break;
             }
         permisosUsuario.remove(permiso);
-        personalSeleccionado.getUsuario().setPermisosCollection(permisosUsuario);
         proyectosDisponibles.add(permiso.getProyecto());
         logicaPersonal.guardar(personalSeleccionado);
         proyectoSeleccionado = null;
         permisoSeleccionado = null;
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha eliminado correctamente el permiso");
+    }
+
+    public void guardarUsuario() {
+        logicaPersonal.guardar(personalSeleccionado);
     }
 
     public List<Personal> getListaPersonal() {

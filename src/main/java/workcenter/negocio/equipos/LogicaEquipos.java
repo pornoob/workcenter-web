@@ -1,4 +1,4 @@
-package workcenter.negocio;
+package workcenter.negocio.equipos;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -112,5 +112,10 @@ public class LogicaEquipos {
     @Transactional(readOnly = false)
     public void guardarFoto(FotoEquipo foto) {
         equipoDao.guardarFoto(foto);
+    }
+
+    @Transactional(readOnly = true)
+    public Vuelta obtenerUltimaVuelta(Equipo e) {
+        return equipoDao.obtenerUltimaVuelta(e);
     }
 }

@@ -52,9 +52,10 @@
                 </h:panelGrid>
             </ui:fragment>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton value="Guardar" action="#{mantenedorUsuarios.guardarPermiso()}"/>
                 <p:commandButton value="Volver" action="#{mantenedorUsuarios.irEditarUsuario()}" ajax="false"
-                                 immediate="true"/>
+                                 immediate="true" icon="ui-icon-arrowreturnthick-1-w"/>
+                <p:commandButton value="Guardar" icon="ui-icon-disk" action="#{mantenedorUsuarios.guardarPermiso()}"
+                                 ajax="false"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

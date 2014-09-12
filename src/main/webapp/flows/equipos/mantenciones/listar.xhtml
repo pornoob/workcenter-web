@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Listado de Mantenciones</h2>
+        <h:form id="formMantenciones">
+            <p:tabView>
+                <p:tab title="Tractos">
+                    <p:commandButton value="Agregar" action="#{mantenedorMantenciones.irEditar()}" icon="ui-icon-plus"/>
+                    <p:dataTable emptyMessage="No se han registrado mantenciones"
+                                 value="#{mantenedorMantenciones.mantencionesTractos}" var="mt"
+                                 rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
+                                 paginatorTemplate="#{constantes.paginadorTemplate}"
+                                 rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+                        <p:columnGroup type="header">
+                            <p:row>
+                                <p:column rowspan="2" headerText="Patente"/>
+                                <p:column colspan="3" headerText="Última mantención"/>
+                                <p:column colspan="2" headerText="Última Panne"/>
+                                <p:column width="90" rowspan="2" headerText="Kms. Actuales"/>
+                                <p:column width="160" rowspan="2" headerText="Prox. Control"/>
+                                <p:column rowspan="2" headerText="Kms. Faltantes"/>
+                                <p:column width="20" rowspan="2" headerText=""/>
+                            </p:row>
+                            <p:row>
+                                <p:column headerText="Fecha"/>
+                                <p:column headerText="Tipo"/>
+                                <p:column headerText="KM"/>
+
+                                <p:column headerText="Fecha"/>
+                                <p:column headerText="KM"/>
+                            </p:row>
+                        </p:columnGroup>
+                        <p:column>
+                            <p:commandLink value="#{mt.tracto.patente}" ajax="false"
+                                           action="#{mantenedorMantenciones.irHistorial(mt.tracto)}"/>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{mt.fecha}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>#{mt.tipo.nombre}</p:column>
+                        <p:column>
+                            <p:commandLink ajax="false">
+                                <h:outputText value="#{mt.kilometraje}">
+                                    <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                </h:outputText>
+                                <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(mt)}"/>
+                            </p:commandLink>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{mantenedorMantenciones.obtenerFechaUltimaPanne(mt.tracto)}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <p:commandLink ajax="false">
+                                <h:outputText value="#{mantenedorMantenciones.obtenerKmUltimaPanne(mt.tracto)}">
+                                    <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                </h:outputText>
+                                <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargablePanne(mt.tracto)}"/>
+                            </p:commandLink>
+                        </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunGuias(mt.tracto)}">
+                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column style="white-space: nowrap">
+                            <h:outputText value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencion(mt)}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText> (
+                            <h:outputText value="#{mantenedorMantenciones.obtenerKmSiguienteMantencion(mt)}">
+                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                            </h:outputText> Kms. )
+                        </p:column>
+                        <p:column>
+                            <h:outputText value="#{mantenedorMantenciones.obtenerKmsFaltante(mt)}">
+                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column>
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojo(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                                    value="/img/icons/luz_roja.png"/>
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarillo(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                                    value="/img/icons/luz_amarilla.png"/>
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerde(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                                    value="/img/icons/luz_verde.png"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+                <p:tab title="Semiremolques">
+                    <p:commandButton value="Agregar" action="#{mantenedorMantenciones.irEditar()}"
+                                     icon="ui-icon-plus"/>
+                    <p:dataTable emptyMessage="No se han registrado mantenciones"
+                                 value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"
+                                 rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
+                                 paginatorTemplate="#{constantes.paginadorTemplate}"
+                                 rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+                        <p:column headerText="Patente">
+                            <p:commandLink value="#{ms.semiRemolque.patente}" ajax="false"
+                                           action="#{mantenedorMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
+                        </p:column>
+                        <p:column headerText="Fecha">
+                            <p:commandLink ajax="false">
+                                <h:outputText value="#{ms.fecha}">
+                                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                                </h:outputText>
+                                <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableSemiremolque(ms)}"/>
+                            </p:commandLink>
+                        </p:column>
+                        <p:column headerText="Próx. Mantención">
+                            <h:outputText
+                                    value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencionSemiremolque(ms)}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="" width="20">
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojoSemiremolque(ms)}"
+                                    value="/img/icons/luz_roja.png"/>
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarilloSemiremolque(ms)}"
+                                    value="/img/icons/luz_amarilla.png"/>
+                            <h:graphicImage
+                                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerdeSemiremolque(ms)}"
+                                    value="/img/icons/luz_verde.png"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:tab>
+            </p:tabView>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -33,6 +33,7 @@ public class Constantes implements Serializable {
 
     // Zona de personal
     private int cargoConductor = 3;
+    private int cargoMecanico = 4;
     private List<String> estadosCiviles;
     private int fonasa = 0;
     private int isapre = 1;
@@ -44,6 +45,7 @@ public class Constantes implements Serializable {
     // Zona equipos
     private int equipoTipoTracto = 1;
     private int equipoTipoBatea = 2;
+    private int alarmaProximaMantencion = 2000;
 
     // Zona registros
     private int registroR112 = 1;
@@ -276,5 +278,13 @@ public class Constantes implements Serializable {
 
     public String getModuloEquipos() {
         return moduloEquipos;
+    }
+
+    public int getCargoMecanico() {
+        return cargoMecanico;
+    }
+
+    public int getAlarmaProximaMantencion() {
+        return alarmaProximaMantencion;
     }
 }

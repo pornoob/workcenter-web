@@ -1,4 +1,4 @@
-package workcenter.negocio;
+package workcenter.negocio.personal;
 
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -125,5 +125,12 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public List<DocumentoPersonal> obtenerDocumentosActualizados(Personal p) {
         return personalDao.obtenerDocumentosActualizados(p);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Personal> obtenerMecanicos() {
+        List<Personal> mecanicos = personalDao.obtenerSegunCargo(constantes.getCargoMecanico());
+        mecanicos.add(personalDao.obtener(8846226)); // don freddy (socio empresa)
+        return mecanicos;
     }
 }

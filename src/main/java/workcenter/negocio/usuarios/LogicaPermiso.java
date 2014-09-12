@@ -1,4 +1,4 @@
-package workcenter.negocio;
+package workcenter.negocio.usuarios;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;

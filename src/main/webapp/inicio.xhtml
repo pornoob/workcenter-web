@@ -12,7 +12,7 @@
             <p:panel header="Módulos Mantenedores">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"
-                                   action="#{facesUtil.redirigir('/spring/personal')}" class="menuWorkcenter"
+                                   action="#{facesUtil.redirigir('/m/personal')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_personal.png"/>
@@ -20,14 +20,22 @@
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"
-                                   action="#{facesUtil.redirigir('/spring/equipos')}" class="menuWorkcenter"
+                                   action="#{facesUtil.redirigir('/m/equipos')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_camiones.png"/>
                         <h:outputLabel value="Mantenedor de Equipos"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="false" action="#{facesUtil.redirigir('/spring/empresas')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"
+                                   action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <h:graphicImage value="/img/icons/64/m_mantenciones.png"/>
+                        <h:outputLabel value="Módulo de Mantenciones"/>
+                    </h:commandLink>
+
+                    <h:commandLink ajax="false" rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
                                    class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_empresas.png"/>
@@ -35,7 +43,7 @@
                     </h:commandLink>
 
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"
-                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/usuarios')}"
+                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/m/usuarios')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_usuarios.png"/>
@@ -43,7 +51,7 @@
                     </h:commandLink>
 
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"
-                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/registros')}"
+                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/m/registros')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_formularios.png"/>
@@ -52,7 +60,7 @@
 
                     <h:commandLink ajax="false"
                                    rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
-                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/spring/remuneraciones')}"
+                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_remuneraciones.png"/>
@@ -64,7 +72,7 @@
             <p:panel header="Módulos Gestión">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
-                                   action="#{facesUtil.redirigir('/spring/alarmas_gps')}" class="menuWorkcenter"
+                                   action="#{facesUtil.redirigir('/m/alarmas_gps')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_alarmas_gps.png"/>
@@ -72,7 +80,7 @@
                     </h:commandLink>
 
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"
-                                   action="#{facesUtil.redirigir('/spring/informe_actividades')}" class="menuWorkcenter"
+                                   action="#{facesUtil.redirigir('/m/informe_actividades')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_informe_actividades.png"/>
@@ -80,7 +88,7 @@
                     </h:commandLink>
 
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"
-                                   action="#{facesUtil.redirigir('/spring/programa_actividades')}"
+                                   action="#{facesUtil.redirigir('/m/programa_actividades')}"
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">

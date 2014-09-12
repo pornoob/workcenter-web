@@ -21,7 +21,7 @@ import workcenter.entidades.MpaPrograma;
 import workcenter.entidades.MpaValorPlanPrograma;
 import workcenter.entidades.Personal;
 import workcenter.negocio.LogicaDocumentos;
-import workcenter.negocio.LogicaPersonal;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.LogicaProgramaActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;

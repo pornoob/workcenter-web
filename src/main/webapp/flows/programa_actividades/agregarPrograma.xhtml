@@ -11,10 +11,15 @@
         <h:form id="frmCrearPro">
             <h:panelGrid columns="3">
                 <p:outputLabel value="Nombre Programa"/>:
-                <p:inputText id="programa" required="true" requiredMessage="Debes ingresar el nombre del programa" value="#{mantenedorProgramaActividades.programa.nombre}"/>
+                <p:inputText id="programa" required="true" requiredMessage="Debes ingresar el nombre del programa"
+                             value="#{mantenedorProgramaActividades.programa.nombre}"/>
             </h:panelGrid>
-            <p:commandButton value="Volver" immediate="true" action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
-            <p:commandButton value="Guardar" action="#{mantenedorProgramaActividades.guardarPrograma()}"/>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" immediate="true"
+                                 action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar"
+                                 action="#{mantenedorProgramaActividades.guardarPrograma()}"/>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

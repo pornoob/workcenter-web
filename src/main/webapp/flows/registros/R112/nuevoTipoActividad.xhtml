@@ -38,10 +38,10 @@
                 </h:panelGroup>
             </h:panelGrid>
 
-            <p:panel styleClass="actionPanel">
-                <p:commandButton value="Guardar" ajax="false" action="#{registroR112.guardarTipoActividad()}"/>
-                <p:commandButton value="Volver" action="#{registroR112.irNuevoR112()}"/>
-            </p:panel>
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false" action="#{registroR112.guardarTipoActividad()}"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{registroR112.irNuevoR112()}" ajax="false" immediate="true"/>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

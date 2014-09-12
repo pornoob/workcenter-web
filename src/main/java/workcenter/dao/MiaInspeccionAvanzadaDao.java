@@ -17,7 +17,7 @@ import java.util.List;
  * Created by colivares on 20-08-14.
  */
 @Repository
-public class InspeccionAvanzadaDao {
+public class MiaInspeccionAvanzadaDao {
     @PersistenceContext
     EntityManager em;
 

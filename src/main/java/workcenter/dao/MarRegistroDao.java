@@ -16,7 +16,7 @@ import java.util.List;
  * Created by colivares on 04-08-14.
  */
 @Repository
-public class RegistroDao {
+public class MarRegistroDao {
     @PersistenceContext
     EntityManager em;
 

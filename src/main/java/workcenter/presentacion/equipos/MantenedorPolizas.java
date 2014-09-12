@@ -11,7 +11,7 @@ import workcenter.entidades.Equipo;
 import workcenter.entidades.SeguroEquipo;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
-import workcenter.negocio.LogicaEquipos;
+import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;

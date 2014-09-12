@@ -23,7 +23,7 @@
         <h:form id="formR112">
             <p:panel header="Detalle">
                 <p:commandButton icon="ui-icon-plus" immediate="true" value="Agregar Subtipo de Actividad"
-                                 rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
+                                 rendered="#{sesionCliente.esAdministrador(constantes.moduloAdministradorRegistros)}"
                                  action="#{registroR112.preparaCreacionTipoActividad()}"/>
                 <h:panelGrid columns="2">
                     <h:panelGrid columns="3">
