@@ -26,16 +26,16 @@
                     <h:outputText value="#{a.id}"/>
                 </p:column>
                 <p:column headerText="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
-                          filterMatchMode="contains">
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
                 </p:column>
-                <p:column headerText="Subtipo" filterBy="#{a.tipoActividad.nombre}" filterMatchMode="contains">
+                <p:column headerText="Subtipo" filterBy="#{a.tipoActividad.nombre}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{a.tipoActividad.nombre}"/>
                 </p:column>
-                <p:column headerText="Encargado" filterBy="#{a.encargado.nombreCompleto}" filterMatchMode="contains">
+                <p:column headerText="Encargado" filterBy="#{a.encargado.nombreCompleto}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{a.encargado.nombreCompleto}"/>
                 </p:column>
-                <p:column headerText="Fecha" filterBy="#{a.fecha}" filterMatchMode="contains">
+                <p:column headerText="Fecha" filterBy="#{a.fecha}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{a.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>

@@ -76,7 +76,13 @@ public class Equipo implements Serializable {
     private Integer kilometraje;
     @Column(name = "bollo")
     private Boolean bollo;
-    @OneToMany(mappedBy = "equipo", fetch = FetchType.LAZY)
+    @OneToMany(
+            mappedBy = "equipo",
+            fetch = FetchType.LAZY,
+            cascade = {
+                CascadeType.REMOVE , CascadeType.DETACH, CascadeType.REFRESH
+            }
+    )
     private List<FotoEquipo> fotos;
 
     public Equipo() {

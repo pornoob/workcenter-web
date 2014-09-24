@@ -36,7 +36,6 @@ public class TipoDocPersonal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Size(max = 70)
@@ -96,7 +95,6 @@ public class TipoDocPersonal implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof TipoDocPersonal)) {
             return false;
         }

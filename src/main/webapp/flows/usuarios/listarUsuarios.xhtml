@@ -27,11 +27,11 @@
                     <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>
                 </p:column>
                 
-                <p:column filterBy="#{personal.nombres}" headerText="Nombres" filterMatchMode="contains">
+                <p:column filterBy="#{personal.nombres}" headerText="Nombres" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
                 </p:column>
 
-                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos" filterMatchMode="contains">
+                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
                 </p:column>
 

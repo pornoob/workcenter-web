@@ -27,7 +27,7 @@
                         <h:outputLabel value="Mantenedor de Equipos"/>
                     </h:commandLink>
 
-                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"
                                    action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">

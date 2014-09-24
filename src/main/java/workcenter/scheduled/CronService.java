@@ -50,6 +50,7 @@ public class CronService {
         testQueryDao.run();
     }
 
+    // todos los días a las 7 de la mañana descargar correo SAMTECH
     @Scheduled(cron = "0 0 7 * * *")
     public void descargarFicheroAlarmaGPS() {
         Properties props = new Properties();

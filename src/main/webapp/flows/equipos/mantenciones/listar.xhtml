@@ -8,10 +8,25 @@
     <ui:define name="contenido">
 
         <h2>Listado de Mantenciones</h2>
-        <h:form id="formMantenciones">
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="formMantenciones" enctype="multipart/form-data">
+            <p:panel rendered="#{sesionCliente.esAdministrador(constantes.getModuloMantenciones())}"
+                     header="Información Copec">
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="iFecha" value="Última Actualización"/>:
+                    <p:inputText readonly="true" id="iFecha" value="#{importadorDatosCopec.ultimaActualizacion}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </p:inputText>
+                    <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>:
+                    <p:fileUpload value="#{importadorDatosCopec.archivo}" id="iArchivo" mode="simple"/>
+                </h:panelGrid>
+                <p:commandButton action="#{importadorDatosCopec.subir}" ajax="false" icon="ui-icon-arrowthickstop-1-n"
+                                 value="Subir"/>
+            </p:panel>
             <p:tabView>
                 <p:tab title="Tractos">
-                    <p:commandButton value="Agregar" action="#{mantenedorMantenciones.irEditar()}" icon="ui-icon-plus"/>
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                                     action="#{mantenedorMantenciones.irEditar()}" icon="ui-icon-plus"/>
                     <p:dataTable emptyMessage="No se han registrado mantenciones"
                                  value="#{mantenedorMantenciones.mantencionesTractos}" var="mt"
                                  rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
@@ -22,7 +37,7 @@
                                 <p:column rowspan="2" headerText="Patente"/>
                                 <p:column colspan="3" headerText="Última mantención"/>
                                 <p:column colspan="2" headerText="Última Panne"/>
-                                <p:column width="90" rowspan="2" headerText="Kms. Actuales"/>
+                                <p:column width="100" colspan="2" headerText="Kms. Actuales"/>
                                 <p:column width="160" rowspan="2" headerText="Prox. Control"/>
                                 <p:column rowspan="2" headerText="Kms. Faltantes"/>
                                 <p:column width="20" rowspan="2" headerText=""/>
@@ -34,6 +49,9 @@
 
                                 <p:column headerText="Fecha"/>
                                 <p:column headerText="KM"/>
+
+                                <p:column headerText="Guías"/>
+                                <p:column headerText="Copec"/>
                             </p:row>
                         </p:columnGroup>
                         <p:column>
@@ -75,6 +93,13 @@
                                 <f:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
+
+                        <p:column>
+                            <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunProveedor(mt.tracto)}">
+                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
+
                         <p:column style="white-space: nowrap">
                             <h:outputText value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencion(mt)}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
@@ -102,7 +127,8 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Semiremolques">
-                    <p:commandButton value="Agregar" action="#{mantenedorMantenciones.irEditar()}"
+                    <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                                     action="#{mantenedorMantenciones.irEditar()}"
                                      icon="ui-icon-plus"/>
                     <p:dataTable emptyMessage="No se han registrado mantenciones"
                                  value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"

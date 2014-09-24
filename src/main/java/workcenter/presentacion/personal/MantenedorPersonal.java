@@ -1,28 +1,33 @@
 package workcenter.presentacion.personal;
 
 import org.primefaces.model.StreamedContent;
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
+import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
 import workcenter.negocio.LogicaVariables;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 
-import java.io.File;
-import java.io.Serializable;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
+
 /**
- *
  * @author colivares
  */
 @Component
@@ -55,24 +60,43 @@ public class MantenedorPersonal implements Serializable {
     private SancionRetiradaPersonal retiroSancion;
     private Sancionado sancion;
     private DocumentoPersonal docSeleccionado;
+    private List<DocumentoPersonal> documentos;
+    private List<TipoDocPersonal> tiposDocumentos;
+    private UploadedFile archivo;
+
+    private enum TipoOperacion {
+        EDITAR,
+        ACTUALIZAR,
+        INGRESAR
+    }
+
+    ;
+
+    private TipoOperacion operacion;
 
     @Autowired
-    LogicaPersonal logicaPersonal;
+    private LogicaPersonal logicaPersonal;
 
     @Autowired
-    LogicaVariables logicaVariables;
+    private LogicaVariables logicaVariables;
 
     @Autowired
-    LogicaEmpresas logicaEmpresas;
+    private LogicaEmpresas logicaEmpresas;
 
     @Autowired
-    LogicaPrevisiones logicaPrevisiones;
+    private LogicaPrevisiones logicaPrevisiones;
 
     @Autowired
-    Constantes constantes;
+    private Constantes constantes;
 
     @Autowired
-    SesionCliente sesionCliente;
+    private SesionCliente sesionCliente;
+
+    @Autowired
+    private Formato formato;
+
+    @Autowired
+    private LogicaDocumentos logicaDocumentos;
 
     public String inicio() {
         opcionesFiltroEstado = new ArrayList<FilterOption>();
@@ -92,7 +116,7 @@ public class MantenedorPersonal implements Serializable {
         sancion.setSancionado(personalSeleccionado);
         personalSeleccionado.setSancion(sancion);
         logicaPersonal.guardar(personalSeleccionado);
-        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha sancionado al personal "+personalSeleccionado.getNombreCompleto()+" por "+sancion.getMotivo());
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha sancionado al personal " + personalSeleccionado.getNombreCompleto() + " por " + sancion.getMotivo());
     }
 
     public void quitarSancion() {
@@ -100,7 +124,7 @@ public class MantenedorPersonal implements Serializable {
         retiroSancion.setPerdonadapor(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
         personalSeleccionado.setSancion(null);
         logicaPersonal.guardar(personalSeleccionado);
-        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha quitado la sanción al personal "+personalSeleccionado.getNombreCompleto()+" por "+retiroSancion.getMotivosancion()+" debido a "+retiroSancion.getMotivolevantada());
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha quitado la sanción al personal " + personalSeleccionado.getNombreCompleto() + " por " + retiroSancion.getMotivosancion() + " debido a " + retiroSancion.getMotivolevantada());
     }
 
     public String volverDesdeDesbloqueo() {
@@ -131,6 +155,18 @@ public class MantenedorPersonal implements Serializable {
     public String irVerFicha(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
+        documentos = new ArrayList<DocumentoPersonal>(personalSeleccionado.getDocumentos());
+        tiposDocumentos = new ArrayList<TipoDocPersonal>();
+        for (TipoDocPersonal tdp : logicaPersonal.obtenerTiposDocPorCargo(personalSeleccionado)) {
+            boolean encontrado = false;
+            for (DocumentoPersonal dp : documentos) {
+                if (dp.getTipo().equals(tdp)) {
+                    encontrado = true;
+                    break;
+                }
+            }
+            if (!encontrado) tiposDocumentos.add(tdp);
+        }
         rutIngresado = p.getRut() + "-" + p.getDigitoverificador();
         return "flowMostrarFicha";
     }
@@ -159,6 +195,19 @@ public class MantenedorPersonal implements Serializable {
 
     public String irActualizarDocCarpeta(DocumentoPersonal dp) {
         docSeleccionado = dp;
+        operacion = TipoOperacion.ACTUALIZAR;
+        return "flowActualizarDocumento";
+    }
+
+    public String irEditarDocCarpeta(DocumentoPersonal dp) {
+        docSeleccionado = dp;
+        operacion = TipoOperacion.EDITAR;
+        return "flowActualizarDocumento";
+    }
+
+    public String irIngresarDocCarpeta() {
+        docSeleccionado = new DocumentoPersonal();
+        operacion = TipoOperacion.INGRESAR;
         return "flowActualizarDocumento";
     }
 
@@ -180,6 +229,74 @@ public class MantenedorPersonal implements Serializable {
         String retorno = irContratosPersonal(personalSeleccionado);
         paginaPrevia = "flowMostrarFicha";
         return retorno;
+    }
+
+    public void subirArchivo() {
+        String path = constantes.getPathArchivos() + "Documentos/personal/"
+                + formato.numeroAgrupado(personalSeleccionado.getRut())
+                + "-" + personalSeleccionado.getDigitoverificador() + "/";
+        new File(path).mkdirs();
+        path += docSeleccionado.getTipo().getEtiqueta() + archivo.getFileName().substring(archivo.getFileName().lastIndexOf('.'));
+        if (docSeleccionado.getId() == null) {
+            docSeleccionado.setPersonal(personalSeleccionado);
+            personalSeleccionado.getDocumentos().add(docSeleccionado);
+        }
+        DocumentoPersonal existente = null;
+        if (operacion == TipoOperacion.ACTUALIZAR) {
+            // respaldamos existente antes de subir
+            for (DocumentoPersonal de : documentos) {
+                if (de.getTipo().equals(docSeleccionado.getTipo())) {
+                    existente = de;
+                    break;
+                }
+            }
+            Documento d = new Documento();
+            d.setFecha(new Date());
+            System.err.println("EXISTENTE: "+existente);
+            d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
+            logicaDocumentos.guardarDocumento(d);
+
+
+            HistorialDocumentosPersonal respaldo = new HistorialDocumentosPersonal();
+            respaldo.setNumero(existente.getNumero());
+            respaldo.setPersonal(personalSeleccionado.getRut());
+            respaldo.setTipo(docSeleccionado.getTipo().getId());
+            respaldo.setVencimiento(existente.getVencimiento());
+            logicaPersonal.guardarHistorialDocumento(respaldo);
+
+            File result = new File(constantes.getPathArchivos());
+            result.mkdirs();
+            try {
+                Files.move(Paths.get(constantes.getPathArchivos() + existente.getArchivo()), Paths.get(constantes.getPathArchivos() + d.getId()));
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            logicaDocumentos.asociarDocumento(d, respaldo);
+        } else if (operacion == TipoOperacion.INGRESAR) {
+            tiposDocumentos.remove(docSeleccionado.getTipo());
+        }
+        docSeleccionado.setArchivo(path.substring(constantes.getPathArchivos().length()));
+        logicaPersonal.guardarDocumento(docSeleccionado);
+        try {
+            new File(path).createNewFile();
+            FileOutputStream fileOutputStream = new FileOutputStream(path);
+            byte[] buffer = new byte[BUFFER_SIZE];
+            int bulk;
+            InputStream inputStream = archivo.getInputstream();
+            while (true) {
+                bulk = inputStream.read(buffer);
+                if (bulk < 0) {
+                    break;
+                }
+                fileOutputStream.write(buffer, 0, bulk);
+                fileOutputStream.flush();
+            }
+            fileOutputStream.close();
+            inputStream.close();
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha agregado la nueva imagen");
+        } catch (Exception e) {
+            FacesUtil.mostrarMensajeInformativo("Operación fallida", "Ha ocurrido un error interno");
+        }
     }
 
     public String irEditarContrato(ContratoPersonal cp) {
@@ -307,6 +424,18 @@ public class MantenedorPersonal implements Serializable {
         } else {
             return true;
         }
+    }
+
+    public boolean esActualizarDoc() {
+        return operacion == TipoOperacion.ACTUALIZAR;
+    }
+
+    public boolean esEditarDoc() {
+        return operacion == TipoOperacion.EDITAR;
+    }
+
+    public boolean esIngresarDoc() {
+        return operacion == TipoOperacion.INGRESAR;
     }
 
     public StreamedContent generaDescargable(DocumentoPersonal dp) {
@@ -512,5 +641,21 @@ public class MantenedorPersonal implements Serializable {
 
     public void setDocSeleccionado(DocumentoPersonal docSeleccionado) {
         this.docSeleccionado = docSeleccionado;
+    }
+
+    public UploadedFile getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(UploadedFile archivo) {
+        this.archivo = archivo;
+    }
+
+    public List<TipoDocPersonal> getTiposDocumentos() {
+        return tiposDocumentos;
+    }
+
+    public void setTiposDocumentos(List<TipoDocPersonal> tiposDocumentos) {
+        this.tiposDocumentos = tiposDocumentos;
     }
 }

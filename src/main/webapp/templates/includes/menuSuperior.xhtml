@@ -34,7 +34,7 @@
                     </li>
                 </ui:fragment>
 
-                <ui:fragment rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}">
+                <ui:fragment rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}">
                     <li>
                         <h:commandLink action="#{facesUtil.redirigir('/m/equipos/mantenciones')}"
                                        title="Módulo de Mantenciones"

@@ -72,6 +72,7 @@ public class Constantes implements Serializable {
     private String moduloPersonal = "Mantenedor Personal App";
     private String moduloAdministradorRegistros = "Administrador de Registros";
     private String moduloEquipos = "Mantenedor Tractos";
+    private String moduloMantenciones = "Modulo Mantenciones";
 
     @Autowired
     LogicaVariables logicaVariables;
@@ -286,5 +287,9 @@ public class Constantes implements Serializable {
 
     public int getAlarmaProximaMantencion() {
         return alarmaProximaMantencion;
+    }
+
+    public String getModuloMantenciones() {
+        return moduloMantenciones;
     }
 }

@@ -83,6 +83,7 @@ public class SesionCliente implements Serializable {
 
     public boolean tieneNivel(Integer nivel, String permiso) {
         Permiso p = null;
+        if (this.getUsuario() == null) return false;
         if (!this.getUsuario().isExterno())
             p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
         else

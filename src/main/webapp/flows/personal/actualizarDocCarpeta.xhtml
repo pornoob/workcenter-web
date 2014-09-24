@@ -5,20 +5,39 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
-        <h2>Actualizar Documento de Carpeta</h2>
+        <h2>
+            <h:outputText rendered="#{mantenedorPersonal.esActualizarDoc()}" value="Actualizar Documento de Carpeta"/>
+            <h:outputText rendered="#{mantenedorPersonal.esEditarDoc()}" value="Editar Documento de Carpeta"/>
+            <h:outputText rendered="#{mantenedorPersonal.esIngresarDoc()}" value="Ingresar Documento de Carpeta"/>
+        </h2>
 
-        <h3>#{mantenedorPersonal.docSeleccionado.tipo.etiqueta} - #{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
-        <h:form id="frmPersonal">
-            <p:fileUpload label="Seleccionar nuevo" cancelLabel="Cancelar" uploadLabel="Subir" auto="false"
-                          mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(pdf|jpg|png)$/i"
-                          rendered="#{mantenedorPersonal.docSeleccionado.id != null}"/>
-            <p:fileUpload label="Seleccionar nuevo" cancelLabel="Cancelar" uploadLabel="Subir" auto="false"
-                          mode="advanced" fileLimit="1" allowTypes="/(\.|\/)(pdf|jpg|png)$/i"
-                          rendered="#{mantenedorPersonal.docSeleccionado.id == null}"/>
-            <p:panel styleClass="actionPanel">
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+
+        <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
+        <h:form id="frmPersonal" enctype="multipart/form-data">
+            <h:panelGrid columns="3">
+                <h:outputLabel value="Tipo Documento"/>:
+                <h:outputText rendered="#{!mantenedorPersonal.esIngresarDoc()}"
+                              value="#{mantenedorPersonal.docSeleccionado.tipo.etiqueta}"/>
+                <p:selectOneMenu converter="entityConverter" filter="true"
+                                 value="#{mantenedorPersonal.docSeleccionado.tipo}"
+                                 rendered="#{mantenedorPersonal.esIngresarDoc()}">
+                    <f:selectItems value="#{mantenedorPersonal.tiposDocumentos}" var="td" itemLabel="#{td.etiqueta}"/>
+                </p:selectOneMenu>
+                <h:outputLabel for="iNumero" value="Número"/>:
+                <p:inputText id="iNumero" value="#{mantenedorPersonal.docSeleccionado.numero}"/>
+                <h:outputLabel for="iVencimiento" value="Vencimiento"/>:
+                <p:calendar id="iVencimiento" pattern="dd-MM-yyyy"
+                            value="#{mantenedorPersonal.docSeleccionado.vencimiento}"/>
+                <h:outputLabel for="iArchivo" value="Archivo"/>:
+                <p:fileUpload value="#{mantenedorPersonal.archivo}" id="iArchivo" mode="simple"/>
+            </h:panelGrid>
+            <p:outputPanel styleClass="actionPanel">
                 <p:commandButton value="Volver" icon="ui-icon-arrowreturnthick-1-w"
                                  action="#{mantenedorPersonal.irVerFicha(mantenedorPersonal.personalSeleccionado)}"/>
-            </p:panel>
+                <p:commandButton value="Guardar" ajax="false" icon="ui-icon-disk"
+                                 action="#{mantenedorPersonal.subirArchivo}"/>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -1,5 +1,6 @@
 package workcenter.dao;
 
+import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
@@ -7,7 +8,9 @@ import workcenter.util.components.Constantes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -147,5 +150,22 @@ public class EquipoDao {
         } catch (Exception ex) {
             return null;
         }
+    }
+
+    public void guardarRendimientoDiario(RendimientoCopec rc) throws PersistenceException {
+        if (rc.getId() == null)
+            em.persist(rc);
+        else
+            em.merge(rc);
+    }
+
+    public Date obtenerFechaUltimoRendimientoDiario() {
+        String sql = "select max(fecha) from rendimientos_copec";
+        return (Date) em.createNativeQuery(sql).getSingleResult();
+    }
+
+    public Integer obtenerUltimoKmProveedor(Equipo e) {
+        String sql = "select max(odometro) from rendimientos_copec where patente = :patente";
+        return (Integer) em.createNativeQuery(sql).setParameter("patente", e.getPatente().replace(' ', '-')).getSingleResult();
     }
 }

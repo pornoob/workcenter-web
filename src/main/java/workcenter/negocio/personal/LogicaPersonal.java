@@ -8,14 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.CargoDao;
 import workcenter.dao.PersonalDao;
-import workcenter.entidades.Cargo;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.DocumentoPersonal;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.Personal;
-import workcenter.entidades.SancionRetiradaPersonal;
-import workcenter.entidades.Sancionado;
-import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.*;
 import workcenter.util.pojo.Md5;
 import workcenter.util.components.Constantes;
 
@@ -132,5 +125,20 @@ public class LogicaPersonal {
         List<Personal> mecanicos = personalDao.obtenerSegunCargo(constantes.getCargoMecanico());
         mecanicos.add(personalDao.obtener(8846226)); // don freddy (socio empresa)
         return mecanicos;
+    }
+
+    @Transactional(readOnly = false)
+    public void guardarDocumento(DocumentoPersonal doc) {
+        personalDao.guardarDocumento(doc);
+    }
+
+    @Transactional(readOnly = false)
+    public void guardarHistorialDocumento(HistorialDocumentosPersonal respaldo) {
+        personalDao.guardarHistorialDocumento(respaldo);
+    }
+
+    @Transactional(readOnly = true)
+    public List<TipoDocPersonal> obtenerTiposDocPorCargo(Personal p) {
+        return personalDao.obtenerTiposDocPorCargo(p);
     }
 }

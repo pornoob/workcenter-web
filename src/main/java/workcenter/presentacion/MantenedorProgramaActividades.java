@@ -162,17 +162,23 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     public String obtenerCumplimientoResponsable(MpaPlanPrograma plan) {
         float cumplimiento = 0;
         int contador = 0;
+        int planeado = 0;
         Calendar c = Calendar.getInstance();
 
         for (Mes mes : constantes.getMeses()) {
             if (Integer.parseInt(mes.getId()) >= c.get(Calendar.MONTH)) {
                 break;
             }
-            cumplimiento += logicaProgramaActividades.obtenerCumplimientoResponsable(plan, mes);
-            contador++;
+            planeado = plan.obtenerPorMes(mes);
+            if (planeado > 0) {
+                cumplimiento += logicaProgramaActividades.obtenerCumplimientoResponsable(plan, mes);
+                contador++;
+            }
         }
         NumberFormat nf = NumberFormat.getPercentInstance();
-        return nf.format(cumplimiento / contador);
+        if (contador > 0)
+            return nf.format(cumplimiento / contador);
+        return "0";
     }
 
     public String obtenerCumplimientoGlobal(MpaPrograma programa) {
@@ -196,11 +202,15 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
                 cumplimientoPersonal += logicaProgramaActividades.obtenerCumplimientoResponsable(p, mes);
                 contadorPersonal++;
             }
-            cumplimientoGlobal += (cumplimientoPersonal / contadorPersonal);
-            contadorGlobal++;
+            if (contadorPersonal > 0) {
+                cumplimientoGlobal += (cumplimientoPersonal / contadorPersonal);
+                contadorGlobal++;
+            }
         }
         NumberFormat nf = NumberFormat.getPercentInstance();
-        return nf.format(cumplimientoGlobal / contadorGlobal);
+        if (contadorGlobal > 0)
+            return nf.format(cumplimientoGlobal / contadorGlobal);
+        return "0";
     }
 
     public boolean correspondeDibujar(MpaPrograma p) {
@@ -252,7 +262,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         try {
             porcentaje = ((Number) nf.parse(s)).floatValue();
         } catch (Exception e) {
-            e.printStackTrace();
+//            e.printStackTrace();
             porcentaje = 0;
         }
 

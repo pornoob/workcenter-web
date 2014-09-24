@@ -9,6 +9,7 @@ import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.equipos.LogicaMantenciones;
+import workcenter.negocio.equipos.LogicaProveedorPetroleo;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
@@ -47,6 +48,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     @Autowired
     private Constantes constantes;
+
+    @Autowired
+    private LogicaProveedorPetroleo logicaProveedorPetroleo;
 
     private List<Equipo> tractos;
     private Equipo equipo;
@@ -162,6 +166,10 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         }
     }
 
+    public Integer obtenerKmSegunProveedor(Equipo e) {
+        return logicaProveedorPetroleo.obtenerUltimoOdometro(e);
+    }
+
     private Integer obtenerKmSegunVueltaGuia() {
         return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
                 : ultimaVuelta.getKmFinal();
@@ -186,7 +194,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public Integer obtenerKmsFaltante(MmeMantencionTracto mt) {
-        return obtenerKmSiguienteMantencion(mt).intValue() - obtenerKmSegunVueltaGuia().intValue();
+        Equipo e = mt.getTracto();
+        Integer kmCopec = obtenerKmSegunProveedor(e);
+        Integer kmGuia = obtenerKmSegunVueltaGuia();
+        int kms = 0;
+        if (kmCopec != null && kmGuia != null) kms = kmCopec.intValue() > kmGuia.intValue() ? kmCopec.intValue() : kmGuia.intValue();
+        else if (kmCopec == null && kmGuia != null) kms = kmGuia.intValue();
+        else if (kmCopec != null && kmGuia == null) kms = kmCopec.intValue();
+        return obtenerKmSiguienteMantencion(mt).intValue() - kms;
     }
 
     public void guardar() {

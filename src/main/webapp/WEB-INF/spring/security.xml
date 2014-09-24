@@ -16,20 +16,21 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                    access-denied-page="/inicio.jsf"
                    entry-point-ref="authenticationEntryPoint" >
   
-        <security:intercept-url pattern="/spring/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
-        <security:intercept-url pattern="/spring/usuarios" access="hasRole('MODULO_USUARIOS')"/>
-        <security:intercept-url pattern="/spring/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
-        <security:intercept-url pattern="/spring/personal" access="hasRole('MANTENEDOR_PERSONAL_APP')"/>
-        <security:intercept-url pattern="/spring/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
-        <security:intercept-url pattern="/spring/programa_actividades" access="hasRole('MODULO_PROGRAMA_ACTIVIDADES')"/>
+        <security:intercept-url pattern="/m/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
+        <security:intercept-url pattern="/m/usuarios" access="hasRole('MODULO_USUARIOS')"/>
+        <security:intercept-url pattern="/m/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
+        <security:intercept-url pattern="/m/personal" access="hasRole('MANTENEDOR_PERSONAL_APP')"/>
+        <security:intercept-url pattern="/m/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
+        <security:intercept-url pattern="/m/programa_actividades" access="hasRole('MODULO_PROGRAMA_ACTIVIDADES')"/>
 
-        <security:intercept-url pattern="/spring/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
-        <security:intercept-url pattern="/spring/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
-        <security:intercept-url pattern="/spring/inspeccion_avanzada" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+        <security:intercept-url pattern="/m/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+        <security:intercept-url pattern="/m/registros/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+        <security:intercept-url pattern="/m/registros/inspeccion_avanzada" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
 
-        <security:intercept-url pattern="/spring/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
-        <security:intercept-url pattern="/spring/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
-        <security:intercept-url pattern="/spring/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/equipos/mantenciones" access="hasRole('MODULO_MANTENCIONES')"/>
 
         <security:logout invalidate-session="true"
                          delete-cookies="jsessionid"

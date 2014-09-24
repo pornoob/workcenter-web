@@ -13,6 +13,7 @@ import workcenter.util.pojo.FilterOption;
 
 import java.io.*;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -104,11 +105,16 @@ public class MantenedorEquipos implements Serializable {
     public void subirFoto() {
         try {
             String path = constantes.getPathArchivos() + "Imagenes/equipos/" + equipo.getPatente();
+            new File(path).mkdirs();
             path += "/" + posicionFoto + foto.getFileName().substring(foto.getFileName().lastIndexOf('.'));
 
             List<FotoEquipo> existentes = obtenerFotosSegunPosicion();
             for (FotoEquipo fe : existentes) {
-                Files.delete(Paths.get(constantes.getPathArchivos() + fe.getFoto()));
+                try {
+                    Files.delete(Paths.get(constantes.getPathArchivos() + fe.getFoto()));
+                } catch (NoSuchFileException nsfe) {
+                    System.err.println("IMAGEN PREVIA MAL SUBIDA, NO EXISTE " + equipo.getPatente());
+                }
                 fotoEquipo = fe;
                 break;
             }
@@ -117,7 +123,9 @@ public class MantenedorEquipos implements Serializable {
             fotoEquipo.setEtiqueta(posicionFoto);
             fotoEquipo.setFoto(path.substring(constantes.getPathArchivos().length()));
             logicaEquipos.guardarFoto(fotoEquipo);
+            equipo.getFotos().add(fotoEquipo);
 
+            new File(path).createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             byte[] buffer = new byte[BUFFER_SIZE];
             int bulk;
@@ -133,6 +141,7 @@ public class MantenedorEquipos implements Serializable {
             fileOutputStream.close();
             inputStream.close();
             FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha agregado la nueva imagen");
+            fotoEquipo = new FotoEquipo();
         } catch (IOException e) {
             FacesUtil.mostrarMensajeError("Operación fallida", "Ha ocurrido un error interno");
             e.printStackTrace();
