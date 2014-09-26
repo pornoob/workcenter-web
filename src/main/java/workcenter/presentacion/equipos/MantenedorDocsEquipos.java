@@ -11,7 +11,7 @@ import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 import java.io.*;
 import java.nio.file.Files;

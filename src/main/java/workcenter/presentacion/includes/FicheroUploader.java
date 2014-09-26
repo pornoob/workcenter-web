@@ -9,14 +9,12 @@ import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 import workcenter.entidades.Documento;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.util.components.Constantes;
-import workcenter.util.components.SesionCliente;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 /**
  *

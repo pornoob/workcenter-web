@@ -25,7 +25,6 @@ public class UsuarioDto implements Serializable {
     }
 
     public Integer getRut() {
-
         return rut;
     }
 

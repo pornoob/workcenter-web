@@ -27,7 +27,7 @@
                     <p:outputPanel id="pPatente">
                         <p:inputMask
                                 rendered="#{mantenedorEquipos.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
-                                mask="aaaa 99" value="#{mantenedorEquipos.equipo.patente}"
+                                mask="aa** 99" value="#{mantenedorEquipos.equipo.patente}"
                                 style="text-transform: uppercase"/>
                         <p:inputMask
                                 rendered="#{mantenedorEquipos.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
@@ -67,7 +67,7 @@
                 </h:panelGrid>
             </p:panel>
             <p:panel id="pGalleria" header="Fotos Equipo">
-                <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorEquipos.irAgregarFoto()}"/>
+                <p:commandButton icon="ui-icon-plus" value="Agregar" ajax="false" action="#{mantenedorEquipos.irAgregarFoto()}"/>
                 <p:galleria panelWidth="600" value="#{mantenedorEquipos.equipo.fotos}" var="f"
                             autoPlay="true">
                     <h:graphicImage width="600" value="/oldFiles/#{f.foto}" alt="#{f.etiqueta}"

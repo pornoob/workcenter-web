@@ -16,7 +16,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.AlarmaGps;
 import workcenter.negocio.LogicaAlarmasGps;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 /**
  *

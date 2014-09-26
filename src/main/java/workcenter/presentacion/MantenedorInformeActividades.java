@@ -9,7 +9,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.servlet.http.HttpServletRequest;
 
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +27,7 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Semana;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 /**
  * @author colivares

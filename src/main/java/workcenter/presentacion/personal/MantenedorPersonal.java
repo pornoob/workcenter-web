@@ -15,7 +15,7 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 
 import java.io.*;

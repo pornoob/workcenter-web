@@ -7,6 +7,12 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "mue_permisos_usuarios", schema = "")
+@NamedQueries(
+        @NamedQuery(
+                name = "MuePermisoUsuario.findByUsuario",
+                query = "SELECT p FROM MuePermisoUsuario p WHERE p.usuario.usuario = :usuario"
+        )
+)
 public class MuePermisoUsuario {
     private Integer id;
     private MueUsuarioExterno usuario;

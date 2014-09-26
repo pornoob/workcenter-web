@@ -16,7 +16,7 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.usuarios.LogicaProyecto;
 import workcenter.negocio.usuarios.LogicaPermiso;
 import workcenter.util.components.Constantes;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.Md5;
 
 /**

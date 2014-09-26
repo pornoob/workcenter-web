@@ -8,7 +8,7 @@ import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 
 import java.io.*;
@@ -122,8 +122,8 @@ public class MantenedorEquipos implements Serializable {
             fotoEquipo.setEquipo(equipo);
             fotoEquipo.setEtiqueta(posicionFoto);
             fotoEquipo.setFoto(path.substring(constantes.getPathArchivos().length()));
+            if (fotoEquipo.getId() == null) equipo.getFotos().add(fotoEquipo);
             logicaEquipos.guardarFoto(fotoEquipo);
-            equipo.getFotos().add(fotoEquipo);
 
             new File(path).createNewFile();
             FileOutputStream fileOutputStream = new FileOutputStream(path);

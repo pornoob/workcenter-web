@@ -25,6 +25,7 @@ import workcenter.entidades.Personal;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaLibroRemuneraciones;
 import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.*;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
@@ -78,7 +79,7 @@ public class MantenedorRemuneraciones implements Serializable {
     public StreamedContent generaLiquidacion(Remuneracion r) {
         try {
             if (r.getArchivo() == null) {
-                FacesUtil.mostrarMensajeError("Operación fallida", "No se adjuntó la liquidación de "+r.getIdPersonal().getNombreCompleto());
+                FacesUtil.mostrarMensajeError("Operación fallida", "No se adjuntó la liquidación de " + r.getIdPersonal().getNombreCompleto());
                 return null;
             }
             SimpleDateFormat sdf = new SimpleDateFormat("yyyyMMdd");

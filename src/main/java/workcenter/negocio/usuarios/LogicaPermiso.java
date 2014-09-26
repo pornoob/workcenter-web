@@ -6,7 +6,10 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.PermisosDao;
+import workcenter.entidades.MuePermisoUsuario;
 import workcenter.entidades.Permiso;
+
+import java.util.List;
 
 /**
  * @author colivares
@@ -20,5 +23,15 @@ public class LogicaPermiso {
     @Transactional(readOnly = true)
     public Permiso obtenerPermiso(Integer id) {
         return permisoDao.obtener(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Permiso> obtPermisosUsuarioInterno(Integer rut) {
+        return permisoDao.obtenerTodos(rut);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MuePermisoUsuario> obtPermisosUsuarioExterno(String usuario) {
+        return permisoDao.obtenerTodos(usuario);
     }
 }

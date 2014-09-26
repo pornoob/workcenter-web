@@ -14,7 +14,7 @@ import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 import java.io.File;
 import java.io.Serializable;

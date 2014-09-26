@@ -21,14 +21,15 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "permisos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Permiso.findAll", query = "SELECT p FROM Permiso p"),
-    @NamedQuery(name = "Permiso.findById", query = "SELECT p FROM Permiso p WHERE p.id = :id"),
-    @NamedQuery(name = "Permiso.findByNivel", query = "SELECT p FROM Permiso p WHERE p.nivel = :nivel")})
+        @NamedQuery(name = "Permiso.findAll", query = "SELECT p FROM Permiso p"),
+        @NamedQuery(name = "Permiso.findById", query = "SELECT p FROM Permiso p WHERE p.id = :id"),
+        @NamedQuery(name = "Permiso.findByNivel", query = "SELECT p FROM Permiso p WHERE p.nivel = :nivel"),
+        @NamedQuery(name = "Permiso.findByRut", query = "SELECT p FROM Permiso  p WHERE p.usuario.rut = :rut")
+})
 public class Permiso implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)

@@ -12,7 +12,6 @@ import org.springframework.util.StringUtils;
 import workcenter.dao.UsuarioDao;
 import workcenter.entidades.Permiso;
 import workcenter.util.dto.UsuarioDto;
-import workcenter.util.pojo.FacesUtil;
 
 /**
  * @author colivares

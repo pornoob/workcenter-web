@@ -1,14 +1,45 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
         <h2>Perfil de Usuario</h2>
-        <h:outputText style="font-style: italic; color: red" value="En construcción"/>
-        <br/><br/><br/><br/>
         <h:form id="perfil">
+            <p:panel header="Datos de la Cuenta">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Tipo de Usuario"/>:
+                    <h:outputText rendered="#{!sesionCliente.usuario.externo}" value="Personal Interno"/>
+                    <h:outputText rendered="#{sesionCliente.usuario.externo}" value="Usuario Externo"/>
+                    <h:outputLabel value="Usuario"/>:
+                    <h:panelGroup rendered="#{!sesionCliente.usuario.externo}">
+                        <h:outputText value="#{sesionCliente.usuario.rut}"/>-#{mantenedorPerfilUsuario.obtenerDv(sesionCliente.usuario.rut)}
+                    </h:panelGroup>
+                    <h:outputText rendered="#{sesionCliente.usuario.externo}" value="#{sesionCliente.usuario.usuario}"/>
+                    <h:outputLabel value="Contraseña"/>:
+                    <p:commandButton icon="ui-icon-pencil" value="Cambiar" action="#{mantenedorPerfilUsuario.irCambiarClave()}"/>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Datos Personales">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Nombres"/>:
+                    <h:outputText value="#{sesionCliente.usuario.nombres}" converter="nombreConverter"/>
+                    <h:outputLabel value="Apellidos"/>:
+                    <h:outputText value="#{sesionCliente.usuario.apellidos}" converter="nombreConverter"/>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Niveles de Accesos">
+                <p:dataTable rows="#{constantes.cantidadFilasTablas}"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}" paginator="true"
+                             paginatorPosition="both" value="#{mantenedorPerfilUsuario.permisos}" var="p"
+                             emptyMessage="No se han encontrado resultados">
+                    <p:column headerText="Módulo" filterBy="#{p.modulo}"
+                              filterFunction="#{dataTableFilter.filtroInsensitivo}">#{p.modulo}</p:column>
+                    <p:column headerText="Nivel de Acceso" filterBy="#{p.acceso}"
+                              filterFunction="#{dataTableFilter.filtroInsensitivo}">#{p.acceso}</p:column>
+                </p:dataTable>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

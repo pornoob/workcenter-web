@@ -7,5 +7,10 @@
     </on-start>
 
     <view-state id="perfil">
+        <transition on="flowCambiarClave" to="cambiarClave"/>
+    </view-state>
+
+    <view-state id="cambiarClave">
+        <transition on="flowVerPerfil" to="perfil"/>
     </view-state>
 </flow>

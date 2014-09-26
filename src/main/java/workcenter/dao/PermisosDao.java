@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.MuePermisoUsuario;
 import workcenter.entidades.Permiso;
 
 /**
@@ -24,5 +25,13 @@ public class PermisosDao {
     
     public Permiso obtener(Integer id) {
         return em.find(Permiso.class, id);
+    }
+
+    public List<Permiso> obtenerTodos(Integer rut) {
+        return em.createNamedQuery("Permiso.findByRut").setParameter("rut", rut).getResultList();
+    }
+
+    public List<MuePermisoUsuario> obtenerTodos(String usuario) {
+        return em.createNamedQuery("MuePermisoUsuario.findByUsuario").setParameter("usuario", usuario).getResultList();
     }
 }

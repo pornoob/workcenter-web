@@ -29,7 +29,7 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.dto.Mes;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 /**
  *

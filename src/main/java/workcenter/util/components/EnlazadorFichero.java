@@ -10,7 +10,6 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.Documento;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.FacesUtil;
 
 /**
  *

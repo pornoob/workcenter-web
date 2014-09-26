@@ -9,7 +9,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.RendimientoCopec;
 import workcenter.negocio.equipos.LogicaProveedorPetroleo;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 import javax.persistence.PersistenceException;
 import java.io.IOException;

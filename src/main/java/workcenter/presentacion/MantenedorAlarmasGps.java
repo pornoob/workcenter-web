@@ -35,7 +35,7 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.dto.Mes;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.DynamicColumnDataTable;
-import workcenter.util.pojo.FacesUtil;
+import workcenter.util.components.FacesUtil;
 
 /**
  * @author colivares

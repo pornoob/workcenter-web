@@ -8,16 +8,18 @@
 http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd   
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
 
-    <security:http pattern="/templates/**" security="none" />
-    <security:http pattern="/resources/**" security="none" />
-    
-    <security:http auto-config="false" 
-                   use-expressions="true" 
+    <security:http pattern="/templates/**" security="none"/>
+    <security:http pattern="/resources/**" security="none"/>
+
+    <security:http auto-config="false"
+                   use-expressions="true"
                    access-denied-page="/inicio.jsf"
                    entry-point-ref="authenticationEntryPoint" >
-  
-        <security:intercept-url pattern="/m/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
+
         <security:intercept-url pattern="/m/usuarios" access="hasRole('MODULO_USUARIOS')"/>
+        <security:intercept-url pattern="/m/perfil" access="hasRole('USUARIO_WEB')"/>
+
+        <security:intercept-url pattern="/m/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
         <security:intercept-url pattern="/m/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
         <security:intercept-url pattern="/m/personal" access="hasRole('MANTENEDOR_PERSONAL_APP')"/>
         <security:intercept-url pattern="/m/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
@@ -25,7 +27,8 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
         <security:intercept-url pattern="/m/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
         <security:intercept-url pattern="/m/registros/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
-        <security:intercept-url pattern="/m/registros/inspeccion_avanzada" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
+        <security:intercept-url pattern="/m/registros/inspeccion_avanzada"
+                                access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
 
         <security:intercept-url pattern="/m/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
@@ -36,20 +39,21 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                          delete-cookies="jsessionid"
                          logout-success-url="/inicio.jsf"
                          logout-url="/logOut"/>
-        
+
         <security:session-management>
-            <security:concurrency-control max-sessions="1" />
+            <security:concurrency-control max-sessions="1"/>
         </security:session-management>
-        <security:form-login username-parameter="transVentanasUser" password-parameter="transVentanasPass" always-use-default-target="false"/>
+        <security:form-login username-parameter="transVentanasUser" password-parameter="transVentanasPass"
+                             always-use-default-target="false"/>
     </security:http>
-    
+
     <bean id="autenticadorPersonalizado" class="workcenter.security.LogInManager"/>
-    
+
     <security:authentication-manager>
         <security:authentication-provider ref="autenticadorPersonalizado"/>
     </security:authentication-manager>
-    
-    <bean id="authenticationEntryPoint"  
+
+    <bean id="authenticationEntryPoint"
           class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"
           p:loginFormUrl="/logIn.jsf"/>
 </beans>

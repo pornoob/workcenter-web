@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.UsuarioDao;
 import workcenter.entidades.Proyecto;
 import workcenter.util.dto.UsuarioDto;
@@ -20,6 +21,7 @@ public class LogicaUsuario {
     @Autowired
     UsuarioDao usuarioDao;
     
+    @Transactional(readOnly = true)
     public UsuarioDto logIn(String rut, String pass) {
         try {
             return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
@@ -28,10 +30,12 @@ public class LogicaUsuario {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Proyecto> obtenerPermisos(Integer rut) {
         return usuarioDao.obtenerPermisos(rut);
     }
 
+    @Transactional(readOnly = true)
     public UsuarioDto logInExterno(String usuario, String password) {
         try {
             return usuarioDao.obtenerUsuario(usuario, Md5.hash(password));
@@ -40,8 +44,18 @@ public class LogicaUsuario {
         }
     }
 
+    @Transactional(readOnly = true)
     public List<Proyecto> obtenerPermisos(String usuario) {
-        System.err.println(usuarioDao.obtenerPermisos(usuario));
         return usuarioDao.obtenerPermisos(usuario);
+    }
+
+    @Transactional(readOnly = false)
+    public void cambiarClave(String usuario, String clave) {
+        usuarioDao.cambiarClave(usuario, clave);
+    }
+
+    @Transactional(readOnly = false)
+    public void cambiarClave(Integer rut, String clave) {
+        usuarioDao.cambiarClave(rut, clave);
     }
 }

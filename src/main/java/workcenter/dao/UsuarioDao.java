@@ -138,4 +138,17 @@ public class UsuarioDao implements Serializable {
             return null;
         }
     }
+
+    public void cambiarClave(String usuario, String clave) {
+        MueUsuarioExterno u = (MueUsuarioExterno) em.createNamedQuery("MueUsuarioExterno.findByUsuario")
+                .setParameter("usuario", usuario).getSingleResult();
+        u.setClave(clave);
+        em.merge(u);
+    }
+
+    public void cambiarClave(Integer rut, String clave) {
+        Usuario u = (Usuario) em.createNamedQuery("Usuario.findByRut").setParameter("rut", rut).getSingleResult();
+        u.setPassword(clave);
+        em.merge(u);
+    }
 }

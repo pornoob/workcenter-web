@@ -1,4 +1,4 @@
-package workcenter.util.pojo;
+package workcenter.util.components;
 
 
 import java.io.IOException;
