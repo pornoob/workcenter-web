@@ -75,6 +75,16 @@
                         </h:commandLink>
                     </li>
                 </ui:fragment>
+                <ui:fragment rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}">
+                    <li>
+                        <h:commandLink action="#{facesUtil.redirigir('/m/incidencias')}"
+                                       title="PIIR" class="menuWorkcenter"
+                                       onmouseover="WebCenter.Menu.mouseover(this)"
+                                       onmouseout="WebCenter.Menu.mouseout(this)">
+                            <h:graphicImage value="/img/icons/24/m_incidencias.png"/>
+                        </h:commandLink>
+                    </li>
+                </ui:fragment>
                 <ui:fragment rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}">
                     <li>
                         <h:commandLink action="#{facesUtil.redirigir('/m/alarmas_gps')}"

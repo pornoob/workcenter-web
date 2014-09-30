@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.entidades.TipoUnidad;
-import workcenter.negocio.LogicaVariables;
+import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 

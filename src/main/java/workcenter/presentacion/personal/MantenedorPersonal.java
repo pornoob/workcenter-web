@@ -10,7 +10,7 @@ import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
-import workcenter.negocio.LogicaVariables;
+import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;

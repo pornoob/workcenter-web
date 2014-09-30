@@ -71,6 +71,14 @@
 
             <p:panel header="Módulos Gestión">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
+                                   action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <h:graphicImage value="/img/icons/64/m_incidencias.png"/>
+                        <h:outputLabel value="PIIR"/>
+                    </h:commandLink>
+
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
                                    action="#{facesUtil.redirigir('/m/alarmas_gps')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"

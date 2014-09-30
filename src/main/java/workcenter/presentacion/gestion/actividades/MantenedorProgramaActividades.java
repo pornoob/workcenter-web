@@ -1,4 +1,4 @@
-package workcenter.presentacion;
+package workcenter.presentacion.gestion.actividades;
 
 import java.io.File;
 import java.io.Serializable;

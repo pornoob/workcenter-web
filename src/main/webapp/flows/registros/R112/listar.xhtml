@@ -25,7 +25,7 @@
                 <p:column headerText="Folio" filterBy="#{a.id}" filterMatchMode="startsWith" width="30">
                     <h:outputText value="#{a.id}"/>
                 </p:column>
-                <p:column headerText="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
+                <p:column headerText="Tipo" filterBy="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"
                           filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     <h:outputText value="#{a.tipoActividad.marTipoActividadByIdTipoPadre.nombre}"/>
                 </p:column>
