@@ -95,4 +95,6 @@ public class ImportadorDatosCopec {
     public void setUltimaActualizacion(Date ultimaActualizacion) {
         this.ultimaActualizacion = ultimaActualizacion;
     }
+
+//    https://www.copec.cl/wseext/CopecWebPortalTaeTct/ExcelServlet?tipoArchivo=rendimientos&nameFile=InformeRendimientosDiario&tipo=0&fc_ini=01-10-2014&fc_fin=01-10-2014
 }

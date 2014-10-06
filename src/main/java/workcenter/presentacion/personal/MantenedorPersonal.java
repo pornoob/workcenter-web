@@ -24,6 +24,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 
@@ -37,8 +38,6 @@ public class MantenedorPersonal implements Serializable {
     private List<Personal> listaPersonal;
     private List<Personal> listaFiltradaPersonal;
     private Personal personalSeleccionado;
-    private String filtroEmpleador;
-    private Integer filtroEstado;
     private List<FilterOption> opcionesFiltroEstado;
     private List<FilterOption> opcionesSalud;
     private Integer tipoSalud;
@@ -152,6 +151,26 @@ public class MantenedorPersonal implements Serializable {
         return irListaPersonal();
     }
 
+    public boolean filtroEmpleador(Object valor, Object filtro, Locale idioma) {
+        if (valor == null) return false;
+        Empresa e = logicaPersonal.obtenerEmpleador((Personal) valor);
+        if (e == null) return false;
+        return e.getNombre().toLowerCase().contains(filtro.toString().toLowerCase());
+    }
+
+    public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
+        if (valor == null) return false;
+        Personal p = (Personal) valor;
+        Integer opcion = Integer.parseInt(filtro.toString());
+        if (opcion.intValue() == 2 && p.getSancion() == null) {
+            return false;
+        } else if (opcion.intValue() == 1 && p.getSancion() != null) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public String irVerFicha(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
@@ -213,8 +232,6 @@ public class MantenedorPersonal implements Serializable {
 
     public String irListaPersonal() {
         listaPersonal = logicaPersonal.obtenerTodos();
-        filtroEmpleador = null;
-        filtroEstado = null;
         return "flowListarPersonal";
     }
 
@@ -252,7 +269,7 @@ public class MantenedorPersonal implements Serializable {
             }
             Documento d = new Documento();
             d.setFecha(new Date());
-            System.err.println("EXISTENTE: "+existente);
+            System.err.println("EXISTENTE: " + existente);
             d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
             logicaDocumentos.guardarDocumento(d);
 
@@ -383,40 +400,6 @@ public class MantenedorPersonal implements Serializable {
         return logicaPersonal.obtenerEmpleador(p);
     }
 
-    public void filtraPorEmpleadores() {
-        listaFiltradaPersonal = new ArrayList<Personal>();
-        if (filtroEmpleador == null || "".equals(filtroEmpleador)) {
-            listaFiltradaPersonal = listaPersonal;
-            return;
-        }
-        Empresa e;
-        for (Personal p : listaPersonal) {
-            e = logicaPersonal.obtenerEmpleador(p);
-            if (e == null) {
-                continue;
-            }
-            if (e.getNombre().toLowerCase().contains(filtroEmpleador.toLowerCase())) {
-                listaFiltradaPersonal.add(p);
-            }
-        }
-    }
-
-    public void filtrarPorEstado() {
-        listaFiltradaPersonal = new ArrayList<Personal>();
-        if (filtroEstado == null || filtroEstado.intValue() == 0) {
-            listaFiltradaPersonal = listaPersonal;
-            return;
-        }
-        for (Personal p : listaPersonal) {
-            if (filtroEstado.intValue() == 2 && p.getSancion() == null) {
-                continue;
-            } else if (filtroEstado.intValue() == 1 && p.getSancion() != null) {
-                continue;
-            }
-            listaFiltradaPersonal.add(p);
-        }
-    }
-
     public boolean estaBloqueado(Personal p) {
         p.setSancion(logicaPersonal.obtenerSancion(p));
         if (p.getSancion() == null) {
@@ -465,22 +448,6 @@ public class MantenedorPersonal implements Serializable {
 
     public void setPersonalSeleccionado(Personal personalSeleccionado) {
         this.personalSeleccionado = personalSeleccionado;
-    }
-
-    public String getFiltroEmpleador() {
-        return filtroEmpleador;
-    }
-
-    public void setFiltroEmpleador(String filtroEmpleador) {
-        this.filtroEmpleador = filtroEmpleador;
-    }
-
-    public Integer getFiltroEstado() {
-        return filtroEstado;
-    }
-
-    public void setFiltroEstado(Integer filtroEstado) {
-        this.filtroEstado = filtroEstado;
     }
 
     public List<FilterOption> getOpcionesFiltroEstado() {

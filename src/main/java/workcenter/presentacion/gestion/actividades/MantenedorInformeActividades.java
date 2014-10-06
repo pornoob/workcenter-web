@@ -165,12 +165,10 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         actividadesDetalladas = new ArrayList<ActividadDiaria>();
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
         for (ActividadDiaria ad : actividades) {
-            System.out.println("COMPARANDO: " + dia + " vs " + ad.getFecha() + " Hora: " + ad.getHora() + " vs " + Integer.valueOf(h.getHora().split(":")[0]));
             if (sdf.format(ad.getFecha()).equals(sdf.format(dia)) && ad.getHora().intValue() == Integer.valueOf(h.getHora().split(":")[0])) {
                 actividadesDetalladas.add(ad);
             }
         }
-        System.out.println("EN TOTAL AGREGAMOS: " + actividadesDetalladas.size());
         return "flowDetalleActividades";
     }
 

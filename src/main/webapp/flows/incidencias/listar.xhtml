@@ -22,14 +22,31 @@
             <p:dataTable paginatorPosition="both" paginator="true"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          rows="#{constantes.cantidadFilasTablas}"
-                         emptyMessage="No se han reportado incidencias">
-                <p:column headerText="ID"></p:column>
-                <p:column headerText="Fecha"></p:column>
-                <p:column headerText="Incidencia"></p:column>
+                         emptyMessage="No se han reportado incidencias" value="#{mantenedorIncidencias.incidencias}"
+                         var="i">
+                <p:column headerText="ID">
+                    #{i.id}
+                </p:column>
+                <p:column headerText="Fecha">
+                    <h:outputText value="#{i.fecha}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Incidencia">
+                    #{mantenedorIncidencias.detalleInicial(i)}
+                </p:column>
                 <p:column headerText="Resolución"></p:column>
-                <p:column headerText="Informador"></p:column>
-                <p:column headerText="Apoyo Resolución"></p:column>
-                <p:column headerText="Fecha Programada de Resolución"></p:column>
+                <p:column headerText="Informador">
+                    #{i.rutInformador.nombreCompleto}
+                </p:column>
+                <p:column headerText="Apoyo Resolución">
+                    #{i.idApoyo.idSocio.nombre}
+                </p:column>
+                <p:column headerText="Fecha Programada de Resolución">
+                    <h:outputText value="#{i.resolucionProgramada}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
                 <p:column headerText="Estado"></p:column>
                 <p:column headerText=""></p:column>
             </p:dataTable>

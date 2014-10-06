@@ -6,10 +6,7 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MirIncidenciasDao;
-import workcenter.entidades.MirIncidencia;
-import workcenter.entidades.MirPrioridad;
-import workcenter.entidades.MirSeveridad;
-import workcenter.entidades.MirTrazabilidadIncidencia;
+import workcenter.entidades.*;
 
 import java.util.List;
 
@@ -36,5 +33,30 @@ public class LogicaIncidencias {
     public void guardarIncidencia(MirIncidencia incidencia, MirTrazabilidadIncidencia trazabilidad) {
         mirIncidenciasDao.guardarIncidencia(incidencia);
         mirIncidenciasDao.guardarTrazabilidad(trazabilidad);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MirApoyo> obtApoyos() {
+        return mirIncidenciasDao.obtApoyos();
+    }
+
+    @Transactional(readOnly = true)
+    public MirApoyo obtSiguienteApoyo() {
+        return mirIncidenciasDao.obtSiguienteApoyo();
+    }
+
+    @Transactional(readOnly = true)
+    public MirEstadoIncidencia obtEstado(Integer id) {
+        return mirIncidenciasDao.obtEstado(id);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MirIncidencia> obtTodas() {
+        return mirIncidenciasDao.obtTodas();
+    }
+
+    @Transactional(readOnly = true)
+    public String obtDetalleInicial(MirIncidencia i) {
+        return mirIncidenciasDao.obtDetalleInicial(i);
     }
 }

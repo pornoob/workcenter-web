@@ -118,22 +118,19 @@ public class MantenedorDocsEquipos implements Serializable {
                             break;
                         }
                     }
-                    Documento d = new Documento();
-                    d.setFecha(new Date());
-                    d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
-                    logicaDocumentos.guardarDocumento(d);
+                    if (new File(constantes.getPathArchivos() + existente.getArchivo()).exists()) {
+                        Documento d = new Documento();
+                        d.setFecha(new Date());
+                        d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
+                        logicaDocumentos.guardarDocumento(d);
 
-                    HistorialDocumentoEquipo respaldo = new HistorialDocumentoEquipo();
-                    respaldo.setNumero(existente.getNumero());
-                    respaldo.setPatente(existente.getPatente());
-                    respaldo.setVencimiento(existente.getVencimiento());
-                    respaldo.setTipo(existente.getTipo().getId());
-                    logicaEquipos.guardarHistorialDocumento(respaldo);
-
-                    File result = new File(constantes.getPathArchivos());
-                    result.mkdirs();
-                    Files.move(Paths.get(constantes.getPathArchivos() + existente.getArchivo()), Paths.get(constantes.getPathArchivos() + d.getId()));
-                    logicaDocumentos.asociarDocumento(d, respaldo);
+                        HistorialDocumentoEquipo respaldo = new HistorialDocumentoEquipo();
+                        respaldo.setNumero(existente.getNumero());
+                        respaldo.setPatente(existente.getPatente());
+                        respaldo.setVencimiento(existente.getVencimiento());
+                        respaldo.setTipo(existente.getTipo().getId());
+                        logicaEquipos.guardarHistorialDocumento(respaldo);
+                    }
                     break;
                 case EDITAR:
                     // sobreescribir el existente
@@ -143,7 +140,9 @@ public class MantenedorDocsEquipos implements Serializable {
                             break;
                         }
                     }
-                    Files.delete(Paths.get(constantes.getPathArchivos() + existente.getArchivo()));
+                    if (new File(constantes.getPathArchivos() + existente.getArchivo()).exists()) {
+                        Files.delete(Paths.get(constantes.getPathArchivos() + existente.getArchivo()));
+                    }
                     break;
             }
             path += "/" + documentoSeleccionado.getEtiqueta() + archivo.getFileName().substring(archivo.getFileName().lastIndexOf('.'));

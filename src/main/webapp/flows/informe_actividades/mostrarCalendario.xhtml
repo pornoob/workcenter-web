@@ -66,9 +66,9 @@
                             <ui:repeat value="#{mantenedorInformeActividades.semana.dias}" var="dia">
                                 <td style="text-align: center">
                                     <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="ta">
-                                        <p:outputPanel style="border:0; float: left"
+                                        <p:outputPanel style="border:0; float: left; padding-right: 12px"
                                                  rendered="#{mantenedorInformeActividades.hayActividadDelTipo(ta, dia.fecha, horario)}">
-                                            <img style="width: 15px" src="#{request.contextPath}#{ta.icono}"/>
+                                            <img style="width: 15px; height: 10px" src="#{request.contextPath}#{ta.icono}"/>
                                         </p:outputPanel>
                                     </ui:repeat>
 

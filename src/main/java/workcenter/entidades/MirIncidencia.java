@@ -9,10 +9,16 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "mir_incidencia", schema = "")
+@NamedQueries(
+        @NamedQuery(
+                name = "MirIncidencia.findAll",
+                query = "select i from MirIncidencia i order by i.fecha desc"
+        )
+)
 public class MirIncidencia implements Serializable {
     private Integer id;
-    private int rutInformador;
-    private int idApoyo;
+    private Personal rutInformador;
+    private MirApoyo idApoyo;
     private Date fecha;
     private Date resolucionProgramada;
     private MirSeveridad severidad;
@@ -29,23 +35,23 @@ public class MirIncidencia implements Serializable {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "rut_informador", nullable = false, insertable = true, updatable = true)
-    public int getRutInformador() {
+    @ManyToOne
+    @JoinColumn(name = "rut_informador", referencedColumnName = "rut")
+    public Personal getRutInformador() {
         return rutInformador;
     }
 
-    public void setRutInformador(int rutInformador) {
+    public void setRutInformador(Personal rutInformador) {
         this.rutInformador = rutInformador;
     }
 
-    @Basic
-    @Column(name = "id_apoyo", nullable = false, insertable = true, updatable = true)
-    public int getIdApoyo() {
+    @ManyToOne
+    @JoinColumn(name = "id_apoyo", referencedColumnName = "id")
+    public MirApoyo getIdApoyo() {
         return idApoyo;
     }
 
-    public void setIdApoyo(int idApoyo) {
+    public void setIdApoyo(MirApoyo idApoyo) {
         this.idApoyo = idApoyo;
     }
 

@@ -38,25 +38,14 @@
                     <h:outputText value="#{personal.celular}" />
                 </p:column>
 
-                <p:column filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                    <f:facet name="header">
-                        Empleador<br/>
-                        <p:inputText value="#{mantenedorPersonal.filtroEmpleador}" onkeypress="if (event.keyCode == 13) {
-                                    this.change();
-                                    return false;
-                                }">
-                            <p:ajax event="change" listener="#{mantenedorPersonal.filtraPorEmpleadores()}" process="@this" update="@form"/>
-                        </p:inputText>
-                    </f:facet>
+                <p:column filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEmpleador}" headerText="Empleador">
                     <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}" />
                 </p:column>
 
-                <p:column style="text-align: center">
-                    <f:facet name="header">
-                        Estado<br/>
-                        <p:selectOneMenu value="#{mantenedorPersonal.filtroEstado}" valueChangeListener="#{mantenedorPersonal.filtrarPorEstado()}">
+                <p:column headerText="Estado" filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEstado}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('tablaPersonal').filter()">
                             <f:selectItems value="#{mantenedorPersonal.opcionesFiltroEstado}" var="filtro" itemLabel="#{filtro.label}" itemValue="#{filtro.value}"/>
-                            <p:ajax event="change" listener="#{mantenedorPersonal.filtrarPorEstado()}" process="@this" update="@form"/>
                         </p:selectOneMenu>
                     </f:facet>
                     <h:graphicImage rendered="#{!mantenedorPersonal.estaBloqueado(personal)}" value="/img/icons/luz_verde.png"/>

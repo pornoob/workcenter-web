@@ -12,7 +12,7 @@ import java.util.Date;
 @NamedQueries(
         @NamedQuery(
                 name = "MiaInspeccionAvanzada.findAll",
-                query = "SELECT i FROM MiaInspeccionAvanzada i"
+                query = "SELECT i FROM MiaInspeccionAvanzada i ORDER BY i.fecha DESC"
         )
 )
 public class MiaInspeccionAvanzada implements Serializable {

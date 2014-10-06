@@ -51,6 +51,9 @@ public class Constantes implements Serializable {
     private int registroR112 = 1;
     private int registroInspeccionAvanzada = 2;
 
+    // Zona PIIR
+    private int piirEstadoInicial = 1;
+
     // Genericos
     private List<Mes> meses;
     private List<Horario> horarios;
@@ -291,5 +294,9 @@ public class Constantes implements Serializable {
 
     public String getModuloMantenciones() {
         return moduloMantenciones;
+    }
+
+    public int getPiirEstadoInicial() {
+        return piirEstadoInicial;
     }
 }

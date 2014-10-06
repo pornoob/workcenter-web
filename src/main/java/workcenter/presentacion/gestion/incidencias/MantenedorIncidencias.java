@@ -3,13 +3,12 @@ package workcenter.presentacion.gestion.incidencias;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.MirIncidencia;
-import workcenter.entidades.MirPrioridad;
-import workcenter.entidades.MirSeveridad;
-import workcenter.entidades.MirTrazabilidadIncidencia;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.incidencias.LogicaIncidencias;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.presentacion.includes.FicheroUploader;
+import workcenter.util.components.Constantes;
 import workcenter.util.components.SesionCliente;
 
 import java.io.Serializable;
@@ -30,7 +29,13 @@ public class MantenedorIncidencias implements Serializable {
     private LogicaDocumentos logicaDocumentos;
 
     @Autowired
+    private LogicaPersonal logicaPersonal;
+
+    @Autowired
     private FicheroUploader ficheroUploader;
+
+    @Autowired
+    private Constantes constantes;
 
     @Autowired
     private LogicaIncidencias logicaIncidencias;
@@ -39,10 +44,14 @@ public class MantenedorIncidencias implements Serializable {
     private List<MirPrioridad> prioridades;
     private MirIncidencia incidencia;
     private MirTrazabilidadIncidencia trazabilidad;
+    private List<MirApoyo> apoyos;
+    private List<MirIncidencia> incidencias;
 
     public void inicio() {
         severidades = logicaIncidencias.obtSeveridades();
         prioridades = logicaIncidencias.obtPrioridades();
+        apoyos = logicaIncidencias.obtApoyos();
+        incidencias = logicaIncidencias.obtTodas();
     }
 
     public void calcularPeso() {
@@ -82,7 +91,7 @@ public class MantenedorIncidencias implements Serializable {
 
     public String irIngresar() {
         incidencia = new MirIncidencia();
-        incidencia.setRutInformador(sesionCliente.getUsuario().getRut());
+        incidencia.setRutInformador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
         trazabilidad = new MirTrazabilidadIncidencia();
         trazabilidad.setIdIncidencia(incidencia);
         calcularPeso();
@@ -96,9 +105,14 @@ public class MantenedorIncidencias implements Serializable {
 
     public void guardarIncidencia() {
         incidencia.setFecha(new Date());
-        incidencia.setIdApoyo(0);
-        trazabilidad.setIdEstado(null);
+        incidencia.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
+        trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
         logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        irIngresar();
+    }
+
+    public String detalleInicial(MirIncidencia i) {
+        return logicaIncidencias.obtDetalleInicial(i);
     }
 
     public List<MirSeveridad> getSeveridades() {
@@ -131,5 +145,13 @@ public class MantenedorIncidencias implements Serializable {
 
     public void setTrazabilidad(MirTrazabilidadIncidencia trazabilidad) {
         this.trazabilidad = trazabilidad;
+    }
+
+    public List<MirIncidencia> getIncidencias() {
+        return incidencias;
+    }
+
+    public void setIncidencias(List<MirIncidencia> incidencias) {
+        this.incidencias = incidencias;
     }
 }

@@ -40,7 +40,7 @@
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{mantenedorIncidencias.irListar}"
                                  value="Volver" ajax="false" immediate="true"/>
-                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false" action="#{mantenedorIncidencias.guardarIncidencia}"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

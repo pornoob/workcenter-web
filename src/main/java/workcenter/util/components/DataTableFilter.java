@@ -13,6 +13,7 @@ import java.util.Locale;
 @Scope("application")
 public class DataTableFilter implements Serializable {
     public boolean filtroInsensitivo(Object valor, Object filtro, Locale idioma) {
+        if (valor == null || filtro == null) return false;
         return valor.toString().toUpperCase().contains(filtro.toString().toUpperCase());
     }
 }

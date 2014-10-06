@@ -50,6 +50,11 @@ public class CronService {
         testQueryDao.run();
     }
 
+    // todos los días a las importar datos desde la copec
+    @Scheduled(cron = "0 0 0 * * *")
+    public void descargarRendimientosDiarios() {
+    }
+
     // todos los días a las 7 de la mañana descargar correo SAMTECH
     @Scheduled(cron = "0 0 7 * * *")
     public void descargarFicheroAlarmaGPS() {
