@@ -16,7 +16,7 @@
                 <h:outputLabel for="transVentanasPass" value="Contraseña"/>:
                 <h:inputSecret id="transVentanasPass" value="#{autentificacionBean.pass}"/>
                 <p:commandButton value="Ingresar"
-                                 action="#{autentificacionBean.logIn()}"
+                                 action="#{autentificacionBean.logIn()}" update="sesionExpired"
                                  id="btnLogin"
                                  ajax="false"/>
             </h:panelGrid>

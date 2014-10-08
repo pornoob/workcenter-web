@@ -13,6 +13,32 @@
         <h:outputText style="font-style: italic; color: red" value="* En construcción"/>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="formIncidencias">
+            <p:panel header="Incidencia #{mantenedorIncidencias.incidencia.id}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Fecha"/>:
+                    <h:outputText value="#{mantenedorIncidencias.incidencia.fecha}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                    <h:outputLabel value="Detalle"/>:
+                    <h:outputText value="#{mantenedorIncidencias.detalleInicial(mantenedorIncidencias.incidencia)}"/>
+                    <h:outputLabel value="Informador"/>:
+                    <h:outputText value="#{mantenedorIncidencias.incidencia.rutInformador.nombreCompleto}"/>
+                    <h:outputLabel value="Apoyo Resolución"/>:
+                    <h:outputText value="#{mantenedorIncidencias.incidencia.idApoyo.idSocio.nombre}"/>
+                    <h:outputLabel value="Fecha Programada de Resolución"/>:
+                    <h:outputText value="#{mantenedorIncidencias.incidencia.resolucionProgramada}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                    <h:outputLabel value="Estado Actual"/>:
+                    <h:outputText
+                            value="#{mantenedorIncidencias.obtenerEstado(mantenedorIncidencias.incidencia).nombre}"/>
+                    <h:outputLabel for="iEstado" value="Nuevo Estado"/>:
+                    <p:selectOneMenu id="iEstado">
+                    </p:selectOneMenu>
+                    <h:outputLabel for="iDetalle" value="Detalle Cambio"/>:
+                    <p:inputTextarea id="iDetalle" style="width: 400px; height: 200"/>
+                </h:panelGrid>
+            </p:panel>
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{mantenedorIncidencias.irListar}"
                                  value="Volver" ajax="false" immediate="true"/>

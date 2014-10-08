@@ -59,4 +59,9 @@ public class LogicaIncidencias {
     public String obtDetalleInicial(MirIncidencia i) {
         return mirIncidenciasDao.obtDetalleInicial(i);
     }
+
+    @Transactional(readOnly = true)
+    public MirEstadoIncidencia obtEstadoActual(MirIncidencia i) {
+        return mirIncidenciasDao.obtEstadoActual(i);
+    }
 }

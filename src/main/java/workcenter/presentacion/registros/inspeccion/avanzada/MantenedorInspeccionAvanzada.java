@@ -62,6 +62,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     private Integer mes;
     private Integer anio;
     private List<MiaInspeccionAvanzada> inspeccionesAvanzadas;
+    private List<MiaInspeccionAvanzada> inspeccionesAvanzadasFiltradas;
     private MiaInspeccionAvanzada inspeccionAvanzada;
     private List<MiaPregunta> preguntas;
     private Map<String, List<Documento>> comprobantesInspeccion;
@@ -173,56 +174,55 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return retorno;
     }
 
-    public String obtenerValorCalendario(String idColumna, Equipo e) {
+    public Integer obtenerValorCalendario(String idColumna, Equipo e) {
+        if (idColumna == null || "".equals(idColumna)) return 0;
         int id = Integer.parseInt(idColumna);
         String strFecha;
+        cacheInspecciones = new ArrayList<MiaInspeccionAvanzada>();
         try {
+            int contador = 0;
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
             switch (id) {
                 case -1:
                     strFecha = "01/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fechaInf = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
+                    Date fechaInf = sdf.parse(strFecha);
                     Calendar c = Calendar.getInstance();
                     c.setTime(fechaInf);
                     strFecha = c.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fechaSup = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                    cacheInspecciones = logicaInspeccionAvanzada.obtenerInspecciones(fechaInf, fechaSup, e);
-                    return String.valueOf(cacheInspecciones.size());
+                    Date fechaSup = sdf.parse(strFecha);
+                    for (MiaInspeccionAvanzada i : inspeccionesAvanzadas) {
+                        Equipo revisado = i.getTracto() != null ? i.getTracto() : i.getBatea();
+                        Date fechaInspeccion = sdf.parse(sdf.format(i.getFecha()));
+                        if (revisado.equals(e) &&
+                                (fechaInspeccion.equals(fechaInf) || fechaInspeccion.after(fechaInf)) &&
+                                (fechaInspeccion.before(fechaSup) || fechaInspeccion.equals(fechaSup))) {
+                            contador++;
+                            cacheInspecciones.add(i);
+                        }
+                    }
+                    return contador;
                 default:
                     strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                    cacheInspecciones = logicaInspeccionAvanzada.obtenerInspecciones(fecha, e);
-                    return String.valueOf(cacheInspecciones.size());
+                    Date fecha = sdf.parse(strFecha);
+                    for (MiaInspeccionAvanzada i : inspeccionesAvanzadas) {
+                        Equipo revisado = i.getTracto() != null ? i.getTracto() : i.getBatea();
+                        Date fechaInspeccion = sdf.parse(sdf.format(i.getFecha()));
+                        if (revisado.equals(e) && fechaInspeccion.equals(fecha)) {
+                            contador++;
+                            cacheInspecciones.add(i);
+                        }
+                    }
+                    return contador;
 
             }
         } catch (ParseException e1) {
             System.err.println("FALLA FECHA");
-            return "0";
+            return 0;
         }
     }
 
     public boolean noEsCero(String idCol, Equipo e) {
-        int id = Integer.parseInt(idCol);
-        String strFecha;
-        try {
-            switch (id) {
-                case -1:
-                    strFecha = "01/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fechaInf = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                    Calendar c = Calendar.getInstance();
-                    c.setTime(fechaInf);
-                    strFecha = c.getActualMaximum(Calendar.DAY_OF_MONTH) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fechaSup = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                    return logicaInspeccionAvanzada.obtenerCantInspecciones(fechaInf, fechaSup, e) > 0;
-                default:
-                    strFecha = (id < 10 ? "0" + id : id) + "/" + (mes.intValue() < 10 ? "0" + mes.intValue() : mes.intValue()) + "/" + anio;
-                    Date fecha = new SimpleDateFormat("dd/MM/yyyy").parse(strFecha);
-                    return logicaInspeccionAvanzada.obtenerCantInspecciones(fecha, e) > 0;
-
-            }
-        } catch (ParseException e1) {
-            System.err.println("FALLA FECHA");
-            return false;
-        }
+        return obtenerValorCalendario(idCol, e).intValue() > 0;
     }
 
     public List<MiaPregunta> getPreguntasCamion() {
@@ -261,7 +261,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     public StreamedContent obtenerFormulario(MiaInspeccionAvanzada i) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(i);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + docs.get(0).getId()));
-        d.setNombre(docs.get(docs.size()-1).getNombreOriginal());
+        d.setNombre(docs.get(docs.size() - 1).getNombreOriginal());
         return d.getStreamedContent();
     }
 
@@ -359,12 +359,12 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         this.inspeccionAvanzada = inspeccionAvanzada;
     }
 
-    public List<MiaPregunta> getPreguntas() {
-        return preguntas;
+    public List<MiaInspeccionAvanzada> getInspeccionesAvanzadasFiltradas() {
+        return inspeccionesAvanzadasFiltradas;
     }
 
-    public void setPreguntas(List<MiaPregunta> preguntas) {
-        this.preguntas = preguntas;
+    public void setInspeccionesAvanzadasFiltradas(List<MiaInspeccionAvanzada> inspeccionesAvanzadasFiltradas) {
+        this.inspeccionesAvanzadasFiltradas = inspeccionesAvanzadasFiltradas;
     }
 
     public List<Equipo> getBateas() {

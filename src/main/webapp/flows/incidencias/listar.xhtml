@@ -47,8 +47,13 @@
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Estado"></p:column>
-                <p:column headerText=""></p:column>
+                <p:column headerText="Estado">#{mantenedorIncidencias.obtenerEstado(i).nombre}</p:column>
+                <p:column headerText="">
+                    <p:outputPanel styleClass="opcionesFila">
+                        <p:commandLink styleClass="ui-icon ui-icon-search" alt="Ver Incidencia"
+                                       action="#{mantenedorIncidencias.irCambiarEstado(i)}"/>
+                    </p:outputPanel>
+                </p:column>
             </p:dataTable>
         </h:form>
     </ui:define>

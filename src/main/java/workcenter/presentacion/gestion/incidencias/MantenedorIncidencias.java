@@ -46,6 +46,7 @@ public class MantenedorIncidencias implements Serializable {
     private MirTrazabilidadIncidencia trazabilidad;
     private List<MirApoyo> apoyos;
     private List<MirIncidencia> incidencias;
+    private List<MirEstadoIncidencia> estadosSiguientes;
 
     public void inicio() {
         severidades = logicaIncidencias.obtSeveridades();
@@ -85,6 +86,18 @@ public class MantenedorIncidencias implements Serializable {
         incidencia.setResolucionProgramada(c.getTime());
     }
 
+    public void guardarIncidencia() {
+        incidencia.setFecha(new Date());
+        incidencia.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
+        trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
+        logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        irIngresar();
+    }
+
+    public MirEstadoIncidencia obtenerEstado(MirIncidencia i) {
+        return logicaIncidencias.obtEstadoActual(i);
+    }
+
     public String irListar() {
         return "flowListar";
     }
@@ -101,14 +114,6 @@ public class MantenedorIncidencias implements Serializable {
     public String irCambiarEstado(MirIncidencia i) {
         incidencia = i;
         return "flowCambiarEstado";
-    }
-
-    public void guardarIncidencia() {
-        incidencia.setFecha(new Date());
-        incidencia.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
-        trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
-        logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
-        irIngresar();
     }
 
     public String detalleInicial(MirIncidencia i) {

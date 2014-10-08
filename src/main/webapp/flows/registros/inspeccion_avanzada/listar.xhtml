@@ -11,9 +11,11 @@
             .ui-datatable-frozenlayout-left {
                 width: 140px;
             }
+
             td {
                 height: 22px;
             }
+
             th {
                 height: 44px;
             }
@@ -23,34 +25,45 @@
         <h:form id="formFormularios">
             <p:tabView id="tabsView">
                 <p:tab title="Listado Inspecciones" id="tabs">
-                    <p:commandButton icon="ui-icon-plus" value="Agregar" rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
+                    <p:commandButton icon="ui-icon-plus" value="Agregar"
+                                     rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
                                      action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
                     <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
                         <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario()}"/>
                     </p:commandButton>
                     <p:dataTable emptyMessage="No se han encontrado inspecciones" paginator="true" rows="20"
                                  filterEvent="enter" value="#{mantenedorInspeccionAvanzada.inspeccionesAvanzadas}"
-                                 var="i"
+                                 var="i" id="tInspecciones" widgetVar="tInspecciones"
+                                 filteredValue="#{mantenedorInspeccionAvanzada.inspeccionesAvanzadasFiltradas}"
                                  paginatorTemplate="#{constantes.paginadorTemplate}" paginatorPosition="both">
-                        <p:column headerText="Folio">
+                        <p:column headerText="Folio" width="35">
                             #{i.id}
                         </p:column>
-                        <p:column headerText="Fecha">
-                            #{i.fecha}
+                        <p:column headerText="Fecha" filterBy="#{i.fecha}"
+                                  filterFunction="#{dataTableFilter.filtroFechas}">
+                            <f:facet name="filter">
+                                <p:calendar pattern="dd-MM-yyyy">
+                                    <p:ajax event="dateSelect" oncomplete="PF('tInspecciones').filter()"/>
+                                </p:calendar>
+                            </f:facet>
+                            <h:outputText value="#{i.fecha}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
                         </p:column>
-                        <p:column headerText="Patente Tracto/Camión">
+                        <p:column headerText="Patente Tracto/Camión" filterBy="#{i.tracto.patente}"
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.tracto.patente}
                         </p:column>
-                        <p:column headerText="Patente Batea/Acoplado">
+                        <p:column headerText="Patente Batea/Acoplado" filterBy="#{i.batea.patente}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.batea.patente}
                         </p:column>
-                        <p:column headerText="Conductor">
+                        <p:column headerText="Conductor" filterBy="#{i.conductor.nombreCompleto}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.conductor.nombreCompleto}
                         </p:column>
-                        <p:column headerText="Ejecutor">
+                        <p:column headerText="Ejecutor" filterBy="#{i.ejecutor.nombreCompleto}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.ejecutor.nombreCompleto}
                         </p:column>
-                        <p:column headerText="Indicador">
+                        <p:column headerText="Indicador" width="60">
                             <h:graphicImage rendered="#{mantenedorInspeccionAvanzada.pasaInspeccion(i)}11"
                                             value="/img/icons/luz_verde.png"/>
                             <h:graphicImage title="#{i.observacion}"
@@ -60,7 +73,7 @@
                                             rendered="#{!mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
                                             value="/img/icons/luz_amarilla.png"/>
                         </p:column>
-                        <p:column headerText="Acciones">
+                        <p:column headerText="Acciones" width="60">
                             <p:outputPanel styleClass="opcionesFila">
                                 <p:commandLink styleClass="ui-icon ui-icon-pencil"
                                                action="#{mantenedorInspeccionAvanzada.irEditar(i)}"/>
@@ -81,28 +94,32 @@
                         <h:outputLabel value="Año"/>:
                         <p:spinner min="2014" value="#{mantenedorInspeccionAvanzada.anio}"/>
                         <p:commandButton icon="ui-icon-refresh" value="Actualizar"
-                                         action="#{mantenedorInspeccionAvanzada.dummy()}"
+                                         action="#{mantenedorInspeccionAvanzada.dummy()}" process="@form"
                                          update=":formFormularios:tabsView:tCalendario"/>
                     </h:panelGrid>
                     <p:dataTable emptyMessage="No se han encontrado inspecciones" scrollable="true" id="tCalendario"
                                  var="e" selectionMode="single" rowKey="#{e.patente}" filterEvent="enter"
                                  value="#{mantenedorInspeccionAvanzada.equipos}" widgetVar="calendario"
                                  frozenColumns="1">
-                        <p:column headerText="Equipo" filterBy="patente" filterMatchMode="contains" width="110" style="width: 110px">
+                        <p:column headerText="Equipo" filterBy="#{e.patente}" filterMatchMode="contains" width="110"
+                                  style="width: 110px">
                             <h:outputText value="#{e.patente}"/>
                         </p:column>
                         <c:forEach items="#{mantenedorInspeccionAvanzada.obtenerCalendario()}" var="columna">
                             <p:column width="#{columna.ancho}" headerText="#{columna.header}">
                                 <h:outputText style="display: none" value="0"/>
                                 <h:commandLink rendered="#{mantenedorInspeccionAvanzada.noEsCero(columna.id, e)}">
-                                    <h:outputText value="#{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}"/>
-                                    <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.pasaInspecciones()}"
+                                    <h:outputText
+                                            value="#{mantenedorInspeccionAvanzada.obtenerValorCalendario(columna.id, e)}"/>
+                                    <h:graphicImage style="float: right"
+                                                    rendered="#{mantenedorInspeccionAvanzada.pasaInspecciones()}"
                                                     value="/img/icons/luz_verde.png"/>
-                                    <h:graphicImage style="float: right" rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante()}"
+                                    <h:graphicImage style="float: right"
+                                                    rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante()}"
                                                     value="/img/icons/luz_roja.png"/>
                                     <h:graphicImage style="float: right"
-                                            rendered="#{!mantenedorInspeccionAvanzada.pasaInspecciones() and !mantenedorInspeccionAvanzada.esCausaBloqueante()}"
-                                            value="/img/icons/luz_amarilla.png"/>
+                                                    rendered="#{!mantenedorInspeccionAvanzada.pasaInspecciones() and !mantenedorInspeccionAvanzada.esCausaBloqueante()}"
+                                                    value="/img/icons/luz_amarilla.png"/>
                                 </h:commandLink>
                             </p:column>
                         </c:forEach>
