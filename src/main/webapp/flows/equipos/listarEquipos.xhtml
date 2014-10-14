@@ -6,17 +6,25 @@
 
     <ui:define name="contenido">
         <h2>Listado de equipos</h2>
+        <p:growl autoUpdate="true" showDetail="true"/>
         <h:form id="formEquipos">
+            <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorEquipos.irAgregarEquipo()}"/>
             <p:dataTable value="#{mantenedorEquipos.equipos}" var="e" rows="15" filterEvent="enter"
                          filteredValue="#{mantenedorEquipos.equiposFiltrados}" widgetVar="tEquipos"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          emptyMessage="No se han encontrado equipos"
                          paginatorTemplate="#{constantes.paginadorTemplate}" paginator="true" paginatorPosition="both">
-                <p:column headerText="Patente" filterBy="#{e.patente}"
+                <p:column headerText="Patente" filterBy="#{e.patente}" width="60"
                           filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    <f:facet name="filter">
+                        <p:inputText styleClass="inputFilter" style="width: 50px"/>
+                    </f:facet>
                     #{e.patente}
                 </p:column>
-                <p:column headerText="N°" filterBy="#{e.numero}" filterMatchMode="startsWith">
+                <p:column headerText="N°" width="30" filterBy="#{e.numero}" filterMatchMode="startsWith">
+                    <f:facet name="filter">
+                        <p:inputText styleClass="inputFilter" style="width: 20px"/>
+                    </f:facet>
                     #{e.numero}
                 </p:column>
                 <p:column headerText="Tipo" filterBy="#{e.tipo.etiqueta}" filterMatchMode="exact">
@@ -41,19 +49,41 @@
                           filterFunction="#{dataTableFilter.filtroInsensitivo}">
                     #{e.modelo.nombre}
                 </p:column>
-                <p:column headerText="Año" filterBy="#{e.anio}" filterMatchMode="startsWith">
+                <p:column headerText="Año" width="40" filterBy="#{e.anio}" filterMatchMode="startsWith">
+                    <f:facet name="filter">
+                        <p:inputText styleClass="inputFilter" style="width: 30px"/>
+                    </f:facet>
                     #{e.anio}
                 </p:column>
-                <p:column headerText="Estado">
+                <p:column headerText="Estado" width="80" filterBy="#{e}"
+                          filterFunction="#{mantenedorEquipos.filtroEstado}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu style="width: 70px" onchange="PF('tEquipos').filter()">
+                            <f:selectItem itemLabel="-- Todos --" itemValue="#{null}"/>
+                            <f:selectItem itemLabel="Bloqueados" itemValue="bloqueados"/>
+                            <f:selectItem itemLabel="Desbloqueados" itemValue="desbloqueados"/>
+                        </p:selectOneMenu>
+                    </f:facet>
                     <h:graphicImage rendered="#{mantenedorEquipos.estaHabilitado(e)}" value="/img/icons/luz_verde.png"/>
-                    <h:graphicImage rendered="#{!mantenedorEquipos.estaHabilitado(e)}" value="/img/icons/luz_roja.png"/>
+                    <h:graphicImage rendered="#{!mantenedorEquipos.estaHabilitado(e)}"
+                                    title="#{mantenedorEquipos.razonBloqueo}" value="/img/icons/luz_roja.png"/>
                 </p:column>
-                <p:column headerText="Acciones">
+                <p:column headerText="Acciones" width="60">
                     <p:outputPanel styleClass="opcionesFila">
-                        <p:commandLink styleClass="ui-icon ui-icon-pencil" action="#{mantenedorEquipos.irEditar(e)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-pencil" title="Editar"
+                                       action="#{mantenedorEquipos.irEditar(e)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-locked" title="Bloquear"
+                                       rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloEquipos)}"
+                                       action="#{mantenedorEquipos.irBloquear(e)}"/>
+                        <p:commandLink styleClass="ui-icon ui-icon-unlocked" title="Desbloquear"
+                                       rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloEquipos)}"
+                                       action="#{mantenedorEquipos.irDesbloquear(e)}"/>
                     </p:outputPanel>
                 </p:column>
             </p:dataTable>
         </h:form>
+        <h:outputScript library="js">
+            WebCenter.Filter.run('tEquipos');
+        </h:outputScript>
     </ui:define>
 </ui:composition>

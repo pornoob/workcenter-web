@@ -1,0 +1,31 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h2>Desbloquear Equipo</h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="formEquipo">
+            <p:panel header="#{mantenedorEquipos.equipo.patente}">
+                <h:panelGrid columns="3">
+                    <h:outputLabel for="iMotivoSancion" value="Motivo Sanción"/>:
+                    <p:inputTextarea value="#{mantenedorEquipos.sancionRetiradaEquipo.motivo}" id="iMotivoSancion"
+                                     style="width: 600px;"/>
+                    <h:outputLabel for="iMotivoRetiro" value="Motivo Retiro Sanción"/>:
+                    <p:inputTextarea value="#{mantenedorEquipos.sancionRetiradaEquipo.motivoretirosancion}"
+                                     id="iMotivoRetiro"
+                                     style="width: 600px;"/>
+                </h:panelGrid>
+
+                <p:outputPanel styleClass="actionPanel">
+                    <p:commandButton value="Volver" action="#{mantenedorEquipos.irListar()}"
+                                     icon="ui-icon-arrowreturnthick-1-s"/>
+                    <p:commandButton value="Guardar" ajax="false" action="#{mantenedorEquipos.desbloquear()}"
+                                     icon="ui-icon-disk"/>
+                </p:outputPanel>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

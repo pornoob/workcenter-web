@@ -118,4 +118,15 @@ public class LogicaEquipos {
     public Vuelta obtenerUltimaVuelta(Equipo e) {
         return equipoDao.obtenerUltimaVuelta(e);
     }
+
+    @Transactional(readOnly = false)
+    public void sancionar(EquipoSancionado e) {
+        equipoDao.guardar(e);
+    }
+
+    @Transactional(readOnly = false)
+    public void quitarSAncion(EquipoSancionado sancion, SancionRetiradaEquipo retiro) {
+        equipoDao.eliminar(sancion);
+        equipoDao.guardar(retiro);
+    }
 }

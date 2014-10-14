@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -44,14 +34,11 @@ public class SancionRetiradaEquipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Size(min = 1, max = 7)
-    @Column(name = "sancionado")
-    private String sancionado;
+    @ManyToOne
+    @JoinColumn(name = "sancionado", referencedColumnName = "patente")
+    private Equipo sancionado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "perdonadopor")
@@ -84,15 +71,6 @@ public class SancionRetiradaEquipo implements Serializable {
         this.id = id;
     }
 
-    public SancionRetiradaEquipo(Integer id, String sancionado, int perdonadopor, int nivel, String motivoretirosancion, Date fechasancion) {
-        this.id = id;
-        this.sancionado = sancionado;
-        this.perdonadopor = perdonadopor;
-        this.nivel = nivel;
-        this.motivoretirosancion = motivoretirosancion;
-        this.fechasancion = fechasancion;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -101,11 +79,11 @@ public class SancionRetiradaEquipo implements Serializable {
         this.id = id;
     }
 
-    public String getSancionado() {
+    public Equipo getSancionado() {
         return sancionado;
     }
 
-    public void setSancionado(String sancionado) {
+    public void setSancionado(Equipo sancionado) {
         this.sancionado = sancionado;
     }
 

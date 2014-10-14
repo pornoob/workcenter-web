@@ -1,6 +1,5 @@
 package workcenter.dao;
 
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
@@ -167,5 +166,24 @@ public class EquipoDao {
     public Integer obtenerUltimoKmProveedor(Equipo e) {
         String sql = "select max(odometro) from rendimientos_copec where patente = :patente";
         return (Integer) em.createNativeQuery(sql).setParameter("patente", e.getPatente().replace(' ', '-')).getSingleResult();
+    }
+
+    public void guardar(EquipoSancionado e) {
+        if (e.getId() == null)
+            em.persist(e);
+        else
+            em.merge(e);
+    }
+
+    public void eliminar(EquipoSancionado sancion) {
+        EquipoSancionado es = em.find(EquipoSancionado.class, sancion.getId());
+        em.remove(es);
+    }
+
+    public void guardar(SancionRetiradaEquipo retiro) {
+        if (retiro.getId() == null)
+            em.persist(retiro);
+        else
+            em.merge(retiro);
     }
 }

@@ -5,7 +5,10 @@
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
-        <h2>Editar Equipo</h2>
+        <h2>
+            <h:outputText rendered="#{mantenedorEquipos.equipo.patente != null}" value="Editar Equipo"/>
+            <h:outputText rendered="#{mantenedorEquipos.equipo.patente == null}" value="Agregar Equipo"/>
+        </h2>
         <p:messages autoUpdate="true" showDetail="true" closable="true"/>
         <h:form id="formEquipo">
             <p:panel header="Antecedentes Generales">

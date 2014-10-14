@@ -9,6 +9,7 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
+import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.FilterOption;
 
 import java.io.*;
@@ -16,7 +17,9 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 
@@ -35,6 +38,9 @@ public class MantenedorEquipos implements Serializable {
     @Autowired
     private Constantes constantes;
 
+    @Autowired
+    private SesionCliente sesionCliente;
+
     private List<Equipo> equipos;
     private List<Equipo> equiposFiltrados;
     private List<TipoEquipo> tiposEquipos;
@@ -48,6 +54,10 @@ public class MantenedorEquipos implements Serializable {
     private String posicionFoto;
     private UploadedFile foto;
     private FotoEquipo fotoEquipo;
+    private SancionRetiradaEquipo sancionRetiradaEquipo;
+
+    //cache
+    private EquipoSancionado equipoSancionado;
 
     public void inicio() {
         equipos = logicaEquipos.obtenerTodos();
@@ -78,6 +88,13 @@ public class MantenedorEquipos implements Serializable {
         return "flowListar";
     }
 
+    public String irAgregarEquipo() {
+        equipo = new Equipo();
+        equipo.setFotos(new ArrayList<FotoEquipo>());
+        empresas = logicaEmpresas.obtenerEmpleadores();
+        return "flowEditar";
+    }
+
     public String irEditar(Equipo e) {
         equipo = e;
         equipo.setFotos(logicaEquipos.obtenerFotos(e));
@@ -98,8 +115,58 @@ public class MantenedorEquipos implements Serializable {
         return "flowNuevaFoto";
     }
 
+    public String irBloquear(Equipo e) {
+        equipo = e;
+        equipoSancionado = logicaEquipos.obtenerEquipoSancionado(equipo);
+        if (equipoSancionado != null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "El equipo ya posee un bloqueo");
+            return null;
+        }
+        equipoSancionado = new EquipoSancionado();
+        equipoSancionado.setSancionado(e);
+        return "flowBloquear";
+    }
+
+    public String irDesbloquear(Equipo e) {
+        equipo = e;
+        sancionRetiradaEquipo = new SancionRetiradaEquipo();
+        equipoSancionado = logicaEquipos.obtenerEquipoSancionado(equipo);
+        if (equipoSancionado == null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "El equipo no posee un bloqueo");
+            return null;
+        }
+        sancionRetiradaEquipo.setSancionado(equipo);
+        System.err.println("FECHA SANCION: "+equipoSancionado.getFecha());
+        sancionRetiradaEquipo.setFechasancion(equipoSancionado.getFecha());
+        System.err.println("FECHA SANCION 2: "+sancionRetiradaEquipo.getFechasancion());
+        sancionRetiradaEquipo.setMotivo(equipoSancionado.getMotivo());
+        return "flowDesbloquear";
+    }
+
     public void guardar() {
         logicaEquipos.guardar(equipo);
+    }
+
+    public void bloquear() {
+        equipoSancionado.setFecha(new Date());
+        equipoSancionado.setNivel(0); // nunca implementaron niveles
+        logicaEquipos.sancionar(equipoSancionado);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha bloqueado el equipo");
+    }
+
+    public void desbloquear() {
+        sancionRetiradaEquipo.setFecha(new Date());
+        sancionRetiradaEquipo.setNivel(0);
+        sancionRetiradaEquipo.setPerdonadopor(sesionCliente.getUsuario().getRut());
+        logicaEquipos.quitarSAncion(equipoSancionado, sancionRetiradaEquipo);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha desbloqueado el equipo");
+    }
+
+    public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
+        if (filtro == null) return true;
+        equipoSancionado = logicaEquipos.obtenerEquipoSancionado((Equipo) valor);
+        return (filtro.equals("bloqueados") && equipoSancionado != null) ||
+                (filtro.equals("desbloqueados") && equipoSancionado == null);
     }
 
     public void subirFoto() {
@@ -160,7 +227,12 @@ public class MantenedorEquipos implements Serializable {
     }
 
     public boolean estaHabilitado(Equipo e) {
-        return logicaEquipos.obtenerEquipoSancionado(e) == null;
+        equipoSancionado = logicaEquipos.obtenerEquipoSancionado(e);
+        return equipoSancionado == null;
+    }
+
+    public String getRazonBloqueo() {
+        return equipoSancionado.getMotivo();
     }
 
     public List<Equipo> getEquipos() {
@@ -265,5 +337,21 @@ public class MantenedorEquipos implements Serializable {
 
     public void setFotoEquipo(FotoEquipo fotoEquipo) {
         this.fotoEquipo = fotoEquipo;
+    }
+
+    public EquipoSancionado getEquipoSancionado() {
+        return equipoSancionado;
+    }
+
+    public void setEquipoSancionado(EquipoSancionado equipoSancionado) {
+        this.equipoSancionado = equipoSancionado;
+    }
+
+    public SancionRetiradaEquipo getSancionRetiradaEquipo() {
+        return sancionRetiradaEquipo;
+    }
+
+    public void setSancionRetiradaEquipo(SancionRetiradaEquipo sancionRetiradaEquipo) {
+        this.sancionRetiradaEquipo = sancionRetiradaEquipo;
     }
 }

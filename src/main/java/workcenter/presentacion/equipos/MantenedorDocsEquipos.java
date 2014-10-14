@@ -55,6 +55,7 @@ public class MantenedorDocsEquipos implements Serializable {
     public void inicio(Equipo e) {
         this.equipo = e;
         documentos = logicaEquipos.obtenerDocumentosActualizados(equipo);
+        archivo = null;
     }
 
     public String irListar() {
@@ -107,6 +108,7 @@ public class MantenedorDocsEquipos implements Serializable {
 
     public void subir() {
         String path = constantes.getPathArchivos() + "Documentos/equipos/" + equipo.getPatente();
+        new File(path).mkdirs();
         DocumentoEquipo existente = null;
         try {
             switch (operacion) {
@@ -146,6 +148,7 @@ public class MantenedorDocsEquipos implements Serializable {
                     break;
             }
             path += "/" + documentoSeleccionado.getEtiqueta() + archivo.getFileName().substring(archivo.getFileName().lastIndexOf('.'));
+            new File(path);
             FileOutputStream fileOutputStream = new FileOutputStream(path);
             byte[] buffer = new byte[BUFFER_SIZE];
             int bulk;

@@ -9,6 +9,16 @@
 
     <view-state id="listarEquipos">
         <transition on="flowEditar" to="editarEquipo"/>
+        <transition on="flowBloquear" to="bloquear"/>
+        <transition on="flowDesbloquear" to="desbloquear"/>
+    </view-state>
+
+    <view-state id="bloquear">
+        <transition on="flowListar" to="listarEquipos"/>
+    </view-state>
+
+    <view-state id="desbloquear">
+        <transition on="flowListar" to="listarEquipos"/>
     </view-state>
 
     <view-state id="editarEquipo">

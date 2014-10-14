@@ -89,7 +89,7 @@ public class Equipo implements Serializable {
     }
 
     public Equipo(String patente) {
-        this.patente = patente;
+        this.patente = patente != null ? patente.toUpperCase() : null;
     }
 
     public String getPatente() {
@@ -97,7 +97,7 @@ public class Equipo implements Serializable {
     }
 
     public void setPatente(String patente) {
-        this.patente = patente;
+        this.patente = patente != null ? patente.toUpperCase() : null;
     }
 
     public Empresa getDuenio() {

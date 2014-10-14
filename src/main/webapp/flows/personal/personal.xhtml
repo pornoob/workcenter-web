@@ -56,10 +56,10 @@
                     <h:panelGroup class="opcionesFila">
                         <p:commandLink title="Ver ficha" action="#{mantenedorPersonal.irVerFicha(personal)}"
                                        styleClass="ui-icon ui-icon-search"/>
-                        <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}" 
+                        <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                                        title="Administrar contratos" action="#{mantenedorPersonal.irContratosPersonal(personal)}"
                                        styleClass="ui-icon ui-icon-pencil"/>
-                        <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}" 
+                        <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                        title="Bloquear" action="#{mantenedorPersonal.irBloqueoPersonal(personal)}"
                                        styleClass="ui-icon ui-icon-locked"/>
                         <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
