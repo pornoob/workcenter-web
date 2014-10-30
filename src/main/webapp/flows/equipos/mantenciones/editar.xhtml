@@ -23,12 +23,14 @@
                 <h:outputLabel for="iTracto" value="Camión"/>:
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionTracto.tracto}" id="iTracto"
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
                     <f:selectItems value="#{mantenedorMantenciones.tractos}" var="t" itemLabel="#{t.patente}"/>
                 </p:selectOneMenu>
 
                 <h:outputLabel for="iBatea" value="Batea"/>:
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionSemiremolque.semiRemolque}" id="iBatea"
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
                     <f:selectItems value="#{mantenedorMantenciones.bateas}" var="b" itemLabel="#{b.patente}"/>
                 </p:selectOneMenu>
 

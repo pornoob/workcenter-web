@@ -68,18 +68,38 @@ public class LogicaProgramaActividades {
     }
 
     @Transactional(readOnly = true)
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, MpaActividad actividad, Personal responsable, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(programa, actividad, responsable, anioSeleccionado);
+    }
+
+    @Transactional(readOnly = true)
     public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Integer anioSeleccionado) {
         return mpaProgramaDao.obtenerPlanes(programa, anioSeleccionado);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, MpaActividad actividad, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(programa, actividad, anioSeleccionado);
     }
 
     @Transactional(readOnly = true)
     public List<MpaPlanPrograma> obtenerPlanes(Personal responsable, Integer anioSeleccionado) {
         return mpaProgramaDao.obtenerPlanes(responsable, anioSeleccionado);
     }
+
+    @Transactional(readOnly = true)
+    public List<MpaPlanPrograma> obtenerPlanes(MpaActividad actividad, Personal responsable, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(actividad, responsable, anioSeleccionado);
+    }
     
     @Transactional(readOnly = true)
     public List<MpaPlanPrograma> obtenerPlanes(Integer anioSeleccionado) {
         return mpaProgramaDao.obtenerPlanes(anioSeleccionado);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MpaPlanPrograma> obtenerPlanes(MpaActividad actividad, Integer anioSeleccionado) {
+        return mpaProgramaDao.obtenerPlanes(actividad, anioSeleccionado);
     }
 
     @Transactional(readOnly = true)

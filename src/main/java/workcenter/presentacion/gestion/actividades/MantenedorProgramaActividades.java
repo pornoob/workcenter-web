@@ -53,6 +53,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     private boolean ordenarPorPrograma;
     private boolean haConsultado;
     private Integer anioSeleccionado;
+    private List<Mes> mesesSeleccionados;
 
     @Autowired
     LogicaPersonal logicaPersonal;
@@ -181,6 +182,11 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         return "0";
     }
 
+    public void checkear() {
+        if (mesesSeleccionados == null || mesesSeleccionados.isEmpty()) mesesSeleccionados = new ArrayList<Mes>(constantes.getMeses());
+        else mesesSeleccionados.removeAll(constantes.getMeses());
+    }
+
     public String obtenerCumplimientoGlobal(MpaPrograma programa) {
         float cumplimientoPersonal;
         int contadorPersonal;
@@ -242,16 +248,28 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         
         if (programa != null && responsable != null) {
             ordenarPorPrograma = false;
-            planes = logicaProgramaActividades.obtenerPlanes(programa, responsable, anioSeleccionado);
+            if (actividad == null)
+                planes = logicaProgramaActividades.obtenerPlanes(programa, responsable, anioSeleccionado);
+            else
+                planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, responsable, anioSeleccionado);
         } else if (programa != null) {
             ordenarPorPrograma = true;
-            planes = logicaProgramaActividades.obtenerPlanes(programa, anioSeleccionado);
+            if (actividad == null)
+                planes = logicaProgramaActividades.obtenerPlanes(programa, anioSeleccionado);
+            else
+                planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, anioSeleccionado);
         } else if (responsable != null) {
             ordenarPorPrograma = false;
-            planes = logicaProgramaActividades.obtenerPlanes(responsable, anioSeleccionado);
+            if (actividad == null)
+                planes = logicaProgramaActividades.obtenerPlanes(responsable, anioSeleccionado);
+            else
+                planes = logicaProgramaActividades.obtenerPlanes(actividad, responsable, anioSeleccionado);
         } else {
             ordenarPorPrograma = true;
-            planes = logicaProgramaActividades.obtenerPlanes(anioSeleccionado);
+            if (actividad == null)
+                planes = logicaProgramaActividades.obtenerPlanes(anioSeleccionado);
+            else
+                planes = logicaProgramaActividades.obtenerPlanes(actividad, anioSeleccionado);
         }
         haConsultado = true;
     }
@@ -510,6 +528,14 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
 
     public void setAnioSeleccionado(Integer anioSeleccionado) {
         this.anioSeleccionado = anioSeleccionado;
+    }
+
+    public List<Mes> getMesesSeleccionados() {
+        return mesesSeleccionados;
+    }
+
+    public void setMesesSeleccionados(List<Mes> mesesSeleccionados) {
+        this.mesesSeleccionados = mesesSeleccionados;
     }
 
     public void subir(FileUploadEvent fue) {

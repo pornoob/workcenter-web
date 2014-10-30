@@ -24,7 +24,8 @@
                   modal="true" closable="false" header="Su sesión ha expirado">
             <h:form>
                 <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton ajax="false" value="Aceptar" onclick="WebCenter.Session.expired()"/>
+                    <p:commandButton ajax="false" value="Aceptar"
+                                     onclick="location.href='#{request.contextPath}/logIn.jsf'"/>
                 </p:outputPanel>
             </h:form>
         </p:dialog>

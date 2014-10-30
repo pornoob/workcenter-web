@@ -9,6 +9,7 @@ import workcenter.negocio.incidencias.LogicaIncidencias;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 
 import java.io.Serializable;
@@ -46,7 +47,7 @@ public class MantenedorIncidencias implements Serializable {
     private MirTrazabilidadIncidencia trazabilidad;
     private List<MirApoyo> apoyos;
     private List<MirIncidencia> incidencias;
-    private List<MirEstadoIncidencia> estadosSiguientes;
+    private List<MirEstadoIncidencia> estadosDisponibles;
 
     public void inicio() {
         severidades = logicaIncidencias.obtSeveridades();
@@ -90,7 +91,15 @@ public class MantenedorIncidencias implements Serializable {
         incidencia.setFecha(new Date());
         incidencia.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
         trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
+        trazabilidad.setCreador(sesionCliente.getUsuario().getRut());
         logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha creado la nueva incidencia, el apoyo asignado es: " + incidencia.getIdApoyo().getIdSocio().getNombreCompleto());
+        irIngresar();
+    }
+
+    public void cambiarEstadoIncidencia() {
+        logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha cambiado el estado de la incidencia");
         irIngresar();
     }
 
@@ -98,7 +107,18 @@ public class MantenedorIncidencias implements Serializable {
         return logicaIncidencias.obtEstadoActual(i);
     }
 
+    public boolean esInformador() {
+        if (incidencia.getRutInformador() == null) return false;
+        return sesionCliente.getUsuario().getRut().intValue() == incidencia.getRutInformador().getRut().intValue();
+    }
+
+    public boolean esApoyo() {
+        if (incidencia.getIdApoyo().getIdSocio() == null || incidencia.getIdApoyo().getIdSocio().getRut() == null) return false;
+        return sesionCliente.getUsuario().getRut().intValue() == incidencia.getIdApoyo().getIdSocio().getRut().intValue();
+    }
+
     public String irListar() {
+        incidencias = logicaIncidencias.obtTodas();
         return "flowListar";
     }
 
@@ -113,6 +133,14 @@ public class MantenedorIncidencias implements Serializable {
 
     public String irCambiarEstado(MirIncidencia i) {
         incidencia = i;
+        if (!esApoyo()) {
+            estadosDisponibles = logicaIncidencias.obtenerEstadosDisponiblesInformador(incidencia);
+        } else {
+            estadosDisponibles = logicaIncidencias.obtenerEstadosDisponiblesApoyo(incidencia);
+        }
+        trazabilidad = new MirTrazabilidadIncidencia();
+        trazabilidad.setCreador(sesionCliente.getUsuario().getRut());
+        trazabilidad.setIdIncidencia(incidencia);
         return "flowCambiarEstado";
     }
 
@@ -158,5 +186,13 @@ public class MantenedorIncidencias implements Serializable {
 
     public void setIncidencias(List<MirIncidencia> incidencias) {
         this.incidencias = incidencias;
+    }
+
+    public List<MirEstadoIncidencia> getEstadosDisponibles() {
+        return estadosDisponibles;
+    }
+
+    public void setEstadosDisponibles(List<MirEstadoIncidencia> estadosDisponibles) {
+        this.estadosDisponibles = estadosDisponibles;
     }
 }

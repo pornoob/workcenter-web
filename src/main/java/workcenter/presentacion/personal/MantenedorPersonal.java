@@ -61,7 +61,7 @@ public class MantenedorPersonal implements Serializable {
     private DocumentoPersonal docSeleccionado;
     private List<DocumentoPersonal> documentos;
     private List<TipoDocPersonal> tiposDocumentos;
-    private UploadedFile archivo;
+    private transient UploadedFile archivo;
 
     private enum TipoOperacion {
         EDITAR,
@@ -171,6 +171,10 @@ public class MantenedorPersonal implements Serializable {
         }
     }
 
+    public String irCambiarFoto() {
+        return "flowCambiarFoto";
+    }
+
     public String irVerFicha(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
@@ -194,6 +198,10 @@ public class MantenedorPersonal implements Serializable {
         personalSeleccionado = p;
         sancion = new Sancionado();
         return "flowBloquear";
+    }
+
+    public String irDocumentos() {
+        return null;
     }
 
     public String irDesbloqueoPersonal(Personal p) {

@@ -24,7 +24,7 @@
                     <h:outputLabel value="Informador"/>:
                     <h:outputText value="#{mantenedorIncidencias.incidencia.rutInformador.nombreCompleto}"/>
                     <h:outputLabel value="Apoyo Resolución"/>:
-                    <h:outputText value="#{mantenedorIncidencias.incidencia.idApoyo.idSocio.nombre}"/>
+                    <h:outputText value="#{mantenedorIncidencias.incidencia.idApoyo.idSocio.nombreCompleto}"/>
                     <h:outputLabel value="Fecha Programada de Resolución"/>:
                     <h:outputText value="#{mantenedorIncidencias.incidencia.resolucionProgramada}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
@@ -32,17 +32,40 @@
                     <h:outputLabel value="Estado Actual"/>:
                     <h:outputText
                             value="#{mantenedorIncidencias.obtenerEstado(mantenedorIncidencias.incidencia).nombre}"/>
-                    <h:outputLabel for="iEstado" value="Nuevo Estado"/>:
-                    <p:selectOneMenu id="iEstado">
+                    <h:outputLabel rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                   for="iEstado"
+                                   value="Nuevo Estado"/>
+                    <h:outputText rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                  value=":"/>
+                    <p:selectOneMenu value="#{mantenedorIncidencias.trazabilidad.idEstado}" required="true"
+                                     rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                     id="iEstado" converter="entityConverter">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorIncidencias.estadosDisponibles}" var="e"
+                                       itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
-                    <h:outputLabel for="iDetalle" value="Detalle Cambio"/>:
-                    <p:inputTextarea id="iDetalle" style="width: 400px; height: 200"/>
+                    <h:outputLabel rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                   for="iDetalle" value="Detalle Cambio"/>
+                    <h:outputText rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                  value=":"/>
+                    <p:inputTextarea
+                            rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                            value="#{mantenedorIncidencias.trazabilidad.detalle}" id="iDetalle"
+                            style="width: 400px; height: 200" required="true"/>
+
+                    <h:outputLabel rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                   for="iAdjunto" value="Adjuntar Evidencia"/>
+                    <h:outputText rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                  value=":"/>
+                    <p:fileUpload id="iAdjunto" mode="simple"/>
                 </h:panelGrid>
             </p:panel>
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{mantenedorIncidencias.irListar}"
                                  value="Volver" ajax="false" immediate="true"/>
-                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar" ajax="false"
+                                 rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                 action="#{mantenedorIncidencias.cambiarEstadoIncidencia()}"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

@@ -33,7 +33,7 @@
                     <h3>Enlazar ficheros nuevos</h3>
                     <p:fileUpload rendered="true" immediate="true" auto="false" multiple="true" mode="advanced"
                                   fileUploadListener="#{padre.subir}" uploadLabel="Subir" cancelLabel="Cancelar"
-                                  allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png)$/i"
+                                  allowTypes="/(\.|\/)(xlsx|docx|doc|xls|ppt|pptx|wmv|pdf|jpg|png|rar|zip|tar|gz)$/i"
                                   label="Cargar nuevo archivo"
                                   fileLimit="#{enlazadorFichero.obtLimiteArchivos(cantFicheros)}"
                                   fileLimitMessage="Solo se puede subir #{enlazadorFichero.obtLimiteArchivos(cantFicheros)} documento(s)"/>

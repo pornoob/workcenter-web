@@ -58,14 +58,14 @@
                         <h:graphicImage rendered="#{mantenedorPersonal.personalSeleccionado.foto != null}"
                                         value="/oldFiles/#{mantenedorPersonal.personalSeleccionado.foto}"/>
                         <br/>
-                        <p:commandButton icon="ui-icon-person"
+                        <p:commandButton icon="ui-icon-person" action="#{mantenedorPersonal.irCambiarFoto()}"
                                          rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                          value="Cambiar Foto"/>
                     </h:panelGroup>
                 </h:panelGrid>
             </p:panel>
 
-            <p:panel header="Documentos de Carpeta" id="pDocumentos" styleClass="sinBordes">
+            <p:panel header="Documentos de Carpeta" id="pDocumentos">
                 <p:commandButton icon="ui-icon-plus"
                                  rendered="#{!mantenedorPersonal.tiposDocumentos.isEmpty() and (sesionCliente.esEditor(constantes.moduloPersonal) or sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal))}"
                                  value="Agregar documento" action="#{mantenedorPersonal.irIngresarDocCarpeta()}"/>
@@ -109,6 +109,9 @@
                 <p:panel class="actionPanel">
                     <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                                      value="Guardar"/>
+                    <!--<p:commandButton icon="ui-icon-document"
+                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
+                                     value="Documentos" action="#{mantenedorPersonal.irDocumentos()}"/>-->
                     <p:commandButton icon="ui-icon-document"
                                      rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                                      value="Ver contratos" action="#{mantenedorPersonal.irContratosPersonal()}"/>

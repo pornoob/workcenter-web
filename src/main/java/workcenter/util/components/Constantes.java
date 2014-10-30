@@ -54,6 +54,12 @@ public class Constantes implements Serializable {
     // Zona PIIR
     private int piirEstadoInicial = 1;
 
+    // Correo de la aplicación
+    private String correo = "";
+    private String claveCorreo = "";
+    private String servidorCorreo = "";
+    private int puertoCorreo = 993;
+
     // Genericos
     private List<Mes> meses;
     private List<Horario> horarios;
@@ -62,12 +68,12 @@ public class Constantes implements Serializable {
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
     private String pathArchivos;
 
-    // cliente de correo
-    private String usuarioCorreo = "colivares@transportesventanas.cl";
-    private String contrasennaCorreo = "colivares1";
-    private String servidorCorreo = "imap.googlemail.com";
-    private Integer puertoCorreo = 993;
-    private String protocoloCorreo = "imaps";
+    // cliente de correo, alarmas GPS
+    private String marUsuarioCorreo = "colivares@transportesventanas.cl";
+    private String marContrasennaCorreo = "colivares1";
+    private String marServidorCorreo = "imap.googlemail.com";
+    private Integer marPuertoCorreo = 993;
+    private String marProtocoloCorreo = "imaps";
 
     // modulos
     private String moduloAlarmasGPS = "Modulo Alarmas GPS";
@@ -199,24 +205,24 @@ public class Constantes implements Serializable {
         return moduloProgramaActividades;
     }
 
-    public String getUsuarioCorreo() {
-        return usuarioCorreo;
+    public String getMarUsuarioCorreo() {
+        return marUsuarioCorreo;
     }
 
-    public String getContrasennaCorreo() {
-        return contrasennaCorreo;
+    public String getMarContrasennaCorreo() {
+        return marContrasennaCorreo;
     }
 
-    public String getServidorCorreo() {
-        return servidorCorreo;
+    public String getMarServidorCorreo() {
+        return marServidorCorreo;
     }
 
-    public Integer getPuertoCorreo() {
-        return puertoCorreo;
+    public Integer getMarPuertoCorreo() {
+        return marPuertoCorreo;
     }
 
-    public String getProtocoloCorreo() {
-        return protocoloCorreo;
+    public String getMarProtocoloCorreo() {
+        return marProtocoloCorreo;
     }
 
     public List<String> getEstadosCiviles() {

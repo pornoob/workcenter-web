@@ -43,7 +43,7 @@ public class MantenedorDocsEquipos implements Serializable {
     private List<DocumentoEquipo> documentos;
     private List<TipoDocumentoEquipo> tiposPendientes;
     private TipoDocumentoEquipo documentoSeleccionado;
-    private UploadedFile archivo;
+    private transient UploadedFile archivo;
     private DocumentoEquipo documentoEquipo;
 
     private enum Operacion {

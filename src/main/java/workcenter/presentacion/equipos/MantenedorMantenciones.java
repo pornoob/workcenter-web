@@ -64,7 +64,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private Map<String, List<Documento>> comprobantesMantencion;
 
     // caché
-    private Vuelta ultimaVuelta;
     private MmeMantencionTracto panne;
     private int ciclos;
 
@@ -113,6 +112,18 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return valor.intValue() > constantes.getAlarmaProximaMantencion();
     }
 
+    public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
+        if (filtro == null) return true;
+        if (filtro.equals("proximas")) {
+            return dibujarSemaforoAmarillo(obtenerKmsFaltante((MmeMantencionTracto) valor));
+        } else if (filtro.equals("lejanas")) {
+            return dibujarSemaforoVerde(obtenerKmsFaltante((MmeMantencionTracto) valor));
+        } else if (filtro.equals("atrasadas")) {
+            return dibujarSemaforoRojo(obtenerKmsFaltante((MmeMantencionTracto) valor));
+        }
+        return false;
+    }
+
     public boolean dibujarSemaforoRojoSemiremolque(MmeMantencionSemiremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
@@ -128,7 +139,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
         if (new Date().before(fechaMantencion.getTime())) {
             fechaMantencion.add(Calendar.DAY_OF_MONTH, -5);
-            System.err.println(new Date() + " vs " + fechaMantencion.getTime());
             return new Date().after(fechaMantencion.getTime());
         }
         return false;
@@ -141,7 +151,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
         if (new Date().before(fechaMantencion.getTime())) {
             fechaMantencion.add(Calendar.DAY_OF_MONTH, -5);
-            System.err.println(new Date() + " vs " + fechaMantencion.getTime());
             return new Date().before(fechaMantencion.getTime());
         }
         return false;
@@ -157,9 +166,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public Integer obtenerKmSegunGuias(Equipo e) {
-        ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
+        Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
         try {
-            return obtenerKmSegunVueltaGuia();
+            return obtenerKmSegunVueltaGuia(e);
         } catch (Exception ex) {
             System.err.println("EX: " + ex.getMessage());
             return null;
@@ -170,7 +179,8 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return logicaProveedorPetroleo.obtenerUltimoOdometro(e);
     }
 
-    private Integer obtenerKmSegunVueltaGuia() {
+    private Integer obtenerKmSegunVueltaGuia(Equipo e) {
+        Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
         return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
                 : ultimaVuelta.getKmFinal();
     }
@@ -196,7 +206,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public Integer obtenerKmsFaltante(MmeMantencionTracto mt) {
         Equipo e = mt.getTracto();
         Integer kmCopec = obtenerKmSegunProveedor(e);
-        Integer kmGuia = obtenerKmSegunVueltaGuia();
+        Integer kmGuia = obtenerKmSegunVueltaGuia(e);
         int kms = 0;
         if (kmCopec != null && kmGuia != null) kms = kmCopec.intValue() > kmGuia.intValue() ? kmCopec.intValue() : kmGuia.intValue();
         else if (kmCopec == null && kmGuia != null) kms = kmGuia.intValue();
@@ -209,17 +219,26 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             FacesUtil.mostrarMensajeError("Operación fallida", "Debes adjuntar al menos un respaldo de la mantención");
             return;
         }
-        // es + 2 debido a que a los ciclos de por si se le quita uno
-        int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
-        mantencionTracto.setCiclo(cicloActual);
-        mantencionSemiremolque.setMecanicoResponsable(mantencionTracto.getMecanicoResponsable());
-        mantencionSemiremolque.setFecha(mantencionTracto.getFecha());
-        mantencionSemiremolque.setCriterioSiguiente(30);
-        logicaMantenciones.guardar(mantencionTracto);
-        logicaMantenciones.guardar(mantencionSemiremolque);
+        if (mantencionTracto.getTracto() == null && mantencionSemiremolque.getSemiRemolque() == null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "La mantención se realiza sobre un equipo al menos");
+            return;
+        }
+        if (mantencionTracto.getTracto() != null) {
+            // es + 2 debido a que a los ciclos de por si se le quita uno
+            int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
+            mantencionTracto.setCiclo(cicloActual);
+            logicaMantenciones.guardar(mantencionTracto);
+        }
+
+        if (mantencionSemiremolque.getSemiRemolque() != null) {
+            mantencionSemiremolque.setMecanicoResponsable(mantencionTracto.getMecanicoResponsable());
+            mantencionSemiremolque.setFecha(mantencionTracto.getFecha());
+            mantencionSemiremolque.setCriterioSiguiente(30);
+            logicaMantenciones.guardar(mantencionSemiremolque);
+        }
         for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
-            logicaDocumentos.asociarDocumento(d, mantencionTracto);
-            logicaDocumentos.asociarDocumento(d, mantencionSemiremolque);
+            if (mantencionTracto.getTracto() != null) logicaDocumentos.asociarDocumento(d, mantencionTracto);
+            if (mantencionSemiremolque.getSemiRemolque() != null) logicaDocumentos.asociarDocumento(d, mantencionSemiremolque);
         }
 
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la mantención");

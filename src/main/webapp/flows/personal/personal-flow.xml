@@ -15,6 +15,10 @@
         <transition on="flowBloquear" to="bloquearPersonal"/>
         <transition on="flowDesbloquear" to="desbloquearPersonal"/>
     </view-state>
+
+    <view-state id="cambiarFoto">
+        <transition on="flowListarPersonal" to="personal"/>
+    </view-state>
     
     <view-state id="bloquearPersonal">
         <transition on="flowListarPersonal" to="personal"/>
@@ -28,6 +32,7 @@
         <transition on="flowListarPersonal" to="personal"/>
         <transition on="flowVerContratos" to="contratos"/>
         <transition on="flowActualizarDocumento" to="actualizarDocCarpeta"/>
+        <transition on="flowCambiarFoto" to="cambiarFoto"/>
     </view-state>
 
     <view-state id="actualizarDocCarpeta">
@@ -43,4 +48,9 @@
     <view-state id="editarContrato">
         <transition on="flowVerContratos" to="contratos"/>
     </view-state>
+
+    <subflow-state id="documentos" subflow="personal/documentos_personal">
+        <input name="equipo" value="mantenedorEquipos.equipo" type="workcenter.entidades.Equipo"/>
+        <transition on="finSubFlow" to="verFicha"/>
+    </subflow-state>
 </flow>

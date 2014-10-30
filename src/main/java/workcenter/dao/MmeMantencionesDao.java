@@ -39,7 +39,7 @@ public class MmeMantencionesDao {
         sql.append("select m.id, m.id_tipo, max(m.fecha) as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
         sql.append("from mme_mantenciones_tractos m where m.id_tipo is not null ");
         sql.append("group by m.equipo order by m.id desc ");
-        sql.append(") t group by equipo ");
+        sql.append(") t group by equipo order by fecha desc ");
         return em.createNativeQuery(sql.toString(), MmeMantencionTracto.class).getResultList();
     }
 
@@ -77,7 +77,7 @@ public class MmeMantencionesDao {
     public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable ");
-        sql.append("from mme_mantenciones_semiremolque m group by m.equipo ");
+        sql.append("from mme_mantenciones_semiremolque m group by m.equipo order by fecha desc ");
         return em.createNativeQuery(sql.toString(), MmeMantencionSemiremolque.class).getResultList();
     }
 

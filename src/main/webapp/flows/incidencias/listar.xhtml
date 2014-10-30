@@ -35,12 +35,11 @@
                 <p:column headerText="Incidencia">
                     #{mantenedorIncidencias.detalleInicial(i)}
                 </p:column>
-                <p:column headerText="Resolución"></p:column>
                 <p:column headerText="Informador">
                     #{i.rutInformador.nombreCompleto}
                 </p:column>
                 <p:column headerText="Apoyo Resolución">
-                    #{i.idApoyo.idSocio.nombre}
+                    #{i.idApoyo.idSocio.nombreCompleto}
                 </p:column>
                 <p:column headerText="Fecha Programada de Resolución">
                     <h:outputText value="#{i.resolucionProgramada}">

@@ -16,7 +16,7 @@ import java.io.Serializable;
 )
 public class MirApoyo implements Serializable {
     private Integer id;
-    private Empresa idSocio;
+    private Personal idSocio;
     private int orden;
 
     @Id
@@ -30,13 +30,13 @@ public class MirApoyo implements Serializable {
         this.id = id;
     }
 
-    @OneToOne
-    @JoinColumn(name = "id_socio", referencedColumnName = "id")
-    public Empresa getIdSocio() {
+    @ManyToOne
+    @JoinColumn(name = "id_socio", referencedColumnName = "rut")
+    public Personal getIdSocio() {
         return idSocio;
     }
 
-    public void setIdSocio(Empresa idSocio) {
+    public void setIdSocio(Personal idSocio) {
         this.idSocio = idSocio;
     }
 

@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "EquipoSancionado.findAll", query = "SELECT e FROM EquipoSancionado e"),
     @NamedQuery(name = "EquipoSancionado.findById", query = "SELECT e FROM EquipoSancionado e WHERE e.id = :id"),
-    @NamedQuery(name = "EquipoSancionado.findByEquipo", query = "SELECT e FROM EquipoSancionado e WHERE e.sancionado = :equipo"),
+    @NamedQuery(name = "EquipoSancionado.findByEquipo", query = "SELECT e FROM EquipoSancionado e WHERE e.sancionado = :equipo ORDER BY e.fecha ASC"),
     @NamedQuery(name = "EquipoSancionado.findByNivel", query = "SELECT e FROM EquipoSancionado e WHERE e.nivel = :nivel"),
     @NamedQuery(name = "EquipoSancionado.findByMotivo", query = "SELECT e FROM EquipoSancionado e WHERE e.motivo = :motivo"),
     @NamedQuery(name = "EquipoSancionado.findByFecha", query = "SELECT e FROM EquipoSancionado e WHERE e.fecha = :fecha")})

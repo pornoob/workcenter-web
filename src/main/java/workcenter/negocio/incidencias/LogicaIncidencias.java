@@ -64,4 +64,19 @@ public class LogicaIncidencias {
     public MirEstadoIncidencia obtEstadoActual(MirIncidencia i) {
         return mirIncidenciasDao.obtEstadoActual(i);
     }
+
+    @Transactional(readOnly = true)
+    public List<MirEstadoIncidencia> obtenerEstadosDisponiblesInformador(MirIncidencia incidencia) {
+        return mirIncidenciasDao.obtenerEstadosDisponibles(incidencia, "informador");
+    }
+
+    @Transactional(readOnly = true)
+    public List<MirEstadoIncidencia> obtenerEstadosDisponiblesApoyo(MirIncidencia incidencia) {
+        return mirIncidenciasDao.obtenerEstadosDisponibles(incidencia, "apoyo");
+    }
+
+    @Transactional(readOnly = true)
+    public List<MirIncidencia> obtenerIncidenciasPorEstado(Integer idEstado) {
+        return mirIncidenciasDao.obtenerIncidenciasPorEstado(idEstado);
+    }
 }

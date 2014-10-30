@@ -55,6 +55,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
     </security:authentication-manager>
 
     <bean id="authenticationEntryPoint"
-          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint"
-          p:loginFormUrl="/logIn.jsf"/>
+          class="org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint">
+        <constructor-arg name="loginFormUrl" value="/logIn.jsf"/>
+    </bean>
 </beans>

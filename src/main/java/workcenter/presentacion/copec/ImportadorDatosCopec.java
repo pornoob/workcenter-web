@@ -23,7 +23,7 @@ import java.util.Date;
 @Component
 @Scope("view")
 public class ImportadorDatosCopec {
-    private UploadedFile archivo;
+    private transient UploadedFile archivo;
     private Date ultimaActualizacion;
 
     @Autowired
@@ -51,8 +51,16 @@ public class ImportadorDatosCopec {
 
                 rc.setEstacionDeServicio(row.getCell(6).getStringCellValue());
                 rc.setGuiaDespacho((int) row.getCell(7).getNumericCellValue());
-                rc.setPrecio((int) Float.valueOf(row.getCell(8).getStringCellValue()).floatValue());
-                rc.setLitros(Float.valueOf(row.getCell(9).getStringCellValue()));
+                try {
+                    rc.setPrecio((int) Float.valueOf(row.getCell(8).getStringCellValue()).floatValue());
+                } catch (IllegalStateException ise) {
+                    rc.setPrecio((int) row.getCell(8).getNumericCellValue());
+                }
+                try {
+                    rc.setLitros(Float.valueOf(row.getCell(9).getStringCellValue()));
+                } catch (IllegalStateException ise) {
+                    rc.setLitros((float) row.getCell(9).getNumericCellValue());
+                }
                 rc.setMonto((int) row.getCell(10).getNumericCellValue());
                 rc.setOdometro((int) row.getCell(11).getNumericCellValue());
                 try {

@@ -16,11 +16,6 @@ var WebCenter = {
             location.href = url;
         }
     },
-    Session: {
-        expired: function () {
-            location.href = '/logIn.jsf';
-        }
-    },
     Filter: {
         componente: null,
         run: function (componente) {
@@ -38,7 +33,6 @@ var WebCenter = {
         },
         inputKeyUp: function (event) {
             if (event.which == 13) {
-                console.log("LLEGE "+this.componente);
                 event.preventDefault();
                 PF(this.componente).filter();
             }

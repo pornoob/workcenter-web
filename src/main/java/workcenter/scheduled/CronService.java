@@ -4,10 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.Iterator;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.mail.BodyPart;
@@ -25,7 +22,9 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import workcenter.dao.TestQueryDao;
 import workcenter.entidades.AlarmaGps;
+import workcenter.entidades.MirIncidencia;
 import workcenter.negocio.LogicaAlarmasGps;
+import workcenter.negocio.incidencias.LogicaIncidencias;
 import workcenter.presentacion.includes.AlarmasUploader;
 import workcenter.util.components.Constantes;
 
@@ -37,10 +36,13 @@ import workcenter.util.components.Constantes;
 public class CronService {
 
     @Autowired
-    TestQueryDao testQueryDao;
+    private TestQueryDao testQueryDao;
 
     @Autowired
-    LogicaAlarmasGps logicaAlarmasGps;
+    private LogicaAlarmasGps logicaAlarmasGps;
+
+    @Autowired
+    private LogicaIncidencias logicaIncidencias;
 
     @Autowired
     Constantes constantes;
@@ -51,19 +53,23 @@ public class CronService {
     }
 
     // todos los días a las importar datos desde la copec
-    @Scheduled(cron = "0 0 0 * * *")
-    public void descargarRendimientosDiarios() {
+    @Scheduled(cron = "0 0 0/1 * * *")
+    public void cerrarIncidencias() {
+        List<MirIncidencia> incidencias = logicaIncidencias.obtenerIncidenciasPorEstado(constantes.getPiirEstadoInicial());
+        for (MirIncidencia i : incidencias) {
+//            if (i.getResolucionProgramada())
+        }
     }
 
     // todos los días a las 7 de la mañana descargar correo SAMTECH
     @Scheduled(cron = "0 0 7 * * *")
     public void descargarFicheroAlarmaGPS() {
         Properties props = new Properties();
-        props.setProperty("mail.store.protocol", constantes.getProtocoloCorreo());
+        props.setProperty("mail.store.protocol", constantes.getMarProtocoloCorreo());
         try {
             Session session = Session.getInstance(props, null);
             Store store = session.getStore();
-            store.connect(constantes.getServidorCorreo(), constantes.getUsuarioCorreo(), constantes.getContrasennaCorreo());
+            store.connect(constantes.getMarServidorCorreo(), constantes.getMarUsuarioCorreo(), constantes.getMarContrasennaCorreo());
             Folder inbox = store.getFolder("SAMTECH");
             inbox.open(Folder.READ_ONLY);
 

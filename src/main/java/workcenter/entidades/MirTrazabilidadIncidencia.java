@@ -2,20 +2,25 @@ package workcenter.entidades;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.sql.Timestamp;
 import java.util.Date;
 
 /**
  * Created by claudio on 30-09-14.
  */
 @Entity
-@Table(name = "mir_trazabilidad_incidencia", schema = "")
+@Table(name = "mir_trazabilidad_incidencia", schema = "", catalog = "TransportesVentanas")
 public class MirTrazabilidadIncidencia implements Serializable {
     private Integer id;
     private MirIncidencia idIncidencia;
     private MirEstadoIncidencia idEstado;
     private Date fecha;
-    private String detalleInformador;
-    private String detalleApoyo;
+    private String detalle;
+    private Integer creador;
+
+    public void setFecha(Timestamp fecha) {
+        this.fecha = fecha;
+    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -60,23 +65,13 @@ public class MirTrazabilidadIncidencia implements Serializable {
     }
 
     @Basic
-    @Column(name = "detalle_informador", nullable = false, insertable = true, updatable = true, length = 65535)
-    public String getDetalleInformador() {
-        return detalleInformador;
+    @Column(name = "detalle", nullable = false, insertable = true, updatable = true, length = 65535)
+    public String getDetalle() {
+        return detalle;
     }
 
-    public void setDetalleInformador(String detalleInformador) {
-        this.detalleInformador = detalleInformador;
-    }
-
-    @Basic
-    @Column(name = "detalle_apoyo", nullable = false, insertable = true, updatable = true, length = 65535)
-    public String getDetalleApoyo() {
-        return detalleApoyo;
-    }
-
-    public void setDetalleApoyo(String detalleApoyo) {
-        this.detalleApoyo = detalleApoyo;
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
     }
 
     @Override
@@ -94,5 +89,15 @@ public class MirTrazabilidadIncidencia implements Serializable {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    @Basic
+    @Column(name = "creador")
+    public Integer getCreador() {
+        return creador;
+    }
+
+    public void setCreador(Integer creador) {
+        this.creador = creador;
     }
 }

@@ -39,7 +39,7 @@ public class EquipoDao {
 
     public EquipoSancionado obtenerEquipoSancionado(Equipo e) {
         try {
-            return (EquipoSancionado) em.createNamedQuery("EquipoSancionado.findByEquipo").setParameter("equipo", e).getSingleResult();
+            return (EquipoSancionado) em.createNamedQuery("EquipoSancionado.findByEquipo").setParameter("equipo", e).setMaxResults(1).getSingleResult();
         } catch (Exception ex) {
             return null;
         }

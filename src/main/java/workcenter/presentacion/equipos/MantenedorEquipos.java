@@ -52,7 +52,7 @@ public class MantenedorEquipos implements Serializable {
     private List<Empresa> empresas;
     private Equipo equipo;
     private String posicionFoto;
-    private UploadedFile foto;
+    private transient UploadedFile foto;
     private FotoEquipo fotoEquipo;
     private SancionRetiradaEquipo sancionRetiradaEquipo;
 
@@ -118,10 +118,6 @@ public class MantenedorEquipos implements Serializable {
     public String irBloquear(Equipo e) {
         equipo = e;
         equipoSancionado = logicaEquipos.obtenerEquipoSancionado(equipo);
-        if (equipoSancionado != null) {
-            FacesUtil.mostrarMensajeError("Operación fallida", "El equipo ya posee un bloqueo");
-            return null;
-        }
         equipoSancionado = new EquipoSancionado();
         equipoSancionado.setSancionado(e);
         return "flowBloquear";
@@ -136,9 +132,7 @@ public class MantenedorEquipos implements Serializable {
             return null;
         }
         sancionRetiradaEquipo.setSancionado(equipo);
-        System.err.println("FECHA SANCION: "+equipoSancionado.getFecha());
         sancionRetiradaEquipo.setFechasancion(equipoSancionado.getFecha());
-        System.err.println("FECHA SANCION 2: "+sancionRetiradaEquipo.getFechasancion());
         sancionRetiradaEquipo.setMotivo(equipoSancionado.getMotivo());
         return "flowDesbloquear";
     }

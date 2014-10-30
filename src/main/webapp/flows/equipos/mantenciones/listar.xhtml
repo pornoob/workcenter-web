@@ -27,20 +27,35 @@
                 <p:tab title="Tractos">
                     <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                                      action="#{mantenedorMantenciones.irEditar()}" icon="ui-icon-plus"/>
-                    <p:dataTable emptyMessage="No se han registrado mantenciones"
+                    <p:dataTable emptyMessage="No se han registrado mantenciones" widgetVar="tTractos"
                                  value="#{mantenedorMantenciones.mantencionesTractos}" var="mt"
                                  rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                                  paginatorTemplate="#{constantes.paginadorTemplate}"
                                  rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
                         <p:columnGroup type="header">
                             <p:row>
-                                <p:column rowspan="2" headerText="Patente"/>
-                                <p:column colspan="3" headerText="Última mantención"/>
+                                <p:column rowspan="2" filterBy="#{mt.tracto.patente}" headerText="Patente"
+                                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                                    <f:facet name="filter">
+                                        <p:inputText styleClass="inputFilter" style="width: 50px"/>
+                                    </f:facet>
+                                </p:column>
+                                <p:column width="240" colspan="3" headerText="Última mantención"/>
                                 <p:column colspan="2" headerText="Última Panne"/>
                                 <p:column width="100" colspan="2" headerText="Kms. Actuales"/>
-                                <p:column width="160" rowspan="2" headerText="Prox. Control"/>
+                                <p:column width="100" rowspan="2" headerText="Prox. Control"/>
                                 <p:column rowspan="2" headerText="Kms. Faltantes"/>
-                                <p:column width="20" rowspan="2" headerText=""/>
+                                <p:column rowspan="2" headerText="Estado" filterBy="#{mt}"
+                                          filterFunction="#{mantenedorMantenciones.filtroEstado}">
+                                    <f:facet name="filter">
+                                        <p:selectOneMenu onchange="PF('tTractos').filter()">
+                                            <f:selectItem itemLabel="-- Todas --" itemValue="#{null}"/>
+                                            <f:selectItem itemLabel="Atrasadas" itemValue="atrasadas"/>
+                                            <f:selectItem itemLabel="Próximas" itemValue="proximas"/>
+                                            <f:selectItem itemLabel="Lejanas" itemValue="lejanas"/>
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                </p:column>
                             </p:row>
                             <p:row>
                                 <p:column headerText="Fecha"/>
@@ -100,10 +115,10 @@
                             </h:outputText>
                         </p:column>
 
-                        <p:column style="white-space: nowrap">
+                        <p:column style="text-align: center">
                             <h:outputText value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencion(mt)}">
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
-                            </h:outputText> (
+                            </h:outputText><br/>(
                             <h:outputText value="#{mantenedorMantenciones.obtenerKmSiguienteMantencion(mt)}">
                                 <f:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText> Kms. )
@@ -168,5 +183,8 @@
                 </p:tab>
             </p:tabView>
         </h:form>
+        <h:outputScript library="js" target="body">
+            WebCenter.Filter.run('tTractos');
+        </h:outputScript>
     </ui:define>
 </ui:composition>
