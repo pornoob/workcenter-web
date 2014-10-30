@@ -36,6 +36,8 @@
                 <h:outputLabel for="iFechaProgramada" value="Fecha de Resolución Programada"/>:
                 <p:calendar pattern="dd-MM-yyyy" value="#{mantenedorIncidencias.incidencia.resolucionProgramada}" id="iFechaProgramada"
                             readonly="true"/>
+                <h:outputLabel for="iAdjunto" value="Adjuntar Evidencia"/>:
+                <p:fileUpload id="iAdjunto" mode="simple" value="#{mantenedorIncidencias.archivo}"/>
             </h:panelGrid>
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{mantenedorIncidencias.irListar}"

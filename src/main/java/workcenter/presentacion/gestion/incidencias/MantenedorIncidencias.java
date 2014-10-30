@@ -1,5 +1,6 @@
 package workcenter.presentacion.gestion.incidencias;
 
+import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -30,10 +31,10 @@ public class MantenedorIncidencias implements Serializable {
     private LogicaDocumentos logicaDocumentos;
 
     @Autowired
-    private LogicaPersonal logicaPersonal;
+    private FicheroUploader ficheroUploader;
 
     @Autowired
-    private FicheroUploader ficheroUploader;
+    private LogicaPersonal logicaPersonal;
 
     @Autowired
     private Constantes constantes;
@@ -48,6 +49,7 @@ public class MantenedorIncidencias implements Serializable {
     private List<MirApoyo> apoyos;
     private List<MirIncidencia> incidencias;
     private List<MirEstadoIncidencia> estadosDisponibles;
+    private transient UploadedFile archivo;
 
     public void inicio() {
         severidades = logicaIncidencias.obtSeveridades();
@@ -93,12 +95,22 @@ public class MantenedorIncidencias implements Serializable {
         trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
         trazabilidad.setCreador(sesionCliente.getUsuario().getRut());
         logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        if (archivo != null && archivo.getSize() > 0) {
+            Documento d = ficheroUploader.subir(archivo);
+            logicaDocumentos.asociarDocumento(d, trazabilidad);
+            archivo = null;
+        }
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha creado la nueva incidencia, el apoyo asignado es: " + incidencia.getIdApoyo().getIdSocio().getNombreCompleto());
         irIngresar();
     }
 
     public void cambiarEstadoIncidencia() {
         logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
+        if (archivo != null && archivo.getSize() > 0) {
+            Documento d = ficheroUploader.subir(archivo);
+            logicaDocumentos.asociarDocumento(d, trazabilidad);
+            archivo = null;
+        }
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha cambiado el estado de la incidencia");
         irIngresar();
     }
@@ -194,5 +206,13 @@ public class MantenedorIncidencias implements Serializable {
 
     public void setEstadosDisponibles(List<MirEstadoIncidencia> estadosDisponibles) {
         this.estadosDisponibles = estadosDisponibles;
+    }
+
+    public UploadedFile getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(UploadedFile archivo) {
+        this.archivo = archivo;
     }
 }

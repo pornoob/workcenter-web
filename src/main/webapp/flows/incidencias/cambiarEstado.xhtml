@@ -57,7 +57,8 @@
                                    for="iAdjunto" value="Adjuntar Evidencia"/>
                     <h:outputText rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
                                   value=":"/>
-                    <p:fileUpload id="iAdjunto" mode="simple"/>
+                    <p:fileUpload rendered="#{mantenedorIncidencias.esApoyo() || mantenedorIncidencias.esInformador()}"
+                                  id="iAdjunto" mode="simple" value="#{mantenedorIncidencias.archivo}"/>
                 </h:panelGrid>
             </p:panel>
             <p:outputPanel styleClass="actionPanel">
