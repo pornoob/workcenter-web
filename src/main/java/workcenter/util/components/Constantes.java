@@ -53,12 +53,13 @@ public class Constantes implements Serializable {
 
     // Zona PIIR
     private int piirEstadoInicial = 1;
+    private int piirEstadoCerradaPorSistema = 3;
 
     // Correo de la aplicación
-    private String correo = "";
-    private String claveCorreo = "";
-    private String servidorCorreo = "";
-    private int puertoCorreo = 993;
+    private String correo = "colivares@transportesventanas.cl";
+    private String claveCorreo = "colivares1";
+    private String servidorCorreo = "smtp.googlemail.com";
+    private int puertoCorreo = 465;
 
     // Genericos
     private List<Mes> meses;
@@ -304,5 +305,25 @@ public class Constantes implements Serializable {
 
     public int getPiirEstadoInicial() {
         return piirEstadoInicial;
+    }
+
+    public String getCorreo() {
+        return correo;
+    }
+
+    public String getClaveCorreo() {
+        return claveCorreo;
+    }
+
+    public String getServidorCorreo() {
+        return servidorCorreo;
+    }
+
+    public int getPuertoCorreo() {
+        return puertoCorreo;
+    }
+
+    public int getPiirEstadoCerradaPorSistema() {
+        return piirEstadoCerradaPorSistema;
     }
 }

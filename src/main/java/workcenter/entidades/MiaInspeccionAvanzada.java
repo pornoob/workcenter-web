@@ -23,6 +23,7 @@ public class MiaInspeccionAvanzada implements Serializable {
     private Equipo batea;
     private Personal conductor;
     private Personal ejecutor;
+    private Integer kilometraje;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -93,6 +94,16 @@ public class MiaInspeccionAvanzada implements Serializable {
 
     public void setEjecutor(Personal ejecutor) {
         this.ejecutor = ejecutor;
+    }
+
+    @Basic
+    @Column(name = "kilometraje")
+    public Integer getKilometraje() {
+        return kilometraje;
+    }
+
+    public void setKilometraje(Integer kilometraje) {
+        this.kilometraje = kilometraje;
     }
 
     @Override

@@ -67,6 +67,11 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     private List<MiaPregunta> preguntas;
     private Map<String, List<Documento>> comprobantesInspeccion;
     private MarRegistro formulario;
+    private enum Formulario {
+        CAMION_BATEA,
+        DETENCION_GESTION
+    };
+    private Formulario formularioEnPantalla;
 
     // Zona de "caché"
     private List<MiaRespuesta> ultimasRespuestas;
@@ -91,6 +96,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     public String irAgregar() {
         preguntas = logicaInspeccionAvanzada.obtenerPreguntas();
         inspeccionAvanzada = new MiaInspeccionAvanzada();
+        formularioEnPantalla = Formulario.DETENCION_GESTION;
         return "flowAgregar";
     }
 
@@ -98,6 +104,10 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         preguntas = logicaInspeccionAvanzada.obtenerPreguntas();
         inspeccionAvanzada = i;
         ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(inspeccionAvanzada);
+        if (!ultimasRespuestas.isEmpty() && ultimasRespuestas.get(0).getMiaPreguntasByIdPregunta().getNumero() < 31)
+            formularioEnPantalla = Formulario.CAMION_BATEA;
+        else
+            formularioEnPantalla = Formulario.DETENCION_GESTION;
         comprobantesInspeccion = new HashMap<String, List<Documento>>();
         return "flowAgregar";
     }
@@ -225,6 +235,34 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return obtenerValorCalendario(idCol, e).intValue() > 0;
     }
 
+    public List<MiaPregunta> getPreguntasDetencionInmediata() {
+        int[] preguntasCamion = {31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42};
+        List<MiaPregunta> retorno = new ArrayList<MiaPregunta>();
+        for (int i = 0; i < preguntasCamion.length; i++) {
+            for (MiaPregunta p : preguntas) {
+                if (p.getNumero().intValue() == preguntasCamion[i]) {
+                    retorno.add(p);
+                    break;
+                }
+            }
+        }
+        return retorno;
+    }
+
+    public List<MiaPregunta> getPreguntasGestionBrevedad() {
+        int[] preguntasBatea = {43, 56, 44, 57, 45, 58, 46, 59, 47, 60, 48, 61, 49, 62, 50, 63, 51, 64, 52, 65, 53, 66, 54, 67, 55, 68};
+        List<MiaPregunta> retorno = new ArrayList<MiaPregunta>();
+        for (int i = 0; i < preguntasBatea.length; i++) {
+            for (MiaPregunta p : preguntas) {
+                if (p.getNumero().intValue() == preguntasBatea[i]) {
+                    retorno.add(p);
+                    break;
+                }
+            }
+        }
+        return retorno;
+    }
+
     public List<MiaPregunta> getPreguntasCamion() {
         int[] preguntasCamion = {1, 11, 2, 12, 3, 13, 4, 14, 5, 15, 6, 16, 7, 17, 8, 18, 9, 19, 10};
         List<MiaPregunta> retorno = new ArrayList<MiaPregunta>();
@@ -298,6 +336,14 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
             }
         }
         return false;
+    }
+
+    public boolean esCamionBatea() {
+        return formularioEnPantalla == Formulario.CAMION_BATEA;
+    }
+
+    public boolean esDetencionGestion() {
+        return formularioEnPantalla == Formulario.DETENCION_GESTION;
     }
 
     public void dummy() {

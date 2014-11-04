@@ -23,10 +23,12 @@ import org.springframework.stereotype.Component;
 import workcenter.dao.TestQueryDao;
 import workcenter.entidades.AlarmaGps;
 import workcenter.entidades.MirIncidencia;
+import workcenter.entidades.MirTrazabilidadIncidencia;
 import workcenter.negocio.LogicaAlarmasGps;
 import workcenter.negocio.incidencias.LogicaIncidencias;
 import workcenter.presentacion.includes.AlarmasUploader;
 import workcenter.util.components.Constantes;
+import workcenter.util.services.MailSender;
 
 /**
  *
@@ -45,7 +47,10 @@ public class CronService {
     private LogicaIncidencias logicaIncidencias;
 
     @Autowired
-    Constantes constantes;
+    private Constantes constantes;
+
+    @Autowired
+    private MailSender mailSender;
 
     @Scheduled(fixedRate = 30000)
     public void mantenerActivoMySQL() {
@@ -53,11 +58,27 @@ public class CronService {
     }
 
     // todos los días a las importar datos desde la copec
-    @Scheduled(cron = "0 0 0/1 * * *")
+    @Scheduled(cron = "0 */1 * * * *")
     public void cerrarIncidencias() {
         List<MirIncidencia> incidencias = logicaIncidencias.obtenerIncidenciasPorEstado(constantes.getPiirEstadoInicial());
+        long actual = new Date().getTime();
+        long programada = 0;
+        long diferencia = 0;
         for (MirIncidencia i : incidencias) {
-//            if (i.getResolucionProgramada())
+            programada = i.getResolucionProgramada().getTime();
+            diferencia = (programada - actual)/3600000; // 1 hr 3600 segundos y * 1000 para pasarlo a segundos
+            if (diferencia <= 5 && diferencia >= 4) {
+//                mailSender.send(new String[]{ new String("claudio.pol.olivares@gmail.com") }, "holi", "teni pololi");
+            } else if (diferencia <= 0) {
+                // cerrar incidencia
+//                MirTrazabilidadIncidencia t = new MirTrazabilidadIncidencia();
+//                t.setIdIncidencia(i);
+//                t.setFecha(new Date());
+//                t.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoCerradaPorSistema()));
+//                t.setDetalle("El plazo de resolución ha expirado");
+//                logicaIncidencias.guardarIncidencia(i, t);
+//                mailSender.send(new String[]{ new String("claudio.pol.olivares@gmail.com") }, "holi2", "teni pololi2");
+            }
         }
     }
 

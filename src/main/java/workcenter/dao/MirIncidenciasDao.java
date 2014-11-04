@@ -65,7 +65,12 @@ public class MirIncidenciasDao {
         sql.append("inner join mir_incidencia i on (t.id_incidencia=i.id) ");
         sql.append("where i.id=:incidencia ");
         sql.append("order by t.fecha asc limit 1 ");
-        return (String) em.createNativeQuery(sql.toString()).setParameter("incidencia", i.getId()).getSingleResult();
+        try {
+            return (String) em.createNativeQuery(sql.toString()).setParameter("incidencia", i.getId()).getSingleResult();
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
     }
 
     public MirEstadoIncidencia obtEstadoActual(MirIncidencia i) {

@@ -13,7 +13,6 @@
         </h:outputStylesheet>
 
         <h2>Ingreso de Inspección Avanzada</h2>
-        <h4>(*) Punto Obligatorio dentro de la revisión. Si el Tracto o Batea no cumple con algun punto obligatorio queda suspendido de salir a circulacion.</h4>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <p:panel header="Documentos">
             <ui:include src="/components/cargadorArchivos.xhtml">
@@ -31,7 +30,7 @@
                         <f:selectItems value="#{mantenedorInspeccionAvanzada.conductores}" var="c" itemValue="#{c}"
                                        itemLabel="#{c.nombreCompleto}"/>
                     </p:selectOneMenu>
-                    <h:outputLabel value="Ejecutor"/>:
+                    <h:outputLabel value="Supervisor"/>:
                     <p:selectOneMenu filter="true" filterMatchMode="contains"
                                      value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.ejecutor}"
                                      converter="entityConverter">
@@ -45,7 +44,6 @@
                         <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorInspeccionAvanzada.tractos}" var="e"
                                        itemLabel="#{e.patente}"/>
-                        <p:ajax event="change" update=":formFormularios:iCodCamion"/>
                     </p:selectOneMenu>
                     <h:outputLabel value="Fecha"/>:
                     <p:calendar value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.fecha}" pattern="dd-MM-yyyy"/>
@@ -56,13 +54,13 @@
                         <f:selectItems value="#{mantenedorInspeccionAvanzada.bateas}" var="e"
                                        itemLabel="#{e.patente}"/>
                     </p:selectOneMenu>
-                    <h:outputLabel value="Código Camión"/>:
-                    <p:inputText id="iCodCamion"
-                                 value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.tracto.numero}"
+                    <h:outputLabel value="Kilometraje"/>:
+                    <p:inputText id="iKm"
+                                 value="#{mantenedorInspeccionAvanzada.inspeccionAvanzada.kilometraje}"
                                  readonly="true"/>
                 </h:panelGrid>
             </p:panel>
-            <p:panel header="Camión">
+            <p:panel rendered="#{mantenedorInspeccionAvanzada.esCamionBatea()}" header="Camión">
                 <h:panelGrid columnClasses="nada,miaPregunta" columns="8">
                     <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasCamion}" var="p">
                         <b>#{p.numero}</b>
@@ -75,12 +73,42 @@
                     </c:forEach>
                 </h:panelGrid>
             </p:panel>
-            <p:panel header="Semi Remolque">
+            <p:panel rendered="#{mantenedorInspeccionAvanzada.esCamionBatea()}" header="Semi Remolque">
                 <h:panelGrid columnClasses="nada,miaPregunta" columns="8">
                     <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasBatea}" var="p">
                         <b>#{p.numero}</b>
                         <h:outputLabel rendered="#{p.bloqueante}" value="(*) #{p.pregunta}"/>
                         <h:outputLabel rendered="#{!p.bloqueante}" value="#{p.pregunta}"/>
+                        :
+                        <p:selectBooleanCheckbox
+                                id="pregunta#{p.id}"
+                                value="#{mantenedorInspeccionAvanzada.obtenerRespuesta(p).cumple}"/>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:panel>
+            <h:panelGrid rendered="#{mantenedorInspeccionAvanzada.esDetencionGestion()}" columns="3"
+                         style="width: auto;float: right">
+                <h:outputText value="Marcar Todas"/>:
+                <p:selectBooleanCheckbox styleClass="selectAll"/>
+            </h:panelGrid>
+            <p:outputPanel style="clear: both"/>
+            <p:panel rendered="#{mantenedorInspeccionAvanzada.esDetencionGestion()}"
+                     header="Condiciones de Seguridad Detención Inmediata">
+                <h:panelGrid columns="3">
+                    <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasDetencionInmediata}" var="p">
+                        <h:outputLabel value="#{p.pregunta}"/>
+                        :
+                        <p:selectBooleanCheckbox
+                                id="pregunta#{p.id}"
+                                value="#{mantenedorInspeccionAvanzada.obtenerRespuesta(p).cumple}"/>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel rendered="#{mantenedorInspeccionAvanzada.esDetencionGestion()}"
+                     header="Condiciones y Elementos de Seguridad Gestión a la Brevedad">
+                <h:panelGrid columnClasses="miaPregunta,nada" columns="6">
+                    <c:forEach items="#{mantenedorInspeccionAvanzada.preguntasGestionBrevedad}" var="p">
+                        <h:outputLabel value="#{p.pregunta}"/>
                         :
                         <p:selectBooleanCheckbox
                                 id="pregunta#{p.id}"
@@ -99,5 +127,18 @@
                                  action="#{mantenedorInspeccionAvanzada.inicio()}"/>
             </p:outputPanel>
         </h:form>
+        <h:outputScript target="body" library="js">
+            $('.ui-chkbox.selectAll input[type=checkbox]').change(function() {
+                if ($(this).is(':checked')) {
+                    $('.ui-chkbox input[type=checkbox]').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                        $(this).click();
+                    });
+                } else {
+                    $('.ui-chkbox input[type=checkbox]').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                        $(this).click();
+                    });
+                }
+            });
+        </h:outputScript>
     </ui:define>
 </ui:composition>
