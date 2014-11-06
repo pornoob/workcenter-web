@@ -9,12 +9,20 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "mir_incidencia", schema = "")
-@NamedQueries(
+@NamedQueries({
         @NamedQuery(
                 name = "MirIncidencia.findAll",
                 query = "select i from MirIncidencia i order by i.fecha desc"
+        ),
+        @NamedQuery(
+                name = "MirIncidencia.findByInformador",
+                query = "select i from MirIncidencia i where i.rutInformador.rut = :rut"
+        ),
+        @NamedQuery(
+                name = "MirIncidencia.findByApoyo",
+                query = "select i from MirIncidencia i where i.idApoyo.idSocio.rut = :rut"
         )
-)
+})
 public class MirIncidencia implements Serializable {
     private Integer id;
     private Personal rutInformador;

@@ -112,4 +112,20 @@ public class MirIncidenciasDao {
         return em.createNativeQuery(sql.toString(), MirIncidencia.class)
                 .setParameter("estado", idEstado).getResultList();
     }
+
+    public MirEstadoIncidencia obtenerEstadoIncidencia(Integer id) {
+        return em.find(MirEstadoIncidencia.class, id);
+    }
+
+    public List<MirIncidencia> obtenerPorInformador(Integer rut) {
+        return em.createNamedQuery("MirIncidencia.findByInformador")
+                .setParameter("rut", rut)
+                .getResultList();
+    }
+
+    public List<MirIncidencia> obtenerPorApoyo(Integer rut) {
+        return em.createNamedQuery("MirIncidencia.findByApoyo")
+                .setParameter("rut", rut)
+                .getResultList();
+    }
 }

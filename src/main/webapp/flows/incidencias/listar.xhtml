@@ -7,14 +7,14 @@
 
     <ui:define name="contenido">
         <h2>Programa Ingreso de Incidencias y Resoluciones</h2>
-        <h:outputText style="font-style: italic; color: red" value="* En construcción"/>
         <h:form id="formIncidencias">
             <h:panelGrid columns="4">
                 <h:outputLabel for="iFiltro" value="Ver Incidencias"/>:
-                <p:selectOneMenu id="iFiltro">
-                    <f:selectItem itemLabel="Asignadas a mí"/>
-                    <f:selectItem itemLabel="Reportadas por mí"/>
-                    <f:selectItem itemLabel="Todas"/>
+                <p:selectOneMenu id="iFiltro" value="#{mantenedorIncidencias.filtro}">
+                    <f:selectItem itemLabel="Asignadas a mí" itemValue="apoyo"/>
+                    <f:selectItem itemLabel="Reportadas por mí" itemValue="informador"/>
+                    <f:selectItem itemLabel="Todas" itemValue="todos"/>
+                    <p:ajax event="change" listener="#{mantenedorIncidencias.filtrar()}" />
                 </p:selectOneMenu>
                 <p:commandButton icon="ui-icon-plus" value="Reportar Incidencia"
                                  action="#{mantenedorIncidencias.irIngresar}"/>

@@ -130,11 +130,11 @@
         <h:outputScript target="body" library="js">
             $('.ui-chkbox.selectAll input[type=checkbox]').change(function() {
                 if ($(this).is(':checked')) {
-                    $('.ui-chkbox input[type=checkbox]').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                    $('.ui-chkbox input[type=checkbox]:not(:checked)').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
                         $(this).click();
                     });
                 } else {
-                    $('.ui-chkbox input[type=checkbox]').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                    $('.ui-chkbox input[type=checkbox]:checked').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
                         $(this).click();
                     });
                 }

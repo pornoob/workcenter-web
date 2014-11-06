@@ -14,6 +14,7 @@ import javax.mail.Multipart;
 import javax.mail.Session;
 import javax.mail.Store;
 import javax.mail.internet.MimeBodyPart;
+
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -22,6 +23,7 @@ import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 import workcenter.dao.TestQueryDao;
 import workcenter.entidades.AlarmaGps;
+import workcenter.entidades.MirEstadoIncidencia;
 import workcenter.entidades.MirIncidencia;
 import workcenter.entidades.MirTrazabilidadIncidencia;
 import workcenter.negocio.LogicaAlarmasGps;
@@ -31,7 +33,6 @@ import workcenter.util.components.Constantes;
 import workcenter.util.services.MailSender;
 
 /**
- *
  * @author colivares
  */
 @Component()
@@ -57,8 +58,8 @@ public class CronService {
         testQueryDao.run();
     }
 
-    // todos los días a las importar datos desde la copec
-    @Scheduled(cron = "0 */1 * * * *")
+    // cada 1 hra notificar o cerrar estados incidencias
+    @Scheduled(cron = "0 0 */1 * * *")
     public void cerrarIncidencias() {
         List<MirIncidencia> incidencias = logicaIncidencias.obtenerIncidenciasPorEstado(constantes.getPiirEstadoInicial());
         long actual = new Date().getTime();
@@ -66,18 +67,55 @@ public class CronService {
         long diferencia = 0;
         for (MirIncidencia i : incidencias) {
             programada = i.getResolucionProgramada().getTime();
-            diferencia = (programada - actual)/3600000; // 1 hr 3600 segundos y * 1000 para pasarlo a segundos
-            if (diferencia <= 5 && diferencia >= 4) {
-//                mailSender.send(new String[]{ new String("claudio.pol.olivares@gmail.com") }, "holi", "teni pololi");
+            diferencia = (programada - actual) / 3600000; // 1 hr 3600 segundos y * 1000 para pasarlo a segundos
+            SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+            if (diferencia <= 5 && diferencia > 4) {
+                MirEstadoIncidencia estado = logicaIncidencias.obtenerEstadoIncidencia(i.getId());
+
+                String html = new String(constantes.getPirrMensajeCorreo());
+                html = html.replaceAll("\\$tipoCambio", "Marcada para ser Cerrada");
+                html = html.replaceAll("\\$estadoTransicion", estado.getNombre());
+                html = html.replaceAll("\\$detalleTransicion", "Inactividad por parte de Informador y/o Apoyo");
+                html = html.replaceAll("\\$codIncidencia", i.getId().toString());
+                html = html.replaceAll("\\$informador", i.getRutInformador().getNombreCompleto());
+                html = html.replaceAll("\\$apoyo", i.getIdApoyo().getIdSocio().getNombreCompleto());
+                html = html.replaceAll("\\$fecha", sdf.format(i.getFecha()));
+                html = html.replaceAll("\\$fResolucion", sdf.format(i.getResolucionProgramada()));
+                html = html.replaceAll("\\$detalle", logicaIncidencias.obtDetalleInicial(i));
+                html = html.replaceAll("\\$severidad", i.getSeveridad().getNombre());
+                html = html.replaceAll("\\$prioridad", i.getSeveridad().getNombre());
+
+                String[] destinos = new String[2];
+                destinos[0] = i.getRutInformador().getMail();
+                destinos[1] = i.getIdApoyo().getIdSocio().getMail();
+                mailSender.send(destinos, "[PIIR #" + i.getId() + "] Incidencia Marcada por Inactividad", html);
             } else if (diferencia <= 0) {
+                MirEstadoIncidencia estado = logicaIncidencias.obtenerEstadoIncidencia(constantes.getPiirEstadoCerradaPorSistema());
+                MirTrazabilidadIncidencia t = new MirTrazabilidadIncidencia();
+                t.setIdIncidencia(i);
+                t.setFecha(new Date());
+                t.setIdEstado(estado);
+                t.setDetalle("El plazo de resolución ha expirado");
+
+                String html = new String(constantes.getPirrMensajeCorreo());
+                html = html.replaceAll("\\$tipoCambio", "Cerrada");
+                html = html.replaceAll("\\$estadoTransicion", estado.getNombre());
+                html = html.replaceAll("\\$detalleTransicion", t.getDetalle());
+                html = html.replaceAll("\\$codIncidencia", i.getId().toString());
+                html = html.replaceAll("\\$informador", i.getRutInformador().getNombreCompleto());
+                html = html.replaceAll("\\$apoyo", i.getIdApoyo().getIdSocio().getNombreCompleto());
+                html = html.replaceAll("\\$fecha", sdf.format(i.getFecha()));
+                html = html.replaceAll("\\$fResolucion", sdf.format(i.getResolucionProgramada()));
+                html = html.replaceAll("\\$detalle", logicaIncidencias.obtDetalleInicial(i));
+                html = html.replaceAll("\\$severidad", i.getSeveridad().getNombre());
+                html = html.replaceAll("\\$prioridad", i.getSeveridad().getNombre());
+
                 // cerrar incidencia
-//                MirTrazabilidadIncidencia t = new MirTrazabilidadIncidencia();
-//                t.setIdIncidencia(i);
-//                t.setFecha(new Date());
-//                t.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoCerradaPorSistema()));
-//                t.setDetalle("El plazo de resolución ha expirado");
-//                logicaIncidencias.guardarIncidencia(i, t);
-//                mailSender.send(new String[]{ new String("claudio.pol.olivares@gmail.com") }, "holi2", "teni pololi2");
+                logicaIncidencias.guardarIncidencia(i, t);
+                String[] destinos = new String[2];
+                destinos[0] = i.getRutInformador().getMail();
+                destinos[1] = i.getIdApoyo().getIdSocio().getMail();
+                mailSender.send(destinos, "[PIIR #" + i.getId() + "] Incidencia Cerrada por Sistema", html);
             }
         }
     }
@@ -100,7 +138,7 @@ public class CronService {
             c.setTime(diaActual);
             c.add(Calendar.MINUTE, 60 * -24);
             Date diaAnterior = c.getTime();
-            
+
             Message msg = inbox.getMessage(inbox.getMessageCount());
 
             if (msg.getSentDate().before(diaAnterior)) {
