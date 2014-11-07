@@ -24,6 +24,7 @@ public class MiaInspeccionAvanzada implements Serializable {
     private Personal conductor;
     private Personal ejecutor;
     private Integer kilometraje;
+    private Integer piir;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,7 +48,7 @@ public class MiaInspeccionAvanzada implements Serializable {
     }
 
     @Basic
-    @Column(name = "observacion", nullable = true, insertable = true, updatable = true, length = 1000)
+    @Column(name = "observacion", nullable = true, insertable = true, updatable = true)
     public String getObservacion() {
         return observacion;
     }
@@ -104,6 +105,16 @@ public class MiaInspeccionAvanzada implements Serializable {
 
     public void setKilometraje(Integer kilometraje) {
         this.kilometraje = kilometraje;
+    }
+
+    @Basic
+    @Column(name = "piir")
+    public Integer getPiir() {
+        return piir;
+    }
+
+    public void setPiir(Integer piir) {
+        this.piir = piir;
     }
 
     @Override

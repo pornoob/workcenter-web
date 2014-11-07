@@ -324,6 +324,10 @@ public class MantenedorPersonal implements Serializable {
         }
     }
 
+    public String irCrearContrato() {
+        return irEditarContrato(new ContratoPersonal());
+    }
+
     public String irEditarContrato(ContratoPersonal cp) {
         contratoSeleccionado = cp;
 
@@ -337,7 +341,10 @@ public class MantenedorPersonal implements Serializable {
 
         isapres = logicaPrevisiones.obtenerIsapres();
         afps = logicaPrevisiones.obtenerAfps();
-        cp.setPrevisiones(logicaPrevisiones.obtenerPrevisionesContrato(cp));
+        if (cp.getNumero()!= null)
+            cp.setPrevisiones(logicaPrevisiones.obtenerPrevisionesContrato(cp));
+        else
+            cp.setPrevisiones(new ArrayList<PrevisionContrato>());
         for (PrevisionContrato pc : cp.getPrevisiones()) {
             if (pc.getPrevision().getTipo().equals("salud")) {
                 isapreSeleccionada = pc.getPrevision();
@@ -365,6 +372,10 @@ public class MantenedorPersonal implements Serializable {
         return "flowEditarContrato";
     }
 
+    public void guardarContrato() {
+        logicaPersonal.guardarContrato(contratoSeleccionado);
+    }
+
     public List<DocumentoPersonal> obtenerDocumentosActualizados() {
         return logicaPersonal.obtenerDocumentosActualizados(personalSeleccionado);
     }
@@ -390,13 +401,15 @@ public class MantenedorPersonal implements Serializable {
     private void setearValoresCalculados() {
         Variable sueldoMinimo = logicaVariables.obtenerSueldoMinimoActual();
         int im = sueldoMinimo != null ? Integer.parseInt(sueldoMinimo.getValor()) : 0;
-        gratificacionCalculada = contratoSeleccionado.getSueldoBase() / 4 < (int) (4.75 * im / 12) ? (contratoSeleccionado.getSueldoBase() / 4) : (int) (4.75 * im / 12);
-        if (contratoSeleccionado.getCargo().getNombrecargo().equalsIgnoreCase("conductor")) {
-            hrsEspera = ((int) (im * 1.5 / 180 * 88));
-            semanaCorrida = 41200;
-        } else {
-            hrsEspera = null;
-            semanaCorrida = null;
+        if (contratoSeleccionado.getNumero() != null) {
+            gratificacionCalculada = contratoSeleccionado.getSueldoBase() / 4 < (int) (4.75 * im / 12) ? (contratoSeleccionado.getSueldoBase() / 4) : (int) (4.75 * im / 12);
+            if (contratoSeleccionado.getCargo().getNombrecargo().equalsIgnoreCase("conductor")) {
+                hrsEspera = ((int) (im * 1.5 / 180 * 88));
+                semanaCorrida = 41200;
+            } else {
+                hrsEspera = null;
+                semanaCorrida = null;
+            }
         }
     }
 

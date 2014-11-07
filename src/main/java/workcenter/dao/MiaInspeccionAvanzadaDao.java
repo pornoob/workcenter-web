@@ -33,7 +33,7 @@ public class MiaInspeccionAvanzadaDao {
         }
         List<MiaRespuesta> respuestasPersistidas = obtenerRespuestas(inspeccionAvanzada);
         if (respuestasPersistidas == null || respuestasPersistidas.isEmpty()) {
-            for (MiaRespuesta r :respuestas) {
+            for (MiaRespuesta r : respuestas) {
                 em.persist(r);
             }
         } else {
@@ -101,5 +101,22 @@ public class MiaInspeccionAvanzadaDao {
         q.setParameter("fechaSup", fechaSup);
         q.setParameter("patente", e.getPatente());
         return ((BigInteger) q.getSingleResult()).intValue();
+    }
+
+    public MiaInspeccionAvanzada obtenerUltimaInspeccion(Equipo tracto) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select i.* from mia_inspeccion_avanzada i ");
+        sql.append("inner join ( ");
+        sql.append("select max(i2.fecha) as fecha, i2.tracto from mia_inspeccion_avanzada i2 group by i2.tracto ");
+        sql.append(") i2 on (i.tracto=i2.tracto and i.fecha=i2.fecha) ");
+        sql.append("where i.tracto=:tracto ");
+
+        try {
+            return (MiaInspeccionAvanzada) em.createNativeQuery(sql.toString(), MiaInspeccionAvanzada.class)
+                    .setParameter("tracto", tracto.getPatente())
+                    .getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

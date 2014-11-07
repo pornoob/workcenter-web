@@ -72,32 +72,9 @@ public class MantenedorIncidencias implements Serializable {
     }
 
     public void calcularPeso() {
-        int pesoDias = 0;
+        int pesoDias = logicaIncidencias.calcularPesoIncidencia(incidencia);
+
         Calendar c = Calendar.getInstance();
-        try {
-            switch (incidencia.getPrioridad().getPeso() * incidencia.getSeveridad().getPeso()) {
-                case 1:
-                    pesoDias = 5;
-                    break;
-                case 2:
-                    pesoDias = 4;
-                    break;
-                case 3:
-                    pesoDias = 3;
-                    break;
-                case 4:
-                    pesoDias = 2;
-                    break;
-                case 6:
-                    pesoDias = 1;
-                    break;
-                case 9:
-                    pesoDias = 0;
-                    break;
-            }
-        } catch (NullPointerException ne) {
-            pesoDias = 5;
-        }
         c.add(Calendar.DAY_OF_MONTH, pesoDias);
         incidencia.setResolucionProgramada(c.getTime());
     }

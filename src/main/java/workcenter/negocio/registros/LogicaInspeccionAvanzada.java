@@ -42,4 +42,9 @@ public class LogicaInspeccionAvanzada {
     public List<MiaRespuesta> obtenerRespuestas(MiaInspeccionAvanzada i) {
         return miaInspeccionAvanzadaDao.obtenerRespuestas(i);
     }
+
+    @Transactional(readOnly = true)
+    public MiaInspeccionAvanzada obtenerUltimaInspeccion(Equipo tracto) {
+        return miaInspeccionAvanzadaDao.obtenerUltimaInspeccion(tracto);
+    }
 }

@@ -128,4 +128,24 @@ public class MirIncidenciasDao {
                 .setParameter("rut", rut)
                 .getResultList();
     }
+
+    public MirSeveridad obtenerSeveridad(Integer id) {
+        return em.find(MirSeveridad.class, id);
+    }
+
+    public MirPrioridad obtenerPriodidad(Integer id) {
+        return em.find(MirPrioridad.class, id);
+    }
+
+    public MirIncidencia obtenerIncidencia(Integer id) {
+        return em.find(MirIncidencia.class, id);
+    }
+
+    public MirTrazabilidadIncidencia obtenerTrazabilidadActual(MirIncidencia i) {
+        StringBuilder sql = new StringBuilder();
+        sql.append("select ti.* from mir_trazabilidad_incidencia ti ");
+        sql.append("where ti.id_incidencia = :incidencia order by ti.fecha desc limit 1 ");
+        return (MirTrazabilidadIncidencia) em.createNativeQuery(sql.toString(), MirTrazabilidadIncidencia.class)
+                .setParameter("incidencia", i.getId()).getSingleResult();
+    }
 }

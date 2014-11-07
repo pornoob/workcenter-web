@@ -64,13 +64,13 @@
                             #{i.ejecutor.nombreCompleto}
                         </p:column>
                         <p:column headerText="Indicador" width="60">
-                            <h:graphicImage rendered="#{mantenedorInspeccionAvanzada.pasaInspeccion(i)}11"
+                            <h:graphicImage rendered="#{mantenedorInspeccionAvanzada.pasaInspeccion(i)}"
                                             value="/img/icons/luz_verde.png"/>
-                            <h:graphicImage title="#{i.observacion}"
+                            <h:graphicImage title="#{mantenedorInspeccionAvanzada.generaObs(i)}"
                                             rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
                                             value="/img/icons/luz_roja.png"/>
-                            <h:graphicImage title="#{i.observacion}"
-                                            rendered="#{!mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
+                            <h:graphicImage title="#{mantenedorInspeccionAvanzada.generaObs(i)}"
+                                            rendered="#{!mantenedorInspeccionAvanzada.pasaInspeccion(i) and !mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
                                             value="/img/icons/luz_amarilla.png"/>
                         </p:column>
                         <p:column headerText="Acciones" width="60">

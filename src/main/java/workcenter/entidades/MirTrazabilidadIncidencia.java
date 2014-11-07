@@ -9,7 +9,7 @@ import java.util.Date;
  * Created by claudio on 30-09-14.
  */
 @Entity
-@Table(name = "mir_trazabilidad_incidencia", schema = "", catalog = "TransportesVentanas")
+@Table(name = "mir_trazabilidad_incidencia", schema = "")
 public class MirTrazabilidadIncidencia implements Serializable {
     private Integer id;
     private MirIncidencia idIncidencia;
@@ -17,10 +17,6 @@ public class MirTrazabilidadIncidencia implements Serializable {
     private Date fecha;
     private String detalle;
     private Integer creador;
-
-    public void setFecha(Timestamp fecha) {
-        this.fecha = fecha;
-    }
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

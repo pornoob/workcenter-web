@@ -209,7 +209,7 @@
     <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
                      action="#{mantenedorPersonal.irContratosPersonal()}"/>
     <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
-                     value="Guardar"/>
+                     value="Guardar" action="#{mantenedorPersonal.guardarContrato()}"/>
 </p:outputPanel>
 </h:form>
 </ui:define>

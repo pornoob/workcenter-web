@@ -141,4 +141,9 @@ public class LogicaPersonal {
     public List<TipoDocPersonal> obtenerTiposDocPorCargo(Personal p) {
         return personalDao.obtenerTiposDocPorCargo(p);
     }
+
+    @Transactional(readOnly = false)
+    public void guardarContrato(ContratoPersonal contrato) {
+        personalDao.guardarContrato(contrato);
+    }
 }

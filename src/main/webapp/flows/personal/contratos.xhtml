@@ -8,7 +8,7 @@
         <h2>Contratos</h2>
         <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
         <h:form id="frmPersonal">
-            <p:commandButton value="Crear nuevo contrato"/>
+            <p:commandButton value="Crear nuevo contrato" icon="ui-icon-plus" action="#{mantenedorPersonal.irCrearContrato()}"/>
             <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.contratospersonalCollection}" var="contrato"
                          rowKey="#{contrato.numero}">
                 <p:column headerText="N° Contrato">

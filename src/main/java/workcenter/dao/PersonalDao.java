@@ -164,4 +164,11 @@ public class PersonalDao {
                 .setParameter("rut", p.getRut())
                 .getResultList();
     }
+
+    public void guardarContrato(ContratoPersonal contrato) {
+        if (contrato.getNumero() == null)
+            em.persist(contrato);
+        else
+            em.merge(contrato);
+    }
 }

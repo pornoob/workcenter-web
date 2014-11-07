@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.*;
 import workcenter.negocio.equipos.LogicaEquipos;
+import workcenter.negocio.incidencias.LogicaIncidencias;
 import workcenter.negocio.registros.LogicaInspeccionAvanzada;
 import workcenter.negocio.registros.LogicaRegistroActividades;
 import workcenter.negocio.personal.LogicaPersonal;
@@ -18,6 +19,7 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.DynamicColumnDataTable;
 import workcenter.util.components.FacesUtil;
+import workcenter.util.services.MailSender;
 
 import java.io.File;
 import java.io.Serializable;
@@ -55,6 +57,12 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     @Autowired
     private LogicaRegistroActividades logicaRegistroActividades;
 
+    @Autowired
+    private LogicaIncidencias logicaIncidencias;
+
+    @Autowired
+    private MailSender mailSender;
+
     private List<Personal> conductores;
     private List<Personal> encargados;
     private List<Equipo> tractos;
@@ -67,11 +75,20 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     private List<MiaPregunta> preguntas;
     private Map<String, List<Documento>> comprobantesInspeccion;
     private MarRegistro formulario;
+
     private enum Formulario {
         CAMION_BATEA,
         DETENCION_GESTION
-    };
+    }
+
+    ;
     private Formulario formularioEnPantalla;
+
+    private enum Operacion {
+        AGREGAR,
+        EDITAR
+    };
+    private Operacion operacion;
 
     // Zona de "caché"
     private List<MiaRespuesta> ultimasRespuestas;
@@ -97,6 +114,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         preguntas = logicaInspeccionAvanzada.obtenerPreguntas();
         inspeccionAvanzada = new MiaInspeccionAvanzada();
         formularioEnPantalla = Formulario.DETENCION_GESTION;
+        operacion = Operacion.AGREGAR;
         return "flowAgregar";
     }
 
@@ -109,6 +127,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         else
             formularioEnPantalla = Formulario.DETENCION_GESTION;
         comprobantesInspeccion = new HashMap<String, List<Documento>>();
+        operacion = Operacion.EDITAR;
         return "flowAgregar";
     }
 
@@ -126,6 +145,11 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
 
     public void obtenerConductores() {
         conductores = logicaPersonal.obtenerConductores();
+    }
+
+    public String generaObs(MiaInspeccionAvanzada i) {
+        if (i.getPiir() != null) return i.getObservacion() + " [PIIR: #"+i.getPiir()+"]";
+        else return i.getObservacion();
     }
 
     public void obtenerEncargados() {
@@ -149,17 +173,125 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
             return;
         }
         List<MiaRespuesta> respuestas = new ArrayList<MiaRespuesta>();
+
+        boolean cumple = true;
+        boolean bloqueante = false;
+        boolean enviarCorreo = true;
         for (MiaPregunta pregunta : preguntas) {
+            if (formularioEnPantalla == Formulario.DETENCION_GESTION && pregunta.getNumero() < 31) {
+                continue;
+            } else if (formularioEnPantalla == Formulario.CAMION_BATEA && pregunta.getNumero() >= 31) {
+                continue;
+            }
             valor = FacesUtil.obtenerParametroRequest("formFormularios:pregunta" + pregunta.getId() + "_input");
             MiaRespuesta respuesta = new MiaRespuesta();
             respuesta.setCumple(valor != null);
             respuesta.setMiaInspeccionAvanzadaByIdInspeccion(inspeccionAvanzada);
             respuesta.setMiaPreguntasByIdPregunta(pregunta);
             respuestas.add(respuesta);
+            if (!respuesta.getCumple()) {
+                cumple = false;
+                if (pregunta.getBloqueante()) bloqueante = true;
+            }
         }
+        String piir = "";
+        if (!cumple && operacion == Operacion.AGREGAR) {
+            MiaInspeccionAvanzada ultimaInspeccion = logicaInspeccionAvanzada.obtenerUltimaInspeccion(inspeccionAvanzada.getTracto());
+            List<MiaRespuesta> ultimasRespuestas = ultimaInspeccion != null ? logicaInspeccionAvanzada.obtenerRespuestas(ultimaInspeccion) : new ArrayList<MiaRespuesta>();
+
+            List<MiaRespuesta> problemasCorreo = new ArrayList<MiaRespuesta>(respuestas);
+            for (MiaRespuesta ultimaRespuesta : ultimasRespuestas) {
+                for (MiaRespuesta respuestaActual : respuestas) {
+                    if (!respuestaActual.getMiaPreguntasByIdPregunta().equals(ultimaRespuesta.getMiaPreguntasByIdPregunta())) continue;
+                    if (ultimaRespuesta.getCumple().booleanValue() == respuestaActual.getCumple().booleanValue()) {
+                        problemasCorreo.remove(respuestaActual);
+                    }
+                }
+            }
+
+            if (!problemasCorreo.isEmpty()) {
+
+                MirSeveridad severidad;
+                MirPrioridad prioridad;
+                if (bloqueante) {
+                    severidad = logicaIncidencias.obtenerMaximaSeveridad();
+                    prioridad = logicaIncidencias.obtenerMaximaPrioridad();
+                } else {
+                    severidad = logicaIncidencias.obtenerMedianaSeveridad();
+                    prioridad = logicaIncidencias.obtenerMedianaPrioridad();
+                }
+
+                MirIncidencia i = new MirIncidencia();
+
+                i.setFecha(new Date());
+                i.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
+                i.setPrioridad(prioridad);
+                i.setSeveridad(severidad);
+                i.setRutInformador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
+
+                int pesoDias = logicaIncidencias.calcularPesoIncidencia(i);
+                Calendar c = Calendar.getInstance();
+                c.add(Calendar.DAY_OF_MONTH, pesoDias);
+                i.setResolucionProgramada(c.getTime());
+
+                MirTrazabilidadIncidencia t = new MirTrazabilidadIncidencia();
+                t.setIdEstado(logicaIncidencias.obtenerEstadoIncidencia(constantes.getPiirEstadoInicial()));
+                t.setIdIncidencia(i);
+                t.setCreador(sesionCliente.getUsuario().getRut());
+
+                StringBuilder detalle = new StringBuilder("La inspección avanzada [Día: "+inspeccionAvanzada.getFecha()+"] en el camión [Patente: "+inspeccionAvanzada.getTracto().getPatente()+"] no cumple con lo siguiente:\n");
+                for (MiaRespuesta r : problemasCorreo) {
+                    if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) {
+                        detalle.append("* ");
+                        detalle.append(r.getMiaPreguntasByIdPregunta().getPregunta());
+                        detalle.append(",\n");
+                    } else if (!r.getCumple()) {
+                        detalle.append(r.getMiaPreguntasByIdPregunta().getPregunta());
+                        detalle.append(",\n");
+                    }
+                }
+                detalle.deleteCharAt(detalle.length() - 1);
+                detalle.deleteCharAt(detalle.length() - 1);
+                detalle.append(". Además consta con la(s) siguiente(s) observaciones:\n");
+                detalle.append(inspeccionAvanzada.getObservacion());
+                t.setDetalle(detalle.toString());
+
+                logicaIncidencias.guardarIncidencia(i, t);
+                piir = ". Se ha auto generado una incidencia, favor de anotar el código [PIIR #" + i.getId() + "]";
+                inspeccionAvanzada.setPiir(i.getId());
+            }
+        }
+
         logicaInspeccionAvanzada.guardar(inspeccionAvanzada, respuestas);
-        if (!editar) logicaDocumentos.asociarDocumentos(docs, inspeccionAvanzada);
-        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la inspección avanzada [ID: " + inspeccionAvanzada.getId() + "]");
+
+        if (operacion == Operacion.AGREGAR) {
+            logicaDocumentos.asociarDocumentos(docs, inspeccionAvanzada);
+
+            if (inspeccionAvanzada.getPiir() != null) {
+
+                MirIncidencia i = logicaIncidencias.obtenerIncidencia(inspeccionAvanzada.getPiir());
+                MirTrazabilidadIncidencia t = logicaIncidencias.obtenerTrazabilidadActual(i);
+
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+                String html = new String(constantes.getPirrMensajeCorreo());
+                html = html.replaceAll("\\$tipoCambio", "Creada");
+                html = html.replaceAll("\\$estadoTransicion", t.getIdEstado().getNombre());
+                html = html.replaceAll("\\$detalleTransicion", t.getDetalle());
+                html = html.replaceAll("\\$codIncidencia", i.getId().toString());
+                html = html.replaceAll("\\$informador", i.getRutInformador().getNombreCompleto());
+                html = html.replaceAll("\\$apoyo", i.getIdApoyo().getIdSocio().getNombreCompleto());
+                html = html.replaceAll("\\$fecha", sdf.format(i.getFecha()));
+                html = html.replaceAll("\\$fResolucion", sdf.format(i.getResolucionProgramada()));
+                html = html.replaceAll("\\$detalle", t.getDetalle());
+                html = html.replaceAll("\\$severidad", i.getSeveridad().getNombre());
+                html = html.replaceAll("\\$prioridad", i.getSeveridad().getNombre());
+                String[] destinos = new String[2];
+                destinos[0] = i.getRutInformador().getMail();
+                destinos[1] = i.getIdApoyo().getIdSocio().getMail();
+                mailSender.send(destinos, "[PIIR #" + i.getId() + "] Ha sido creada", html);
+            }
+        }
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la inspección avanzada [ID: " + inspeccionAvanzada.getId() + "]" + piir);
         comprobantesInspeccion = null;
         inspeccionAvanzada = new MiaInspeccionAvanzada();
     }
@@ -322,6 +454,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     }
 
     public boolean esCausaBloqueante(MiaInspeccionAvanzada i) {
+        ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
         for (MiaRespuesta r : ultimasRespuestas) {
             if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) return true;
         }

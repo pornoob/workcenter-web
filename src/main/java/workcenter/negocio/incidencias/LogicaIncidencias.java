@@ -94,4 +94,63 @@ public class LogicaIncidencias {
     public List<MirIncidencia> obtPorApoyo(Integer rut) {
         return mirIncidenciasDao.obtenerPorApoyo(rut);
     }
+
+    @Transactional(readOnly = true)
+    public MirSeveridad obtenerMaximaSeveridad() {
+        return mirIncidenciasDao.obtenerSeveridad(3);
+    }
+
+    @Transactional(readOnly = true)
+    public MirPrioridad obtenerMaximaPrioridad() {
+        return mirIncidenciasDao.obtenerPriodidad(3);
+    }
+
+    @Transactional(readOnly = true)
+    public MirSeveridad obtenerMedianaSeveridad() {
+        return mirIncidenciasDao.obtenerSeveridad(2);
+    }
+
+    @Transactional(readOnly = true)
+    public MirPrioridad obtenerMedianaPrioridad() {
+        return mirIncidenciasDao.obtenerPriodidad(2);
+    }
+
+    public int calcularPesoIncidencia(MirIncidencia i) {
+        int pesoDias = 5;
+        try {
+            switch (i.getSeveridad().getPeso() * i.getPrioridad().getPeso()) {
+                case 1:
+                    pesoDias = 5;
+                    break;
+                case 2:
+                    pesoDias = 4;
+                    break;
+                case 3:
+                    pesoDias = 3;
+                    break;
+                case 4:
+                    pesoDias = 2;
+                    break;
+                case 6:
+                    pesoDias = 1;
+                    break;
+                case 9:
+                    pesoDias = 0;
+                    break;
+            }
+        } catch (Exception e) {
+
+        }
+        return pesoDias;
+    }
+
+    @Transactional(readOnly = true)
+    public MirIncidencia obtenerIncidencia(Integer id) {
+        return mirIncidenciasDao.obtenerIncidencia(id);
+    }
+
+    @Transactional(readOnly = true)
+    public MirTrazabilidadIncidencia obtenerTrazabilidadActual(MirIncidencia i) {
+        return mirIncidenciasDao.obtenerTrazabilidadActual(i);
+    }
 }

@@ -188,8 +188,8 @@ public class Constantes implements Serializable {
             "</html>";
 
     // Correo de la aplicación
-    private String correo = "colivares@transportesventanas.cl";
-    private String claveCorreo = "colivares1";
+    private String correo = "piir@transportesventanas.cl";
+    private String claveCorreo = "piir12345";
     private String servidorCorreo = "smtp.googlemail.com";
     private int puertoCorreo = 465;
 
