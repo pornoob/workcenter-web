@@ -11,6 +11,16 @@
 
         <h3>Cambiar Estado Incidencia</h3>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form rendered="false" id="postGestion">
+            <p:panel header="Gestión Post-Cierre de Sistema">
+                <h:panelGrid columns="3">
+                    <h:outputText value="Estado antes del cierre"/>:
+                    <h:outputText value=""/>
+                    <h:outputText value="Detalle antes del cierre"/>:
+                    <h:outputText value=""/>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
         <h:form id="formIncidencias">
             <p:panel header="Incidencia #{mantenedorIncidencias.incidencia.id}">
                 <h:panelGrid columns="3">
@@ -60,6 +70,7 @@
                                   id="iAdjunto" mode="simple" value="#{mantenedorIncidencias.archivo}"/>
                 </h:panelGrid>
             </p:panel>
+
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton icon="ui-icon-arrowreturnthick-1-w" action="#{mantenedorIncidencias.irListar}"
                                  value="Volver" ajax="false" immediate="true"/>

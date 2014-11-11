@@ -70,7 +70,7 @@ public class CronService {
             diferencia = (programada - actual) / 3600000; // 1 hr 3600 segundos y * 1000 para pasarlo a segundos
             SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
             if (diferencia <= 5 && diferencia > 4) {
-                MirEstadoIncidencia estado = logicaIncidencias.obtenerEstadoIncidencia(i.getId());
+                MirEstadoIncidencia estado = logicaIncidencias.obtEstadoActual(i);
 
                 String html = new String(constantes.getPirrMensajeCorreo());
                 html = html.replaceAll("\\$tipoCambio", "Marcada para ser Cerrada");

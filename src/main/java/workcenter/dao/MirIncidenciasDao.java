@@ -5,7 +5,6 @@ import workcenter.entidades.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -113,10 +112,6 @@ public class MirIncidenciasDao {
                 .setParameter("estado", idEstado).getResultList();
     }
 
-    public MirEstadoIncidencia obtenerEstadoIncidencia(Integer id) {
-        return em.find(MirEstadoIncidencia.class, id);
-    }
-
     public List<MirIncidencia> obtenerPorInformador(Integer rut) {
         return em.createNamedQuery("MirIncidencia.findByInformador")
                 .setParameter("rut", rut)
@@ -147,5 +142,9 @@ public class MirIncidenciasDao {
         sql.append("where ti.id_incidencia = :incidencia order by ti.fecha desc limit 1 ");
         return (MirTrazabilidadIncidencia) em.createNativeQuery(sql.toString(), MirTrazabilidadIncidencia.class)
                 .setParameter("incidencia", i.getId()).getSingleResult();
+    }
+
+    public MirEstadoIncidencia obtenerEstadoIncidencia(Integer id) {
+        return em.find(MirEstadoIncidencia.class, id);
     }
 }

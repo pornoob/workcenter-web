@@ -119,4 +119,14 @@ public class MiaInspeccionAvanzadaDao {
             return null;
         }
     }
+
+    public List<MiaInspeccionAvanzada> obtenerSegunMesAnio(Integer mes, Integer anio) {
+        StringBuilder sql = new StringBuilder("select i.* from mia_inspeccion_avanzada i ");
+        sql.append("where month(i.fecha)=:mes and year(i.fecha)=:anio ");
+        sql.append("order by i.fecha desc");
+        return em.createNativeQuery(sql.toString(), MiaInspeccionAvanzada.class)
+                .setParameter("mes", mes)
+                .setParameter("anio", anio)
+                .getResultList();
+    }
 }

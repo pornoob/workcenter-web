@@ -47,4 +47,9 @@ public class LogicaInspeccionAvanzada {
     public MiaInspeccionAvanzada obtenerUltimaInspeccion(Equipo tracto) {
         return miaInspeccionAvanzadaDao.obtenerUltimaInspeccion(tracto);
     }
+
+    @Transactional(readOnly = true)
+    public List<MiaInspeccionAvanzada> obtenerSegunMesAnio(Integer mes, Integer anio) {
+        return miaInspeccionAvanzadaDao.obtenerSegunMesAnio(mes, anio);
+    }
 }

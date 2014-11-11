@@ -23,12 +23,26 @@
 
         <h2>Inspección Avanzada</h2>
         <h:form id="formFormularios">
+            <h:panelGrid columns="7">
+                <h:outputLabel value="Mes"/>:
+                <p:selectOneMenu value="#{mantenedorInspeccionAvanzada.mes}">
+                    <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"
+                                   itemValue="#{m.id}"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Año"/>:
+                <p:spinner min="2014" value="#{mantenedorInspeccionAvanzada.anio}"/>
+                <p:commandButton icon="ui-icon-refresh" value="Actualizar"
+                                 action="#{mantenedorInspeccionAvanzada.dummy()}" process="@form"
+                                 update=":formFormularios:tabsView"/>
+            </h:panelGrid>
             <p:tabView id="tabsView">
                 <p:tab title="Listado Inspecciones" id="tabs">
+
                     <p:commandButton icon="ui-icon-plus" value="Agregar"
                                      rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
                                      action="#{mantenedorInspeccionAvanzada.irAgregar()}"/>
-                    <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario" ajax="false">
+                    <p:commandButton icon="ui-icon-arrowthickstop-1-s" value="Descargar Formulario"
+                                     ajax="false">
                         <p:fileDownload value="#{mantenedorInspeccionAvanzada.obtenerFormulario()}"/>
                     </p:commandButton>
                     <p:dataTable emptyMessage="No se han encontrado inspecciones" paginator="true" rows="20"
@@ -54,13 +68,16 @@
                                   filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.tracto.patente}
                         </p:column>
-                        <p:column headerText="Patente Batea/Acoplado" filterBy="#{i.batea.patente}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                        <p:column headerText="Patente Batea/Acoplado" filterBy="#{i.batea.patente}"
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.batea.patente}
                         </p:column>
-                        <p:column headerText="Conductor" filterBy="#{i.conductor.nombreCompleto}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                        <p:column headerText="Conductor" filterBy="#{i.conductor.nombreCompleto}"
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.conductor.nombreCompleto}
                         </p:column>
-                        <p:column headerText="Ejecutor" filterBy="#{i.ejecutor.nombreCompleto}" filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                        <p:column headerText="Ejecutor" filterBy="#{i.ejecutor.nombreCompleto}"
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             #{i.ejecutor.nombreCompleto}
                         </p:column>
                         <p:column headerText="Indicador" width="60">
@@ -70,7 +87,7 @@
                                             rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
                                             value="/img/icons/luz_roja.png"/>
                             <h:graphicImage title="#{mantenedorInspeccionAvanzada.generaObs(i)}"
-                                            rendered="#{!mantenedorInspeccionAvanzada.pasaInspeccion(i) and !mantenedorInspeccionAvanzada.esCausaBloqueante(i)}"
+                                            rendered="#{mantenedorInspeccionAvanzada.esCausaGestionBrevedad(i)}"
                                             value="/img/icons/luz_amarilla.png"/>
                         </p:column>
                         <p:column headerText="Acciones" width="60">
@@ -85,18 +102,6 @@
                     </p:dataTable>
                 </p:tab>
                 <p:tab title="Calendario Inspecciones" id="tab2">
-                    <h:panelGrid columns="7" width="auto">
-                        <h:outputLabel value="Mes"/>:
-                        <p:selectOneMenu value="#{mantenedorInspeccionAvanzada.mes}">
-                            <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"
-                                           itemValue="#{m.id}"/>
-                        </p:selectOneMenu>
-                        <h:outputLabel value="Año"/>:
-                        <p:spinner min="2014" value="#{mantenedorInspeccionAvanzada.anio}"/>
-                        <p:commandButton icon="ui-icon-refresh" value="Actualizar"
-                                         action="#{mantenedorInspeccionAvanzada.dummy()}" process="@form"
-                                         update=":formFormularios:tabsView:tCalendario"/>
-                    </h:panelGrid>
                     <p:dataTable emptyMessage="No se han encontrado inspecciones" scrollable="true" id="tCalendario"
                                  var="e" selectionMode="single" rowKey="#{e.patente}" filterEvent="enter"
                                  value="#{mantenedorInspeccionAvanzada.equipos}" widgetVar="calendario"
@@ -118,7 +123,7 @@
                                                     rendered="#{mantenedorInspeccionAvanzada.esCausaBloqueante()}"
                                                     value="/img/icons/luz_roja.png"/>
                                     <h:graphicImage style="float: right"
-                                                    rendered="#{!mantenedorInspeccionAvanzada.pasaInspecciones() and !mantenedorInspeccionAvanzada.esCausaBloqueante()}"
+                                                    rendered="#{mantenedorInspeccionAvanzada.esCausaGestionBrevedad()}"
                                                     value="/img/icons/luz_amarilla.png"/>
                                 </h:commandLink>
                             </p:column>

@@ -96,13 +96,13 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     private List<MiaInspeccionAvanzada> cacheInspecciones;
 
     public String inicio() {
-        inspeccionesAvanzadas = logicaInspeccionAvanzada.obtenerTodas();
         formulario = logicaRegistroActividades.obtenerRegistro(constantes.getRegistroInspeccionAvanzada());
         obtenerConductores();
         obtenerEncargados();
         obtenerEquipos();
         mes = Calendar.getInstance().get(Calendar.MONTH) + 1;
         anio = Calendar.getInstance().get(Calendar.YEAR);
+        inspeccionesAvanzadas = logicaInspeccionAvanzada.obtenerSegunMesAnio(mes, anio);
         return "flowListar";
     }
 
@@ -461,6 +461,16 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return false;
     }
 
+    public boolean esCausaGestionBrevedad(MiaInspeccionAvanzada i) {
+        ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
+        boolean retorno = false;
+        for (MiaRespuesta r : ultimasRespuestas) {
+            if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) return false;
+            else if (!r.getCumple()) retorno = true;
+        }
+        return retorno;
+    }
+
     public boolean esCausaBloqueante() {
         for (MiaInspeccionAvanzada i : cacheInspecciones) {
             ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
@@ -469,6 +479,18 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
             }
         }
         return false;
+    }
+
+    public boolean esCausaGestionBrevedad() {
+        boolean retorno = false;
+        for (MiaInspeccionAvanzada i : cacheInspecciones) {
+            ultimasRespuestas = logicaInspeccionAvanzada.obtenerRespuestas(i);
+            for (MiaRespuesta r : ultimasRespuestas) {
+                if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) return false;
+                else if (!r.getCumple()) retorno = true;
+            }
+        }
+        return retorno;
     }
 
     public boolean esCamionBatea() {
@@ -480,6 +502,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     }
 
     public void dummy() {
+        inspeccionesAvanzadas = logicaInspeccionAvanzada.obtenerSegunMesAnio(mes, anio);
     }
 
     public List<Personal> getConductores() {
