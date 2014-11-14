@@ -51,6 +51,7 @@ public class MailSender {
             mensaje = mensaje.replaceAll("ó", "&oacute;");
             mensaje = mensaje.replaceAll("ú", "&uacute;");
             mensaje = mensaje.replaceAll("ñ", "&ntilde;");
+            mensaje = mensaje.replaceAll("\\n", "<br/>");
             message.setContent(mensaje, "text/html");
             Transport transport = session.getTransport("smtp");
             transport.connect(

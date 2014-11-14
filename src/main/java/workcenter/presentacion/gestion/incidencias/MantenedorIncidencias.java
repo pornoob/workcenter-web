@@ -1,5 +1,6 @@
 package workcenter.presentacion.gestion.incidencias;
 
+import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -12,13 +13,16 @@ import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
+import workcenter.util.pojo.Descargable;
 import workcenter.util.services.MailSender;
 
+import java.io.File;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 
 /**
  * Created by claudio on 26-09-14.
@@ -53,7 +57,10 @@ public class MantenedorIncidencias implements Serializable {
     private MirTrazabilidadIncidencia trazabilidad;
     private List<MirApoyo> apoyos;
     private List<MirIncidencia> incidencias;
+    private List<MirIncidencia> incidenciasFiltradas;
     private List<MirEstadoIncidencia> estadosDisponibles;
+    private List<MirEstadoIncidencia> estados;
+    private List<MirTrazabilidadIncidencia> historial;
     private transient UploadedFile archivo;
     private String filtro;
 
@@ -62,6 +69,7 @@ public class MantenedorIncidencias implements Serializable {
         prioridades = logicaIncidencias.obtPrioridades();
         apoyos = logicaIncidencias.obtApoyos();
         incidencias = logicaIncidencias.obtTodas();
+        estados = logicaIncidencias.obtenerEstadosDeIncidencia();
         filtro = "todos";
     }
 
@@ -69,6 +77,21 @@ public class MantenedorIncidencias implements Serializable {
         if (filtro.equals("informador")) incidencias = logicaIncidencias.obtPorInformador(sesionCliente.getUsuario().getRut());
         else if (filtro.equals("apoyo")) incidencias = logicaIncidencias.obtPorApoyo(sesionCliente.getUsuario().getRut());
         else incidencias = logicaIncidencias.obtTodas();
+    }
+
+    public boolean filtrarPorEstado(Object valor, Object filtro, Locale idioma) {
+        if (valor == null) return false;
+        if (filtro == null) return true;
+        MirEstadoIncidencia e = logicaIncidencias.obtEstadoActual((MirIncidencia) valor);
+        return e.toString().equals(filtro);
+    }
+
+    public List<Documento> obtenerAdjunto(MirTrazabilidadIncidencia t) {
+        return logicaDocumentos.obtenerDocumentosAsociados(t);
+    }
+
+    public StreamedContent generaDescargable(Documento d) {
+        return new Descargable(new File(constantes.getPathArchivos()+d.getId())).getStreamedContent();
     }
 
     public void calcularPeso() {
@@ -83,7 +106,7 @@ public class MantenedorIncidencias implements Serializable {
         incidencia.setFecha(new Date());
         incidencia.setIdApoyo(logicaIncidencias.obtSiguienteApoyo());
         trazabilidad.setIdEstado(logicaIncidencias.obtEstado(constantes.getPiirEstadoInicial()));
-        trazabilidad.setCreador(sesionCliente.getUsuario().getRut());
+        trazabilidad.setCreador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
         logicaIncidencias.guardarIncidencia(incidencia, trazabilidad);
         if (archivo != null && archivo.getSize() > 0) {
             Documento d = ficheroUploader.subir(archivo);
@@ -179,8 +202,9 @@ public class MantenedorIncidencias implements Serializable {
             estadosDisponibles = logicaIncidencias.obtenerEstadosDisponiblesApoyo(incidencia);
         }
         trazabilidad = new MirTrazabilidadIncidencia();
-        trazabilidad.setCreador(sesionCliente.getUsuario().getRut());
+        trazabilidad.setCreador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
         trazabilidad.setIdIncidencia(incidencia);
+        historial = logicaIncidencias.obtenerTrazaCompleta(i);
         return "flowCambiarEstado";
     }
 
@@ -250,5 +274,29 @@ public class MantenedorIncidencias implements Serializable {
 
     public void setFiltro(String filtro) {
         this.filtro = filtro;
+    }
+
+    public List<MirEstadoIncidencia> getEstados() {
+        return estados;
+    }
+
+    public void setEstados(List<MirEstadoIncidencia> estados) {
+        this.estados = estados;
+    }
+
+    public List<MirIncidencia> getIncidenciasFiltradas() {
+        return incidenciasFiltradas;
+    }
+
+    public void setIncidenciasFiltradas(List<MirIncidencia> incidenciasFiltradas) {
+        this.incidenciasFiltradas = incidenciasFiltradas;
+    }
+
+    public List<MirTrazabilidadIncidencia> getHistorial() {
+        return historial;
+    }
+
+    public void setHistorial(List<MirTrazabilidadIncidencia> historial) {
+        this.historial = historial;
     }
 }

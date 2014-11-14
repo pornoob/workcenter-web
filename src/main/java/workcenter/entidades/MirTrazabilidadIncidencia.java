@@ -10,13 +10,19 @@ import java.util.Date;
  */
 @Entity
 @Table(name = "mir_trazabilidad_incidencia", schema = "")
+@NamedQueries({
+        @NamedQuery(
+                name = "MirTrazabilidadIncidencia.findByIncidencia",
+                query = "select t from MirTrazabilidadIncidencia t where t.idIncidencia = :incidencia order by t.id asc"
+        )
+})
 public class MirTrazabilidadIncidencia implements Serializable {
     private Integer id;
     private MirIncidencia idIncidencia;
     private MirEstadoIncidencia idEstado;
     private Date fecha;
     private String detalle;
-    private Integer creador;
+    private Personal creador;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -87,13 +93,13 @@ public class MirTrazabilidadIncidencia implements Serializable {
         return id != null ? id.hashCode() : 0;
     }
 
-    @Basic
-    @Column(name = "creador")
-    public Integer getCreador() {
+    @ManyToOne
+    @JoinColumn(name = "creador", referencedColumnName = "rut")
+    public Personal getCreador() {
         return creador;
     }
 
-    public void setCreador(Integer creador) {
+    public void setCreador(Personal creador) {
         this.creador = creador;
     }
 }

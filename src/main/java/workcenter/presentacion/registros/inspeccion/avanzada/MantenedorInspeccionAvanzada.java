@@ -237,9 +237,11 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
                 MirTrazabilidadIncidencia t = new MirTrazabilidadIncidencia();
                 t.setIdEstado(logicaIncidencias.obtenerEstadoIncidencia(constantes.getPiirEstadoInicial()));
                 t.setIdIncidencia(i);
-                t.setCreador(sesionCliente.getUsuario().getRut());
+                t.setCreador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
 
-                StringBuilder detalle = new StringBuilder("La inspección avanzada [Día: "+inspeccionAvanzada.getFecha()+"] en el camión [Patente: "+inspeccionAvanzada.getTracto().getPatente()+"] no cumple con lo siguiente:\n");
+                SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
+
+                StringBuilder detalle = new StringBuilder("La inspección avanzada [Día: "+sdf.format(inspeccionAvanzada.getFecha())+"] en el camión [Patente: "+inspeccionAvanzada.getTracto().getPatente()+"] no cumple con lo siguiente:\n");
                 for (MiaRespuesta r : problemasCorreo) {
                     if (!r.getCumple() && r.getMiaPreguntasByIdPregunta().getBloqueante()) {
                         detalle.append("* ");

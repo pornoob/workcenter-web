@@ -153,4 +153,14 @@ public class LogicaIncidencias {
     public MirEstadoIncidencia obtenerEstadoIncidencia(Integer id) {
         return mirIncidenciasDao.obtenerEstadoIncidencia(id);
     }
+
+    @Transactional(readOnly = true)
+    public List<MirEstadoIncidencia> obtenerEstadosDeIncidencia() {
+        return mirIncidenciasDao.obtenerEstadosDeIncidencia();
+    }
+
+    @Transactional(readOnly = true)
+    public List<MirTrazabilidadIncidencia> obtenerTrazaCompleta(MirIncidencia i) {
+        return mirIncidenciasDao.obtenerTrazaCompleta(i);
+    }
 }

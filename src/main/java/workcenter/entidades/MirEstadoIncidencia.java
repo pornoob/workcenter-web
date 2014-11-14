@@ -8,6 +8,9 @@ import java.io.Serializable;
  */
 @Entity
 @Table(name = "mir_estado_incidencia", schema = "")
+@NamedQueries({
+        @NamedQuery(name = "MirEstadoIncidencia.findAll", query = "select e from MirEstadoIncidencia e order by e.nombre asc")
+})
 public class MirEstadoIncidencia implements Serializable {
     private Integer id;
     private String nombre;

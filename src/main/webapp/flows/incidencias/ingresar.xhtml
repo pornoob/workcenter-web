@@ -11,7 +11,7 @@
 
         <h3>Agregar Incidencia</h3>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
-        <h:form id="formIncidencias">
+        <h:form id="formIncidencias" enctype="multipart/form-data">
             <h:panelGrid columns="3">
                 <h:outputLabel value="Informador"/>:
                 <h:outputText value="#{sesionCliente.nombreCompleto}"/>

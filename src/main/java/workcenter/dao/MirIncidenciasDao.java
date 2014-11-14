@@ -147,4 +147,14 @@ public class MirIncidenciasDao {
     public MirEstadoIncidencia obtenerEstadoIncidencia(Integer id) {
         return em.find(MirEstadoIncidencia.class, id);
     }
+
+    public List<MirEstadoIncidencia> obtenerEstadosDeIncidencia() {
+        return em.createNamedQuery("MirEstadoIncidencia.findAll").getResultList();
+    }
+
+    public List<MirTrazabilidadIncidencia> obtenerTrazaCompleta(MirIncidencia i) {
+        return em.createNamedQuery("MirTrazabilidadIncidencia.findByIncidencia")
+                .setParameter("incidencia", i)
+                .getResultList();
+    }
 }

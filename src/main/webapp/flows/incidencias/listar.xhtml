@@ -14,20 +14,26 @@
                     <f:selectItem itemLabel="Asignadas a mí" itemValue="apoyo"/>
                     <f:selectItem itemLabel="Reportadas por mí" itemValue="informador"/>
                     <f:selectItem itemLabel="Todas" itemValue="todos"/>
-                    <p:ajax event="change" listener="#{mantenedorIncidencias.filtrar()}" />
+                    <p:ajax event="change" listener="#{mantenedorIncidencias.filtrar()}"/>
                 </p:selectOneMenu>
                 <p:commandButton icon="ui-icon-plus" value="Reportar Incidencia"
                                  action="#{mantenedorIncidencias.irIngresar}"/>
             </h:panelGrid>
-            <p:dataTable paginatorPosition="both" paginator="true"
+            <p:dataTable paginatorPosition="both" paginator="true" widgetVar="tIncidencias"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
-                         rows="#{constantes.cantidadFilasTablas}"
+                         filteredValue="#{mantenedorIncidencias.incidenciasFiltradas}"
+                         rows="#{constantes.cantidadFilasTablas}" filterEvent="enter"
                          emptyMessage="No se han reportado incidencias" value="#{mantenedorIncidencias.incidencias}"
                          var="i">
-                <p:column headerText="ID">
+                <p:column headerText="ID" filterBy="#{i.id}" filterMatchMode="startsWith">
                     #{i.id}
                 </p:column>
-                <p:column headerText="Fecha">
+                <p:column headerText="Fecha" filterBy="#{i.fecha}" filterFunction="#{dataTableFilter.filtroFechas}">
+                    <f:facet name="filter">
+                        <p:calendar pattern="dd-MM-yyyy">
+                            <p:ajax event="dateSelect" oncomplete="PF('tIncidencias').filter()"/>
+                        </p:calendar>
+                    </f:facet>
                     <h:outputText value="#{i.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
@@ -46,7 +52,16 @@
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
                 </p:column>
-                <p:column headerText="Estado">#{mantenedorIncidencias.obtenerEstado(i).nombre}</p:column>
+                <p:column headerText="Estado" filterBy="#{i}"
+                          filterFunction="#{mantenedorIncidencias.filtrarPorEstado}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu onchange="PF('tIncidencias').filter()">
+                            <f:selectItem itemLabel="-- Todos --" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorIncidencias.estados}" var="e" itemLabel="#{e.nombre}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    #{mantenedorIncidencias.obtenerEstado(i).nombre}
+                </p:column>
                 <p:column headerText="">
                     <p:outputPanel styleClass="opcionesFila">
                         <p:commandLink styleClass="ui-icon ui-icon-search" alt="Ver Incidencia"

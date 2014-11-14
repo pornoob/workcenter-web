@@ -43,7 +43,7 @@ public class Documento implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "nombre_original")
-    private String nombreOriginal;
+        private String nombreOriginal;
     @Basic(optional = false)
     @Column(name = "fecha")
     @Temporal(TemporalType.TIMESTAMP)
