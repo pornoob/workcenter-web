@@ -57,7 +57,7 @@ public class SancionRetiradaPersonal implements Serializable {
     @JoinColumn(name = "perdonadapor", referencedColumnName = "rut")
     @OneToOne(fetch = FetchType.LAZY)
     private Personal perdonadapor;
-    @Size(max = 200)
+    @Size(max = 1000)
     @Column(name = "motivosancion")
     private String motivosancion;
     @Basic(optional = false)

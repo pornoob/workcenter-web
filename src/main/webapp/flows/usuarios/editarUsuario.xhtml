@@ -23,7 +23,7 @@
             </h:panelGrid>
 
             <h3>Permisos</h3>
-            <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorUsuarios.irCrearPermiso()}"/>
+            <p:commandButton icon="ui-icon-plus" value="Agregar" action="#{mantenedorUsuarios.irCrearPermiso()}" immediate="true"/>
             <p:dataTable id="tablaPermisos" rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          emptyMessage="No tiene permisos asignados"
                          rows="#{constantes.cantidadFilasTablas}"

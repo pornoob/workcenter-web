@@ -55,7 +55,7 @@ public class Sancionado implements Serializable {
     @NotNull
     @Column(name = "nivel")
     private int nivel;
-    @Size(max = 200)
+    @Size(max = 1000)
     @Column(name = "motivo")
     private String motivo;
     @Column(name = "fecha")

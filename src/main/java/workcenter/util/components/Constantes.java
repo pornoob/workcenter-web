@@ -13,10 +13,7 @@ import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 
 import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * @author colivares
@@ -200,6 +197,7 @@ public class Constantes implements Serializable {
     private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
     private String pathArchivos;
+    private Random random;
 
     // cliente de correo, alarmas GPS
     private String marUsuarioCorreo = "colivares@transportesventanas.cl";
@@ -292,6 +290,7 @@ public class Constantes implements Serializable {
         estadosCiviles.add("Separado");
 
         tiposUnidad = null;
+        random = new Random();
     }
 
     public int getCargoConductor() {
@@ -461,5 +460,9 @@ public class Constantes implements Serializable {
 
     public String getPirrMensajeCorreo() {
         return pirrMensajeCorreo;
+    }
+
+    public Random getRandom() {
+        return random;
     }
 }

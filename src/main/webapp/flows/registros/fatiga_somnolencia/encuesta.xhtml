@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/templates/mobil.xhtml">
+
+    <ui:define name="contenido">
+        <h:outputStylesheet>
+            @media (min-width: 600px) {
+                .ui-field-contain > label {
+                    width: 68% !important;
+                }
+
+                .ui-field-contain > label ~ [class*="ui-"] {
+                    width: 30% !important;
+                }
+            }
+        </h:outputStylesheet>
+        <h2>Transportes Ventanas / Puchuncaví</h2>
+        <p:growl autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form>
+            <h3>Encuesta de Fatiga y Somnolencia - PASO 1</h3>
+            <h4>#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}</h4>
+            <ui:repeat value="#{mantenedorFatigaSomnolencia.preguntasSeccion1}" var="p">
+                <pm:field>
+                    <p:outputLabel value="#{p.pregunta}"/>
+                    <p:selectOneButton value="#{mantenedorFatigaSomnolencia.respuestas[p]}">
+                        <f:selectItem itemLabel="Sí" itemValue="1"/>
+                        <f:selectItem itemLabel="No" itemValue="0"/>
+                    </p:selectOneButton>
+                </pm:field>
+            </ui:repeat>
+            <p:outputPanel id="pasoSiguiente">
+                <p:commandButton value="Siguiente" action="#{mantenedorFatigaSomnolencia.irPaso2()}"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

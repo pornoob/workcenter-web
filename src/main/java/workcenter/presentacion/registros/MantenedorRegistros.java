@@ -20,4 +20,8 @@ public class MantenedorRegistros implements Serializable {
     }
 
     public String irInspeccionAvanzada() { return "flowListarInspeccionesAvanzadas"; }
+
+    public String irFatigaSomnolencia() {
+        return "flowFatigaSomnolencia";
+    }
 }

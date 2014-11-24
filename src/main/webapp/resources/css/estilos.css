@@ -40,18 +40,31 @@ html, body {
 
 .panelBarraAutentificacion {
     background-color: black;
-    /*-webkit-opacity: 0.8;*/
-    /*-moz-opacity: 0.8;*/
-    /*-ms-filter: alpha(opacity=80);*/
-    /*filter: alpha(opacity=80);*/
-    width: 1020px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-right: 15px;
+    padding-left: -5px;
     color: white;
     text-align: right;
     border: 0;
+    margin-right: auto;
+    margin-left: auto;
+    text-shadow: none !important;
+    font-weight: normal !important;
 }
 
 .panelBarraAutentificacion a {
-    color: white;
+    color: white !important;
+    font-weight: normal !important;
+    text-shadow: none !important;
+}
+
+.panelBarraAutentificacion a:hover {
+    color: white !important;;
+    font-weight: normal !important;;
 }
 
 .panelBarraAutentificacion * {
@@ -59,8 +72,16 @@ html, body {
 }
 
 .pNavBar {
-    margin-top: 12px;
+    margin-left: auto;
+    margin-right: auto;
     background-color: yellow;
+    height: 35px;
+    vertical-align: middle;
+    padding-top: 1px;
+    padding-bottom: 5px;
+    -webkit-border-radius: 3px;
+    -moz-border-radius: 3px;
+    border-radius: 3px;
 }
 
 ul.navBar {
@@ -74,11 +95,20 @@ ul.navBar li {
 .piePagina {
     background-color: black;
     color: white;
+    border-radius: 3px;
+    -moz-border-radius: 3px;
+    -webkit-border-radius: 3px;
+    font-weight: normal !important;
+    text-shadow: none !important;
+    padding-top: 7px;
+    padding-bottom: 7px;
+    padding-left: 7px;
 }
 
 .piePagina a {
     color: white;
     text-decoration: none;
+    font-weight: normal !important;
 }
 
 .actionPanel {
@@ -87,28 +117,6 @@ ul.navBar li {
     text-align: center;
     margin-top: 5px;
     border: 0;
-}
-
-.menuWorkcenter {
-    font-size: 8pt;
-    text-align: center;
-    display: block;
-    margin-right: 15px;
-}
-
-.menuWorkcenter:hover {
-    color: #cc0000;
-}
-
-.menuWorkcenter label {
-    cursor: pointer;
-    display: block;
-}
-
-.menuWorkcenter img {
-    margin-left: auto;
-    margin-right: auto;
-    display: block;
 }
 
 .opcionesFila {
@@ -138,4 +146,120 @@ table {
 
 .ui-paginator-top {
     height: 25px;
+}
+
+.ui-mobile {
+    margin-right: auto;
+    margin-left: auto;
+}
+
+.ui-mobile .ui-page {
+    max-width: 1024px;
+}
+
+.ui-mobile label {
+    font-size: 10pt;
+}
+
+/* Responsive Design*/
+@media (min-width: 1024px) {
+    .ui-page {
+        left: 50% !important;
+        margin-left: -512px;
+    }
+}
+
+@media (max-width: 1023px) {
+    .ui-page {
+        left: 0 !important;
+        margin-left: 0px;
+    }
+}
+
+@media (min-width: 600px) {
+    .ui-field-contain > label {
+        width: 60% !important;
+    }
+
+    .ui-field-contain > label ~ [class*="ui-"] {
+        width: 38% !important;
+    }
+}
+
+/* Menu Central */
+.menuWorkcenter {
+    font-size: 8pt;
+    text-align: center;
+    display: block;
+    margin-right: 15px;
+}
+
+.menuWorkcenter:hover {
+    color: #cc0000;
+}
+
+.menuWorkcenter label {
+    cursor: pointer;
+    display: block;
+}
+
+.menuWorkcenter img {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+
+/* Menu Superior */
+.ui-tabmenuitem > a[class*=" ui-icon-m"] {
+    background-position: center !important;
+    background-repeat: no-repeat;
+}
+
+li[class^="ui-block"] > a[class*=" ui-icon-m"] {
+    background-position: center !important;
+    background-repeat: no-repeat;
+    min-height: 8px;
+}
+
+.ui-icon-m-registros {
+    background-image: url('img/icons/24/m_formularios.png') !important;
+}
+
+.ui-icon-m-inicio {
+    background-image: url('img/icons/24/inicio.png') !important;
+}
+
+.ui-icon-m-personal {
+    background-image: url('img/icons/24/m_personal.png') !important;
+}
+
+.ui-icon-m-equipos {
+    background-image: url('img/icons/24/m_camiones.png') !important;
+}
+
+.ui-icon-m-mantenciones {
+    background-image: url('img/icons/24/m_mantenciones.png') !important;
+}
+
+.ui-icon-m-usuarios {
+    background-image: url('img/icons/24/m_usuarios.png') !important;
+}
+
+.ui-icon-m-remuneraciones {
+    background-image: url('img/icons/24/m_remuneraciones.png') !important;
+}
+
+.ui-icon-m-incidencias {
+    background-image: url('img/icons/24/m_incidencias.png') !important;
+}
+
+.ui-icon-m-alarmas-gps {
+    background-image: url('img/icons/24/m_alarmas_gps.png') !important;
+}
+
+.ui-icon-m-informe-actividades {
+    background-image: url('img/icons/24/m_informe_actividades.png') !important;
+}
+.ui-icon-m-programa-actividades {
+    background-image: url('img/icons/24/m_programa_actividades.png') !important;
 }

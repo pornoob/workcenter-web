@@ -1,0 +1,56 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                template="/templates/mobil.xhtml">
+
+    <ui:define name="contenido">
+        <h2>Transportes Ventanas / Puchuncaví</h2>
+        <p:growl autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form>
+            Notas:
+            <ol>
+                <li>Debe ingresar el RUT del encuestado sin puntos, ni guión y sin digito verificador.</li>
+                <li>Si es es primera vez que el conductor es encuestado, el sistema le solicitará crear una contraseña.</li>
+            </ol>
+            <pm:field>
+                <h:outputLabel for="rut" value="Rut"/>
+                <p:inputText id="rut" value="#{mantenedorFatigaSomnolencia.rut}">
+                    <p:ajax event="blur" listener="#{mantenedorFatigaSomnolencia.obtenerConductor()}"
+                            update="@form"/>
+                </p:inputText>
+            </pm:field>
+            <p:panel header="Datos Encuestado" rendered="#{!mantenedorFatigaSomnolencia.esPrimeraEncuesta()}">
+                <pm:field>
+                    <p:outputLabel for="conductor" value="Conductor"/>
+                    <p:inputText id="conductor" readonly="true" value="#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}"/>
+                </pm:field>
+
+                <pm:field>
+                    <p:outputLabel for="claveEncuestado" value="Contraseña"/>
+                    <p:password id="claveEncuestado" value="#{mantenedorFatigaSomnolencia.clave}"/>
+                </pm:field>
+            </p:panel>
+
+            <p:panel header="Datos Encuestado" rendered="#{mantenedorFatigaSomnolencia.esPrimeraEncuesta()}">
+                <pm:field>
+                    <p:outputLabel for="nConductor" value="Conductor"/>
+                    <p:inputText id="nConductor" readonly="true" value="#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}"/>
+                </pm:field>
+
+                <pm:field>
+                    <p:outputLabel for="nClaveEncuestado" value="Crear Contraseña"/>
+                    <p:password id="nClaveEncuestado" value="#{mantenedorFatigaSomnolencia.clave}"/>
+                </pm:field>
+
+                <pm:field>
+                    <p:outputLabel for="nConfirmarClaveEncuestado" value="Confirme Contraseña"/>
+                    <p:password id="nConfirmarClaveEncuestado" value="#{mantenedorFatigaSomnolencia.clave}"/>
+                </pm:field>
+            </p:panel>
+            <p:commandButton disabled="#{mantenedorFatigaSomnolencia.conductor == null}" value="Siguiente"
+                             action="#{mantenedorFatigaSomnolencia.irEncuesta()}"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

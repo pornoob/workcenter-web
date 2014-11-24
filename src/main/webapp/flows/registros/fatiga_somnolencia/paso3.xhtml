@@ -1,0 +1,46 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/templates/mobil.xhtml">
+
+    <ui:define name="contenido">
+        <h:outputStylesheet>
+            table {
+                border-spacing: 0;
+                border-right: 1px solid;
+                border-bottom: 1px solid;
+            }
+            td {
+                text-align: center;
+                border-top: 1px solid;
+                border-left: 1px solid;
+            }
+        </h:outputStylesheet>
+
+        <h2>Transportes Ventanas / Puchuncaví</h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form>
+            <h3>Encuesta de Fatiga y Somnolencia - PASO 3</h3>
+            <h4>#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}</h4>
+            <h4>* Indicar cuantas N hay en el recuadro</h4>
+
+            <p:dataTable value="#{mantenedorFatigaSomnolencia.indicesFilas}" var="fila">
+                <p:columns var="columna" value="#{mantenedorFatigaSomnolencia.indicesColumnas}">
+                    #{mantenedorFatigaSomnolencia.matriz[fila][columna]}
+                </p:columns>
+            </p:dataTable>
+
+            <p:selectOneButton>
+                <f:selectItems value="#{mantenedorFatigaSomnolencia.opcionesMatriz}" var="valor"
+                               itemLabel="#{valor.label}" itemValue="#{valor.value}"/>
+            </p:selectOneButton>
+
+            <p:outputPanel id="pasoSiguiente">
+                <p:commandButton value="Finalizar"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

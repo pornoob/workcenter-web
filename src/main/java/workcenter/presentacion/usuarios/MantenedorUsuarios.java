@@ -59,7 +59,10 @@ public class MantenedorUsuarios implements Serializable {
             Usuario u = new Usuario();
             u.setRut(personalSeleccionado.getRut());
             u.setPassword(Md5.hash(String.valueOf(personalSeleccionado.getRut())));
+            u.setPermisosCollection(new ArrayList<Permiso>());
+            u.setHabilitado(false);
             personalSeleccionado.setUsuario(u);
+            logicaPersonal.guardar(personalSeleccionado);
         }
         permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
         proyectosDisponibles = logicaProyecto.obtenerTodos();
@@ -87,7 +90,8 @@ public class MantenedorUsuarios implements Serializable {
 
     public String irEditarUsuario() {
         personalSeleccionado = logicaPersonal.obtenerConAccesos(personalSeleccionado.getRut());
-        permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
+        if (personalSeleccionado.getUsuario() != null)
+            permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
         return "flowEditarAccesos";
     }
 
