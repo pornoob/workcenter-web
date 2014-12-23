@@ -16,7 +16,24 @@ import java.util.Locale;
 public class DataTableFilter implements Serializable {
     public boolean filtroInsensitivo(Object valor, Object filtro, Locale idioma) {
         if (valor == null || filtro == null) return false;
-        return valor.toString().toUpperCase().contains(filtro.toString().toUpperCase());
+
+        String v = valor.toString().toLowerCase();
+        String f = filtro.toString().toLowerCase();
+
+        v = v.replaceAll("á","a");
+        v = v.replaceAll("é","e");
+        v = v.replaceAll("í","i");
+        v = v.replaceAll("ó","o");
+        v = v.replaceAll("ú","u");
+        v = v.replaceAll("ü","u");
+
+        f = f.replaceAll("á", "a");
+        f = f.replaceAll("é", "e");
+        f = f.replaceAll("í", "i");
+        f = f.replaceAll("ó", "o");
+        f = f.replaceAll("ú", "u");
+        f = f.replaceAll("ü", "u");
+        return v.contains(f);
     }
 
     public boolean filtroFechas(Object valor, Object filtro, Locale idioma) {

@@ -13,13 +13,7 @@ import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Documento;
-import workcenter.entidades.MpaActividad;
-import workcenter.entidades.MpaEjecucionPlan;
-import workcenter.entidades.MpaPlanPrograma;
-import workcenter.entidades.MpaPrograma;
-import workcenter.entidades.MpaValorPlanPrograma;
-import workcenter.entidades.Personal;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.LogicaProgramaActividades;
@@ -47,6 +41,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     private MpaPlanPrograma planSeleccionado;
     private Mes mesSeleccionado;
     private Personal responsable;
+    private Personal colaborador;
     private List<MpaPrograma> programas;
     private List<MpaActividad> actividades;
     private List<MpaPlanPrograma> planes;
@@ -54,6 +49,8 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     private boolean haConsultado;
     private Integer anioSeleccionado;
     private List<Mes> mesesSeleccionados;
+    private List<MpaContrato> contratos;
+    private MpaContrato contrato;
 
     @Autowired
     LogicaPersonal logicaPersonal;
@@ -79,6 +76,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         obtenerResponsables();
         obtenerProgramas();
         obtenerActividades();
+        contratos =  logicaProgramaActividades.obtenerContratos();
         anioSeleccionado = Calendar.getInstance().get(Calendar.YEAR);
         return irMostrarPlan();
     }
@@ -97,6 +95,71 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         haConsultado = false;
         planSeleccionado = new MpaPlanPrograma();
         planSeleccionado.setAnioVigencia(Calendar.getInstance().get(Calendar.YEAR));
+        return "flowCrearPlan";
+    }
+
+    public String irEditarPlan() {
+        if (programa == null) {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "Debes seleccionar un programa");
+            return null;
+        } else if (actividad == null) {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "Debes seleccionar una actividad");
+            return null;
+        } else if (responsable == null) {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "Debes seleccionar el responsable");
+            return null;
+        } else if (contrato == null) {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "Debes seleccionar el contrato");
+            return null;
+        }
+        planSeleccionado = logicaProgramaActividades.obtenerPlan(programa, actividad, responsable, contrato, anioSeleccionado);
+        cantActividades = new HashMap<Mes, Integer>();
+        if (planSeleccionado == null) {
+            FacesUtil.mostrarMensajeError("Operación Fallida", "No existe un programa para los datos seleccionados");
+            return null;
+        }
+        for (MpaValorPlanPrograma vp : planSeleccionado.getMpaValorPlanProgramaCollection()) {
+            for (Mes m : constantes.getMeses()) {
+                switch (Integer.parseInt(m.getId())) {
+                    case 1:
+                        cantActividades.put(m, vp.getEnero());
+                        break;
+                    case 2:
+                        cantActividades.put(m, vp.getFebrero());
+                        break;
+                    case 3:
+                        cantActividades.put(m, vp.getMarzo());
+                        break;
+                    case 4:
+                        cantActividades.put(m, vp.getAbril());
+                        break;
+                    case 5:
+                        cantActividades.put(m, vp.getMayo());
+                        break;
+                    case 6:
+                        cantActividades.put(m, vp.getJunio());
+                        break;
+                    case 7:
+                        cantActividades.put(m, vp.getJulio());
+                        break;
+                    case 8:
+                        cantActividades.put(m, vp.getAgosto());
+                        break;
+                    case 9:
+                        cantActividades.put(m, vp.getSeptiembre());
+                        break;
+                    case 10:
+                        cantActividades.put(m, vp.getOctubre());
+                        break;
+                    case 11:
+                        cantActividades.put(m, vp.getNoviembre());
+                        break;
+                    case 12:
+                        cantActividades.put(m, vp.getDiciembre());
+                        break;
+                }
+            }
+        }
         return "flowCrearPlan";
     }
 
@@ -132,6 +195,8 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         planSeleccionado = plan;
         programa = plan.getIdPrograma();
         actividad = plan.getIdActividad();
+        contrato = plan.getContrato();
+        responsable = plan.getRutResponsable();
         mesSeleccionado = mes;
         return "flowRealizarActividad";
     }
@@ -245,32 +310,8 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         if (!sesionCliente.esEditor(constantes.getModuloProgramaActividades())) {
             responsable = logicaPersonal.obtener(sesionCliente.getUsuario().getRut());
         }
-        
-        if (programa != null && responsable != null) {
-            ordenarPorPrograma = false;
-            if (actividad == null)
-                planes = logicaProgramaActividades.obtenerPlanes(programa, responsable, anioSeleccionado);
-            else
-                planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, responsable, anioSeleccionado);
-        } else if (programa != null) {
-            ordenarPorPrograma = true;
-            if (actividad == null)
-                planes = logicaProgramaActividades.obtenerPlanes(programa, anioSeleccionado);
-            else
-                planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, anioSeleccionado);
-        } else if (responsable != null) {
-            ordenarPorPrograma = false;
-            if (actividad == null)
-                planes = logicaProgramaActividades.obtenerPlanes(responsable, anioSeleccionado);
-            else
-                planes = logicaProgramaActividades.obtenerPlanes(actividad, responsable, anioSeleccionado);
-        } else {
-            ordenarPorPrograma = true;
-            if (actividad == null)
-                planes = logicaProgramaActividades.obtenerPlanes(anioSeleccionado);
-            else
-                planes = logicaProgramaActividades.obtenerPlanes(actividad, anioSeleccionado);
-        }
+
+        planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, responsable, anioSeleccionado, contrato);
         haConsultado = true;
     }
 
@@ -291,12 +332,19 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         }
     }
 
+    public boolean esResponsable() {
+        if (sesionCliente.getUsuario().getRut().intValue() == planSeleccionado.getRutResponsable().getRut().intValue())
+            return true;
+        return false;
+    }
+
     public void guardarPlan() {
         MpaPlanPrograma plan = planSeleccionado;
         plan.setIdPrograma(programa);
         plan.setIdActividad(actividad);
         plan.setRutCreador(logicaPersonal.obtener(sesionCliente.getUsuario().getRut()));
         plan.setRutResponsable(responsable);
+        plan.setContrato(contrato);
         plan.setMpaValorPlanProgramaCollection(new ArrayList<MpaValorPlanPrograma>());
 
         MpaValorPlanPrograma valoresPlan = new MpaValorPlanPrograma();
@@ -566,5 +614,29 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         logicaProgramaActividades.guardarEjecucion(ejecucion);
         logicaDocumentos.asociarDocumento(d, ejecucion);
         FacesUtil.mostrarMensajeInformativo("Archivo enlazado", "Se ha enlazado el documento " + d.getId() + " a la ejecución del plan");
+    }
+
+    public Personal getColaborador() {
+        return colaborador;
+    }
+
+    public void setColaborador(Personal colaborador) {
+        this.colaborador = colaborador;
+    }
+
+    public List<MpaContrato> getContratos() {
+        return contratos;
+    }
+
+    public void setContratos(List<MpaContrato> contratos) {
+        this.contratos = contratos;
+    }
+
+    public MpaContrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(MpaContrato contrato) {
+        this.contrato = contrato;
     }
 }

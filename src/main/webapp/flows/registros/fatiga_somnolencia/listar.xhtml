@@ -1,0 +1,40 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                xmlns:pm="http://primefaces.org/mobile"
+                template="/templates/mobil.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Transportes Ventanas / Puchuncaví</h2>
+        <p:growl autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="frmEncuestaFS">
+            <p:dataTable paginator="true" rows="#{constantes.cantidadFilasTablas}" id="tblEncuestas"
+                         value="#{mantenedorFatigaSomnolencia.encuestas}" var="e"
+                         tableStyleClass="table table-responsive table-striped table-bordered table-hover">
+                <f:facet name="header">
+                    <p:panelGrid columns="3">
+                        <p:commandButton value="Anterior" update="@form"
+                                         action="#{mantenedorFatigaSomnolencia.obtenerSemanaAnterior()}"/>
+                        <h:outputText value=""/>
+                        <p:commandButton value="Siguiente" update="@form"
+                                         action="#{mantenedorFatigaSomnolencia.obtenerSemanaSiguiente()}"/>
+                    </p:panelGrid>
+                </f:facet>
+                <p:column priority="#{mantenedorFatigaSomnolencia.obtenerPriority()}"
+                          headerText="Conductor">#{e.encuestado.nombreCompleto}</p:column>
+                <p:columns var="dia" value="#{mantenedorFatigaSomnolencia.semana.dias}">
+                    <f:facet name="header">#{dia.nombre}<br/>#{dia.fechaStr}</f:facet>
+                    <h:graphicImage rendered="#{mantenedorFatigaSomnolencia.semaforo(dia.fecha, e) eq 'V'}"
+                                    value="/img/icons/luz_verde.png"/>
+                    <h:graphicImage rendered="#{mantenedorFatigaSomnolencia.semaforo(dia.fecha, e) eq 'R'}"
+                                    value="/img/icons/luz_roja.png"/>
+                    <h:graphicImage rendered="#{mantenedorFatigaSomnolencia.semaforo(dia.fecha, e) eq 'A'}"
+                                    value="/img/icons/luz_amarilla.png"/>
+                </p:columns>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

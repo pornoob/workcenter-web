@@ -10,6 +10,13 @@
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmCrearProAct">
             <h:panelGrid columns="4">
+                <h:outputLabel value="Contrato"/>:
+                <p:selectOneMenu converter="entityConverter" value="#{mantenedorProgramaActividades.contrato}">
+                    <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+                    <f:selectItems value="#{mantenedorProgramaActividades.contratos}" var="contrato"
+                                   itemLabel="#{contrato.nombre}"/>
+                </p:selectOneMenu>
+                <h:outputText value=""/>
                 <h:outputLabel value="Programa"/>:
                 <p:selectOneMenu id="sProgramas" filter="true" filterMatchMode="contains" converter="entityConverter"
                                  required="true" requiredMessage="Debes seleccionar un programa"

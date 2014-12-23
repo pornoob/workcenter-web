@@ -1,30 +1,55 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core">
+                xmlns:p="http://primefaces.org/ui">
     <h:form>
-        <p:tabMenu activeIndex="#{menuSuperior.seleccionado}">
-            <p:menuitem styleClass="ui-icon ui-icon-m-inicio" url="/inicio.jsf" ajax="false"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-personal" url="/m/personal" ajax="false"
+        <ui:fragment rendered="#{!facesContext.renderKit.toString().toLowerCase().contains('mobile')}">
+            <p:tooltip for="mInicio" value="Inicio"/>
+            <p:tooltip for="mPersonal" value="Personal"
+                       rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"/>
+            <p:tooltip for="mEquipos" value="Equipos" rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"/>
+            <p:tooltip for="mMantenciones" value="Mantenciones"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"/>
+            <p:tooltip for="mUsuarios" value="Usuarios" rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
+            <p:tooltip for="mRegistros" value="Registros"
+                       rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
+            <p:tooltip for="mRemuneraciones" value="Remuneraciones"
+                       rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
+            <p:tooltip for="mPiir" value="PIIR" rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
+            <p:tooltip for="mAlarmasGPS" value="Alarmas GPS"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
+            <p:tooltip for="mInfActividades" value="Informe Actividades"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
+            <p:tooltip for="mProgramaActividades" value="Programa Actividades"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
+        </ui:fragment>
+
+        <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
+            <p:menuitem id="mInicio" styleClass="ui-icon ui-icon-m-inicio" url="/inicio.jsf" ajax="false"/>
+            <p:menuitem id="mPersonal" styleClass="ui-icon ui-icon-m-personal" url="/m/personal" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-equipos" url="/m/equipos" ajax="false"
+            <p:menuitem id="mEquipos" styleClass="ui-icon ui-icon-m-equipos" url="/m/equipos" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-mantenciones" url="/m/equipos/mantenciones" ajax="false"
+            <p:menuitem id="mMantenciones" styleClass="ui-icon ui-icon-m-mantenciones" url="/m/equipos/mantenciones"
+                        ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-usuarios" url="/m/usuarios" ajax="false"
+            <p:menuitem id="mUsuarios" styleClass="ui-icon ui-icon-m-usuarios" url="/m/usuarios" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-registros" url="/m/registros" ajax="false"
+            <p:menuitem id="mRegistros" styleClass="ui-icon ui-icon-m-registros" url="/m/registros" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-remuneraciones" url="/m/remuneraciones" ajax="false"
+            <p:menuitem id="mRemuneraciones" styleClass="ui-icon ui-icon-m-remuneraciones" url="/m/remuneraciones"
+                        ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-incidencias" url="/m/incidencias" ajax="false"
+            <p:menuitem id="mPiir" styleClass="ui-icon ui-icon-m-incidencias" url="/m/incidencias" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-alarmas-gps" url="/m/alarmas_gps" ajax="false"
+            <p:menuitem id="mAlarmasGPS" styleClass="ui-icon ui-icon-m-alarmas-gps" url="/m/alarmas_gps" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-informe-actividades" url="/m/informe_actividades" ajax="false"
+            <p:menuitem id="mInfActividades" styleClass="ui-icon ui-icon-m-informe-actividades"
+                        url="/m/informe_actividades" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
-            <p:menuitem styleClass="ui-icon ui-icon-m-programa-actividades" url="/m/programa_actividades" ajax="false"
-                        rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}" />
+            <p:menuitem id="mProgramaActividades" styleClass="ui-icon ui-icon-m-programa-actividades"
+                        url="/m/programa_actividades" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>

@@ -10,7 +10,17 @@
     </on-start>
 
     <view-state id="index">
-        <transition on="flowEncuesta" to="encuesta"/>
+        <transition on="flowEncuesta" to="ingresar"/>
+        <transition on="flowListado" to="listar"/>
+    </view-state>
+
+    <view-state id="listar">
+        <transition on="flowIndex" to="index"/>
+    </view-state>
+
+    <view-state id="ingresar">
+        <transition on="flowIndex" to="index"/>
+        <transition on="flowEncuestaPaso1" to="encuesta"/>
     </view-state>
 
     <view-state id="encuesta">
@@ -24,11 +34,10 @@
 
     <view-state id="paso3">
         <transition on="flowEncuestaPaso2" to="paso2"/>
-        <transition on="flowEncuestaPaso4" to="paso4"/>
+        <transition on="flowEncuestaResultados" to="resultados"/>
     </view-state>
 
-    <view-state id="paso4">
-
+    <view-state id="resultados">
     </view-state>
 
     <end-state id="finSubflow" />

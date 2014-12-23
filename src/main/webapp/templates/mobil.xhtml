@@ -8,51 +8,51 @@
       xmlns:p="http://primefaces.org/ui"
       xmlns:pm="http://primefaces.org/mobile">
 
-<f:view contentType="text/html" renderKitId="PRIMEFACES_MOBILE">
+<f:view renderKitId="PRIMEFACES_MOBILE"/>
 
-    <h:head>
-        <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
-        <title>Transportes Ventanas / Puchuncaví</title>
-        <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/estilos.css"/>
-    </h:head>
-    <h:body>
-        <h:outputStylesheet>
-            li[class^=ui-block] > .ui-btn-active {
-                background-color: #f6f6f6 !important;
-            }
-        </h:outputStylesheet>
-        <pm:page>
-            <pm:header id="pmHeader">
-                <p:outputPanel styleClass="imagenSuperior">
-                    <p:outputPanel styleClass="logoSuperior"/>
-                </p:outputPanel>
-                <ui:include src="/templates/includes/barraAutentificacion.xhtml"/>
-                <ui:include src="/templates/includes/menuSuperior.xhtml"/>
-            </pm:header>
-            <pm:content>
-                <ui:insert name="contenido"></ui:insert>
-            </pm:content>
-            <pm:footer>
-                <ui:include src="/templates/includes/piePagina.xhtml"/>
-            </pm:footer>
-        </pm:page>
-
-        <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
-        <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
-        <h:outputScript library="js" name="webcenter.js" target="head"/>
-        <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
-        <p:idleMonitor id="sesionMonitor" rendered="#{sesionCliente.estaAutentificado()}"
-                       timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>
-        <p:dialog rendered="#{sesionCliente.estaAutentificado()}" id="sesionExpired" widgetVar="sesionExpired"
-                  modal="true" closable="false" header="Su sesión ha expirado">
-            <h:form>
-                <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton ajax="false" value="Aceptar"
-                                     onclick="location.href='#{request.contextPath}/logIn.jsf'"/>
-                </p:outputPanel>
-            </h:form>
-        </p:dialog>
-
-    </h:body>
-</f:view>
+<h:head>
+    <meta content='text/html; charset=UTF-8' http-equiv="Content-Type"/>
+    <title>Transportes Ventanas / Puchuncaví</title>
+    <link type="text/css" rel="stylesheet" href="#{request.contextPath}/resources/css/estilos.css"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap.min.css"/>
+    <!-- Optional theme -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/css/bootstrap-theme.min.css"/>
+    <!-- Latest compiled and minified JavaScript -->
+    <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.1/js/bootstrap.min.js"/>
+    <h:outputStylesheet>
+        li[class^=ui-block] > a {
+            height: 28px;
+        }
+    </h:outputStylesheet>
+</h:head>
+<h:body>
+    <pm:page>
+        <pm:header id="pmHeader">
+            <p:outputPanel styleClass="imagenSuperior">
+                <p:outputPanel styleClass="logoSuperior"/>
+            </p:outputPanel>
+            <ui:include src="/templates/includes/barraAutentificacion.xhtml"/>
+            <ui:include src="/templates/includes/menuSuperior.xhtml"/>
+        </pm:header>
+        <pm:content>
+            <ui:insert name="contenido"></ui:insert>
+            <p:idleMonitor id="sesionMonitor" rendered="#{sesionCliente.estaAutentificado()}"
+                           timeout="#{(session.maxInactiveInterval - 10) * 1000}"
+                           onidle="PF('sesionExpired').show()"/>
+            <p:dialog rendered="#{sesionCliente.estaAutentificado()}" id="sesionExpired" widgetVar="sesionExpired"
+                      modal="true" closable="false" header="Su sesión ha expirado">
+                <h:form>
+                    <p:outputPanel styleClass="actionPanel">
+                        <p:commandButton ajax="false" value="Aceptar"
+                                         onclick="location.href='#{request.contextPath}/logIn.jsf'"/>
+                    </p:outputPanel>
+                </h:form>
+            </p:dialog>
+            <h:outputScript library="js" name="webcenter.js" target="head"/>
+        </pm:content>
+        <pm:footer>
+            <ui:include src="/templates/includes/piePagina.xhtml"/>
+        </pm:footer>
+    </pm:page>
+</h:body>
 </html>

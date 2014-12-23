@@ -13,6 +13,7 @@ import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 
 import java.io.Serializable;
+import java.security.SecureRandom;
 import java.util.*;
 
 /**
@@ -290,7 +291,7 @@ public class Constantes implements Serializable {
         estadosCiviles.add("Separado");
 
         tiposUnidad = null;
-        random = new Random();
+        random = new SecureRandom();
     }
 
     public int getCargoConductor() {

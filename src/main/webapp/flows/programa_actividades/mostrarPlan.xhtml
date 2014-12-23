@@ -13,6 +13,12 @@
 <ui:fragment
         rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades) or sesionCliente.tieneAccesoEspecial(constantes.moduloProgramaActividades)}">
     <h:panelGrid columns="3">
+        <h:outputLabel value="Contrato"/>:
+        <p:selectOneMenu converter="entityConverter" value="#{mantenedorProgramaActividades.contrato}">
+            <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+            <f:selectItems value="#{mantenedorProgramaActividades.contratos}" var="contrato"
+                           itemLabel="#{contrato.nombre}"/>
+        </p:selectOneMenu>
         <h:outputLabel for="sProgramas" value="Programa"/>:
         <p:selectOneMenu id="sProgramas" value="#{mantenedorProgramaActividades.programa}" filter="true"
                          filterMatchMode="contains" converter="entityConverter">
@@ -61,6 +67,12 @@
 <ui:fragment
         rendered="#{!(sesionCliente.esEditor(constantes.moduloProgramaActividades) or sesionCliente.tieneAccesoEspecial(constantes.moduloProgramaActividades))}">
     <h:panelGrid columns="3">
+        <h:outputLabel value="Contrato"/>:
+        <p:selectOneMenu converter="entityConverter" value="#{mantenedorProgramaActividades.contrato}">
+            <f:selectItem value="#{null}" itemLabel="-- Todos --"/>
+            <f:selectItems value="#{mantenedorProgramaActividades.contratos}" var="contrato"
+                           itemLabel="#{contrato.nombre}"/>
+        </p:selectOneMenu>
         <h:outputLabel value="Programa"/>:
         <p:selectOneMenu id="sProgramasConsulta" value="#{mantenedorProgramaActividades.programa}"
                          filter="true" filterMatchMode="contains" converter="entityConverter">
@@ -84,12 +96,13 @@
     </h:panelGrid>
 </ui:fragment>
 <h:panelGroup>
-    <p:commandButton icon="ui-icon-play"
-                     rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}"
+    <p:commandButton icon="ui-icon-play" rendered="#{sesionCliente.esEditor(constantes.moduloProgramaActividades)}"
                      value="Crear" immediate="true"
                      action="#{mantenedorProgramaActividades.irGenerarPlan()}"/>
-    <p:commandButton value="Consultar" icon="ui-icon-search"
-                     action="#{mantenedorProgramaActividades.consultar()}"
+    <p:commandButton icon="ui-icon-pencil"
+                     rendered="#{sesionCliente.esAdministrador(constantes.moduloProgramaActividades)}"
+                     value="Editar Plan" action="#{mantenedorProgramaActividades.irEditarPlan()}"/>
+    <p:commandButton value="Consultar" icon="ui-icon-search" action="#{mantenedorProgramaActividades.consultar()}"
                      process="@form"
                      update=":frmProAct:pPlanes"/>
 </h:panelGroup>

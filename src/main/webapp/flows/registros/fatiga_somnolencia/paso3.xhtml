@@ -13,10 +13,14 @@
                 border-right: 1px solid;
                 border-bottom: 1px solid;
             }
+
             td {
                 text-align: center;
                 border-top: 1px solid;
                 border-left: 1px solid;
+            }
+            input[type=radio] {
+                margin-top: -11px !important;
             }
         </h:outputStylesheet>
 
@@ -27,19 +31,21 @@
             <h4>#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}</h4>
             <h4>* Indicar cuantas N hay en el recuadro</h4>
 
-            <p:dataTable value="#{mantenedorFatigaSomnolencia.indicesFilas}" var="fila">
-                <p:columns var="columna" value="#{mantenedorFatigaSomnolencia.indicesColumnas}">
-                    #{mantenedorFatigaSomnolencia.matriz[fila][columna]}
-                </p:columns>
-            </p:dataTable>
+            <pm:field>
+                <p:dataTable value="#{mantenedorFatigaSomnolencia.indicesFilas}" var="fila">
+                    <p:columns var="columna" value="#{mantenedorFatigaSomnolencia.indicesColumnas}">
+                        #{mantenedorFatigaSomnolencia.matriz[fila][columna]}
+                    </p:columns>
+                </p:dataTable>
 
-            <p:selectOneButton>
-                <f:selectItems value="#{mantenedorFatigaSomnolencia.opcionesMatriz}" var="valor"
-                               itemLabel="#{valor.label}" itemValue="#{valor.value}"/>
-            </p:selectOneButton>
+                <p:selectOneButton value="#{mantenedorFatigaSomnolencia.respuestaIngresadaMatriz}">
+                    <f:selectItems value="#{mantenedorFatigaSomnolencia.opcionesMatriz}" var="valor"
+                                   itemLabel="#{valor.label}" itemValue="#{valor.value}"/>
+                </p:selectOneButton>
+            </pm:field>
 
             <p:outputPanel id="pasoSiguiente">
-                <p:commandButton value="Finalizar"/>
+                <p:commandButton value="Finalizar" action="#{mantenedorFatigaSomnolencia.irResultados()}"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

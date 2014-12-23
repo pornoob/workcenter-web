@@ -16,7 +16,7 @@
                 <h:outputText value="#{mantenedorProgramaActividades.programa.nombre}"/>
                 <h:outputLabel value="Actividad"/>:
                 <h:outputText value="#{mantenedorProgramaActividades.actividad.nombre}"/>
-                <h:outputLabel value="Responsable"/>:
+                <h:outputLabel value="Responsable o Colaborador"/>:
                 <h:outputText value="#{sesionCliente.nombreCompleto}"/>
                 <h:outputLabel value="Mes"/>:
                 <p:selectOneMenu id="sMeses" value="#{mantenedorProgramaActividades.mesSeleccionado}">
@@ -26,8 +26,7 @@
             </h:panelGrid>
         </h:form>
         <h:form id="frmComprobantes">
-            <ui:fragment
-                    rendered="#{sesionCliente.usuario.rut == mantenedorProgramaActividades.planSeleccionado.rutResponsable.rut}">
+            <ui:fragment rendered="#{mantenedorProgramaActividades.esResponsable()}">
                 <h3>NOTA: Cada archivo enlazado implica una actividad</h3>
                 <p:outputPanel id="pDescargables">
                     <ui:repeat value="#{mantenedorProgramaActividades.obtenerDescargables()}" var="d">
@@ -38,7 +37,7 @@
                 </p:outputPanel>
             </ui:fragment>
             <ui:fragment
-                    rendered="#{!(sesionCliente.usuario.rut == mantenedorProgramaActividades.planSeleccionado.rutResponsable.rut)}">
+                    rendered="#{!mantenedorProgramaActividades.esResponsable()}">
                 <h3>Comprobantes</h3>
                 <p:outputPanel id="pDescargables2">
                     <ui:repeat value="#{mantenedorProgramaActividades.obtenerDescargables()}" var="d">
@@ -49,8 +48,7 @@
                 </p:outputPanel>
             </ui:fragment>
         </h:form>
-        <ui:fragment
-                rendered="#{sesionCliente.usuario.rut == mantenedorProgramaActividades.planSeleccionado.rutResponsable.rut}">
+        <ui:fragment rendered="#{mantenedorProgramaActividades.esResponsable()}">
             <ui:include src="/components/cargadorArchivos.xhtml">
                 <ui:param name="padre" value="#{mantenedorProgramaActividades}"/>
             </ui:include>

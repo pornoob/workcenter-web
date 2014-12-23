@@ -7,8 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.hibernate.Session;
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.MpaEjecucionPlan;
-import workcenter.entidades.MpaPlanPrograma;
+import workcenter.entidades.*;
 import workcenter.util.dto.Mes;
 
 /**
@@ -168,5 +167,22 @@ public class MpaPlanDao {
             e.printStackTrace();
         }
         return 0;
+    }
+
+    public List<MpaContrato> obtenerContratos() {
+        return em.createNamedQuery("MpaContrato.findAll").getResultList();
+    }
+
+    public MpaPlanPrograma obtenerPlan(MpaPrograma programa, MpaActividad actividad, Personal responsable, MpaContrato contrato, Integer anio) {
+        try {
+            return (MpaPlanPrograma) em.createNamedQuery("MpaPlanPrograma.find")
+                    .setParameter("programa", programa)
+                    .setParameter("actividad", actividad)
+                    .setParameter("responsable", responsable)
+                    .setParameter("contrato", contrato)
+                    .setParameter("anio", anio)
+                    .setMaxResults(1)
+                    .getSingleResult();
+        } catch (Exception e) { return null; }
     }
 }

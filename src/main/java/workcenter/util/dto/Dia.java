@@ -40,6 +40,10 @@ public class Dia implements Serializable {
         this.nombre = nombre;
     }
 
+    public String getLetra() {
+        return nombre.substring(0, 1).toUpperCase();
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;

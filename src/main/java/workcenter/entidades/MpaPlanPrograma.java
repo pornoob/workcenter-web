@@ -8,44 +8,39 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import java.util.List;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+
 import workcenter.util.dto.Mes;
 
 /**
- *
  * @author colivares
  */
 @Entity
 @Table(name = "mpa_plan_programa")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MpaPlanPrograma.findAll", query = "SELECT m FROM MpaPlanPrograma m"),
-    @NamedQuery(name = "MpaPlanPrograma.findById", query = "SELECT m FROM MpaPlanPrograma m WHERE m.id = :id"),
-    @NamedQuery(name = "MpaPlanPrograma.findByFecha", query = "SELECT m FROM MpaPlanPrograma m WHERE m.fecha = :fecha")})
+        @NamedQuery(name = "MpaPlanPrograma.findAll", query = "SELECT m FROM MpaPlanPrograma m"),
+        @NamedQuery(name = "MpaPlanPrograma.findById", query = "SELECT m FROM MpaPlanPrograma m WHERE m.id = :id"),
+        @NamedQuery(name = "MpaPlanPrograma.findByFecha", query = "SELECT m FROM MpaPlanPrograma m WHERE m.fecha = :fecha"),
+        @NamedQuery(
+                name = "MpaPlanPrograma.find",
+                query = "select p from MpaPlanPrograma p " +
+                        "where p.idPrograma = :programa " +
+                        "and p.idActividad = :actividad " +
+                        "and p.rutResponsable =  :responsable " +
+                        "and p.contrato = :contrato " +
+                        "and p.anioVigencia = :anio order by p.fecha desc "
+        )
+})
 public class MpaPlanPrograma implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -71,6 +66,18 @@ public class MpaPlanPrograma implements Serializable {
     @NotNull
     @Column(name = "anio_vigencia")
     private Integer anioVigencia;
+
+    @OneToOne
+    @JoinTable(
+            name = "mpa_plan_contrato",
+            inverseJoinColumns = {
+                    @JoinColumn(name = "id_contrato")
+            },
+            joinColumns = {
+                    @JoinColumn(name = "id_plan")
+            }
+    )
+    private MpaContrato contrato;
 
     public MpaPlanPrograma() {
     }
@@ -224,5 +231,13 @@ public class MpaPlanPrograma implements Serializable {
 
     public void setAnioVigencia(Integer anioVigencia) {
         this.anioVigencia = anioVigencia;
+    }
+
+    public MpaContrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(MpaContrato contrato) {
+        this.contrato = contrato;
     }
 }

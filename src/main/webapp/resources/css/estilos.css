@@ -106,7 +106,7 @@ ul.navBar li {
 }
 
 .piePagina a {
-    color: white;
+    color: white !important;
     text-decoration: none;
     font-weight: normal !important;
 }
@@ -148,6 +148,8 @@ table {
     height: 25px;
 }
 
+/* Estilos mobile */
+
 .ui-mobile {
     margin-right: auto;
     margin-left: auto;
@@ -161,7 +163,13 @@ table {
     font-size: 10pt;
 }
 
+
+
 /* Responsive Design*/
+@-moz-document url-prefix() {
+    fieldset { display: table-cell; }
+}
+
 @media (min-width: 1024px) {
     .ui-page {
         left: 50% !important;
@@ -183,6 +191,16 @@ table {
 
     .ui-field-contain > label ~ [class*="ui-"] {
         width: 38% !important;
+    }
+}
+
+@media (max-width: 599px) {
+    .ui-field-contain > label {
+        width: 100% !important;
+    }
+
+    .ui-field-contain > label ~ [class*="ui-"] {
+        width: 100% !important;
     }
 }
 

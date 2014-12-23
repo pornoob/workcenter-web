@@ -254,7 +254,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
                 }
                 detalle.deleteCharAt(detalle.length() - 1);
                 detalle.deleteCharAt(detalle.length() - 1);
-                detalle.append(". Además consta con la(s) siguiente(s) observaciones:\n");
+                detalle.append(".\nAdemás consta con la(s) siguiente(s) observaciones:\n");
                 detalle.append(inspeccionAvanzada.getObservacion());
                 t.setDetalle(detalle.toString());
 

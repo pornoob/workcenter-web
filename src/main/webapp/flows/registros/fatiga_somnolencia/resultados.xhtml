@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:pm="http://primefaces.org/mobile"
+                xmlns:f="http://xmlns.jcp.org/jsf/core"
+                template="/templates/mobil.xhtml">
+
+    <ui:define name="contenido">
+        <h3>Encuesta de Fatiga y Somnolencia - RESULTADOS</h3>
+        <h4>#{mantenedorFatigaSomnolencia.conductor.nombreCompleto}</h4>
+
+        <h:form>
+            <ui:fragment rendered="#{!mantenedorFatigaSomnolencia.fatigado}">
+                <p:panel header="Encuesta aprobada">
+                    Las respuestas ingresadas están dentro de la evaluación aceptada
+                </p:panel>
+            </ui:fragment>
+            <ui:fragment rendered="#{mantenedorFatigaSomnolencia.fatigado}">
+                <p:panel header="Encuesta refleja un nivel de fatiga y somnolencia">
+                    <b>Ha respondido de forma incorrecta lo siguiente</b>
+                    <ui:repeat value="#{mantenedorFatigaSomnolencia.erroresSeccion1}" var="pregunta">
+                        <pm:field>
+                            <p:outputLabel value="#{pregunta.pregunta}"/>
+                            <p:commandButton
+                                    rendered="#{mantenedorFatigaSomnolencia.esNo(mantenedorFatigaSomnolencia.respuestas[pregunta])}"
+                                    value="No" icon="ui-icon-delete" iconPos="right"/>
+                            <p:commandButton
+                                    rendered="#{!mantenedorFatigaSomnolencia.esNo(mantenedorFatigaSomnolencia.respuestas[pregunta])}"
+                                    value="Sí" icon="ui-icon-delete" iconPos="right"/>
+                        </pm:field>
+                    </ui:repeat>
+                    <ui:fragment rendered="#{mantenedorFatigaSomnolencia.seccionConError(2)}">
+                        <b>El cálculo de la escala de valores supera 9</b>
+                    </ui:fragment>
+
+                    <ui:fragment rendered="#{mantenedorFatigaSomnolencia.seccionConError(3)}">
+                        <b>La cantidad de N indicadas no corresponden</b>
+                    </ui:fragment>
+                </p:panel>
+            </ui:fragment>
+        </h:form>
+    </ui:define>
+</ui:composition>

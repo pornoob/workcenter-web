@@ -47,7 +47,6 @@ public class MpaActividad implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -109,10 +108,9 @@ public class MpaActividad implements Serializable {
             return false;
         }
         MpaActividad other = (MpaActividad) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else if (this.getId().intValue() != other.getId().intValue()) return false;
+        else return true;
     }
 
     @Override

@@ -24,16 +24,16 @@ import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 
 /**
- *
  * @author colivares
  */
 @Entity
 @Table(name = "mpa_programas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "MpaPrograma.findAll", query = "SELECT m FROM MpaPrograma m"),
-    @NamedQuery(name = "MpaPrograma.findById", query = "SELECT m FROM MpaPrograma m WHERE m.id = :id"),
-    @NamedQuery(name = "MpaPrograma.findByNombre", query = "SELECT m FROM MpaPrograma m WHERE m.nombre = :nombre")})
+        @NamedQuery(name = "MpaPrograma.findAll", query = "SELECT m FROM MpaPrograma m"),
+        @NamedQuery(name = "MpaPrograma.findById", query = "SELECT m FROM MpaPrograma m WHERE m.id = :id"),
+        @NamedQuery(name = "MpaPrograma.findByNombre", query = "SELECT m FROM MpaPrograma m WHERE m.nombre = :nombre")
+})
 public class MpaPrograma implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPrograma")
     private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;

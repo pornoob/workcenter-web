@@ -9,11 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MpaActividadDao;
 import workcenter.dao.MpaPlanDao;
 import workcenter.dao.MpaProgramaDao;
-import workcenter.entidades.MpaActividad;
-import workcenter.entidades.MpaEjecucionPlan;
-import workcenter.entidades.MpaPlanPrograma;
-import workcenter.entidades.MpaPrograma;
-import workcenter.entidades.Personal;
+import workcenter.entidades.*;
 import workcenter.util.dto.Mes;
 
 /**
@@ -63,43 +59,8 @@ public class LogicaProgramaActividades {
     }
 
     @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Personal responsable, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(programa, responsable, anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, MpaActividad actividad, Personal responsable, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(programa, actividad, responsable, anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(programa, anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, MpaActividad actividad, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(programa, actividad, anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(Personal responsable, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(responsable, anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaActividad actividad, Personal responsable, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(actividad, responsable, anioSeleccionado);
-    }
-    
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(anioSeleccionado);
-    }
-
-    @Transactional(readOnly = true)
-    public List<MpaPlanPrograma> obtenerPlanes(MpaActividad actividad, Integer anioSeleccionado) {
-        return mpaProgramaDao.obtenerPlanes(actividad, anioSeleccionado);
+    public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma programa, MpaActividad actividad, Personal responsable, Integer anioSeleccionado, MpaContrato contrato) {
+        return mpaProgramaDao.obtenerPlanes(programa, actividad, responsable, contrato, anioSeleccionado);
     }
 
     @Transactional(readOnly = true)
@@ -130,5 +91,15 @@ public class LogicaProgramaActividades {
     @Transactional(readOnly = true)
     public float obtenerCumplimientoPrograma(MpaPlanPrograma plan, Mes mes) {
         return mpaPlanDao.obtenerCumplimientoPrograma(plan, mes);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MpaContrato> obtenerContratos() {
+        return mpaPlanDao.obtenerContratos();
+    }
+
+    @Transactional(readOnly = true)
+    public MpaPlanPrograma obtenerPlan(MpaPrograma programa, MpaActividad actividad, Personal responsable, MpaContrato contrato, Integer anio) {
+        return mpaPlanDao.obtenerPlan(programa, actividad, responsable, contrato, anio);
     }
 }
