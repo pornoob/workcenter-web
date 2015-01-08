@@ -5,11 +5,9 @@ import workcenter.entidades.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Order;
-import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
+import javax.persistence.Query;
+import javax.persistence.criteria.*;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -46,16 +44,28 @@ public class MpaProgramaDao {
         // aca
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<MpaPlanPrograma> cq = cb.createQuery(MpaPlanPrograma.class);
-        EntityType<MpaPlanPrograma> plan_ = em.getMetamodel().entity(MpaPlanPrograma.class);
         Root<MpaPlanPrograma> plan = cq.from(MpaPlanPrograma.class);
         cq.select(plan);
+        List<Predicate> filtros = new ArrayList<Predicate>();
 
-        if (programa != null) cq.where(cb.equal(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("idPrograma")), programa));
-        if (actividad != null) cq.where(cb.equal(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("actividad")), actividad));
-        if (responsable != null) cq.where(cb.equal(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("responsable")), responsable));
-        if (contrato != null) cq.where(cb.equal(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("contrato")), contrato));
-        cq.where(cb.equal(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("anioVigencia")), anioSeleccionado));
-        cq.orderBy(cb.asc(plan.get((javax.persistence.metamodel.SingularAttribute<? super MpaPlanPrograma, Object>) plan_.getAttribute("fecha"))));
+        if (programa != null) {
+            filtros.add(cb.equal(plan.get(MpaPlanPrograma_.idPrograma), programa));
+        }
+        if (actividad != null) {
+            filtros.add(cb.equal(plan.get(MpaPlanPrograma_.idActividad), actividad));
+        }
+        if (responsable != null) {
+            filtros.add(cb.equal(plan.get(MpaPlanPrograma_.rutResponsable), responsable));
+        }
+
+        if (contrato != null) {
+            filtros.add(cb.equal(plan.get(MpaPlanPrograma_.contrato), contrato));
+        }
+        filtros.add(cb.equal(plan.get(MpaPlanPrograma_.anioVigencia), anioSeleccionado));
+
+        cq.where(filtros.toArray(new Predicate[] {}));
+
+        cq.orderBy(cb.asc(plan.get(MpaPlanPrograma_.fecha)));
         return em.createQuery(cq).getResultList();
     }
 }

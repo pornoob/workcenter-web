@@ -10,6 +10,9 @@ import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import javax.persistence.*;
+import javax.persistence.metamodel.CollectionAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
@@ -67,7 +70,7 @@ public class MpaPlanPrograma implements Serializable {
     @Column(name = "anio_vigencia")
     private Integer anioVigencia;
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinTable(
             name = "mpa_plan_contrato",
             inverseJoinColumns = {

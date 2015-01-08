@@ -49,18 +49,13 @@
         <p:accordionPanel activeIndex="">
             <p:tab title="Seleccionar">
                 <h:panelGrid style="width: auto" columns="2">
-                    <p:selectBooleanCheckbox widgetVar="mesesCheck">
-                        <p:ajax listener="#{mantenedorProgramaActividades.checkear()}" update="sMeses"/>
-                    </p:selectBooleanCheckbox>Todos
+                    <p:selectBooleanCheckbox widgetVar="mesesCheck" styleClass="selectAll"/>Todos
                 </h:panelGrid>
                 <p:selectManyMenu id="sMeses" value="#{mantenedorProgramaActividades.mesesSeleccionados}"
                                   converter="mesConverter" showCheckbox="true">
                     <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"/>
                 </p:selectManyMenu>
             </p:tab>
-            <h:outputScript library="js" target="body">
-                PF('mesesCheck').check();
-            </h:outputScript>
         </p:accordionPanel>
     </h:panelGrid>
 </ui:fragment>
@@ -104,7 +99,7 @@
                      value="Editar Plan" action="#{mantenedorProgramaActividades.irEditarPlan()}"/>
     <p:commandButton value="Consultar" icon="ui-icon-search" action="#{mantenedorProgramaActividades.consultar()}"
                      process="@form"
-                     update=":frmProAct:pPlanes"/>
+                     update="pPlanes"/>
 </h:panelGroup>
 
 <br/>
@@ -234,6 +229,20 @@
         </ui:repeat>
     </ui:fragment>
 </p:scrollPanel>
+<h:outputScript target="body" library="js">
+    $('.ui-chkbox.selectAll input[type=checkbox]').change(function() {
+        if ($(this).is(':checked')) {
+            $('.ui-chkbox input[type=checkbox]:not(:checked)').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                $(this).click();
+            });
+        } else {
+            $('.ui-chkbox input[type=checkbox]:checked').not('.ui-chkbox.selectAll input[type=checkbox]').each(function () {
+                $(this).click();
+            });
+        }
+    });
+    PF('mesesCheck').check();
+</h:outputScript>
 </h:form>
 </ui:define>
 </ui:composition>

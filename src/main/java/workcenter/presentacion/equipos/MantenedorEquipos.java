@@ -66,11 +66,12 @@ public class MantenedorEquipos implements Serializable {
         marcasEquipos = logicaEquipos.obtenerMarcas();
         modelos = logicaEquipos.obtenerModelos();
         colores = new ArrayList<FilterOption>();
-        colores.add(new FilterOption(1, "Blanco"));
-        colores.add(new FilterOption(2, "Negro"));
-        colores.add(new FilterOption(3, "Azul"));
-        colores.add(new FilterOption(4, "Rojo"));
         colores.add(new FilterOption(5, "Amarillo"));
+        colores.add(new FilterOption(3, "Azul"));
+        colores.add(new FilterOption(1, "Blanco"));
+        colores.add(new FilterOption(7, "Naranjo"));
+        colores.add(new FilterOption(2, "Negro"));
+        colores.add(new FilterOption(4, "Rojo"));
         colores.add(new FilterOption(6, "Verde"));
         posicionesFoto = new ArrayList<FilterOption>();
         posicionesFoto.add(new FilterOption(1, "Frontal"));
@@ -91,14 +92,14 @@ public class MantenedorEquipos implements Serializable {
     public String irAgregarEquipo() {
         equipo = new Equipo();
         equipo.setFotos(new ArrayList<FotoEquipo>());
-        empresas = logicaEmpresas.obtenerEmpleadores();
+        empresas = logicaEmpresas.obtenerEmpresas();
         return "flowEditar";
     }
 
     public String irEditar(Equipo e) {
         equipo = e;
         equipo.setFotos(logicaEquipos.obtenerFotos(e));
-        empresas = logicaEmpresas.obtenerEmpleadores();
+        empresas = logicaEmpresas.obtenerEmpresas();
         return "flowEditar";
     }
 

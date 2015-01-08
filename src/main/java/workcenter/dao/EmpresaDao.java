@@ -22,12 +22,12 @@ public class EmpresaDao {
         sb.append("inner join contratospersonal cp on (e.id = cp.empleador) ");
         sb.append("where (cp.vencimiento > current_date or cp.vencimiento is null) ");
 
-        // empezamos el hardcodeo para traernos las excepciones
-        sb.append("or e.id=128 "); // luis gabriel silva peña
-        sb.append("or e.nombre like '%banco%' "); // bancos
-
         sb.append("order by e.nombre asc");
         Query q = em.createNativeQuery(sb.toString(), Empresa.class);
         return q.getResultList();
+    }
+
+    public List<Empresa> obtenerEmpresas() {
+        return em.createNamedQuery("Empresa.findAll").getResultList();
     }
 }

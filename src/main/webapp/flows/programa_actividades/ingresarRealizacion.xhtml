@@ -16,8 +16,8 @@
                 <h:outputText value="#{mantenedorProgramaActividades.programa.nombre}"/>
                 <h:outputLabel value="Actividad"/>:
                 <h:outputText value="#{mantenedorProgramaActividades.actividad.nombre}"/>
-                <h:outputLabel value="Responsable o Colaborador"/>:
-                <h:outputText value="#{sesionCliente.nombreCompleto}"/>
+                <h:outputLabel value="Responsable"/>:
+                <h:outputText value="#{mantenedorProgramaActividades.planSeleccionado.rutResponsable.nombreCompleto}"/>
                 <h:outputLabel value="Mes"/>:
                 <p:selectOneMenu id="sMeses" value="#{mantenedorProgramaActividades.mesSeleccionado}">
                     <f:selectItems value="#{constantes.meses}" var="mes" itemLabel="#{mes.nombre}"/>

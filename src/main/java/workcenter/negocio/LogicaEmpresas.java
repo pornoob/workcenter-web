@@ -23,4 +23,9 @@ public class LogicaEmpresas {
     public List<Empresa> obtenerEmpleadores() {
         return empresaDao.obtenerEmpleadores();
     }
+
+    @Transactional(readOnly = true)
+    public List<Empresa> obtenerEmpresas() {
+        return empresaDao.obtenerEmpresas();
+    }
 }

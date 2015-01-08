@@ -78,6 +78,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         obtenerActividades();
         contratos =  logicaProgramaActividades.obtenerContratos();
         anioSeleccionado = Calendar.getInstance().get(Calendar.YEAR);
+        mesesSeleccionados = new ArrayList<Mes>(constantes.getMeses());
         return irMostrarPlan();
     }
 
@@ -247,11 +248,6 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         return "0";
     }
 
-    public void checkear() {
-        if (mesesSeleccionados == null || mesesSeleccionados.isEmpty()) mesesSeleccionados = new ArrayList<Mes>(constantes.getMeses());
-        else mesesSeleccionados.removeAll(constantes.getMeses());
-    }
-
     public String obtenerCumplimientoGlobal(MpaPrograma programa) {
         float cumplimientoPersonal;
         int contadorPersonal;
@@ -310,6 +306,8 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
         if (!sesionCliente.esEditor(constantes.getModuloProgramaActividades())) {
             responsable = logicaPersonal.obtener(sesionCliente.getUsuario().getRut());
         }
+
+        ordenarPorPrograma = responsable == null;
 
         planes = logicaProgramaActividades.obtenerPlanes(programa, actividad, responsable, anioSeleccionado, contrato);
         haConsultado = true;
