@@ -188,6 +188,15 @@ public class MantenedorRemuneraciones implements Serializable {
         }
         return total;
     }
+    
+    //Suma de las rentas afecta
+    public Integer getSumaRentaAfecta() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getRentaAfecta();
+        }
+        return total;
+    }
 
     public Integer getTotalDctoAfp() {
         int total = 0;

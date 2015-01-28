@@ -64,7 +64,7 @@
              emptyMessage="No hay remuneraciones registradas para estos criterios"
              paginator="true" paginatorPosition="top" style="margin-bottom: 18px"
              var="r" id="tRemuneraciones" rows="15">
-<p:columnGroup type="header">
+    <p:columnGroup type="header">
     <p:row>
         <p:column width="60" rowspan="3" headerText="Fecha"/>
         <p:column width="100" rowspan="3" headerText="Nombre conductor"/>
@@ -85,6 +85,8 @@
                   colspan="#{8 + mantenedorRemuneraciones.descuentosTablaRemuneracion.cantidadColumnas}"
                   headerText="Descuentos previsionales - impuestos y otros"/>
         <p:column rowspan="3" width="80" headerText="Total descuentos"/>
+        <!-- Cabecera de la renta afecta -->
+        <p:column rowspan="3" width="80" headerText="Renta afecta"/>
         <p:column rowspan="3" width="80" headerText="Alcanse líquido"/>
         <p:column rowspan="3" width="60" headerText="Anticipos"/>
         <p:column rowspan="3" width="60" headerText="Dif. caja"/>
@@ -340,6 +342,23 @@
         </h:outputText>
     </f:facet>
 </p:column>
+    
+    
+<!-- Columna donde se llena la renta afecta -->
+<p:column>
+    <f:facet name="header">Renta Afecta</f:facet>
+    <h:outputText value="#{r.rentaAfecta}">
+        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+    </h:outputText>
+    <f:facet name="footer">
+        <h:outputText value="#{mantenedorRemuneraciones.sumaRentaAfecta}">
+            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        </h:outputText>
+    </f:facet>
+</p:column>    
+    
+    
+    
 <p:column>
     <f:facet name="header">Alcance líquido</f:facet>
     <h:outputText value="#{r.alcanceLiquido}">
