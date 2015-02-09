@@ -21,6 +21,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
         <security:intercept-url pattern="/m/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
         <security:intercept-url pattern="/m/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
+        <security:intercept-url pattern="/m/reportes_sii" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
         <security:intercept-url pattern="/m/personal" access="hasRole('MANTENEDOR_PERSONAL_APP')"/>
         <security:intercept-url pattern="/m/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
         <security:intercept-url pattern="/m/programa_actividades" access="hasRole('MODULO_PROGRAMA_ACTIVIDADES')"/>
