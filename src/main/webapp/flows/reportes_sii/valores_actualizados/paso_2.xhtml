@@ -49,6 +49,43 @@
                     <p:column headerText="Impuesto único actualizado"></p:column>
                 </p:dataTable>
             </p:panel>
+            
+            <p:column>
+                <f:facet name="header">Total imponible</f:facet>
+                <h:outputText value="#{r.totalImponible}">
+                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                </h:outputText>
+                <f:facet name="footer">
+                    <h:outputText value="#{mantenedorRemuneraciones.sumaImponibles}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </h:outputText>
+                </f:facet>
+            </p:column>
+            
+            <p:column>
+                <f:facet name="header">Renta Afecta</f:facet>
+                <h:outputText value="#{r.rentaAfecta}">
+                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                </h:outputText>
+                <f:facet name="footer">
+                    <h:outputText value="#{mantenedorRemuneraciones.sumaRentaAfecta}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </h:outputText>
+                </f:facet>
+            </p:column>
+            
+            <p:column>
+                <f:facet name="header">Impuesto Único</f:facet>
+                <h:outputText value="#{r.impUnico}">
+                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
+                </h:outputText>
+                <f:facet name="footer">
+                    <h:outputText value="#{mantenedorRemuneraciones.totalImpUnico}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </h:outputText>
+                </f:facet>
+            </p:column>
+            
         </h:form>
     </ui:define>
 </ui:composition>
