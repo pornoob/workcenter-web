@@ -19,7 +19,7 @@ import workcenter.entidades.Remuneracion;
 public class LogicaLibroRemuneraciones {
 
     @Autowired
-    RemuneracionDao remuneracionDao;
+    private RemuneracionDao remuneracionDao;
 
     @Transactional(readOnly = true)
     public List<Remuneracion> obtenerSegunConductor(Personal c, Integer mes, Integer anio) {

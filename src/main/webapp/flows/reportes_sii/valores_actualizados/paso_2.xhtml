@@ -1,0 +1,54 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Factor de actualización</h2>
+        <p:growl autoUpdate="true" showDetail="true"/>
+        <h:form id="frmValorActualizado">
+            <p:panel header="Correción de impuesto">
+                <h:panelGrid columns="3">
+                    <h:outputLabel value="Empleador"/>:
+                    <p:selectOneMenu value="#{mantenedorValoresActualizados.empleador}" converter="entityConverter">
+                        <f:selectItem value="#{null}" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{mantenedorValoresActualizados.empleadores}" var="e"
+                                       itemLabel="#{e.nombre}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel value="Año"/>:
+                    <p:spinner min="2014" value="#{mantenedorValoresActualizados.anio}"/>
+                </h:panelGrid>
+                <p:outputPanel styleClass="actionPanel">
+                    <p:commandButton icon="ui-icon-refresh" value="Cargar conductores"
+                                     action="#{mantenedorValoresActualizados.cargarDatosConductores()}"
+                                     update="pConductores"/>
+                </p:outputPanel>
+            </p:panel>
+
+            <p:panel id="pConductores" header="Conductores"
+                     rendered="#{mantenedorValoresActualizados.empleador != null}">
+                <p:dataTable value="#{mantenedorValoresActualizados.remuneraciones}" var="r">
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
+                    </p:column>
+                    <p:column headerText="Rut">
+                        <h:outputText value="#{r.idPersonal.rut}" converter="rutConverter"/>
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
+                    </p:column>
+
+                    <p:column headerText="Total imponible"></p:column>
+                    <p:column headerText="Renta Afecta"></p:column>
+                    <p:column headerText="Impuesto único"></p:column>
+                    <p:column headerText="Factor"></p:column>
+
+                    <p:column headerText="Total imponible actualizado"></p:column>
+                    <p:column headerText="Renta Afecta actualizada"></p:column>
+                    <p:column headerText="Impuesto único actualizado"></p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

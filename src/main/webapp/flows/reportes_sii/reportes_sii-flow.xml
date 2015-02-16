@@ -11,7 +11,7 @@
         <transition on="flowValoresActualizados" to="valores_actualizados"/>
     </view-state>
 
-    <view-state id="valores_actualizados">
-        <transition on="flowInicio" to="reportes_sii"/>
-    </view-state>
+    <subflow-state id="valores_actualizados" subflow="reportes_sii/valores_actualizados">
+        <transition on="finSubFlow" to="reportes_sii"/>
+    </subflow-state>
 </flow>

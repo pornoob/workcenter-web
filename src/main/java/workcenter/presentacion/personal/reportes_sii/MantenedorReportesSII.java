@@ -1,13 +1,17 @@
-package workcenter.presentacion.personal;
+package workcenter.presentacion.personal.reportes_sii;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.Remuneracion;
 import workcenter.negocio.personal.LogicaLibroRemuneraciones;
+import workcenter.util.components.Constantes;
+import workcenter.util.dto.Mes;
 
 import java.io.Serializable;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by colivares on 09-02-15.
@@ -16,21 +20,6 @@ import java.util.List;
 @Scope("flow")
 public class MantenedorReportesSII implements Serializable {
 
-    @Autowired
-    private LogicaLibroRemuneraciones logicaLibroRemuneraciones;
-
-    private List<Remuneracion> remuneraciones;
-
     public void inicio() {
-
-    }
-
-    // getters and setters de aquí para abajo
-    public List<Remuneracion> getRemuneraciones() {
-        return remuneraciones;
-    }
-
-    public void setRemuneraciones(List<Remuneracion> remuneraciones) {
-        this.remuneraciones = remuneraciones;
     }
 }
