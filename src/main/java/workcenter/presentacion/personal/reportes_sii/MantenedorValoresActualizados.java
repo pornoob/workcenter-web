@@ -84,6 +84,11 @@ public class MantenedorValoresActualizados implements Serializable {
         return sdf.format(d);
     }
 
+    public Float obtenerFactor(Date d) {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM");
+        return Float.parseFloat(valoresMap.get(sdf.format(d)));
+    }
+
     // getters and setters
     public Map<String, String> getValoresMap() {
         return valoresMap;

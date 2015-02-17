@@ -21,70 +21,62 @@
                 </h:panelGrid>
                 <p:outputPanel styleClass="actionPanel">
                     <p:commandButton icon="ui-icon-refresh" value="Cargar conductores"
-                                     action="#{mantenedorValoresActualizados.cargarDatosConductores()}"
+                                     action="#{mantenedorValoresActualizados.cargarDatosConductores()}" immediate="false"
                                      update="pConductores"/>
                 </p:outputPanel>
             </p:panel>
 
-            <p:panel id="pConductores" header="Conductores"
-                     rendered="#{mantenedorValoresActualizados.empleador != null}">
-                <p:dataTable value="#{mantenedorValoresActualizados.remuneraciones}" var="r">
+            <p:panel id="pConductores" header="Conductores">
+                <p:dataTable value="#{mantenedorValoresActualizados.remuneraciones}" var="r" emptyMessage="No se han encontrado registros">
                     <p:column headerText="Fecha">
                         <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
                     </p:column>
                     <p:column headerText="Rut">
-                        <h:outputText value="#{r.idPersonal.rut}" converter="rutConverter"/>
+                        <h:outputText value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}" converter="rutConverter"/>
                     </p:column>
                     <p:column headerText="Nombre">
                         <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
                     </p:column>
 
-                    <p:column headerText="Total imponible"></p:column>
-                    <p:column headerText="Renta Afecta"></p:column>
-                    <p:column headerText="Impuesto único"></p:column>
-                    <p:column headerText="Factor"></p:column>
+                    <p:column headerText="Total imponible">
+                        <h:outputText value="#{r.totalImponible}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Renta Afecta">
+                        <h:outputText value="#{r.rentaAfecta}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Impuesto único">
+                        <p:inputText value="#{r.impUnico}" required="false"/>
+                    </p:column>
+                    <p:column headerText="Factor">
+                        <h:outputText value="#{mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)}"/>
+                    </p:column>
 
-                    <p:column headerText="Total imponible actualizado"></p:column>
-                    <p:column headerText="Renta Afecta actualizada"></p:column>
-                    <p:column headerText="Impuesto único actualizado"></p:column>
+                    <p:column headerText="Total imponible actualizado">
+                        <h:outputText value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.totalImponible}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Renta Afecta actualizada">
+                        <h:outputText value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.rentaAfecta}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Impuesto único actualizado">
+                        <h:outputText value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.impUnico}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                    </p:column>
                 </p:dataTable>
+
+                <p:outputPanel styleClass="actionPanel">
+                    <p:commandButton icon="ui-icon-disk" value="Actualizar Remuneraciones"/>
+                    <p:commandButton icon="ui-icon-play" value="Generar Informes"/>
+                </p:outputPanel>
             </p:panel>
-            
-            <p:column>
-                <f:facet name="header">Total imponible</f:facet>
-                <h:outputText value="#{r.totalImponible}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                </h:outputText>
-                <f:facet name="footer">
-                    <h:outputText value="#{mantenedorRemuneraciones.sumaImponibles}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                    </h:outputText>
-                </f:facet>
-            </p:column>
-            
-            <p:column>
-                <f:facet name="header">Renta Afecta</f:facet>
-                <h:outputText value="#{r.rentaAfecta}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                </h:outputText>
-                <f:facet name="footer">
-                    <h:outputText value="#{mantenedorRemuneraciones.sumaRentaAfecta}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                    </h:outputText>
-                </f:facet>
-            </p:column>
-            
-            <p:column>
-                <f:facet name="header">Impuesto Único</f:facet>
-                <h:outputText value="#{r.impUnico}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
-                </h:outputText>
-                <f:facet name="footer">
-                    <h:outputText value="#{mantenedorRemuneraciones.totalImpUnico}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                    </h:outputText>
-                </f:facet>
-            </p:column>
             
         </h:form>
     </ui:define>
