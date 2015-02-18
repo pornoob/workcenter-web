@@ -42,14 +42,31 @@
                         <h:outputText value="#{r.totalImponible}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponible}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     <p:column headerText="Renta Afecta">
                         <h:outputText value="#{r.rentaAfecta}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfecta}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     <p:column headerText="Impuesto único">
-                        <p:inputText value="#{r.impUnico}" required="false"/>
+                        <h:outputText value="#{r.impUnico}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnico}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     <p:column headerText="Factor">
                         <h:outputText value="#{mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)}"/>

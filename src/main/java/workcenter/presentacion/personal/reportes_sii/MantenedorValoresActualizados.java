@@ -145,4 +145,28 @@ public class MantenedorValoresActualizados implements Serializable {
     public void setRemuneraciones(List<Remuneracion> remuneraciones) {
         this.remuneraciones = remuneraciones;
     }
+    
+    public Integer getSumaTotalImponible() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getTotalImponible();
+        }
+        return total;
+    }
+    
+    public Integer getSumaRentaAfecta() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getRentaAfecta();
+        }
+        return total;
+    }
+    
+    public Integer getSumaImpuestoUnico() {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getImpUnico();
+        }
+        return total;
+    }
 }
