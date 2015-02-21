@@ -181,8 +181,12 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     private Integer obtenerKmSegunVueltaGuia(Equipo e) {
         Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
-        return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
+        if(ultimaVuelta != null){
+            return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
                 : ultimaVuelta.getKmFinal();
+        }else{
+            return 0;
+        }
     }
 
     public Integer obtenerKmSiguienteMantencion(MmeMantencionTracto mt) {

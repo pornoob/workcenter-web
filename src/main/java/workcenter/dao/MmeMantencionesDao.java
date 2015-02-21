@@ -35,11 +35,13 @@ public class MmeMantencionesDao {
 
     public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
         StringBuilder sql = new StringBuilder();
-        sql.append("select * from ( ");
-        sql.append("select m.id, m.id_tipo, max(m.fecha) as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
-        sql.append("from mme_mantenciones_tractos m where m.id_tipo is not null ");
-        sql.append("group by m.equipo order by m.id desc ");
-        sql.append(") t group by equipo order by fecha desc ");
+        sql.append("select m.id, m.id_tipo, m.fecha as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
+        sql.append("from mme_mantenciones_tractos m ");
+        sql.append("inner join (");
+        sql.append("select max(fecha) as fecha,equipo from mme_mantenciones_tractos group by 2");
+        sql.append(") u on m.fecha = u.fecha and m.equipo = u.equipo ");
+        sql.append("where m.id_tipo is not null ");
+        sql.append("order by u.fecha desc");
         return em.createNativeQuery(sql.toString(), MmeMantencionTracto.class).getResultList();
     }
 
