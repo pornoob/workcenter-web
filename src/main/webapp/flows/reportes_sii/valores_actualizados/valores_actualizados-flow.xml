@@ -11,5 +11,11 @@
         <transition on="flowCorregirImpuesto" to="paso_2"/>
     </view-state>
 
-    <view-state id="paso_2"></view-state>
+    <view-state id="paso_2">
+        <transition on="flowGenerarReporte" to="paso_3"/>
+    </view-state>
+
+    <view-state id="paso_3">
+
+    </view-state>
 </flow>

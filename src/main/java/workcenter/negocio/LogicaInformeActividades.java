@@ -9,6 +9,7 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.AlarmasGpsDao;
 import workcenter.dao.InformeActividadesDao;
 import workcenter.entidades.ActividadDiaria;
+import workcenter.entidades.MpaContrato;
 import workcenter.entidades.Servicio;
 import workcenter.entidades.TipoActividadDiaria;
 import workcenter.util.dto.Semana;
@@ -46,7 +47,7 @@ public class LogicaInformeActividades {
     }
 
     @Transactional(readOnly = true)
-    public List<ActividadDiaria> obtenerActividades(Servicio servicioSeleccionado, Semana semana) {
-        return informeActividadesDao.obtenerActividades(servicioSeleccionado, semana);
+    public List<ActividadDiaria> obtenerActividades(Servicio servicio, MpaContrato contrato, Semana semana) {
+        return informeActividadesDao.obtenerActividades(servicio, contrato, semana);
     }
 }

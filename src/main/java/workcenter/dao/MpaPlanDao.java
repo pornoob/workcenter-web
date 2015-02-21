@@ -185,4 +185,8 @@ public class MpaPlanDao {
                     .getSingleResult();
         } catch (Exception e) { return null; }
     }
+
+    public List<MpaContrato> obtenerContratos(Servicio servicio) {
+        return em.createNamedQuery("MpaContrato.findByServicio").setParameter("servicio", servicio).getResultList();
+    }
 }

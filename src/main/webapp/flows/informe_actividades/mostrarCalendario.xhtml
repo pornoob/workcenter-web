@@ -16,19 +16,28 @@
                     </tr>
                 </ui:repeat>
             </table>
-            <h:panelGrid columns="4">
+            <h:panelGrid columns="7">
                 <h:outputLabel value="Servicio"/>:
                 <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.servicioSeleccionado}"
                                  converter="entityConverter">
                     <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
-                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
-                            />
+                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"/>
+                    <p:ajax event="change" listener="#{mantenedorInformeActividades.actualizarContratos()}"
+                            update="sContratos"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Contrato"/>:
+                <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.contratoSeleccionado}"
+                                 converter="entityConverter" id="sContratos">
+                    <f:selectItem itemLabel="-- Todos --" itemValue="#{null}"/>
+                    <f:selectItems value="#{mantenedorInformeActividades.contratosServicios}" var="contrato"
+                                   itemLabel="#{contrato.nombre}" itemValue="#{contrato}"/>
                 </p:selectOneMenu>
                 <h:panelGroup>
                     <p:commandButton icon="ui-icon-refresh" value="Actualizar tabla"
                                      action="#{mantenedorInformeActividades.obtenerActividades()}" update=":frmAct"/>
                     <p:commandButton icon="ui-icon-plus" ajax="false" immediate="true"
-                                     value="Agregar Actividad" rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
+                                     value="Agregar Actividad"
+                                     rendered="#{sesionCliente.esEditor(constantes.moduloAdministradorRegistros)}"
                                      action="#{mantenedorInformeActividades.irAgregarActividad()}"/>
                 </h:panelGroup>
             </h:panelGrid>
@@ -67,8 +76,9 @@
                                 <td style="text-align: center">
                                     <ui:repeat value="#{mantenedorInformeActividades.tipoActividades}" var="ta">
                                         <p:outputPanel style="border:0; float: left; padding-right: 12px"
-                                                 rendered="#{mantenedorInformeActividades.hayActividadDelTipo(ta, dia.fecha, horario)}">
-                                            <img style="width: 15px; height: 10px" src="#{request.contextPath}#{ta.icono}"/>
+                                                       rendered="#{mantenedorInformeActividades.hayActividadDelTipo(ta, dia.fecha, horario)}">
+                                            <img style="width: 15px; height: 10px"
+                                                 src="#{request.contextPath}#{ta.icono}"/>
                                         </p:outputPanel>
                                     </ui:repeat>
 

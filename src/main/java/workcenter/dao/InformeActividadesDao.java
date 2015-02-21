@@ -2,14 +2,18 @@
 package workcenter.dao;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.ActividadDiaria;
-import workcenter.entidades.Servicio;
-import workcenter.entidades.TipoActividadDiaria;
+import workcenter.entidades.*;
 import workcenter.util.dto.Semana;
 
 /**
@@ -33,18 +37,25 @@ public class InformeActividadesDao {
         }
     }
 
-    public List<ActividadDiaria> obtenerActividades(Servicio servicio, Semana semana) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select ad.* from actividad_diaria ad ");
-        sql.append("inner join servicio s on (ad.id_servicio=s.id and ad.id_servicio = :idServicio) ");
-        sql.append("where ad.fecha >= :fechaInicio and fecha<= :fechaTermino");
-        Query q = em.createNativeQuery(sql.toString(), ActividadDiaria.class);
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-//        System.out.println(sql.toString().replaceAll(":idServicio", String.valueOf(servicio.getId())).replaceAll(":fechaInicio", sdf.format(semana.getDias()[0].getFecha())).replaceAll(":fechaTermino", sdf.format(semana.getDias()[6].getFecha())));
-        q.setParameter("idServicio", servicio.getId());
-        q.setParameter("fechaInicio", semana.getDias()[0].getFecha());
-        q.setParameter("fechaTermino", semana.getDias()[6].getFecha());
-        return q.getResultList();
+    public List<ActividadDiaria> obtenerActividades(Servicio servicio, MpaContrato contrato, Semana semana) {
+        em.createQuery("select ad from ActividadDiaria ad where ad.idServicio = :servicio and ad.contrato=:contrato and ad.fecha >= :fechaInicio and fecha<= :fechaTermino");
+
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<ActividadDiaria> cq = cb.createQuery(ActividadDiaria.class);
+        Root<ActividadDiaria> actividad = cq.from(ActividadDiaria.class);
+        cq.select(actividad);
+        List<Predicate> filtros = new ArrayList<Predicate>();
+
+        filtros.add(cb.equal(actividad.get(ActividadDiaria_.idServicio), servicio));
+        filtros.add(cb.greaterThanOrEqualTo(actividad.get(ActividadDiaria_.fecha), semana.getDias()[0].getFecha()));
+        filtros.add(cb.lessThanOrEqualTo(actividad.get(ActividadDiaria_.fecha), semana.getDias()[6].getFecha()));
+
+        if (contrato != null) {
+            filtros.add(cb.equal(actividad.get(ActividadDiaria_.contrato), contrato));
+        }
+
+        cq.where(filtros.toArray(new Predicate[]{}));
+        return em.createQuery(cq).getResultList();
     }
     
 }

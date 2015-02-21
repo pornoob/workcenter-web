@@ -9,7 +9,8 @@ import java.io.Serializable;
 @Entity
 @Table(name = "mpa_contrato", schema = "")
 @NamedQueries({
-        @NamedQuery(name = "MpaContrato.findAll", query = "select c from MpaContrato c order by c.idServicio.id, c.nombre")
+        @NamedQuery(name = "MpaContrato.findAll", query = "select c from MpaContrato c order by c.idServicio.id, c.nombre"),
+        @NamedQuery(name = "MpaContrato.findByServicio", query = "select c from MpaContrato c where c.idServicio=:servicio order by c.nombre")
 })
 public class MpaContrato implements Serializable {
     private Integer id;
