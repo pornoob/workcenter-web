@@ -14,37 +14,57 @@
             <p:growl autoUpdate="true" showDetail="true"/>
             <h:panelGrid columns="6">
                 <h:outputLabel value="Servicio"/>:
-                <p:selectOneMenu id="sServicios" filter="true" filterMatchMode="contains" value="#{mantenedorInformeActividades.servicioSeleccionado}"
+                <p:selectOneMenu id="sServicios" filter="true" filterMatchMode="contains"
+                                 value="#{mantenedorInformeActividades.servicioSeleccionado}"
                                  converter="entityConverter">
                     <f:selectItems value="#{mantenedorInformeActividades.servicios}" var="servicio"
-                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"
-                                   />
-                </p:selectOneMenu><h:outputText value=""/><h:outputText value=""/><h:outputText value=""/>
+                                   itemLabel="#{servicio.nombre}" itemValue="#{servicio}"/>
+                    <p:ajax event="change" listener="#{mantenedorInformeActividades.actualizarContratos()}"
+                            update="sContratos"/>
+                </p:selectOneMenu>
+                <h:outputLabel value="Contrato"/>:
+                <p:selectOneMenu filter="true" value="#{mantenedorInformeActividades.contratoSeleccionado}"
+                                 converter="entityConverter" id="sContratos" required="true"
+                                 requiredMessage="Debes especificar el contrato del servicio">
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}" noSelectionOption="true"/>
+                    <f:selectItems value="#{mantenedorInformeActividades.contratosServicios}" var="contrato"
+                                   itemLabel="#{contrato.nombre}" itemValue="#{contrato}"/>
+                </p:selectOneMenu>
                 <h:outputLabel value="Creador"/>:
                 <h:outputText value="#{sesionCliente.nombreCompleto}"/>
                 <h:outputLabel value="Hora de ingreso"/>:
                 <h:panelGroup>
-                    <p:spinner id="iHora" required="true" requiredMessage="Debes indicar la hora de la actividad" min="0" max="23" size="2" value="#{mantenedorInformeActividades.actividadDiaria.hora}"/> : 00
+                    <p:spinner id="iHora" required="true" requiredMessage="Debes indicar la hora de la actividad"
+                               min="0" max="23" size="2"
+                               value="#{mantenedorInformeActividades.actividadDiaria.hora}"/> : 00
                 </h:panelGroup>
                 <h:outputLabel value="Tipo actividad"/>:
-                <p:selectOneMenu value="#{mantenedorInformeActividades.actividadDiaria.idTipoActividad}" var="ta" converter="entityConverter">
+                <p:selectOneMenu value="#{mantenedorInformeActividades.actividadDiaria.idTipoActividad}" var="ta"
+                                 converter="entityConverter">
                     <f:selectItems value="#{mantenedorInformeActividades.tipoActividades}" var="tipoActividad"
                                    itemLabel="#{tipoActividad.nombre}" itemValue="#{tipoActividad}"/>
                     <p:column><img src="#{request.contextPath}#{ta.icono}"/></p:column>
-                    <p:column><h:outputLabel value="#{ta.nombre}" /></p:column>
+                    <p:column><h:outputLabel value="#{ta.nombre}"/></p:column>
                 </p:selectOneMenu>
                 <h:outputLabel value="Fecha"/>:
                 <h:panelGroup>
-                    <p:calendar id="iFecha" required="true" requiredMessage="Debes especificar el día de la actividad" pattern="dd-MM-yyyy" converter="fechaConverter" value="#{mantenedorInformeActividades.actividadDiaria.fecha}"/> (dd-mm-yyyy)
+                    <p:calendar id="iFecha" required="true" requiredMessage="Debes especificar el día de la actividad"
+                                pattern="dd-MM-yyyy" converter="fechaConverter"
+                                value="#{mantenedorInformeActividades.actividadDiaria.fecha}"/> (dd-mm-yyyy)
                 </h:panelGroup>
             </h:panelGrid>
             <h:panelGrid columns="3">
                 <h:outputLabel value="Detalle"/>:
-                <p:inputTextarea id="iDetalle" required="true" requiredMessage="Debes indicar un detalle de la actividad" value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000" style="width: 800px;height: 100px"/>
+                <p:inputTextarea id="iDetalle" required="true"
+                                 requiredMessage="Debes indicar un detalle de la actividad"
+                                 value="#{mantenedorInformeActividades.actividadDiaria.detalle}" maxlength="1000"
+                                 style="width: 800px;height: 100px"/>
             </h:panelGrid>
             <p:outputPanel styleClass="actionPanel">
-                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver" action="#{mantenedorInformeActividades.volver()}" immediate="true"/>
-                <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{mantenedorInformeActividades.guardar()}" immediate="false" process="@form" update=":frmAct"/>
+                <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
+                                 action="#{mantenedorInformeActividades.volver()}" immediate="true"/>
+                <p:commandButton icon="ui-icon-disk" value="Guardar" action="#{mantenedorInformeActividades.guardar()}"
+                                 immediate="false" process="@form" update=":frmAct"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

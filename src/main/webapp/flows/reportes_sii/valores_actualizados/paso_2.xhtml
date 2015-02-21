@@ -76,22 +76,37 @@
                         <h:outputText value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.totalImponible}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponibleActualizado}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     <p:column headerText="Renta Afecta actualizada">
                         <h:outputText value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.rentaAfecta}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfectaActualizada}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                     <p:column headerText="Impuesto único actualizado">
                         <h:outputText value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.impUnico}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </h:outputText>
+                        <f:facet name="footer">
+                            <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizado}">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </f:facet>
                     </p:column>
                 </p:dataTable>
 
                 <p:outputPanel styleClass="actionPanel">
                     <p:commandButton icon="ui-icon-disk" value="Actualizar Remuneraciones"/>
-                    <p:commandButton icon="ui-icon-play" value="Generar Informes"/>
+                    <p:commandButton icon="ui-icon-play" value="Generar Informes" action="#{mantenedorValoresActualizados.}"/>
                 </p:outputPanel>
             </p:panel>
             

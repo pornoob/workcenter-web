@@ -14,12 +14,10 @@ import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.ActividadDiaria;
-import workcenter.entidades.Documento;
-import workcenter.entidades.Servicio;
-import workcenter.entidades.TipoActividadDiaria;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaInformeActividades;
+import workcenter.negocio.LogicaProgramaActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
@@ -37,19 +35,22 @@ import workcenter.util.components.FacesUtil;
 public class MantenedorInformeActividades implements Serializable, WorkcenterFileListener {
 
     @Autowired
-    LogicaInformeActividades logicaInformeActividades;
+    private LogicaInformeActividades logicaInformeActividades;
 
     @Autowired
-    SesionCliente sesionCliente;
+    private SesionCliente sesionCliente;
 
     @Autowired
-    FicheroUploader ficheroUploader;
+    private FicheroUploader ficheroUploader;
 
     @Autowired
-    LogicaDocumentos logicaDocumentos;
+    private LogicaDocumentos logicaDocumentos;
 
     @Autowired
-    Constantes constantes;
+    private LogicaProgramaActividades logicaProgramaActividades;
+
+    @Autowired
+    private Constantes constantes;
 
     private Semana semana;
     private String linkAnterior;
@@ -63,6 +64,8 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
     private Map<String, List<Documento>> documentosSubidos;
     private List<ActividadDiaria> actividades;
     private List<ActividadDiaria> actividadesDetalladas;
+    private List<MpaContrato> contratosServicios;
+    private MpaContrato contratoSeleccionado;
 
     public String inicio() {
         linkAnterior = "<< Anterior";
@@ -71,6 +74,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         obtenerServicios();
         try {
             servicioSeleccionado = servicios.get(0);
+            actualizarContratos();;
         } catch (NullPointerException e) {
             servicioSeleccionado = null;
         } catch (IndexOutOfBoundsException ioe) {
@@ -80,6 +84,10 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         obtenerTiposActividades();
         obtenerActividades();
         return "flowMostrarCalendario";
+    }
+
+    public void actualizarContratos() {
+        contratosServicios = logicaProgramaActividades.obtenerContratos(servicioSeleccionado);
     }
 
     public boolean horaMenorDiez(Integer hora) {
@@ -126,7 +134,7 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
         if (servicioSeleccionado == null) {
             return;
         }
-        actividades = logicaInformeActividades.obtenerActividades(servicioSeleccionado, semana);
+        actividades = logicaInformeActividades.obtenerActividades(servicioSeleccionado, contratoSeleccionado, semana);
     }
 
     public String volver() {
@@ -339,6 +347,22 @@ public class MantenedorInformeActividades implements Serializable, WorkcenterFil
 
     public void setActividadesDetalladas(List<ActividadDiaria> actividadesDetalladas) {
         this.actividadesDetalladas = actividadesDetalladas;
+    }
+
+    public List<MpaContrato> getContratosServicios() {
+        return contratosServicios;
+    }
+
+    public void setContratosServicios(List<MpaContrato> contratosServicios) {
+        this.contratosServicios = contratosServicios;
+    }
+
+    public MpaContrato getContratoSeleccionado() {
+        return contratoSeleccionado;
+    }
+
+    public void setContratoSeleccionado(MpaContrato contratoSeleccionado) {
+        this.contratoSeleccionado = contratoSeleccionado;
     }
 
     public void subir(FileUploadEvent fue) {

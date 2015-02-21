@@ -102,4 +102,8 @@ public class LogicaProgramaActividades {
     public MpaPlanPrograma obtenerPlan(MpaPrograma programa, MpaActividad actividad, Personal responsable, MpaContrato contrato, Integer anio) {
         return mpaPlanDao.obtenerPlan(programa, actividad, responsable, contrato, anio);
     }
+
+    public List<MpaContrato> obtenerContratos(Servicio servicio) {
+        return mpaPlanDao.obtenerContratos(servicio);
+    }
 }

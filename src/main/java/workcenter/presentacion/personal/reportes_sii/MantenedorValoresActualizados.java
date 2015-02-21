@@ -89,6 +89,64 @@ public class MantenedorValoresActualizados implements Serializable {
         return Float.parseFloat(valoresMap.get(sdf.format(d)));
     }
 
+    public String generarInforme() {
+        return "flowGenerarReporte";
+    }
+
+    public Integer getSumaTotalImponible() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += r.getTotalImponible();
+            }
+        return total;
+    }
+
+    public Integer getSumaTotalImponibleActualizado() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += (r.getTotalImponible()  * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+            }
+        return total;
+    }
+
+    public Integer getSumaRentaAfecta() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += r.getRentaAfecta();
+            }
+        return total;
+    }
+
+    public Integer getSumaRentaAfectaActualizada() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getRentaAfecta());
+            }
+        return total;
+    }
+
+    public Integer getSumaImpuestoUnico() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += r.getImpUnico();
+            }
+        return total;
+    }
+
+    public Integer getSumaImpuestoUnicoActualizado() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getImpUnico());
+            }
+        return total;
+    }
+
     // getters and setters
     public Map<String, String> getValoresMap() {
         return valoresMap;
@@ -144,29 +202,5 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public void setRemuneraciones(List<Remuneracion> remuneraciones) {
         this.remuneraciones = remuneraciones;
-    }
-    
-    public Integer getSumaTotalImponible() {
-        int total = 0;
-        for (Remuneracion r : remuneraciones) {
-            total += r.getTotalImponible();
-        }
-        return total;
-    }
-    
-    public Integer getSumaRentaAfecta() {
-        int total = 0;
-        for (Remuneracion r : remuneraciones) {
-            total += r.getRentaAfecta();
-        }
-        return total;
-    }
-    
-    public Integer getSumaImpuestoUnico() {
-        int total = 0;
-        for (Remuneracion r : remuneraciones) {
-            total += r.getImpUnico();
-        }
-        return total;
     }
 }

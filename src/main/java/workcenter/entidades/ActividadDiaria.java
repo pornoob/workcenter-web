@@ -42,10 +42,15 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "ActividadDiaria.findByFecha", query = "SELECT a FROM ActividadDiaria a WHERE a.fecha = :fecha"),
     @NamedQuery(name = "ActividadDiaria.findByDetalle", query = "SELECT a FROM ActividadDiaria a WHERE a.detalle = :detalle")})
 public class ActividadDiaria implements Serializable {
+    private static final long serialVersionUID = 1L;
+
     @JoinColumn(name = "id_servicio", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.EAGER)
     private Servicio idServicio;
-    private static final long serialVersionUID = 1L;
+
+    @JoinColumn(name = "id_contrato", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.EAGER)
+    private MpaContrato contrato;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -164,4 +169,11 @@ public class ActividadDiaria implements Serializable {
         this.persona = persona;
     }
 
+    public MpaContrato getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(MpaContrato contrato) {
+        this.contrato = contrato;
+    }
 }
