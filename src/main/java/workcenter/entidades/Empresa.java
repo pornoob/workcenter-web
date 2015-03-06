@@ -34,7 +34,6 @@ public class Empresa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Size(max = 70)
@@ -137,15 +136,13 @@ public class Empresa implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Empresa)) {
             return false;
         }
         Empresa other = (Empresa) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+
+        return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override
