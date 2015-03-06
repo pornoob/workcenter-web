@@ -259,17 +259,12 @@ public class Personal implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Personal)) {
             return false;
         }
         Personal other = (Personal) object;
-        if (this.getRut() == null || other.getRut() == null) {
-            return false;
-        } else if (this.getRut().intValue() != other.getRut().intValue()) {
-            return false;
-        }
-        return true;
+        if (this.getRut() == null || other.getRut() == null) return false;
+        return this.getRut().intValue() == other.getRut().intValue();
     }
 
     @Override

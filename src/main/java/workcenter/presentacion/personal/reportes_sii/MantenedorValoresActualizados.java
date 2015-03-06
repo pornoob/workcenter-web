@@ -40,8 +40,13 @@ public class MantenedorValoresActualizados implements Serializable {
     private List<Personal> conductores;
     private List<Empresa> empleadores;
     private Empresa empleador;
+    private Personal conductor;
     private String anio;
     private List<Remuneracion> remuneraciones;
+
+    // Variables que solo afectan el render
+    private Boolean primeraCargaPaso2;
+    private Boolean primeraCargaPaso3;
 
     public void inicio() {
         valores = logicaReportesSII.obtenerFactoresActualizacionSII();
@@ -51,6 +56,7 @@ public class MantenedorValoresActualizados implements Serializable {
             if (f.getIdMes() < 10) idMes = "0" + idMes;
             valoresMap.put(idMes, String.valueOf(f.getValor()));
         }
+        primeraCargaPaso2 = Boolean.TRUE;
     }
 
     public String actualizarValoresConductores() {
@@ -76,6 +82,8 @@ public class MantenedorValoresActualizados implements Serializable {
     }
 
     public void cargarDatosConductores() {
+        primeraCargaPaso2 = Boolean.FALSE;
+        primeraCargaPaso3 = Boolean.TRUE;
         remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleador, null, Integer.parseInt(anio));
     }
 
@@ -89,8 +97,13 @@ public class MantenedorValoresActualizados implements Serializable {
         return Float.parseFloat(valoresMap.get(sdf.format(d)));
     }
 
-    public String generarInforme() {
+    public String prepararInforme() {
+        conductores = logicaPersonal.obtenerConductores();
         return "flowGenerarReporte";
+    }
+
+    public void generarInforme() {
+        primeraCargaPaso3 = Boolean.FALSE;
     }
 
     public Integer getSumaTotalImponible() {
@@ -142,6 +155,77 @@ public class MantenedorValoresActualizados implements Serializable {
         int total = 0;
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
+                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getImpUnico());
+            }
+        return total;
+    }
+
+    // Zona ficticia para generar las remuneraciones asociados al empleador y al conductor seleccionado
+    public List<Remuneracion> getRemuneracionesInforme() {
+        List<Remuneracion> retorno = new ArrayList<Remuneracion>();
+        if (conductor == null || empleador == null) return retorno;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+            retorno.add(r);
+        }
+        return retorno;
+    }
+
+    public Integer getSumaTotalImponibleInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+                total += r.getTotalImponible();
+            }
+        return total;
+    }
+
+    public Integer getSumaTotalImponibleActualizadoInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+                total += (r.getTotalImponible()  * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+            }
+        return total;
+    }
+
+    public Integer getSumaRentaAfectaInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+                total += r.getRentaAfecta();
+            }
+        return total;
+    }
+
+    public Integer getSumaRentaAfectaActualizadaInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getRentaAfecta());
+            }
+        return total;
+    }
+
+    public Integer getSumaImpuestoUnicoInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
+                total += r.getImpUnico();
+            }
+        return total;
+    }
+
+    public Integer getSumaImpuestoUnicoActualizadoInforme() {
+        int total = 0;
+        if (remuneraciones != null)
+            for (Remuneracion r : remuneraciones) {
+                if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
                 total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getImpUnico());
             }
         return total;
@@ -202,5 +286,29 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public void setRemuneraciones(List<Remuneracion> remuneraciones) {
         this.remuneraciones = remuneraciones;
+    }
+
+    public Boolean getPrimeraCargaPaso2() {
+        return primeraCargaPaso2;
+    }
+
+    public void setPrimeraCargaPaso2(Boolean primeraCargaPaso2) {
+        this.primeraCargaPaso2 = primeraCargaPaso2;
+    }
+
+    public Boolean getPrimeraCargaPaso3() {
+        return primeraCargaPaso3;
+    }
+
+    public void setPrimeraCargaPaso3(Boolean primeraCargaPaso3) {
+        this.primeraCargaPaso3 = primeraCargaPaso3;
+    }
+
+    public Personal getConductor() {
+        return conductor;
+    }
+
+    public void setConductor(Personal conductor) {
+        this.conductor = conductor;
     }
 }
