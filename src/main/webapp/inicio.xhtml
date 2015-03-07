@@ -103,6 +103,15 @@
                         <h:graphicImage value="/img/icons/64/m_programa_actividades.png"/>
                         <h:outputLabel value="Programa de Actividades"/>
                     </h:commandLink>
+
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
+                                   action="#{facesUtil.redirigir('/m/reportes_sii')}"
+                                   class="menuWorkcenter"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <!--<h:graphicImage value="/img/icons/64/m_reportes_sii.png"/>-->
+                        <h:outputLabel value="Reportes para SII"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
         </h:form>
