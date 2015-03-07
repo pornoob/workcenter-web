@@ -31,7 +31,11 @@
             <p:outputPanel id="contenedorConductores">
                 <p:panel id="pConductores" header="Conductores"
                          rendered="#{!mantenedorValoresActualizados.primeraCargaPaso2}">
-                    <p:dataTable value="#{mantenedorValoresActualizados.remuneraciones}" var="r"
+                    <h:commandLink>
+                        <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
+                        <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
+                    </h:commandLink>
+                    <p:dataTable id="tValoresAct" value="#{mantenedorValoresActualizados.remuneraciones}" var="r"
                                  emptyMessage="No se han encontrado registros">
                         <p:column headerText="Fecha">
                             <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
