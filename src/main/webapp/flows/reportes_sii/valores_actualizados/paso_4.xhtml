@@ -8,50 +8,43 @@
         <h2>Factor de actualización</h2>
         <p:growl autoUpdate="true" showDetail="true"/>
         <h:form id="frmValorActualizado">
-            <p:panel header="Correción de impuesto">
+            <p:panel header="Filtros Informe">
                 <h:panelGrid columns="3">
                     <h:outputLabel value="Empleador"/>:
                     <p:selectOneMenu value="#{mantenedorValoresActualizados.empleador}" converter="entityConverter"
-                                     filter="true" filterMatchMode="contains">
+                            filter="true" filterMatchMode="contains">
                         <f:selectItem value="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorValoresActualizados.empleadores}" var="e"
                                        itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
+
                     <h:outputLabel value="Año"/>:
                     <p:spinner min="2014" value="#{mantenedorValoresActualizados.anio}"/>
                 </h:panelGrid>
                 <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton icon="ui-icon-play" value="Cargar conductores"
-                                     action="#{mantenedorValoresActualizados.cargarDatosConductores()}"
-                                     immediate="false"
-                                     update="contenedorConductores"/>
+                    <p:commandButton icon="ui-icon-play" value="Generar Resumen Anual" immediate="false"
+                                     update="contenedorInforme" process="@form"
+                                     action="#{mantenedorValoresActualizados.generarResumenAnual()}"/>
                 </p:outputPanel>
             </p:panel>
-
-            <p:outputPanel id="contenedorConductores">
-                <p:panel id="pConductores" header="Conductores"
-                         rendered="#{!mantenedorValoresActualizados.primeraCargaPaso2}">
+            <p:outputPanel id="contenedorInforme">
+                <p:panel header="Informe" rendered="#{!mantenedorValoresActualizados.primeraCargaPaso4}">
                     <h:commandLink>
                         <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
                         <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
                     </h:commandLink>
-                    <p:dataTable id="tValoresAct" value="#{mantenedorValoresActualizados.remuneraciones}" var="r"
-                                 emptyMessage="No se han encontrado registros" filterEvent="enter">
-                        <p:column headerText="Fecha">
-                            <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
-                        </p:column>
-                        <p:column headerText="Rut" filterBy="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
-                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                            <h:outputText value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
+                    <p:dataTable value="#{mantenedorValoresActualizados.conductores}" var="c"
+                                 emptyMessage="No se han encontrado registros" filterEvent="enter" id="tValoresAct">
+                        <p:column headerText="Rut">
+                            <h:outputText value="#{c.rut}-#{c.digitoverificador}"
                                           converter="rutConverter"/>
                         </p:column>
-                        <p:column headerText="Nombre" filterBy="#{r.idPersonal.nombreCompleto}"
-                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                            <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
+                        <p:column headerText="Nombre">
+                            <h:outputText value="#{c.nombreCompleto}"/>
                         </p:column>
 
                         <p:column headerText="Total imponible">
-                            <h:outputText value="#{r.totalImponible}">
+                            <h:outputText value="#{mantenedorValoresActualizados.obtenerTotalImponible(c)}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -61,7 +54,7 @@
                             </f:facet>
                         </p:column>
                         <p:column headerText="Renta Afecta">
-                            <h:outputText value="#{r.rentaAfecta}">
+                            <h:outputText value="#{mantenedorValoresActualizados.obtenerTotalRentaAfecta(c)}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -71,61 +64,55 @@
                             </f:facet>
                         </p:column>
                         <p:column headerText="Impuesto único">
-                            <p:inputText value="#{r.impUnico}" style="width: 60px" required="false"/>
+                            <h:outputText value="#{mantenedorValoresActualizados.obtenerTotalImpuestoUnico(c)}" style="width: 60px">
+                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnico}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
-                        <p:column headerText="Factor">
-                            <h:outputText value="#{mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)}"/>
-                        </p:column>
 
                         <p:column headerText="Total imponible actualizado">
                             <h:outputText
-                                    value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.totalImponible}">
+                                    value="#{mantenedorValoresActualizados.obtenerTotalImponibleActualizado(c)}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponibleActualizado}">
+                                <h:outputText
+                                        value="#{mantenedorValoresActualizados.sumaTotalImponibleActualizado}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Renta Afecta actualizada">
                             <h:outputText
-                                    value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.rentaAfecta}">
+                                    value="#{mantenedorValoresActualizados.obtenerTotalRentaAfectaActualizado(c)}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfectaActualizada}">
+                                <h:outputText
+                                        value="#{mantenedorValoresActualizados.sumaRentaAfectaActualizada}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Impuesto único actualizado">
                             <h:outputText
-                                    value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.impUnico}">
+                                    value="#{mantenedorValoresActualizados.obtenerTotalImpuestoUnicoActualizado(c)}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizado}">
+                                <h:outputText
+                                        value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizado}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                     </p:dataTable>
-
-                    <p:outputPanel styleClass="actionPanel">
-                        <p:commandButton icon="ui-icon-refresh" value="Recalcular valores actualizados"
-                                         update="pConductores"/>
-                        <p:commandButton icon="ui-icon-play" value="Generar Informes"
-                                         action="#{mantenedorValoresActualizados.prepararInforme()}"/>
-                    </p:outputPanel>
                 </p:panel>
             </p:outputPanel>
-
         </h:form>
     </ui:define>
 </ui:composition>

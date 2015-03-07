@@ -10,8 +10,8 @@
             <property name="hibernate.connection.charSet" value="UTF-8"/>
             <!--<property name="hibernate.show_sql" value="true"/>-->
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/TransportesVentanas"/>
-            <!--<property name="hibernate.connection.url" value="jdbc:mysql://186.103.133.53:3306/TransportesVentanas?zeroDateTimeBehavior=convertToNull"/>-->
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/TransportesVentanas"/>-->
+            <property name="hibernate.connection.url" value="jdbc:mysql://186.103.133.53:3306/TransportesVentanas?zeroDateTimeBehavior=convertToNull"/>
             <!--<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/desarrollo?zeroDateTimeBehavior=convertToNull"/>-->
             <property name="hibernate.connection.username" value="workcenter"/>
             <property name="hibernate.connection.password" value="w0rc3nt3r."/>

@@ -16,6 +16,10 @@
     </view-state>
 
     <view-state id="paso_3">
+        <transition on="paso2" to="paso_2"/>
+        <transition on="paso4" to="paso_4"/>
+    </view-state>
 
+    <view-state id="paso_4">
     </view-state>
 </flow>

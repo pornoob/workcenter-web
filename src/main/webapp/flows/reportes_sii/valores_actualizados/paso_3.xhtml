@@ -14,23 +14,25 @@
                     <p:selectOneMenu value="#{mantenedorValoresActualizados.empleador}" converter="entityConverter">
                         <f:selectItem value="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorValoresActualizados.empleadores}" var="e"
-                                       itemLabel="#{e.nombre}"/>
+                                       itemLabel="#{e.nombre}" filter="true" filterMatchMode="contains"/>
                     </p:selectOneMenu>
 
                     <h:outputLabel value="Año"/>:
                     <p:spinner min="2014" value="#{mantenedorValoresActualizados.anio}"/>
                     <h:outputLabel value="Conductor"/>:
                     <p:selectOneMenu value="#{mantenedorValoresActualizados.conductor}" converter="entityConverter"
-                                     filter="true">
+                                     filter="true" filterMatchMode="contains">
                         <f:selectItem value="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorValoresActualizados.conductores}" var="c"
                                        itemLabel="#{c.nombreCompleto}" itemValue="#{c}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>
                 <p:outputPanel styleClass="actionPanel">
-                    <p:commandButton icon="ui-icon-play" value="Generar Informe" immediate="false"
+                    <p:commandButton icon="ui-icon-play" value="Generar Informe Del Conductor" immediate="false"
                                      update="contenedorInforme" process="@form"
                                      action="#{mantenedorValoresActualizados.generarInforme()}"/>
+                    <p:commandButton icon="ui-icon-play" value="Continuar a Resumen Anual"
+                                     action="#{mantenedorValoresActualizados.prepararResumenAnual()}"/>
                 </p:outputPanel>
             </p:panel>
             <p:outputPanel id="contenedorInforme">
@@ -88,7 +90,7 @@
 
                         <p:column headerText="Total imponible actualizado">
                             <h:outputText
-                                    value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.totalImponible}">
+                                    value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.totalImponible}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -100,7 +102,7 @@
                         </p:column>
                         <p:column headerText="Renta Afecta actualizada">
                             <h:outputText
-                                    value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.rentaAfecta}">
+                                    value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.rentaAfecta}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -112,7 +114,7 @@
                         </p:column>
                         <p:column headerText="Impuesto único actualizado">
                             <h:outputText
-                                    value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion) + r.impUnico}">
+                                    value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.impUnico}">
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -123,6 +125,11 @@
                             </f:facet>
                         </p:column>
                     </p:dataTable>
+
+                    <p:outputPanel styleClass="actionPanel">
+                        <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
+                                         action="#{mantenedorValoresActualizados.irPaso2()}"/>
+                    </p:outputPanel>
                 </p:panel>
             </p:outputPanel>
         </h:form>

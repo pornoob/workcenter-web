@@ -47,6 +47,7 @@ public class MantenedorValoresActualizados implements Serializable {
     // Variables que solo afectan el render
     private Boolean primeraCargaPaso2;
     private Boolean primeraCargaPaso3;
+    private Boolean primeraCargaPaso4;
 
     public void inicio() {
         valores = logicaReportesSII.obtenerFactoresActualizacionSII();
@@ -93,17 +94,89 @@ public class MantenedorValoresActualizados implements Serializable {
     }
 
     public Float obtenerFactor(Date d) {
+        if (d == null) return (float)0;
         SimpleDateFormat sdf = new SimpleDateFormat("MM");
         return Float.parseFloat(valoresMap.get(sdf.format(d)));
     }
 
     public String prepararInforme() {
-        conductores = logicaPersonal.obtenerConductores();
+        conductores = new ArrayList<Personal>();
+        for (Remuneracion r : remuneraciones) {
+            if (conductores.contains(r.getIdPersonal())) continue;
+            conductores.add(r.getIdPersonal());
+        }
         return "flowGenerarReporte";
+    }
+
+    public String irPaso2() {
+        return "paso2";
     }
 
     public void generarInforme() {
         primeraCargaPaso3 = Boolean.FALSE;
+    }
+
+    public String prepararResumenAnual() {
+        primeraCargaPaso4 = Boolean.TRUE;
+        return "paso4";
+    }
+
+    public void generarResumenAnual() {
+        primeraCargaPaso4 = Boolean.FALSE;
+    }
+
+    public Integer obtenerTotalImponible(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += r.getTotalImponible();
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalRentaAfecta(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += r.getRentaAfecta();
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalImpuestoUnico(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += r.getImpUnico();
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalImponibleActualizado(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += (r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalRentaAfectaActualizado(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += (r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta());
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalImpuestoUnicoActualizado(Personal p) {
+        int total = 0;
+        for (Remuneracion r : remuneraciones) {
+            if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(p)) continue;
+            total += (r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico());
+        }
+        return total;
     }
 
     public Integer getSumaTotalImponible() {
@@ -119,7 +192,7 @@ public class MantenedorValoresActualizados implements Serializable {
         int total = 0;
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
-                total += (r.getTotalImponible()  * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
             }
         return total;
     }
@@ -186,7 +259,7 @@ public class MantenedorValoresActualizados implements Serializable {
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
                 if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
-                total += (r.getTotalImponible()  * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
             }
         return total;
     }
@@ -302,6 +375,14 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public void setPrimeraCargaPaso3(Boolean primeraCargaPaso3) {
         this.primeraCargaPaso3 = primeraCargaPaso3;
+    }
+
+    public Boolean getPrimeraCargaPaso4() {
+        return primeraCargaPaso4;
+    }
+
+    public void setPrimeraCargaPaso4(Boolean primeraCargaPaso4) {
+        this.primeraCargaPaso4 = primeraCargaPaso4;
     }
 
     public Personal getConductor() {
