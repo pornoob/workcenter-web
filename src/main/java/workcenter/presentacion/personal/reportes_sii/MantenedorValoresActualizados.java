@@ -192,7 +192,7 @@ public class MantenedorValoresActualizados implements Serializable {
         int total = 0;
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
-                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
             }
         return total;
     }
@@ -210,7 +210,7 @@ public class MantenedorValoresActualizados implements Serializable {
         int total = 0;
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
-                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getRentaAfecta());
+                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta());
             }
         return total;
     }
@@ -228,7 +228,7 @@ public class MantenedorValoresActualizados implements Serializable {
         int total = 0;
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
-                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getImpUnico());
+                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico());
             }
         return total;
     }
@@ -259,7 +259,7 @@ public class MantenedorValoresActualizados implements Serializable {
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
                 if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
-                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getTotalImponible());
+                total += (r.getTotalImponible() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
             }
         return total;
     }
@@ -279,7 +279,7 @@ public class MantenedorValoresActualizados implements Serializable {
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
                 if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
-                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getRentaAfecta());
+                total += (r.getRentaAfecta() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta());
             }
         return total;
     }
@@ -299,7 +299,7 @@ public class MantenedorValoresActualizados implements Serializable {
         if (remuneraciones != null)
             for (Remuneracion r : remuneraciones) {
                 if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
-                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) + r.getImpUnico());
+                total += (r.getImpUnico() * this.obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico());
             }
         return total;
     }
