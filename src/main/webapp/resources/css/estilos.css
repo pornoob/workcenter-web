@@ -281,3 +281,7 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 .ui-icon-m-programa-actividades {
     background-image: url('img/icons/24/m_programa_actividades.png') !important;
 }
+
+.ui-icon-m-reportes-sii {
+    background-image: url('img/icons/24/m_reportes_sii.png') !important;
+}

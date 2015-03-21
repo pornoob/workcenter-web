@@ -50,6 +50,9 @@
             <p:menuitem id="mProgramaActividades" styleClass="ui-icon ui-icon-m-programa-actividades"
                         url="/m/programa_actividades" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
+            <p:menuitem id="mReportesSII" styleClass="ui-icon ui-icon-m-reportes-sii"
+                        url="/m/reportes_sii" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>
