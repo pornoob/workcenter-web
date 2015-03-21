@@ -285,3 +285,7 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 .ui-icon-m-reportes-sii {
     background-image: url('img/icons/24/m_reportes_sii.png') !important;
 }
+
+.ui-icon-m-consulta-doc {
+    background-image: url('img/icons/24/m_consulta_doc.png') !important;
+}

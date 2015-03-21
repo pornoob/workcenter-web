@@ -112,6 +112,15 @@
                         <h:graphicImage value="/img/icons/64/m_reportes_sii.png"/>
                         <h:outputLabel value="Reportes para SII"/>
                     </h:commandLink>
+
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
+                                   action="#{facesUtil.redirigir('/m/consulta_doc')}"
+                                   class="menuWorkcenter"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <h:graphicImage value="/img/icons/64/m_consulta_doc.png"/>
+                        <h:outputLabel value="Consulta Documentos"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
         </h:form>
