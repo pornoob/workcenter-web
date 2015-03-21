@@ -36,12 +36,12 @@
                         <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
                     </h:commandLink>
                     <p:dataTable id="tValoresAct" value="#{mantenedorValoresActualizados.remuneraciones}" var="r"
-                                 emptyMessage="No se han encontrado registros" filterEvent="enter">
-                        <p:column headerText="Fecha">
+                                 emptyMessage="No se han encontrado registros" filterEvent="enter" sortBy="#{r.fechaLiquidacion}">
+                        <p:column headerText="Fecha" sortBy="#{r.fechaLiquidacion}">
                             <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
                         </p:column>
                         <p:column headerText="Rut" filterBy="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
-                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}" sortBy="#{r.idPersonal.rut}">
                             <h:outputText value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
                                           converter="rutConverter"/>
                         </p:column>

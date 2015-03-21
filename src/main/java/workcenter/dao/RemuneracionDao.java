@@ -71,7 +71,7 @@ public class RemuneracionDao {
         if (anio != null) {
             q.setParameter("anio", String.valueOf(anio));
         }
-        sb.append("order by r.idPersonal asc, r.fechaLiquidacion asc ");
+        sb.append("order by r.fechaLiquidacion asc, r.idPersonal ");
 //        System.out.println("Query: "+sb.toString());
         return q.getResultList();
     }
