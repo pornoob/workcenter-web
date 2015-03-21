@@ -1,4 +1,14 @@
 var WebCenter = {
+    Input: {
+        formatearRut: function(obj) {
+            var valor = $(obj).val();
+            if (valor.length > 1) {
+                valor = valor.replace(/[^0-9]/g, "");
+                valor = valor.substr(0, valor.length - 1) + "-" + valor[valor.length - 1];
+                $(obj).val(valor);
+            }
+        }
+    },
     Menu: {
         mouseover: function (menu) {
             var img = menu.childNodes[0];
