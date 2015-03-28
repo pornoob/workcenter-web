@@ -11,6 +11,9 @@ import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
@@ -114,6 +117,23 @@ public class Personal implements Serializable {
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rut")
     private List<ContratoPersonal> contratospersonalCollection;
+    
+    // se agrega el atributo faena del tipo lista FAENA-----------------------------
+    
+     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+     @JoinTable(      name="personalFaena",
+     joinColumns={@JoinColumn(name="idpersonal", referencedColumnName="rut")},
+     inverseJoinColumns={@JoinColumn(name="idfaena", referencedColumnName="id")})
+     private List<Faena> faena = new ArrayList<Faena>();
+
+    public List<Faena> getFaena() {
+        return faena;
+    }
+    public void setFaena(List<Faena> faena) {
+        this.faena = faena;
+    }
+   
+    // ------------------------------------------------------------------------------
 
     public Personal() {
     }

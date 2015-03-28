@@ -18,7 +18,7 @@ public class PersonalDao {
     private EntityManager em;
 
     public List<Personal> obtenerTodos() {
-        Query q = em.createNamedQuery("Personal.findAll" );
+        Query q = em.createNamedQuery("Personal.findAll" );     
         return q.getResultList();
     }
 
@@ -171,4 +171,10 @@ public class PersonalDao {
         else
             em.merge(contrato);
     }
+
+	public Personal obtenerPersonal(Personal p) {		
+		Query q = em.createNamedQuery("Personal.findByRut" );
+        q.setParameter("rut", p.getRut());        
+        return (Personal) q.getSingleResult();
+	}
 }

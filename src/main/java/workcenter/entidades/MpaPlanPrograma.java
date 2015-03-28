@@ -34,7 +34,7 @@ import workcenter.util.dto.Mes;
                 query = "select p from MpaPlanPrograma p " +
                         "where p.idPrograma = :programa " +
                         "and p.idActividad = :actividad " +
-                        "and p.rutResponsable =  :responsable " +
+                        "and p.rutResponsable = :responsable " +
                         "and p.contrato = :contrato " +
                         "and p.anioVigencia = :anio order by p.fecha desc "
         )

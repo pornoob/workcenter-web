@@ -8,6 +8,7 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
+import workcenter.negocio.faena.LogicaFaena;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
 import workcenter.negocio.personal.LogicaVariables;
@@ -62,6 +63,7 @@ public class MantenedorPersonal implements Serializable {
     private List<DocumentoPersonal> documentos;
     private List<TipoDocPersonal> tiposDocumentos;
     private transient UploadedFile archivo;
+    private List<FilterOption> listaFaenas;
 
     private enum TipoOperacion {
         EDITAR,
@@ -96,6 +98,9 @@ public class MantenedorPersonal implements Serializable {
 
     @Autowired
     private LogicaDocumentos logicaDocumentos;
+    
+    @Autowired
+    private LogicaFaena logicaFaena;
 
     public String inicio() {
         opcionesFiltroEstado = new ArrayList<FilterOption>();
@@ -106,10 +111,17 @@ public class MantenedorPersonal implements Serializable {
         opcionesSalud = new ArrayList<FilterOption>();
         opcionesSalud.add(new FilterOption(constantes.getFonasa(), "FONASA"));
         opcionesSalud.add(new FilterOption(constantes.getIsapre(), "ISAPRE"));
+        
+        listaFaenas = new ArrayList<FilterOption>();
+        listaFaenas.add(new FilterOption(1, "Chagres"));
+        listaFaenas.add(new FilterOption(2, "Tortolas"));
+        listaFaenas.add(new FilterOption(3, "El Soldado"));
+        
+//        listaFaenas = logicaFaena.obtenerTodasFaenas();
         return irListaPersonal();
     }
-
-    public void sancionar() {
+    
+	public void sancionar() {
         sancion.setFecha(new Date());
         sancion.setNivel(0); // no hay niveles implementandos
         sancion.setSancionado(personalSeleccionado);
@@ -170,6 +182,62 @@ public class MantenedorPersonal implements Serializable {
             return true;
         }
     }
+    
+    // se agrega filtro faena
+    
+    public boolean filtroFaena(Object valor, Object filtro, Locale idioma) {
+    
+    	 if (valor == null) return false;
+         Personal p = logicaPersonal.obtenerPersonal((Personal) valor);
+         if (p.getFaena() == null) return false;
+         boolean tieneFaena = false;
+         for (Faena f : p.getFaena()){	
+     		if (f.getId() == Integer.parseInt(filtro.toString())){
+     		 tieneFaena = true;
+     		}
+   	}
+        if  (tieneFaena == true){return true;}else return false;       
+         
+        }
+//  	if ( filtro.toString().length() > 0 ){   
+//    	
+//    	Personal e = (Personal)valor;
+//    	boolean tiene = false;
+//    	for (Faena f : e.getFaena()){	
+//    		if (f.getNombre().toLowerCase().contains(filtro.toString().toLowerCase())){
+//    		 tiene = true;
+//    		}
+//    	}
+//        if  (tiene == true){return true;}else return false;
+//    	}else {return false;}
+    
+//    if (valor == null) return false;
+//    Faena f = logicaFaena.obtenerFaena(filtro.toString());
+//    if (f == null) return false;
+//    return f.getNombre().toLowerCase().contains(filtro.toString().toLowerCase());
+    	
+    
+    
+    //-----------------------
+    
+    //  metodo para buscar personas
+    public Personal obtenerPersonal(Personal p) {
+        return logicaPersonal.obtenerPersonal(p);
+    }
+    
+    // metodo para filtrar combobox
+    
+    public void filtrarComboFaena(Personal p){
+    	
+    	for (Faena f : p.getFaena()){
+    		for (FilterOption o : listaFaenas){
+    			if (f.getNombre().toString() == o.getLabel()){
+    				listaFaenas.remove(o);
+    			}
+    		}
+    	}
+    }
+
 
     public String irCambiarFoto() {
         return "flowCambiarFoto";
@@ -239,7 +307,7 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public String irListaPersonal() {
-        listaPersonal = logicaPersonal.obtenerTodos();
+        listaPersonal = logicaPersonal.obtenerTodos();      
         return "flowListarPersonal";
     }
 
@@ -646,4 +714,12 @@ public class MantenedorPersonal implements Serializable {
     public void setTiposDocumentos(List<TipoDocPersonal> tiposDocumentos) {
         this.tiposDocumentos = tiposDocumentos;
     }
+    
+    public List<FilterOption> getListaFaenas() {
+		return listaFaenas;
+	}
+
+	public void setListaFaenas(List<FilterOption> listaFaenas) {
+		this.listaFaenas = listaFaenas;
+	}
 }

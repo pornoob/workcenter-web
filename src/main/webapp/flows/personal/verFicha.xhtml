@@ -52,6 +52,8 @@
 
                             <h:outputLabel value="Teléfono de Emergencia"/>:
                             <p:inputText value="#{mantenedorPersonal.personalSeleccionado.telefono}"/>
+                            
+                         
                         </h:panelGrid>
                     </h:panelGroup>
                     <h:panelGroup>
@@ -64,7 +66,22 @@
                     </h:panelGroup>
                 </h:panelGrid>
             </p:panel>
-
+			
+			<p:panel header="Faenas Asignadas">
+				<p:commandButton icon="ui-icon-plus" value="Asignar Faena" action="#{mantenedorPersonal.filtrarComboFaena(mantenedorPersonal.personalSeleccionado)}"/>
+				<p:selectOneMenu id="faenas" value="" rendered="#{mantenedorPersonal.listaFaenas.size() > 0 eq true }"> 
+				    <f:selectItems value="#{mantenedorPersonal.listaFaenas}" var="faena" itemLabel="#{faena.label}" itemValue="#{faena.value}"/> 
+				</p:selectOneMenu> 			 
+		   		<p:dataTable var="per" value="#{mantenedorPersonal.personalSeleccionado.faena}">
+				    <p:column headerText="Faena Asiganada">
+				        <h:outputText value="#{per.nombre}" />
+				    </p:column>
+				    <p:column headerText="Acciones">
+                        <p:commandLink styleClass="ui-icon ui-icon-trash"/>
+				    </p:column>
+				</p:dataTable>
+		   </p:panel>
+				
             <p:panel header="Documentos de Carpeta" id="pDocumentos">
                 <p:commandButton icon="ui-icon-plus"
                                  rendered="#{!mantenedorPersonal.tiposDocumentos.isEmpty() and (sesionCliente.esEditor(constantes.moduloPersonal) or sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal))}"
