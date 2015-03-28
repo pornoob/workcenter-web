@@ -146,9 +146,4 @@ public class LogicaPersonal {
     public void guardarContrato(ContratoPersonal contrato) {
         personalDao.guardarContrato(contrato);
     }
-
-    @Transactional(readOnly = true)
-	public Personal obtenerPersonal(Personal p) {    	
-	return personalDao.obtenerPersonal(p);
-	}
 }

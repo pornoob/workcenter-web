@@ -117,23 +117,17 @@ public class Personal implements Serializable {
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rut")
     private List<ContratoPersonal> contratospersonalCollection;
-    
-    // se agrega el atributo faena del tipo lista FAENA-----------------------------
-    
-     @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-     @JoinTable(      name="personalFaena",
-     joinColumns={@JoinColumn(name="idpersonal", referencedColumnName="rut")},
-     inverseJoinColumns={@JoinColumn(name="idfaena", referencedColumnName="id")})
-     private List<Faena> faena = new ArrayList<Faena>();
-
-    public List<Faena> getFaena() {
-        return faena;
-    }
-    public void setFaena(List<Faena> faena) {
-        this.faena = faena;
-    }
-   
-    // ------------------------------------------------------------------------------
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "usuario_servicio_ruta",
+            inverseJoinColumns = {
+                    @JoinColumn(name = "id_servicio")
+            },
+            joinColumns = {
+                    @JoinColumn(name = "rut")
+            }
+    )
+    private List<Servicio> servicios;
 
     public Personal() {
     }
@@ -357,5 +351,13 @@ public class Personal implements Serializable {
 
     public void setSancionesRetiradas(List<SancionRetiradaPersonal> sancionesRetiradas) {
         this.sancionesRetiradas = sancionesRetiradas;
+    }
+
+    public List<Servicio> getServicios() {
+        return servicios;
+    }
+
+    public void setServicios(List<Servicio> servicios) {
+        this.servicios = servicios;
     }
 }

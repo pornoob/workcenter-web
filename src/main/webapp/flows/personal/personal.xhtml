@@ -20,47 +20,57 @@
                          rows="#{constantes.cantidadFilasTablas}"
                          widgetVar="tablaPersonal"
                          var="personal"
-                         >
+                    >
 
                 <p:column filterBy="#{personal.rut}" headerText="Rut" filterMatchMode="startsWith">
                     <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>
                 </p:column>
 
-                <p:column filterBy="#{personal.nombres}" headerText="Nombres" filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                    <h:outputText value="#{personal.nombres}" converter="nombreConverter" />
+                <p:column filterBy="#{personal.nombres}" headerText="Nombres"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    <h:outputText value="#{personal.nombres}" converter="nombreConverter"/>
                 </p:column>
 
-                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos" filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                    <h:outputText value="#{personal.apellidos}" converter="nombreConverter" />
+                <p:column filterBy="#{personal.apellidos}" headerText="Apellidos"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    <h:outputText value="#{personal.apellidos}" converter="nombreConverter"/>
                 </p:column>
 
-                <p:column filterBy="#{personal.celular}" headerText="Celular" filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                    <h:outputText value="#{personal.celular}" />
+                <p:column filterBy="#{personal.celular}" headerText="Celular"
+                          filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                    <h:outputText value="#{personal.celular}"/>
                 </p:column>
- 				
-                <p:column filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEmpleador}" headerText="Empleador">
-                    <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}" />
-                </p:column>                 
-              
-                <p:column filterBy="#{personal}" headerText="Faena" filterFunction="#{mantenedorPersonal.filtroFaena}" filterMatchMode="contains">
-                <f:facet name="filter">
-                        <p:selectOneMenu id="faena" onchange="PF('tablaPersonal').filter()" >
-                         <f:selectItem itemLabel="--Todos--" itemValue="#{null}" noSelectionOption="true" />
-                            <f:selectItems value="#{mantenedorPersonal.listaFaenas}" var="filtro" itemLabel="#{filtro.label}" itemValue="#{filtro.value}"/>
-                        </p:selectOneMenu>
-                    </f:facet>      
-          			 <ui:repeat var="faenas" value="#{personal.faena}">  
-	  				#{faenas.nombre}<br/>   				 	
-					</ui:repeat>      
-      			  </p:column>          	               
-                <p:column headerText="Estado" filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEstado}">
+
+                <p:column filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEmpleador}"
+                          headerText="Empleador">
+                    <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}"/>
+                </p:column>
+
+                <p:column filterBy="#{personal}" headerText="Faena" filterFunction="#{mantenedorPersonal.filtroFaena}">
                     <f:facet name="filter">
-                        <p:selectOneMenu id="estado" onchange="PF('tablaPersonal').filter()">
-                            <f:selectItems value="#{mantenedorPersonal.opcionesFiltroEstado}" var="filtro" itemLabel="#{filtro.label}" itemValue="#{filtro.value}"/>
+                        <p:selectOneMenu id="faena" onchange="PF('tablaPersonal').filter()">
+                            <f:selectItem itemLabel="--Todos--" itemValue="#{null}" noSelectionOption="true"/>
+                            <f:selectItems value="#{mantenedorPersonal.listaServicios}" var="filtro"
+                                           itemLabel="#{filtro.nombre}" itemValue="#{filtro.id}"/>
                         </p:selectOneMenu>
                     </f:facet>
-                    <h:graphicImage rendered="#{!mantenedorPersonal.estaBloqueado(personal)}" value="/img/icons/luz_verde.png"/>
-                    <h:graphicImage title="#{personal.sancion.motivo}" rendered="#{mantenedorPersonal.estaBloqueado(personal)}" value="/img/icons/luz_roja.png"/>
+                    <ui:repeat var="servicio" value="#{personal.servicios}">
+                        #{servicio.nombre}<br/>
+                    </ui:repeat>
+                </p:column>
+                <p:column headerText="Estado" filterBy="#{personal}"
+                          filterFunction="#{mantenedorPersonal.filtroEstado}">
+                    <f:facet name="filter">
+                        <p:selectOneMenu id="estado" onchange="PF('tablaPersonal').filter()">
+                            <f:selectItems value="#{mantenedorPersonal.opcionesFiltroEstado}" var="filtro"
+                                           itemLabel="#{filtro.label}" itemValue="#{filtro.value}"/>
+                        </p:selectOneMenu>
+                    </f:facet>
+                    <h:graphicImage rendered="#{!mantenedorPersonal.estaBloqueado(personal)}"
+                                    value="/img/icons/luz_verde.png"/>
+                    <h:graphicImage title="#{personal.sancion.motivo}"
+                                    rendered="#{mantenedorPersonal.estaBloqueado(personal)}"
+                                    value="/img/icons/luz_roja.png"/>
                 </p:column>
 
                 <p:column headerText="Acciones" width="65">
@@ -68,7 +78,8 @@
                         <p:commandLink title="Ver ficha" action="#{mantenedorPersonal.irVerFicha(personal)}"
                                        styleClass="ui-icon ui-icon-search"/>
                         <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
-                                       title="Administrar contratos" action="#{mantenedorPersonal.irContratosPersonal(personal)}"
+                                       title="Administrar contratos"
+                                       action="#{mantenedorPersonal.irContratosPersonal(personal)}"
                                        styleClass="ui-icon ui-icon-document"/>
                         <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                        title="Bloquear" action="#{mantenedorPersonal.irBloqueoPersonal(personal)}"
