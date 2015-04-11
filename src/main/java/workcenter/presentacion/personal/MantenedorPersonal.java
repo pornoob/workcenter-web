@@ -9,7 +9,6 @@ import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaServicio;
-import workcenter.negocio.faena.LogicaFaena;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
 import workcenter.negocio.personal.LogicaVariables;
