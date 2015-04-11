@@ -9,7 +9,6 @@ import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.LogicaServicio;
-import workcenter.negocio.faena.LogicaFaena;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
 import workcenter.negocio.personal.LogicaVariables;
@@ -65,6 +64,7 @@ public class MantenedorPersonal implements Serializable {
     private List<TipoDocPersonal> tiposDocumentos;
     private transient UploadedFile archivo;
     private List<Servicio> listaServicios;
+    private Servicio servicioSeleccionado;
 
     private enum TipoOperacion {
         EDITAR,
@@ -178,14 +178,30 @@ public class MantenedorPersonal implements Serializable {
             return true;
         }
     }
+    
+    //agregar Servicio
+    public void agregarServicio(){
+    	if (personalSeleccionado.getUsuario() == null){
+    		Usuario u = new Usuario();
+    		u.setRut(personalSeleccionado.getRut());
+    		u.setPassword("0");
+    		personalSeleccionado.setUsuario(u);
+    	}
+    	personalSeleccionado.getServicios().add(servicioSeleccionado);
+    	logicaPersonal.guardar(personalSeleccionado);
+    }
+    public void eliminarServicio(Servicio s){
+    	personalSeleccionado.getServicios().remove(s);
+    	logicaPersonal.guardar(personalSeleccionado);
+    }
 
     // se agrega filtro faena
 
     public boolean filtroFaena(Object valor, Object filtro, Locale idioma) {
 
-        if (valor == null) return false;
-        Personal p = (Personal) valor;
-        return true;
+          if (valor == null) return false;
+          Personal p = (Personal) valor;
+          return true;
     }
 
 
@@ -672,4 +688,13 @@ public class MantenedorPersonal implements Serializable {
     public void setListaServicios(List<Servicio> listaServicios) {
         this.listaServicios = listaServicios;
     }
+
+	public Servicio getServicioSeleccionado() {
+		return servicioSeleccionado;
+	}
+
+	public void setServicioSeleccionado(Servicio servicioSeleccionado) {
+		this.servicioSeleccionado = servicioSeleccionado;
+	}
+    
 }
