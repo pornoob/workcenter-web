@@ -67,9 +67,14 @@
                 </h:panelGrid>
             </p:panel>
 
-            <p:panel header="Faenas Asignadas">
-                <p:commandButton icon="ui-icon-plus" value="Agregar"/>
-                <p:dataTable value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s">
+            <p:panel header="Faenas Asignadas" id="panel">
+               <p:commandButton icon="ui-icon-plus" value="Agregar" update="serAsociados"  action="#{mantenedorPersonal.agregarServicio}"  />
+                 <p:selectOneMenu value="#{mantenedorPersonal.servicioSeleccionado}" converter="entityConverter">
+                     <f:selectItems value="#{mantenedorPersonal.listaServicios}" var="filtro"
+                                           itemLabel="#{filtro.nombre}" />
+                                          <!--<f:ajax listener="#{mantenedorPersonal.agregarServicio}" update="frmPersonal:serAsociados"/>  -->  
+                 </p:selectOneMenu>
+                <p:dataTable id="serAsociados" value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s" >
                     <p:column headerText="ID">
                         #{s.id}
                     </p:column>
@@ -77,7 +82,7 @@
                         #{s.nombre}
                     </p:column>
                     <p:column headerText="Acciones">
-                        <p:commandLink styleClass="ui-icon ui-icon-trash"/></p:column>
+                    <p:commandLink styleClass="ui-icon ui-icon-trash" action="#{mantenedorPersonal.eliminarServicio(s)}" update="serAsociados"/></p:column>
                 </p:dataTable>
             </p:panel>
 
