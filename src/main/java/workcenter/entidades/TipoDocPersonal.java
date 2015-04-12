@@ -20,18 +20,17 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author claudio
  */
 @Entity
 @Table(name = "tiposdocpersonal")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "TipoDocPersonal.findAll", query = "SELECT t FROM TipoDocPersonal t"),
-    @NamedQuery(name = "TipoDocPersonal.findById", query = "SELECT t FROM TipoDocPersonal t WHERE t.id = :id"),
-    @NamedQuery(name = "TipoDocPersonal.findByEtiqueta", query = "SELECT t FROM TipoDocPersonal t WHERE t.etiqueta = :etiqueta"),
-    @NamedQuery(name = "TipoDocPersonal.findByDescripcion", query = "SELECT t FROM TipoDocPersonal t WHERE t.descripcion = :descripcion"),
-    @NamedQuery(name = "TipoDocPersonal.findByDiasalerta", query = "SELECT t FROM TipoDocPersonal t WHERE t.diasalerta = :diasalerta")})
+        @NamedQuery(name = "TipoDocPersonal.findAll", query = "SELECT t FROM TipoDocPersonal t"),
+        @NamedQuery(name = "TipoDocPersonal.findById", query = "SELECT t FROM TipoDocPersonal t WHERE t.id = :id"),
+        @NamedQuery(name = "TipoDocPersonal.findByEtiqueta", query = "SELECT t FROM TipoDocPersonal t WHERE t.etiqueta = :etiqueta"),
+        @NamedQuery(name = "TipoDocPersonal.findByDescripcion", query = "SELECT t FROM TipoDocPersonal t WHERE t.descripcion = :descripcion"),
+        @NamedQuery(name = "TipoDocPersonal.findByDiasalerta", query = "SELECT t FROM TipoDocPersonal t WHERE t.diasalerta = :diasalerta")})
 public class TipoDocPersonal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -99,17 +98,13 @@ public class TipoDocPersonal implements Serializable {
             return false;
         }
         TipoDocPersonal other = (TipoDocPersonal) object;
-        if (this.getId() == null || other.getId() == null) {
-            return false;
-        } else if (this.getId().intValue() != other.getId().intValue()) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override
     public String toString() {
         return "workcenter.entities.TipoDocPersonal[ id=" + id + " ]";
     }
-    
+
 }

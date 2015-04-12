@@ -2,13 +2,47 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Consulta Documentos</h2>
         <p:growl autoUpdate="true" showDetail="true"/>
 
         <h:form id="formConsultaDoc">
+            <p:panel header="Filtros">
+                <h:panelGrid columns="3">
+                    <h:outputLabel>Cargo</h:outputLabel>:
+                    <p:selectOneMenu filter="true" value="#{mantenedorConsultaDoc.cargo}" converter="entityConverter">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorConsultaDoc.cargos}" var="c" itemLabel="#{c.nombreCargo}"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel>Servicio/Faena</h:outputLabel>:
+                    <p:selectOneMenu filter="true" value="#{mantenedorConsultaDoc.servicio}" converter="entityConverter">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorConsultaDoc.servicios}" var="s" itemLabel="#{s.nombre}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:commandButton icon="ui-icon ui-icon-search" value="Buscar"
+                                 action="#{mantenedorConsultaDoc.buscarPersonal()}" update="pTiposDoc pDocs"/>
+            </p:panel>
+            <p:panel header="Tipos de Documentos" id="pTiposDoc">
+                <h:panelGrid columns="12">
+                    <c:forEach items="#{mantenedorConsultaDoc.tiposDocs}" var="td">
+                        <p:selectBooleanCheckbox value="#{mantenedorConsultaDoc.mostrarTipoDoc[td]}" id="cbTipDoc_#{td.id}"/>
+                        <h:outputLabel for="cbTipDoc_#{td.id}">#{td.etiqueta}</h:outputLabel>
+                    </c:forEach>
+                </h:panelGrid>
+            </p:panel>
+            <p:panel header="Detalle" id="pDocs">
+                <p:dataTable value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p" scrollable="true">
+                    <p:column headerText="Nombre">
+                        #{p.nombreCompleto}
+                    </p:column>
+                    <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}">
+                        <f:facet name="header">#{td.etiqueta}</f:facet>
+                    </p:columns>
+                </p:dataTable>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

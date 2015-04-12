@@ -18,7 +18,7 @@
             <td>
                 <p:selectOneMenu value="#{mantenedorPersonal.cargoSeleccionado}" converter="entityConverter"
                                  filter="true" filterMatchMode="contains">
-                    <f:selectItems value="#{mantenedorPersonal.cargos}" var="c" itemLabel="#{c.nombrecargo}"/>
+                    <f:selectItems value="#{mantenedorPersonal.cargos}" var="c" itemLabel="#{c.nombreCargo}"/>
                 </p:selectOneMenu>
             </td>
 

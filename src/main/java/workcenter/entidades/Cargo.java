@@ -8,7 +8,6 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
-import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -30,9 +29,9 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "cargos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Cargo.findAll", query = "SELECT c FROM Cargo c"),
+    @NamedQuery(name = "Cargo.findAll", query = "SELECT c FROM Cargo c ORDER BY c.nombreCargo ASC"),
     @NamedQuery(name = "Cargo.findById", query = "SELECT c FROM Cargo c WHERE c.id = :id"),
-    @NamedQuery(name = "Cargo.findByNombrecargo", query = "SELECT c FROM Cargo c WHERE c.nombrecargo = :nombrecargo"),
+    @NamedQuery(name = "Cargo.findByNombrecargo", query = "SELECT c FROM Cargo c WHERE c.nombreCargo = :nombrecargo"),
     @NamedQuery(name = "Cargo.findByResponsabilidades", query = "SELECT c FROM Cargo c WHERE c.responsabilidades = :responsabilidades"),
     @NamedQuery(name = "Cargo.findByDependencia", query = "SELECT c FROM Cargo c WHERE c.dependencia = :dependencia"),
     @NamedQuery(name = "Cargo.findByEducacion", query = "SELECT c FROM Cargo c WHERE c.educacion = :educacion"),
@@ -43,12 +42,11 @@ public class Cargo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Size(max = 70)
     @Column(name = "nombrecargo")
-    private String nombrecargo;
+    private String nombreCargo;
     @Size(max = 500)
     @Column(name = "responsabilidades")
     private String responsabilidades;
@@ -84,12 +82,12 @@ public class Cargo implements Serializable {
         this.id = id;
     }
 
-    public String getNombrecargo() {
-        return nombrecargo;
+    public String getNombreCargo() {
+        return nombreCargo;
     }
 
-    public void setNombrecargo(String nombrecargo) {
-        this.nombrecargo = nombrecargo;
+    public void setNombreCargo(String nombrecargo) {
+        this.nombreCargo = nombrecargo;
     }
 
     public String getResponsabilidades() {
@@ -149,15 +147,12 @@ public class Cargo implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Cargo)) {
             return false;
         }
         Cargo other = (Cargo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override

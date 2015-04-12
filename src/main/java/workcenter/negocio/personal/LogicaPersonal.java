@@ -146,4 +146,15 @@ public class LogicaPersonal {
     public void guardarContrato(ContratoPersonal contrato) {
         personalDao.guardarContrato(contrato);
     }
+
+    @Transactional(readOnly = true)
+    public List<Personal> obtenerPorCargo(Cargo cargo) {
+        if (cargo.getId().intValue() == constantes.getCargoMecanico()) return obtenerMecanicos();
+        return personalDao.obtenerSegunCargo(cargo.getId());
+    }
+
+    @Transactional(readOnly = true)
+    public List<Personal> obtenerPorCargoServicio(Cargo cargo, Servicio servicio) {
+        return personalDao.obtenerSegunCargoServicio(cargo, servicio);
+    }
 }

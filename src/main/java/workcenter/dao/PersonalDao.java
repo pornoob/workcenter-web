@@ -43,11 +43,33 @@ public class PersonalDao {
 
     public List<Personal> obtenerSegunCargo(Integer cargo) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select distinct p.* from personal p " );
-        sb.append("inner join contratospersonal cp on (p.rut=cp.rut and cp.cargo=:cargo) " );
-        sb.append("order by p.apellidos asc" );
+        sb.append("select ");
+        sb.append("    p.* ");
+        sb.append("from personal p ");
+        sb.append("inner join ( ");
+        sb.append("    select max(fecha) as fecha, rut from contratospersonal GROUP BY rut ");
+        sb.append(") maxContrato on maxContrato.rut = p.rut ");
+        sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
+
         Query q = em.createNativeQuery(sb.toString(), Personal.class);
         q.setParameter("cargo", cargo);
+        return q.getResultList();
+    }
+
+    public List<Personal> obtenerSegunCargoServicio(Cargo cargo, Servicio servicio) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select ");
+        sb.append("    p.* ");
+        sb.append("from personal p ");
+        sb.append("inner join ( ");
+        sb.append("    select max(fecha) as fecha, rut from contratospersonal GROUP BY rut ");
+        sb.append(") maxContrato on maxContrato.rut = p.rut ");
+        sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
+        sb.append("inner join usuario_servicio_ruta us on (us.rut = p.rut and us.id_servicio = :servicio) ");
+
+        Query q = em.createNativeQuery(sb.toString(), Personal.class);
+        q.setParameter("cargo", cargo.getId());
+        q.setParameter("servicio", servicio.getId());
         return q.getResultList();
     }
 

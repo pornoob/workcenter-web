@@ -437,7 +437,7 @@ public class MantenedorPersonal implements Serializable {
         int im = sueldoMinimo != null ? Integer.parseInt(sueldoMinimo.getValor()) : 0;
         if (contratoSeleccionado.getNumero() != null) {
             gratificacionCalculada = contratoSeleccionado.getSueldoBase() / 4 < (int) (4.75 * im / 12) ? (contratoSeleccionado.getSueldoBase() / 4) : (int) (4.75 * im / 12);
-            if (contratoSeleccionado.getCargo().getNombrecargo().equalsIgnoreCase("conductor")) {
+            if (contratoSeleccionado.getCargo().getNombreCargo().equalsIgnoreCase("conductor")) {
                 hrsEspera = ((int) (im * 1.5 / 180 * 88));
                 semanaCorrida = 41200;
             } else {
