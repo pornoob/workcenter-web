@@ -55,6 +55,16 @@ public class MantenedorConsultaDoc implements Serializable {
         this.tiposDocs = new ArrayList<TipoDocPersonal>(tiposDocs);
     }
 
+    public String obtenerLuz(Personal p, TipoDocPersonal td) {
+        List<DocumentoPersonal> docs = personalDocs.get(p);
+        for (DocumentoPersonal dp : docs) {
+            if (dp.getTipo().equals(td)) continue;
+            Date fechaActual = new Date();
+            
+        }
+        return null;
+    }
+
     // getters and setters
     public List<Cargo> getCargos() {
         return cargos;
