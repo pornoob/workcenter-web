@@ -200,8 +200,14 @@ public class MantenedorPersonal implements Serializable {
     public boolean filtroFaena(Object valor, Object filtro, Locale idioma) {
 
           if (valor == null) return false;
+          if (filtro == null) return true;
           Personal p = (Personal) valor;
-          return true;
+          for (Servicio lista : p.getServicios()) {
+        	  if (lista.getId() != Integer.parseInt(filtro.toString())){
+        		  return false;
+        	  }else return true;
+          }
+          return false;
     }
 
 

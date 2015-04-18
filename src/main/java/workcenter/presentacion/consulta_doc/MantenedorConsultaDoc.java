@@ -10,6 +10,7 @@ import workcenter.negocio.personal.LogicaPersonal;
 
 import java.io.Serializable;
 import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by claudio on 11-04-15.
@@ -58,9 +59,16 @@ public class MantenedorConsultaDoc implements Serializable {
     public String obtenerLuz(Personal p, TipoDocPersonal td) {
         List<DocumentoPersonal> docs = personalDocs.get(p);
         for (DocumentoPersonal dp : docs) {
-            if (dp.getTipo().equals(td)) continue;
-            Date fechaActual = new Date();
-            
+            if (!dp.getTipo().equals(td)) continue;
+            if (dp.getVencimiento() == null) return "luz_verde";
+             Date fechaActual = new Date();
+             long diaResta = dp.getVencimiento().getTime()-fechaActual.getTime();
+             long dias = TimeUnit.DAYS.convert(diaResta, TimeUnit.MILLISECONDS);
+             
+            if (dias <= td.getDiasalerta() && dias > 0) return "luz_amarilla";
+            else if (dias<=0) return "luz_roja";
+            else return "luz_verde";
+           
         }
         return null;
     }

@@ -12,13 +12,13 @@
             <p:panel header="Filtros">
                 <h:panelGrid columns="3">
                     <h:outputLabel>Cargo</h:outputLabel>:
-                    <p:selectOneMenu filter="true" value="#{mantenedorConsultaDoc.cargo}" converter="entityConverter">
+                    <p:selectOneMenu filter="true" filterMatchMode="contains" value="#{mantenedorConsultaDoc.cargo}" converter="entityConverter">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorConsultaDoc.cargos}" var="c" itemLabel="#{c.nombreCargo}"/>
                     </p:selectOneMenu>
                     <h:outputLabel>Servicio/Faena</h:outputLabel>:
                     <p:selectOneMenu filter="true" value="#{mantenedorConsultaDoc.servicio}"
-                                     converter="entityConverter">
+                                     converter="entityConverter" filterMatchMode="contains">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorConsultaDoc.servicios}" var="s" itemLabel="#{s.nombre}"/>
                     </p:selectOneMenu>
@@ -28,7 +28,7 @@
             </p:panel>
             <p:panel header="Detalle" id="pDocs">
                 <p:dataTable id="tblDocs" value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p"
-                             scrollable="true" emptyMessage="No se han encontrado documentos">
+                             scrollable="true" emptyMessage="No se han encontrado documentos" resizeMode="expand">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:commandButton id="btnSelColumnas" icon="ui-icon-calculator" value="Filtrar Documentos"/>
@@ -40,7 +40,7 @@
                     </p:column>
                     <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}">
                         <f:facet name="header">#{td.etiqueta}</f:facet>
-                        <h:graphicImage value="/img/icons/#{mantenedorConsultaDoc.obtenerLuz(p, td)}.png"/>
+                        <h:graphicImage value="/img/icons/#{mantenedorConsultaDoc.obtenerLuz(p, td)}.png" rendered="#{mantenedorConsultaDoc.obtenerLuz(p, td) != null}"/>
                     </p:columns>
                 </p:dataTable>
             </p:panel>
