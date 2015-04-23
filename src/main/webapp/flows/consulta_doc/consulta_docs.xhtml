@@ -19,7 +19,7 @@
                     <h:outputLabel>Servicio/Faena</h:outputLabel>:
                     <p:selectOneMenu filter="true" value="#{mantenedorConsultaDoc.servicio}"
                                      converter="entityConverter" filterMatchMode="contains">
-                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Todos --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorConsultaDoc.servicios}" var="s" itemLabel="#{s.nombre}"/>
                     </p:selectOneMenu>
                 </h:panelGrid>

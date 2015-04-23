@@ -65,11 +65,14 @@ public class PersonalDao {
         sb.append("    select max(fecha) as fecha, rut from contratospersonal GROUP BY rut ");
         sb.append(") maxContrato on maxContrato.rut = p.rut ");
         sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
+        if (servicio != null){
         sb.append("inner join usuario_servicio_ruta us on (us.rut = p.rut and us.id_servicio = :servicio) ");
-
+        }
         Query q = em.createNativeQuery(sb.toString(), Personal.class);
         q.setParameter("cargo", cargo.getId());
+        if (servicio != null){
         q.setParameter("servicio", servicio.getId());
+        }
         return q.getResultList();
     }
 

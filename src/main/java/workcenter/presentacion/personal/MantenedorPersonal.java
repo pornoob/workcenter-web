@@ -187,7 +187,9 @@ public class MantenedorPersonal implements Serializable {
     		u.setPassword("0");
     		personalSeleccionado.setUsuario(u);
     	}
-    	personalSeleccionado.getServicios().add(servicioSeleccionado);
+    	if (!personalSeleccionado.getServicios().contains(servicioSeleccionado)){
+    		personalSeleccionado.getServicios().add(servicioSeleccionado);
+    	}    	
     	logicaPersonal.guardar(personalSeleccionado);
     }
     public void eliminarServicio(Servicio s){
