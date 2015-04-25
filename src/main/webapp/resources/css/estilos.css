@@ -289,3 +289,19 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 .ui-icon-m-consulta-doc {
     background-image: url('img/icons/24/m_consulta_doc.png') !important;
 }
+
+.tblDocs table .ui-state-default {
+	width:150px;
+}
+
+.tblDocs table .ui-state-default.ui-static-column {
+	text-align: left;
+}
+
+.tblDocs table tbody {
+	text-align: center;
+}
+
+.ui-datatable tbody td {
+	text-align: center!important;
+}

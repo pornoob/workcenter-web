@@ -27,8 +27,10 @@
                                  action="#{mantenedorConsultaDoc.buscarPersonal()}" update="pDocs"/>
             </p:panel>
             <p:panel header="Detalle" id="pDocs">
+            	
                 <p:dataTable id="tblDocs" value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p"
-                             scrollable="true" emptyMessage="No se han encontrado documentos" resizeMode="expand">
+                             scrollable="true" scrollWidth="965" emptyMessage="No se han encontrado documentos" resizeMode="expand" styleClass="tblDocs" 
+                             rows="10" paginator="true">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:commandButton id="btnSelColumnas" icon="ui-icon-calculator" value="Filtrar Documentos"/>
@@ -38,7 +40,7 @@
                     <p:column headerText="Nombre" toggleable="false">
                         #{p.nombreCompleto}
                     </p:column>
-                    <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}">
+                    <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}" styleClass="center-column">
                         <f:facet name="header">#{td.etiqueta}</f:facet>
                         <h:graphicImage value="/img/icons/#{mantenedorConsultaDoc.obtenerLuz(p, td)}.png" rendered="#{mantenedorConsultaDoc.obtenerLuz(p, td) != null}"/>
                     </p:columns>
