@@ -301,7 +301,3 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 .tblDocs table tbody {
 	text-align: center;
 }
-
-.ui-datatable tbody td {
-	text-align: center!important;
-}

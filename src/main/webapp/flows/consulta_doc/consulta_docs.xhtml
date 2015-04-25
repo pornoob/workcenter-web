@@ -37,7 +37,7 @@
                         </p:outputPanel>
                         <p:columnToggler trigger="btnSelColumnas" datasource="tblDocs"/>
                     </f:facet>
-                    <p:column headerText="Nombre" toggleable="false">
+                    <p:column headerText="Nombre" toggleable="false" style="text-align: left">
                         #{p.nombreCompleto}
                     </p:column>
                     <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}" styleClass="center-column">
