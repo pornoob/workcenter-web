@@ -100,7 +100,7 @@ public class MantenedorUsuarios implements Serializable {
     }
 
     public void guardarPermiso() {
-        Integer nivel = (Integer) constantes.getAccesos().get(acceso);
+         Integer nivel = (Integer) constantes.getAccesos().get(acceso);
 
         Permiso permiso = null;
         if (permisoSeleccionado != null) {
@@ -118,10 +118,12 @@ public class MantenedorUsuarios implements Serializable {
         if (permiso.getId() == null) {
             if (personalSeleccionado.getUsuario().getPermisosCollection() == null)
                 personalSeleccionado.getUsuario().setPermisosCollection(new ArrayList<Permiso>());
+           // if (!personalSeleccionado.getUsuario().getPermisosCollection().contains(permiso.getProyecto()))
             personalSeleccionado.getUsuario().getPermisosCollection().add(permiso);
         }
 
         logicaPersonal.guardar(personalSeleccionado);
+        personalSeleccionado = logicaPersonal.obtener(personalSeleccionado.getRut());
         proyectoSeleccionado = null;
         permisoSeleccionado = null;
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha guardado correctamente el permiso");
