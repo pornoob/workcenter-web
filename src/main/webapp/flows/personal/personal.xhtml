@@ -19,8 +19,7 @@
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                          rows="#{constantes.cantidadFilasTablas}"
                          widgetVar="tablaPersonal"
-                         var="personal"
-                    >
+                         var="personal">
 
                 <p:column filterBy="#{personal.rut}" headerText="Rut" filterMatchMode="startsWith">
                     <h:outputText value="#{personal.rut}-#{personal.digitoverificador}" converter="rutConverter"/>

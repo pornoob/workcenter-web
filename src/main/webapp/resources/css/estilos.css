@@ -292,6 +292,7 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 
 .tblDocs table .ui-state-default {
 	width:150px;
+    max-width: 150px;
 }
 
 .tblDocs table .ui-state-default.ui-static-column {
@@ -300,4 +301,10 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 
 .tblDocs table tbody {
 	text-align: center;
+}
+
+.tblScroll .ui-datatable-tablewrapper,.scrolling-div .ui-datatable-tablewrapper{
+    overflow: auto;
+    width: 100%;
+    padding-bottom: 5px;
 }

@@ -19,6 +19,8 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/m/usuarios" access="hasRole('MODULO_USUARIOS')"/>
         <security:intercept-url pattern="/m/perfil" access="hasRole('USUARIO_WEB')"/>
 
+        <security:intercept-url pattern="/m/consulta_doc" access="hasRole('CONSULTA_DOCUMENTOS')"/>
+
         <security:intercept-url pattern="/m/alarmas_gps" access="hasRole('MODULO_ALARMAS_GPS')"/>
         <security:intercept-url pattern="/m/remuneraciones" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
         <security:intercept-url pattern="/m/reportes_sii" access="hasRole('LIBRO_REMUNERACIONES_CONDUCTORES')"/>
