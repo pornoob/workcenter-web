@@ -73,6 +73,23 @@ public class MantenedorConsultaDoc implements Serializable {
         return null;
     }
 
+    public String obtenerMensaje(Personal p, TipoDocPersonal td) {
+        List<DocumentoPersonal> docs = personalDocs.get(p);
+        for (DocumentoPersonal dp : docs) {
+            if (!dp.getTipo().equals(td)) continue;
+            if (dp.getVencimiento() == null) return "";
+            Date fechaActual = new Date();
+            long diaResta = dp.getVencimiento().getTime()-fechaActual.getTime();
+            long dias = TimeUnit.DAYS.convert(diaResta, TimeUnit.MILLISECONDS);
+
+            if (dias <= td.getDiasalerta() && dias > 0) return " - Vence en "+dias+" día(s)";
+            else if (dias<=0) return " - Venció hace "+(dias*-1)+" día(s)";
+            else return "";
+
+        }
+        return null;
+    }
+
     // getters and setters
     public List<Cargo> getCargos() {
         return cargos;
