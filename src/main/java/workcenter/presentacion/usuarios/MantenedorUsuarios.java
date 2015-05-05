@@ -138,6 +138,7 @@ public class MantenedorUsuarios implements Serializable {
             }
         permisosUsuario.remove(permiso);
         proyectosDisponibles.add(permiso.getProyecto());
+        personalSeleccionado = logicaPersonal.obtener(personalSeleccionado.getRut());
         logicaPersonal.guardar(personalSeleccionado);
         proyectoSeleccionado = null;
         permisoSeleccionado = null;
