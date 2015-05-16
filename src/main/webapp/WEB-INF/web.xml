@@ -114,6 +114,13 @@
         <servlet-name>Faces Servlet</servlet-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
+
+    <!--Configuraciones opcionales primefaces-->
+    <context-param>
+        <param-name>primefaces.FONT_AWESOME</param-name>
+        <param-value>true</param-value>
+    </context-param>
+
     <context-param>
         <param-name>primefaces.UPLOADER</param-name>
         <param-value>commons</param-value>

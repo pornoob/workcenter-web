@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+      start-state="menuLiquidaciones">
+
+    <view-state id="menuLiquidaciones">
+        <transition on="flowLiquidacionesOtros" to="liquidacionesOtros"/>
+    </view-state>
+
+    <view-state id="liquidacionesOtros">
+        <transition on="flowAgregarLiqOtros" to="ingresarLiquidacionOtros"/>
+    </view-state>
+
+    <view-state id="ingresarLiquidacionOtros"></view-state>
+</flow>

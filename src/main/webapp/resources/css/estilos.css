@@ -212,8 +212,16 @@ table {
     margin-right: 15px;
 }
 
-.menuWorkcenter:hover {
+.menuWorkcenter:hover label {
     color: #cc0000;
+}
+
+.menuWorkcenter:hover i {
+    color: yellow;
+}
+
+.menuWorkcenter i {
+    color: black;
 }
 
 .menuWorkcenter label {
@@ -307,4 +315,8 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     overflow: auto;
     width: 100%;
     padding-bottom: 5px;
+}
+
+.ui-icon.fa {
+    margin-top: -4px !important;
 }
