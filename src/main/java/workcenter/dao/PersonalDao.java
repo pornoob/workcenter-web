@@ -109,6 +109,10 @@ public class PersonalDao {
     public List<DocumentoPersonal> obtenerDocumentos(Personal personal) {
         return em.createNamedQuery("DocumentoPersonal.findByPersonal" ).setParameter("personal", personal).getResultList();
     }
+    
+    public List<DocumentoPersonal> obtenerDocumentos(){
+    	return em.createNamedQuery("DocumentoPersonal.findAll").getResultList();
+    }
 
     public List<ContratoPersonal> obtenerContratos(Personal personal) {
         return em.createNamedQuery("ContratoPersonal.findByRut" ).setParameter("rut", personal).getResultList();
@@ -188,6 +192,13 @@ public class PersonalDao {
         return em.createNativeQuery(sb.toString(), TipoDocPersonal.class)
                 .setParameter("rut", p.getRut())
                 .getResultList();
+    }
+    
+    public List<TipoDocPersonal> obtenerTiposDocPorCargo() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select dp.* from tiposdocpersonal dp " );        
+
+        return em.createNativeQuery(sb.toString(), TipoDocPersonal.class).getResultList();
     }
 
     public void guardarContrato(ContratoPersonal contrato) {
