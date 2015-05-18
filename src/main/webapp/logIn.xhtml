@@ -18,6 +18,7 @@
                 <h:outputLabel for="transVentanasPass" value="Contraseña"/>:
                 <h:inputSecret id="transVentanasPass" value="#{autentificacionBean.pass}"/>
                 <p:commandButton value="Ingresar"
+                                 icon="fa fa-unlock"
                                  action="#{autentificacionBean.logIn()}" update="sesionMonitor sesionExpired"
                                  id="btnLogin"
                                  ajax="false"/>

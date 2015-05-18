@@ -58,6 +58,15 @@
                         <h:outputLabel value="Administrador de Registros"/>
                     </h:commandLink>
 
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"
+                                   action="#{facesUtil.redirigir('/m/personal/liquidaciones')}"
+                                   class="menuWorkcenter" style="display: block"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <i class="fa fa-usd fa-5x"></i>
+                        <h:outputLabel value="Liquidaciones" style="margin-top: 10px"/>
+                    </h:commandLink>
+
                     <h:commandLink ajax="false"
                                    rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
@@ -103,6 +112,7 @@
                         <h:graphicImage value="/img/icons/64/m_programa_actividades.png"/>
                         <h:outputLabel value="Programa de Actividades"/>
                     </h:commandLink>
+
 
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                                    action="#{facesUtil.redirigir('/m/reportes_sii')}"

@@ -68,7 +68,7 @@
             </p:panel>
 
             <p:panel header="Faenas Asignadas" id="panel">
-               <p:commandButton icon="ui-icon-plus" value="Agregar" update="serAsociados"  action="#{mantenedorPersonal.agregarServicio}"  />
+               <p:commandButton icon="fa fa-plus" value="Agregar" update="serAsociados"  action="#{mantenedorPersonal.agregarServicio}"  />
                  <p:selectOneMenu value="#{mantenedorPersonal.servicioSeleccionado}" converter="entityConverter">
                      <f:selectItems value="#{mantenedorPersonal.listaServicios}" var="filtro"
                                            itemLabel="#{filtro.nombre}" />

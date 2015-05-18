@@ -37,6 +37,9 @@
                         rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
             <p:menuitem id="mRegistros" styleClass="ui-icon ui-icon-m-registros" url="/m/registros" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
+            <p:menuitem id="mLiquiciones" styleClass="fa fa-usd fa-1x" style="color: black; font-size: 1.26em" url="/m/personal/liquidaciones"
+                        ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
             <p:menuitem id="mRemuneraciones" styleClass="ui-icon ui-icon-m-remuneraciones" url="/m/remuneraciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
