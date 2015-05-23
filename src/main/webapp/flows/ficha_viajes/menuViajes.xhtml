@@ -1,0 +1,27 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Ficha Viajes</h2>
+
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frmFichaViajes">
+            <p:commandButton icon="fa fa-plus" value="Agregar Ficha" action="flowAgregarFicha"/>
+            
+            <p:dataTable emptyMessage="No se han encontrado resultados">
+                <p:column headerText="ID"></p:column>
+                <p:column headerText="NUMERO TRACTO"></p:column>
+                <p:column headerText="PATENTE"></p:column>
+                <p:column headerText="CONDUCTOR"></p:column>
+                <p:column headerText="GUIA"></p:column>
+                <p:column headerText="TONELAJE"></p:column>
+                <p:column headerText="DESTINO"></p:column>
+                <p:column headerText="FECHA"></p:column>
+                <p:column headerText="HORA"></p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

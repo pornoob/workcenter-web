@@ -131,6 +131,15 @@
                         <h:graphicImage value="/img/icons/64/m_consulta_doc.png"/>
                         <h:outputLabel value="Consulta Documentos"/>
                     </h:commandLink>
+                    
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
+                                   action="#{facesUtil.redirigir('/m/ficha_viajes')}"
+                                   class="menuWorkcenter" style="display: block"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <i class="fa fa-files-o fa-5x"></i>
+                        <h:outputLabel value="Control de Despachos" style="margin-top: 10px"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
         </h:form>

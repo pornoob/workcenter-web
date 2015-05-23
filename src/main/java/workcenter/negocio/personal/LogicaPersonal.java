@@ -89,7 +89,7 @@ public class LogicaPersonal {
     public List<DocumentoPersonal> obtenerDocumentos(Personal personal) {
         return personalDao.obtenerDocumentos(personal);
     }
-
+    
     @Transactional(readOnly = true)
     public List<ContratoPersonal> obtenerContratos(Personal personal) {
         return personalDao.obtenerContratos(personal);
@@ -140,6 +140,11 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public List<TipoDocPersonal> obtenerTiposDocPorCargo(Personal p) {
         return personalDao.obtenerTiposDocPorCargo(p);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<TipoDocPersonal> obtenerTiposDocPorCargo() {
+        return personalDao.obtenerTiposDocPorCargo();
     }
 
     @Transactional(readOnly = false)

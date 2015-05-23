@@ -220,9 +220,11 @@ public class MantenedorPersonal implements Serializable {
     public String irVerFicha(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
+//        personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos());
         documentos = new ArrayList<DocumentoPersonal>(personalSeleccionado.getDocumentos());
         tiposDocumentos = new ArrayList<TipoDocPersonal>();
-        for (TipoDocPersonal tdp : logicaPersonal.obtenerTiposDocPorCargo(personalSeleccionado)) {
+//        for (TipoDocPersonal tdp : logicaPersonal.obtenerTiposDocPorCargo(personalSeleccionado)) {
+        for (TipoDocPersonal tdp : logicaPersonal.obtenerTiposDocPorCargo()) {
             boolean encontrado = false;
             for (DocumentoPersonal dp : documentos) {
                 if (dp.getTipo().equals(tdp)) {
