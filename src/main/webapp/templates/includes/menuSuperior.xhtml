@@ -59,6 +59,9 @@
             <p:menuitem id="mConsultaDoc" styleClass="ui-icon ui-icon-m-consulta-doc"
                         url="/m/consulta_doc" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
+            <p:menuitem id="mFicha_Viajes" styleClass="fa fa-files-o fa-1x" style="color: black; font-size: 1.26em"
+                        url="/m/ficha_viajes" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>

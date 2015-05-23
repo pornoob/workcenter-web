@@ -19,6 +19,7 @@
         <h:outputScript library="primefaces" name="jquery/jquery.js" target="head"/>
         <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
         <h:outputScript library="js" name="webcenter.js" target="head"/>
+        <h:outputScript library="js" name="focusEnter.js"/>
         <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
         <p:idleMonitor id="sesionMonitor"  rendered="#{sesionCliente.estaAutentificado()}"
                        timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>

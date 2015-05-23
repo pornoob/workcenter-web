@@ -78,6 +78,11 @@ public class LogicaEquipos {
     public Equipo obtenerEquipo(Equipo e) {
         return equipoDao.obtenerEquipo(e);
     }
+    
+    @Transactional(readOnly = true)
+    public List<Equipo> obtenerEquipo( int tipo) {
+        return equipoDao.obtenerTractos();
+    }
 
     @Transactional(readOnly = false)
     public void guardarSeguro(SeguroEquipo seguro) {
