@@ -22,66 +22,83 @@ public class MantenedorFicha implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	private static final int SUBTIPO = 1;
-    private List<Equipo> equipos;
-    private List<Personal> personal;
-    private Personal persona;
-    private List<String> destino;
-    private ViajesTortola viajes;
-    
-	
+	private List<Equipo> equipos;
+	private List<Personal> personal;
+	private List<ViajesTortola> lViajes;
+	private Personal persona;
+	private List<String> destino;
+	private ViajesTortola viajes;
+
 	@Autowired
 	private LogicaFicha logicaFicha;
-	
+
 	@Autowired
 	private LogicaEquipos logicaEquipos;
-	
+
 	@Autowired
 	private LogicaPersonal logicaPersonal;
-	
-	public void inicio() {
-	viajes = new ViajesTortola();
-	personal = logicaPersonal.obtenerConductores();
-	equipos = logicaEquipos.obtenerTractos();
-	destino = new ArrayList<String>();
-    destino.add("CHAGRES");
-    destino.add("PVSA");
-		
-    }
-	
-	public List<String> destinoAutocomplete(String query) {
-				
-        List<String> destinoFiltro = new ArrayList<String>();
-         
-        for (int i = 0; i < destino.size(); i++) {
-        	String skin = destino.get(i);
-            if(skin.toLowerCase().startsWith(query)) {
-            	destinoFiltro.add(skin);
-            }
-        }
-         
-        return destinoFiltro;
-    }
-	
-	public Equipo obtenerCamion(){
-		//camion = logicaEquipos.obtenerEquipo(numCamion,1);
-		return null;
-	}
-	
-	public void guardarFicha(){
-		
-		for (Equipo e : equipos) {
-		
-			if (e.getNumero().intValue() == viajes.getNumerTracto().intValue()){
-			 viajes.setNomTracto(e.getPatente());
-			 viajes.setNumerTracto(e.getNumero());
-			 break;
-		 	}
-		}		
 
-		logicaFicha.guardarFicha(viajes);		
-		FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha guardado correctamente la ficha con ID: ".concat(viajes.getId()));
+	public void inicio() {
 		viajes = new ViajesTortola();
-	
+		personal = logicaPersonal.obtenerConductores();
+		equipos = logicaEquipos.obtenerTractos();
+		lViajes = logicaFicha.obtenerTodasFichaViajes();
+		destino = new ArrayList<String>();
+		destino.add("CHAGRES");
+		destino.add("PVSA");
+
+	}
+
+	public List<String> destinoAutocomplete(String query) {
+
+		List<String> destinoFiltro = new ArrayList<String>();
+
+		for (int i = 0; i < destino.size(); i++) {
+			String skin = destino.get(i);
+			if (skin.toLowerCase().startsWith(query)) {
+				destinoFiltro.add(skin);
+			}
+		}
+
+		return destinoFiltro;
+	}
+
+	public void guardarFicha() {
+		if (viajes.getNumerTracto() == null || viajes.getDestino() == null
+				|| viajes.getFecha() == null
+				|| viajes.getNom_conductor() == null
+				|| viajes.getHora() == null || viajes.getTonelaje() == null
+				|| viajes.getNumGuia() == null) {
+			FacesUtil.mostrarMensajeError("Operación Fallida",
+					"Debe ingresar todos los campos");
+		} else {
+			ViajesTortola guia = logicaFicha.obtenerGuia(viajes.getNumGuia());
+			if (guia == null) {
+				for (Equipo e : equipos) {
+
+					if (e.getNumero().intValue() == viajes.getNumerTracto()
+							.intValue()) {
+						viajes.setNomTracto(e.getPatente());
+						viajes.setNumerTracto(e.getNumero());
+						break;
+					}
+				}
+
+				logicaFicha.guardarFicha(viajes);
+				FacesUtil.mostrarMensajeInformativo("Operación exitosa",
+						"Se ha guardado correctamente la ficha con ID: "
+								.concat(viajes.getId()));
+				viajes = new ViajesTortola();
+			} else
+				FacesUtil.mostrarMensajeError("Operación Fallida",
+						"Numero de Guía Duplicada : ".concat(viajes
+								.getNumGuia().toString()));
+		}
+	}
+
+	public String regresarListado() {
+		lViajes = logicaFicha.obtenerTodasFichaViajes();
+		return "flowMenuViajes";
 	}
 
 	public Personal getPersona() {
@@ -122,6 +139,14 @@ public class MantenedorFicha implements Serializable {
 
 	public void setViajes(ViajesTortola viajes) {
 		this.viajes = viajes;
+	}
+
+	public List<ViajesTortola> getlViajes() {
+		return lViajes;
+	}
+
+	public void setlViajes(List<ViajesTortola> lViajes) {
+		this.lViajes = lViajes;
 	}
 
 }

@@ -47,7 +47,7 @@
 
                 <p:column filterBy="#{personal}" headerText="Faena" filterFunction="#{mantenedorPersonal.filtroFaena}">
                     <f:facet name="filter">
-                        <p:selectOneMenu id="faena" onchange="PF('tablaPersonal').filter()">
+                        <p:selectOneMenu id="faena" onchange="PF('tablaPersonal').filter()" style="width:75px">
                             <f:selectItem itemLabel="--Todos--" itemValue="#{null}" noSelectionOption="true"/>
                             <f:selectItems value="#{mantenedorPersonal.listaServicios}" var="filtro"
                                            itemLabel="#{filtro.nombre}" itemValue="#{filtro.id}"/>

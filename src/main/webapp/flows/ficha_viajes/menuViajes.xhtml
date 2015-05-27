@@ -11,16 +11,39 @@
         <h:form id="frmFichaViajes">
             <p:commandButton icon="fa fa-plus" value="Agregar Ficha" action="flowAgregarFicha"/>
             
-            <p:dataTable emptyMessage="No se han encontrado resultados">
-                <p:column headerText="ID"></p:column>
-                <p:column headerText="NUMERO TRACTO"></p:column>
-                <p:column headerText="PATENTE"></p:column>
-                <p:column headerText="CONDUCTOR"></p:column>
-                <p:column headerText="GUIA"></p:column>
-                <p:column headerText="TONELAJE"></p:column>
-                <p:column headerText="DESTINO"></p:column>
-                <p:column headerText="FECHA"></p:column>
-                <p:column headerText="HORA"></p:column>
+            <p:dataTable var="f" value="#{mantenedorFicha.lViajes}"
+            			 emptyMessage="No se han encontrado resultados"
+            			 filterEvent="enter"
+            			 paginator="true" 
+            			 rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}">
+                <p:column headerText="ID" filterBy="#{f.id}">
+                	<h:outputText value="#{f.id}"/>
+                </p:column>
+                <p:column headerText="Nº TRACTO" filterBy="#{f.numerTracto}">
+                	 <h:outputText value="#{f.numerTracto}"/>
+               	</p:column>
+                <p:column headerText="PATENTE" filterBy="#{f.nomTracto}" filterMatchMode="contains">
+                	 <h:outputText value="#{f.nomTracto}" />
+                </p:column>
+                <p:column headerText="CONDUCTOR" filterBy="#{f.nom_conductor}" filterMatchMode="contains">
+                	 <h:outputText value="#{f.nom_conductor}" />
+               	</p:column>
+                <p:column headerText="GUIA" filterBy="#{f.numGuia}" filterMatchMode="exact">
+                	 <h:outputText value="#{f.numGuia}" />
+                </p:column>
+                <p:column headerText="TONELAJE">
+                <h:outputText value="#{f.tonelaje}" />
+                </p:column>
+                <p:column headerText="DESTINO" filterBy="#{f.destino}" filterMatchMode="contains">
+                <h:outputText value="#{f.destino}" />
+                </p:column>
+                <p:column headerText="FECHA" filterBy="#{f.fecha}" filterMatchMode="contains">
+                <h:outputText value="#{f.fecha}"/>
+                </p:column>
+                <p:column headerText="HORA">
+                <h:outputText value="#{f.hora}" />
+                </p:column>    
             </p:dataTable>
         </h:form>
     </ui:define>

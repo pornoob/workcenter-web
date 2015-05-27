@@ -11,7 +11,7 @@
     </view-state>
     
     <view-state id="ingresarFicha">
-    <transition on="flowAgregarFicha" to="ingresarFicha"/>
+    <transition on="flowMenuViajes" to="menuViajes"/>
     </view-state>
 
 </flow>

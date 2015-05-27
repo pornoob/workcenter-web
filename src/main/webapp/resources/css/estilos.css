@@ -320,3 +320,9 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 .ui-icon.fa {
     margin-top: -4px !important;
 }
+
+.ui-datatable .ui-column-filter {
+    display: block;
+    margin: auto;
+    width: 70px !important;
+}

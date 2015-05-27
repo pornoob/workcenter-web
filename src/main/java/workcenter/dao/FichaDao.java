@@ -1,5 +1,7 @@
 package workcenter.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -15,6 +17,19 @@ public class FichaDao {
 	 
 	    public void crearFicha(ViajesTortola v) {
 	        em.persist(v);
+	    }
+	    
+	    public List<ViajesTortola> obtenerTodasFichaViajes(){
+	    	return em.createNamedQuery("ViajesTortola.findAll" ).getResultList();
+	    }
+	    
+	    public ViajesTortola obtenerGuia(Integer num_guia){
+	    	try {
+	    		return (ViajesTortola) em.createNamedQuery("ViajesTortola.findByGuia" ).setParameter("numGuia", num_guia).getSingleResult();	
+			} catch (Exception e) {
+				return null;
+			}
+	    	
 	    }
 
 }

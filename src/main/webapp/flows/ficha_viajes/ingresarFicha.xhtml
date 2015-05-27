@@ -20,7 +20,7 @@
 				<td>HORA</td>
 			</tr>
 			<tr>
-				<td><p:inputText style="width:41px" id="numero" value="#{mantenedorFicha.viajes.numerTracto}" onblur="#{mantenedorFicha.obtenerCamion()}" onkeypress="return valida(event)"/></td>
+				<td><p:inputText style="width:41px" id="numero" value="#{mantenedorFicha.viajes.numerTracto}"/></td>
 				<td>
 					<p:selectOneMenu style="width:250px" filter="true" filterMatchMode="contains" value="#{mantenedorFicha.viajes.nom_conductor}">
 	                    <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
@@ -28,28 +28,42 @@
 	                </p:selectOneMenu>
 				</td>
 				<td>
-					<p:inputText value="#{mantenedorFicha.viajes.numGuia}" onkeypress="return valida(event)" />
+					<p:inputText value="#{mantenedorFicha.viajes.numGuia}" onkeypress="return reemplazar(this);"/>
 				</td>
 				<td>
-					<p:inputText value="#{mantenedorFicha.viajes.tonelaje}" onkeypress="return valida(event)"/>
+					<p:inputText value="#{mantenedorFicha.viajes.tonelaje}" onkeypress="return reemplazar(this);"/>
 				</td>
 				<td>
-					<p:autoComplete id="destinos" value="#{mantenedorFicha.viajes.destino}" completeMethod="#{mantenedorFicha.destinoAutocomplete}"
-					var="d" itemLabel="#{d}" itemValue="#{d}" forceSelection="true"/>
+					<p:selectOneMenu style="width:110px" filter="true" filterMatchMode="contains" value="#{mantenedorFicha.viajes.destino}">
+	                    <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+	                    <f:selectItems value="#{mantenedorFicha.destino}" var="d" itemLabel="#{d}" itemValue="#{d}"/>
+	                </p:selectOneMenu>
 				</td>
 				<td>
-				<p:calendar pattern="dd-MM-yyyy" id="ifecha" value="#{mantenedorFicha.viajes.fecha}"/>
+				<p:calendar pattern="dd-MM-yyyy" id="ifecha" value="#{mantenedorFicha.viajes.fecha}" />
 				</td>
-				<td><p:inputText style="width:41px" maxlength="4" value="#{mantenedorFicha.viajes.hora}"/></td>
+				<td>
+				<p:inputMask mask="99:99" value="#{mantenedorFicha.viajes.hora}" style="width:41px" /> 
+				</td>
 			</tr>
 			<tr>
 			<td colspan="7" align="left"></td>
 			</tr>
 			<tr>
-				<td colspan="7" align="right"><p:commandButton value="Guardar" action="#{mantenedorFicha.guardarFicha()}" update="@form"/> </td>
+				<td colspan="7" align="right">
+				<p:commandButton value="Regresar" action="#{mantenedorFicha.regresarListado()}" >
+				<p:confirm header="Confirmación" message="¿Desea regresar a Listar Despachos?" icon="ui-icon-alert"  />
+				</p:commandButton>
+				<p:commandButton value="Guardar" action="#{mantenedorFicha.guardarFicha()}" update="@form">
+				<p:confirm header="Confirmación" message="¿Desea Usted Guarda los datos?" icon="ui-icon-alert"  />
+				</p:commandButton>
+				</td>
 			</tr>
 		</table> 
-		
+		<p:confirmDialog global="true" showEffect="fade">
+        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+       </p:confirmDialog>
         </h:form>
     </ui:define>
 </ui:composition>

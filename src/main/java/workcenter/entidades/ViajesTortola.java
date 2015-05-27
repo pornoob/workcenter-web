@@ -13,15 +13,11 @@ import java.util.Date;
  */
 @Entity
 @Table(name="viajes_tortola")
-//@XmlRootElement
-//@NamedQueries({
-//    @NamedQuery(name = "ViajesTortola.findAll", query = "SELECT v FROM ViajesTortola v"),
-//    @NamedQuery(name = "ViajesTortola.findById", query = "SELECT v FROM ViajesTortola v WHERE v.id = :id"),
-//    @NamedQuery(name = "ViajesTortola.findByVersion", query = "SELECT v FROM ViajesTortola v WHERE v.version = :version"),
-//    @NamedQuery(name = "ViajesTortola.findByProyecto", query = "SELECT v FROM ViajesTortola v WHERE v.proyecto = :proyecto"),
-//    @NamedQuery(name = "ViajesTortola.findByModificacion", query = "SELECT v FROM ViajesTortola v WHERE v.modificacion = :modificacion"),
-//    @NamedQuery(name = "ViajesTortola.findByUrl", query = "SELECT v FROM ViajesTortola v WHERE v.url = :url"),
-//    @NamedQuery(name = "ViajesTortola.findByNota", query = "SELECT v FROM ViajesTortola v WHERE v.nota = :nota")})
+@XmlRootElement
+@NamedQueries({
+    @NamedQuery(name = "ViajesTortola.findAll", query = "SELECT v FROM ViajesTortola v ORDER BY v.id DESC"),
+    @NamedQuery(name = "ViajesTortola.findById", query = "SELECT v FROM ViajesTortola v WHERE v.id = :id"),
+    @NamedQuery(name = "ViajesTortola.findByGuia", query = "SELECT v FROM ViajesTortola v WHERE v.numGuia = :numGuia")})
 public class ViajesTortola implements Serializable {
 	private static final long serialVersionUID = 1L;
 

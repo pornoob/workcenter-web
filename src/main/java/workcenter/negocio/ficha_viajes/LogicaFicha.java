@@ -1,5 +1,7 @@
 package workcenter.negocio.ficha_viajes;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -19,5 +21,13 @@ public class LogicaFicha {
 	 @Transactional(readOnly = false)
 	    public void guardarFicha(ViajesTortola viajes) {    
 	        	fichaDao.crearFicha(viajes);
+	        }
+	 @Transactional(readOnly = true)
+	    public ViajesTortola obtenerGuia(Integer num_guia) {    
+	        	return fichaDao.obtenerGuia(num_guia);
+	        }
+	 @Transactional(readOnly = true)
+	    public List<ViajesTortola> obtenerTodasFichaViajes()  {    
+	        	return fichaDao.obtenerTodasFichaViajes();
 	        } 
-	    }
+}
