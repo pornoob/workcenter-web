@@ -30,15 +30,16 @@
             <p:panel header="Detalle" id="pDocs">
 
                 <p:dataTable id="tblDocs" value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p"
-                             emptyMessage="No se han encontrado documentos"
+                             emptyMessage="No se han encontrado documentos" widgetVar="tblDocs"
                              styleClass="tblDocs tblScroll" reflow="true"
                              rows="10" paginator="true" selectionMode="single" selection="true" rowKey="#{p}">
                     <f:facet name="header">
                         <p:outputPanel>
-                            <p:commandButton id="btnSelColumnas" icon="ui-icon-calculator" value="Filtrar Documentos"/>
+                            <p:commandButton id="btnSelColumnas" icon="fa fa-filter" value="Filtrar Documentos"/>
                         </p:outputPanel>
-                        <p:columnToggler trigger="btnSelColumnas" datasource="tblDocs"/>
+                        <p:columnToggler widgetVar="columnToggler" trigger="btnSelColumnas" datasource="tblDocs"/>
                     </f:facet>
+                    <p:ajax event="page" oncomplete="WebCenter.ColumnToggler.fix('columnToggler')"/>
                     <p:column headerText="Nombre" toggleable="false" style="text-align: left">
                         #{p.nombreCompleto}
                     </p:column>

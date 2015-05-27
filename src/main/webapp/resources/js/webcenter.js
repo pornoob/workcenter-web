@@ -26,6 +26,19 @@ var WebCenter = {
             location.href = url;
         }
     },
+    ColumnToggler: {
+        fix: function (widget) {
+            $(PF(widget).jqId).find("ul li div div.ui-chkbox-box").each(function() {
+                var chkbox = $(this);
+                if(chkbox.hasClass('ui-state-active')) {
+                    PF(widget).check(chkbox);
+                }
+                else {
+                    PF(widget).uncheck(chkbox);
+                }
+            });
+        }
+    },
     Filter: {
         componente: null,
         run: function (componente) {
