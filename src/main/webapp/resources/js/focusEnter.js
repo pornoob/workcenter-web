@@ -28,4 +28,8 @@ function reemplazar(e){
 	$(e).val(cadena);	
 }
 
-
+function cargar(e){
+	var numero = $(e).val();
+	
+	patente( [ { name: 'numero', value: numero }] );;
+}

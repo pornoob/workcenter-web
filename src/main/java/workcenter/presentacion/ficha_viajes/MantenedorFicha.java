@@ -3,7 +3,11 @@ package workcenter.presentacion.ficha_viajes;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import javax.faces.context.FacesContext;
+
+import org.apache.taglibs.standard.tag.common.fmt.ParseDateSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -23,6 +27,7 @@ public class MantenedorFicha implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int SUBTIPO = 1;
 	private List<Equipo> equipos;
+	private Equipo equipo;
 	private List<Personal> personal;
 	private List<ViajesTortola> lViajes;
 	private Personal persona;
@@ -61,6 +66,22 @@ public class MantenedorFicha implements Serializable {
 		}
 
 		return destinoFiltro;
+	}
+	public  void obtenerPatente(){
+	    Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
+	    if (requestParamMap.containsKey("numero")) {
+	        String numPatente = requestParamMap.get("numero");
+	        boolean encontrarPatente = false;
+		    for (Equipo e : equipos) {
+
+			if (e.getNumero().intValue() == Integer.parseInt(numPatente)) {
+				equipo = e;
+				encontrarPatente = true;
+			}
+		}
+		if (!encontrarPatente){equipo = new Equipo();}
+	    }
+
 	}
 
 	public void guardarFicha() {
@@ -147,6 +168,14 @@ public class MantenedorFicha implements Serializable {
 
 	public void setlViajes(List<ViajesTortola> lViajes) {
 		this.lViajes = lViajes;
+	}
+
+	public Equipo getEquipo() {
+	    return equipo;
+	}
+
+	public void setEquipo(Equipo equipo) {
+	    this.equipo = equipo;
 	}
 
 }

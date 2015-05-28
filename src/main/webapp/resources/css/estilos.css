@@ -326,3 +326,8 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     margin: auto;
     width: 70px !important;
 }
+
+.ui-datatable .ui-datatable-header, .ui-datatable .ui-datatable-footer {
+    text-align: right !important;
+    padding: 4px 10px;
+}
