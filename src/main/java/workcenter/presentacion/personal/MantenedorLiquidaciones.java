@@ -3,7 +3,9 @@ package workcenter.presentacion.personal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import workcenter.entidades.Personal;
+import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 
 import java.io.Serializable;
@@ -15,10 +17,16 @@ import java.util.List;
 @Component
 @Scope("flow")
 public class MantenedorLiquidaciones implements Serializable {
-    private List<Personal> personal;
+
+	private static final long serialVersionUID = 1L;
+
+	private List<Personal> personal;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
+    
+    @Autowired
+    private LogicaLiquidaciones logicaLiquidaciones;
 
     public String ingresarLiquidacionOtros() {
         personal = logicaPersonal.obtenerTodos();
