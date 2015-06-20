@@ -1,5 +1,6 @@
 package workcenter.presentacion.consulta_doc;
 
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -7,7 +8,10 @@ import workcenter.entidades.*;
 import workcenter.negocio.LogicaServicio;
 import workcenter.negocio.consulta_doc.LogicaConsultaDoc;
 import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.util.components.Constantes;
+import workcenter.util.pojo.Descargable;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -33,6 +37,8 @@ public class MantenedorConsultaDoc implements Serializable {
     private LogicaServicio logicaServicio;
     @Autowired
     private LogicaPersonal logicaPersonal;
+    @Autowired
+    private Constantes constantes;
 
     public void inicio() {
         cargos = logicaConsultaDoc.obtenerCargos();
@@ -88,6 +94,20 @@ public class MantenedorConsultaDoc implements Serializable {
 
         }
         return null;
+    }
+
+    public StreamedContent generaDescargable(Personal p, TipoDocPersonal td) {
+        List<DocumentoPersonal> docs = logicaPersonal.obtenerDocumentosActualizados(p);
+
+        Descargable d = null;
+        for (DocumentoPersonal dp : docs) {
+            if (dp.getTipo().equals(td)) {
+                d = new Descargable(new File(constantes.getPathArchivos() + "/" + dp.getArchivo()));
+                break;
+            }
+        }
+        if (d != null) return d.getStreamedContent();
+        else return null;
     }
 
     // getters and setters

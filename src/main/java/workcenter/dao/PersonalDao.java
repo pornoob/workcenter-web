@@ -194,7 +194,7 @@ public class PersonalDao {
                 .getResultList();
     }
     
-    public List<TipoDocPersonal> obtenerTiposDocPorCargo() {
+    public List<TipoDocPersonal> obtenerTiposDocPersonal() {
         StringBuilder sb = new StringBuilder();
         sb.append("select dp.* from tiposdocpersonal dp " );        
 

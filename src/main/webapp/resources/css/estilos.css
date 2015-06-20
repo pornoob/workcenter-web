@@ -303,11 +303,15 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     max-width: 150px;
 }
 
-.tblDocs table .ui-state-default.ui-static-column {
+.tblDocs table tbody td.text-left {
 	text-align: left;
 }
 
-.tblDocs table tbody {
+.tblDocs table tbody td.text-center {
+    text-align: center;
+}
+
+.tblDocs table thead th {
 	text-align: center;
 }
 

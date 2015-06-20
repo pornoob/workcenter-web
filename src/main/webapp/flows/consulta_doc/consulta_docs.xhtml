@@ -30,9 +30,9 @@
             <p:panel header="Detalle" id="pDocs">
 
                 <p:dataTable id="tblDocs" value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p"
-                             emptyMessage="No se han encontrado documentos" widgetVar="tblDocs"
-                             styleClass="tblDocs tblScroll" reflow="true"
-                             rows="10" paginator="true" selectionMode="single" selection="true" rowKey="#{p}">
+                             emptyMessage="No se han encontrado documentos" widgetVar="tblDocs" filterEvent="enter"
+                             styleClass="tblDocs tblScroll" reflow="true" rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="1000" paginator="true" selectionMode="single" selection="true" rowKey="#{p}">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:commandButton id="btnSelColumnas" icon="fa fa-filter" value="Filtrar Documentos"/>
@@ -40,14 +40,18 @@
                         <p:columnToggler widgetVar="columnToggler" trigger="btnSelColumnas" datasource="tblDocs"/>
                     </f:facet>
                     <p:ajax event="page" oncomplete="WebCenter.ColumnToggler.fix('columnToggler')"/>
-                    <p:column headerText="Nombre" toggleable="false" style="text-align: left">
+                    <p:column headerText="Nombre" filterBy="#{p.nombreCompleto}"
+                              filterFunction="#{dataTableFilter.filtroInsensitivo}" toggleable="false" styleClass="text-left">
                         #{p.nombreCompleto}
                     </p:column>
-                    <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}" styleClass="center-column">
+                    <p:columns var="td" value="#{mantenedorConsultaDoc.tiposDocs}" styleClass="text-center">
                         <f:facet name="header">#{td.etiqueta}</f:facet>
-                        <h:graphicImage value="/img/icons/#{mantenedorConsultaDoc.obtenerLuz(p, td)}.png"
-                                        rendered="#{mantenedorConsultaDoc.obtenerLuz(p, td) != null}"
-                                        title="#{p.nombreCompleto}#{mantenedorConsultaDoc.obtenerMensaje(p, td)}"/>
+
+                        <p:commandLink ajax="false" rendered="#{mantenedorConsultaDoc.obtenerLuz(p, td) != null}">
+                            <h:graphicImage value="/img/icons/#{mantenedorConsultaDoc.obtenerLuz(p, td)}.png"
+                                            title="#{p.nombreCompleto}#{mantenedorConsultaDoc.obtenerMensaje(p, td)}"/>
+                            <p:fileDownload value="#{mantenedorConsultaDoc.generaDescargable(p, td)}"/>
+                        </p:commandLink>
                     </p:columns>
                 </p:dataTable>
             </p:panel>

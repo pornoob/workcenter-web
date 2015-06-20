@@ -195,7 +195,7 @@ public class Constantes implements Serializable {
     private List<Mes> meses;
     private List<Horario> horarios;
     private int cantidadFilasTablas = 15;
-    private String filasPorPaginaTemplate = "10, 15, 20, 30, 40, 50, 100";
+    private String filasPorPaginaTemplate = "10, 50, 100, 1000";
     private String paginadorTemplate = "{FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}";
     private String pathArchivos;
     private Random random;
