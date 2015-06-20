@@ -32,7 +32,7 @@
                 <p:dataTable id="tblDocs" value="#{mantenedorConsultaDoc.personalDocs.keySet().toArray()}" var="p"
                              emptyMessage="No se han encontrado documentos" widgetVar="tblDocs" filterEvent="enter"
                              styleClass="tblDocs tblScroll" reflow="true" rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
-                             rows="10" paginator="true" selectionMode="single" selection="true" rowKey="#{p}">
+                             rows="1000" paginator="true" selectionMode="single" selection="true" rowKey="#{p}">
                     <f:facet name="header">
                         <p:outputPanel>
                             <p:commandButton id="btnSelColumnas" icon="fa fa-filter" value="Filtrar Documentos"/>
