@@ -44,7 +44,6 @@ public class BonoDescuento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Long id;
     @Basic(optional = false)
@@ -163,15 +162,12 @@ public class BonoDescuento implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof BonoDescuento)) {
             return false;
         }
         BonoDescuento other = (BonoDescuento) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override

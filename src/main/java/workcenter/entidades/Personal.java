@@ -129,6 +129,10 @@ public class Personal implements Serializable {
     )
     private List<Servicio> servicios;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal")
+    private List<BonoDescuentoPersonal> bonosDescuentos;
+
+
     public Personal() {
     }
 
@@ -359,5 +363,13 @@ public class Personal implements Serializable {
 
     public void setServicios(List<Servicio> servicios) {
         this.servicios = servicios;
+    }
+
+    public List<BonoDescuentoPersonal> getBonosDescuentos() {
+        return bonosDescuentos;
+    }
+
+    public void setBonosDescuentos(List<BonoDescuentoPersonal> bonosDescuentos) {
+        this.bonosDescuentos = bonosDescuentos;
     }
 }
