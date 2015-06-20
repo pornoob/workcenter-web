@@ -249,6 +249,9 @@ public class Remuneracion implements Serializable {
     @JoinColumn(name = "idPersonal", referencedColumnName = "rut")
     @ManyToOne(optional = false)
     private Personal idPersonal;
+    @Basic
+    @Column(name = "generica")
+    private Boolean esGenerica;
 
     public Remuneracion() {
     }
@@ -793,17 +796,22 @@ public class Remuneracion implements Serializable {
         return hash;
     }
 
+    public Boolean getEsGenerica() {
+        return esGenerica;
+    }
+
+    public void setEsGenerica(Boolean esGenerica) {
+        this.esGenerica = esGenerica;
+    }
+
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Remuneracion)) {
             return false;
         }
         Remuneracion other = (Remuneracion) object;
-        if ((this.idMaestro == null && other.idMaestro != null) || (this.idMaestro != null && !this.idMaestro.equals(other.idMaestro))) {
-            return false;
-        }
-        return true;
+        if (this.getIdMaestro() == null || other.getIdMaestro() == null) return false;
+        else return this.getIdMaestro().intValue() == other.getIdMaestro().intValue();
     }
 
     @Override

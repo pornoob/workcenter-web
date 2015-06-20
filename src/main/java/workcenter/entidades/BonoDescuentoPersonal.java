@@ -9,17 +9,7 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
@@ -43,17 +33,15 @@ public class BonoDescuentoPersonal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Long id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_bonodescuento")
-    private long idBonodescuento;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "id_personal")
-    private int idPersonal;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
+    private BonoDescuento idBonodescuento;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "id_personal", referencedColumnName = "rut")
+    private Personal idPersonal;
+
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -73,12 +61,6 @@ public class BonoDescuentoPersonal implements Serializable {
         this.id = id;
     }
 
-    public BonoDescuentoPersonal(Long id, long idBonodescuento, int idPersonal) {
-        this.id = id;
-        this.idBonodescuento = idBonodescuento;
-        this.idPersonal = idPersonal;
-    }
-
     public Long getId() {
         return id;
     }
@@ -87,19 +69,19 @@ public class BonoDescuentoPersonal implements Serializable {
         this.id = id;
     }
 
-    public long getIdBonodescuento() {
+    public BonoDescuento getIdBonodescuento() {
         return idBonodescuento;
     }
 
-    public void setIdBonodescuento(long idBonodescuento) {
+    public void setIdBonodescuento(BonoDescuento idBonodescuento) {
         this.idBonodescuento = idBonodescuento;
     }
 
-    public int getIdPersonal() {
+    public Personal getIdPersonal() {
         return idPersonal;
     }
 
-    public void setIdPersonal(int idPersonal) {
+    public void setIdPersonal(Personal idPersonal) {
         this.idPersonal = idPersonal;
     }
 
@@ -144,15 +126,12 @@ public class BonoDescuentoPersonal implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof BonoDescuentoPersonal)) {
             return false;
         }
         BonoDescuentoPersonal other = (BonoDescuentoPersonal) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override
