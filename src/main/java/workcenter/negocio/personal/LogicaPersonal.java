@@ -143,8 +143,8 @@ public class LogicaPersonal {
     }
     
     @Transactional(readOnly = true)
-    public List<TipoDocPersonal> obtenerTiposDocPorCargo() {
-        return personalDao.obtenerTiposDocPorCargo();
+    public List<TipoDocPersonal> obtenerTiposDocPersonal() {
+        return personalDao.obtenerTiposDocPersonal();
     }
 
     @Transactional(readOnly = false)
