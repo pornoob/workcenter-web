@@ -129,7 +129,17 @@ public class Personal implements Serializable {
     )
     private List<Servicio> servicios;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal")
+    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.EAGER)
+    @JoinTable(
+            name = "bonosdescuentospersonal",
+            inverseJoinColumns = {
+                    @JoinColumn(name = "id")
+            },
+            joinColumns = {
+                    @JoinColumn(name = "id_personal")
+            }
+    )
     private List<BonoDescuentoPersonal> bonosDescuentos;
 
 

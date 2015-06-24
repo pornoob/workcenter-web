@@ -35,7 +35,8 @@ public class BonoDescuentoPersonal implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY)
+//    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne
     @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
     private BonoDescuento idBonodescuento;
     @ManyToOne(fetch = FetchType.LAZY)

@@ -30,10 +30,14 @@
                     <td><p:outputLabel value="Personal"/></td>
                     <td>:</td>
                     <td>
-                        <p:selectOneMenu filterMatchMode="contains" filter="true">
-                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
+                        <p:selectOneMenu filterMatchMode="contains" filter="true" 
+                         value="#{mantenedorLiquidaciones.liquidacion.idPersonal}"
+                         onchange="#{mantenedorLiquidaciones.cargarDatos()}"
+                         converter="entityConverter">
+                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                             <f:selectItems value="#{mantenedorLiquidaciones.personal}" var="p" itemLabel="#{p.nombreCompleto}"
-                                           itemValue="#{m.id}"/>
+                                           itemValue="#{p}"/>
+                            <p:ajax event="change" listener="#{mantenedorLiquidaciones.cargarDatos()}" update="frmLiquidaciones" />
                         </p:selectOneMenu>
                     </td>
 
@@ -44,7 +48,7 @@
                 <tr>
                     <td><p:outputLabel value="Sueldo base"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}"/></td>
 
                     <td><p:outputLabel value="AFP"/></td>
                     <td>:</td>
@@ -62,7 +66,7 @@
                 <tr>
                     <td><p:outputLabel value="Gratificación"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}"/></td>
 
                     <td><p:outputLabel value="Renta afecta"/></td>
                     <td>:</td>
@@ -71,7 +75,7 @@
                 <tr>
                     <td><p:outputLabel value="Horas extra"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText vale="#{mantenedorLiquidaciones.liquidacion.horasExtras}"/></td>
 
                     <td><p:outputLabel value="Impuesto único"/></td>
                     <td>:</td>
@@ -89,14 +93,18 @@
 
                 <tr>
                     <td colspan="3">
-                        <p:dataTable emptyMessage="Sin bonos">
+                        <p:dataTable emptyMessage="Sin bonos" value="#{mantenedorLiquidaciones.bonoImponibles}" var="l">
                             <f:facet name="header">
                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/>
                                 </div>
                                 <div>Bonos Imponibles</div>
                             </f:facet>
-                            <p:column headerText="Detalle"></p:column>
-                            <p:column headerText="Monto"></p:column>
+                            <p:column headerText="Detalle">
+                            <h:outputText value="#{l.idBonodescuento.descripcion}"/>
+                            </p:column>
+                            <p:column headerText="Monto">
+                            <h:outputText value="#{l.monto}"/>
+                            </p:column>
                         </p:dataTable>
                     </td>
                     <td colspan="3">
@@ -114,14 +122,17 @@
 
                 <tr>
                     <td colspan="3">
-                        <p:dataTable emptyMessage="Sin bonos">
+                        <p:dataTable emptyMessage="Sin bonos" value="#{mantenedorLiquidaciones.bonoNoImponibles}" var="l">
                             <f:facet name="header">
                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/>
                                 </div>
                                 <div>Bonos No Imponibles</div>
                             </f:facet>
-                            <p:column headerText="Detalle"></p:column>
-                            <p:column headerText="Monto"></p:column>
+                            <p:column headerText="Detalle">
+                            <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
+                            <p:column headerText="Monto">
+                            <h:outputText value="#{l.monto}"/>
+                            </p:column>
                         </p:dataTable>
                     </td>
                     <td colspan="3">
