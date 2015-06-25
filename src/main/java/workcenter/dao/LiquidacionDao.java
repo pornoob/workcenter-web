@@ -1,5 +1,7 @@
 package workcenter.dao;
 
+import java.util.List;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
@@ -7,8 +9,8 @@ import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 
 import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Empresa;
 import workcenter.entidades.Personal;
+import workcenter.entidades.ValorPrevisionPersonal;
 
 @Repository
 public class LiquidacionDao {
@@ -26,6 +28,20 @@ public class LiquidacionDao {
 	        q.setParameter("rut", p.getRut());
 	        try {
 	            return (ContratoPersonal) q.getSingleResult();
+	        } catch (Exception e) {
+	            return null;
+	        }		 
+	 }
+	 
+	@SuppressWarnings("unchecked")
+	public List<ValorPrevisionPersonal> obtenerDatosPrevision(Integer numeroContrato){
+		 StringBuilder sb = new StringBuilder();
+	        sb.append("select vpp.* from valoresprevisionpersonal vpp ");
+	        sb.append("where contrato = :contrato ");
+	        Query q = em.createNativeQuery(sb.toString(), ValorPrevisionPersonal.class);
+	        q.setParameter("contrato", numeroContrato);
+	        try {
+	            return q.getResultList();
 	        } catch (Exception e) {
 	            return null;
 	        }		 

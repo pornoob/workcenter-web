@@ -12,6 +12,7 @@ import workcenter.entidades.BonoDescuentoPersonal;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
+import workcenter.entidades.ValorPrevisionPersonal;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 
@@ -29,6 +30,8 @@ public class MantenedorLiquidaciones implements Serializable {
 	private List<BonoDescuentoPersonal> bonoNoImponibles;
 	
 	private List<BonoDescuentoPersonal> bonoImponibles;
+	
+	private List<ValorPrevisionPersonal> valorprevision;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -44,28 +47,52 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public void cargarDatos(){
+    	//obs: ingresar constasntes en la clase existente;                         
     	bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
     	bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
+    	valorprevision = new ArrayList<ValorPrevisionPersonal>();
+    	Integer totalNoImponible = 0;
+    	Integer totalImponible = 0;
     	if (liquidacion.getIdPersonal() == null){
     		System.out.println("esta nulo");
     	}else{
     	for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
 			if (bDP.getIdBonodescuento().getImponible()){
 				bonoImponibles.add(bDP);
-			}else {bonoNoImponibles.add(bDP);}
+				totalImponible = totalImponible + bDP.getMonto().intValue();
+			}else {bonoNoImponibles.add(bDP);
+				   totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
+			}
 		}
     	liquidacion.getIdPersonal().getBonosDescuentos();
     	ContratoPersonal cp = new ContratoPersonal();
-    	cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());  	
+    	cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
+    	valorprevision = cargarDatosPrevision(cp.getNumero());
     	liquidacion.setSueldoBase(cp.getSueldoBase());
     	Double gratificacion = (cp.getSueldoBase()*0.25);
     	liquidacion.setGratificacion(gratificacion.intValue());
+    	liquidacion.setTotalImponible(liquidacion.getSueldoBase()+liquidacion.getGratificacion()+totalImponible);
+    	liquidacion.setTotalHaberes(liquidacion.getSueldoBase()+liquidacion.getGratificacion()+totalImponible+totalNoImponible);
+    	//calculo afp y salud
+    	for (ValorPrevisionPersonal vPP : valorprevision) {
+    	Double descuentoPrevision = (liquidacion.getTotalImponible()*vPP.getValor() / 100);
+    	Double descuentoAfp = liquidacion.getTotalImponible()*vPP.getValor() / 100;
+			if (vPP.getPrevision().getTipo().equals("salud") ){
+				liquidacion.setDctoPrevision(descuentoPrevision.intValue());
+			}else{
+				liquidacion.setDectoAFP(descuentoAfp.intValue());
+			}
+		}
+    	liquidacion.setRentaAfecta(liquidacion.getTotalImponible()-
+    			(liquidacion.getDctoPrevision()+liquidacion.getDectoAFP()));
+    	liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-
+    			(liquidacion.getDctoPrevision()+liquidacion.getDectoAFP()));
     	liquidacion.setHorasExtras(0);
     	}
     }
     
-    public  void cargarDiasTrabajados(){
-    	
+    public  List<ValorPrevisionPersonal> cargarDatosPrevision(Integer numeroContrato){
+    	 return valorprevision = logicaLiquidaciones.obtenerDatosPrevision(numeroContrato);
     }
 
 	public String ingresarLiquidacionOtros() {
@@ -108,6 +135,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setBonoImponibles(List<BonoDescuentoPersonal> bonoImponibles) {
 		this.bonoImponibles = bonoImponibles;
+	}
+
+	public List<ValorPrevisionPersonal> getValorprevision() {
+		return valorprevision;
+	}
+
+	public void setValorprevision(List<ValorPrevisionPersonal> valorprevision) {
+		this.valorprevision = valorprevision;
 	}
     
     
