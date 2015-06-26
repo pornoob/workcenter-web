@@ -64,6 +64,7 @@ public class MantenedorLiquidaciones implements Serializable {
 				   totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
 			}
 		}
+    	// sueldo base y gratificacion
     	liquidacion.getIdPersonal().getBonosDescuentos();
     	ContratoPersonal cp = new ContratoPersonal();
     	cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
@@ -87,6 +88,12 @@ public class MantenedorLiquidaciones implements Serializable {
     			(liquidacion.getDctoPrevision()+liquidacion.getDectoAFP()));
     	liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-
     			(liquidacion.getDctoPrevision()+liquidacion.getDectoAFP()));
+    	// seguro cesantia
+    	Double seguroEmpresa = (liquidacion.getTotalImponible()*2.4) / 100;
+    	Double seguroTrabajador = (liquidacion.getTotalImponible()*0.6) / 100;
+    	liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
+    	liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
+    	liquidacion.setAlcanceLiquido(liquidacion.getAlcanceLiquido()-liquidacion.getAporteMontoTrabajador());
     	liquidacion.setHorasExtras(0);
     	}
     }
