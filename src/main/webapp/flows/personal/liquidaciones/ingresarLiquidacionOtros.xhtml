@@ -15,7 +15,7 @@
                     <td><p:outputLabel value="Mes"/></td>
                     <td>:</td>
                     <td>
-                        <p:selectOneMenu filter="true" filterMatchMode="contains">
+                        <p:selectOneMenu value="#{mantenedorLiquidaciones.mes}" filter="true" filterMatchMode="contains">
                             <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
                             <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"
                                            itemValue="#{m.id}"/>
@@ -24,7 +24,7 @@
 
                     <td><p:outputLabel value="Año"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.anio}"/></td>
                 </tr>
                 <tr>
                     <td><p:outputLabel value="Personal"/></td>
@@ -89,7 +89,7 @@
 
                     <td><p:outputLabel value="Impuesto único"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.impUnico}"/></td>
                 </tr>
                 <tr>
                     <td></td>

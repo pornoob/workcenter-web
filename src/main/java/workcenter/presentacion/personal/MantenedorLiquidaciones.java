@@ -1,7 +1,9 @@
 package workcenter.presentacion.personal;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,8 +46,15 @@ public class MantenedorLiquidaciones implements Serializable {
     private Constantes constantes;
 
     private Remuneracion liquidacion;
+    private Integer anio;
+    private String mes;
 
     public void inicio() {
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
+        String fechaActual = sdf.format(new Date());
+
+        anio = Integer.parseInt(fechaActual.split("-")[1]);
+        mes = fechaActual.split("-")[0];
         liquidacion = new Remuneracion();
     }
 
@@ -87,10 +96,9 @@ public class MantenedorLiquidaciones implements Serializable {
                 liquidacion.setDectoAFP(descuentoAfp.intValue());
             }
         }
-        liquidacion.setRentaAfecta(liquidacion.getTotalImponible() -
-                (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
-        liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() -
-                (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
+        liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
+        liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
+
         // seguro cesantia
         Double seguroEmpresa = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeEmpleador()) / 100;
     	Double seguroTrabajador = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeTrabajador()) / 100;
@@ -150,5 +158,19 @@ public class MantenedorLiquidaciones implements Serializable {
         this.valorprevision = valorprevision;
     }
 
+    public Integer getAnio() {
+        return anio;
+    }
 
+    public void setAnio(Integer anio) {
+        this.anio = anio;
+    }
+
+    public String getMes() {
+        return mes;
+    }
+
+    public void setMes(String mes) {
+        this.mes = mes;
+    }
 }
