@@ -40,6 +40,9 @@ public class MantenedorLiquidaciones implements Serializable {
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
 
+    @Autowired
+    private Constantes constantes;
+
     private Remuneracion liquidacion;
 
     public void inicio() {
