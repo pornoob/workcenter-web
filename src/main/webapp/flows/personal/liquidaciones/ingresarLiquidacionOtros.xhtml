@@ -30,14 +30,15 @@
                     <td><p:outputLabel value="Personal"/></td>
                     <td>:</td>
                     <td>
-                        <p:selectOneMenu filterMatchMode="contains" filter="true" 
-                         value="#{mantenedorLiquidaciones.liquidacion.idPersonal}"
-                         onchange="#{mantenedorLiquidaciones.cargarDatos()}"
-                         converter="entityConverter">
+                        <p:selectOneMenu filterMatchMode="contains" filter="true"
+                                         value="#{mantenedorLiquidaciones.liquidacion.idPersonal}"
+                                         converter="entityConverter">
                             <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                            <f:selectItems value="#{mantenedorLiquidaciones.personal}" var="p" itemLabel="#{p.nombreCompleto}"
+                            <f:selectItems value="#{mantenedorLiquidaciones.personal}" var="p"
+                                           itemLabel="#{p.nombreCompleto}"
                                            itemValue="#{p}"/>
-                            <p:ajax event="change" listener="#{mantenedorLiquidaciones.cargarDatos()}" update="frmLiquidaciones" />
+                            <p:ajax event="change" listener="#{mantenedorLiquidaciones.cargarDatos()}"
+                                    update="frmLiquidaciones"/>
                         </p:selectOneMenu>
                     </td>
 
@@ -174,8 +175,8 @@
                     <td></td>
 
                     <td><b></b></td>
-                    <td><BR /><BR /><p:commandButton value="Imprimir Liquidación"/></td>
-                    <td><BR /><BR /><p:commandButton value="Guardar Liquidación"/></td>
+                    <td><br/><br/><p:commandButton value="Imprimir Liquidación"/></td>
+                    <td><br/><br/><p:commandButton value="Guardar Liquidación"/></td>
                 </tr>
             </table>
         </h:form>

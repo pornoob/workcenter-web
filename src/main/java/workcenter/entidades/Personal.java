@@ -35,25 +35,18 @@ import org.springframework.util.StringUtils;
 @Table(name = "personal")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos"),
-    @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario"),
-    @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut"),
-    @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario "
-            + "WHERE p.rut = :rut"),
-    @NamedQuery(name = "Personal.findByDigitoverificador", query = "SELECT p FROM Personal p WHERE p.digitoverificador = :digitoverificador"),
-    @NamedQuery(name = "Personal.findByNombres", query = "SELECT p FROM Personal p WHERE p.nombres = :nombres"),
-    @NamedQuery(name = "Personal.findByApellidos", query = "SELECT p FROM Personal p WHERE p.apellidos = :apellidos"),
-    @NamedQuery(name = "Personal.findByTelefono", query = "SELECT p FROM Personal p WHERE p.telefono = :telefono"),
-    @NamedQuery(name = "Personal.findByCelular", query = "SELECT p FROM Personal p WHERE p.celular = :celular"),
-    @NamedQuery(name = "Personal.findByMail", query = "SELECT p FROM Personal p WHERE p.mail = :mail"),
-    @NamedQuery(name = "Personal.findByFoto", query = "SELECT p FROM Personal p WHERE p.foto = :foto"),
-    @NamedQuery(name = "Personal.findByDomicilio", query = "SELECT p FROM Personal p WHERE p.domicilio = :domicilio"),
-    @NamedQuery(name = "Personal.findByEcivil", query = "SELECT p FROM Personal p WHERE p.ecivil = :ecivil"),
-    @NamedQuery(name = "Personal.findByNacimiento", query = "SELECT p FROM Personal p WHERE p.nacimiento = :nacimiento"),
-    @NamedQuery(name = "Personal.findByContactoe", query = "SELECT p FROM Personal p WHERE p.contactoe = :contactoe"),
-    @NamedQuery(name = "Personal.findByEdomicilio", query = "SELECT p FROM Personal p WHERE p.edomicilio = :edomicilio")})
+        @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos"),
+        @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT p FROM Personal p "
+                + "LEFT JOIN FETCH p.usuario"),
+        @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut"),
+        @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT p FROM Personal p "
+                + "LEFT JOIN FETCH p.usuario "
+                + "WHERE p.rut = :rut"),
+        @NamedQuery(
+                name = "Personal.findByRutWithLiquidacion",
+                query = "SELECT p FROM Personal p INNER JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+        )
+})
 public class Personal implements Serializable {
 
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
@@ -129,17 +122,7 @@ public class Personal implements Serializable {
     )
     private List<Servicio> servicios;
 
-    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL)
-    @OneToMany(fetch = FetchType.EAGER)
-    @JoinTable(
-            name = "bonosdescuentospersonal",
-            inverseJoinColumns = {
-                    @JoinColumn(name = "id")
-            },
-            joinColumns = {
-                    @JoinColumn(name = "id_personal")
-            }
-    )
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal")
     private List<BonoDescuentoPersonal> bonosDescuentos;
 
 

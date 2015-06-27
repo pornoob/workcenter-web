@@ -162,4 +162,9 @@ public class LogicaPersonal {
     public List<Personal> obtenerPorCargoServicio(Cargo cargo, Servicio servicio) {
         return personalDao.obtenerSegunCargoServicio(cargo, servicio);
     }
+
+    @Transactional(readOnly = true)
+    public Personal obtenerConDatosLiquidacion(Personal p) {
+        return personalDao.obtenerConDatosLiquidacion(p);
+    }
 }

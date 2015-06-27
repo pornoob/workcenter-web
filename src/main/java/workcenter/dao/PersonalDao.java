@@ -213,4 +213,10 @@ public class PersonalDao {
         q.setParameter("rut", p.getRut());        
         return (Personal) q.getSingleResult();
 	}
+
+    public Personal obtenerConDatosLiquidacion(Personal p) {
+        Query q = em.createNamedQuery("Personal.findByRutWithLiquidacion" );
+        q.setParameter("personal", p);
+        return (Personal) q.getSingleResult();
+    }
 }
