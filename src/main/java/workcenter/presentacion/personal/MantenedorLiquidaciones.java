@@ -10,11 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
-import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.*;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
@@ -59,7 +55,8 @@ public class MantenedorLiquidaciones implements Serializable {
     }
 
     public void cargarDatos() {
-        //obs: ingresar constasntes en la clase existente;
+        Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
+
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         valorprevision = new ArrayList<ValorPrevisionPersonal>();
@@ -98,14 +95,28 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
+        liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
 
         // seguro cesantia
-        Double seguroEmpresa = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeEmpleador()) / 100;
-    	Double seguroTrabajador = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeTrabajador()) / 100;
+        Double seguroEmpresa = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
+        Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
         liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
         liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
         liquidacion.setAlcanceLiquido(liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador());
         liquidacion.setHorasExtras(0);
+    }
+
+    public Double calcularImpuestoUnico(int rentaAfecta, int utm) {
+        float rentaAfectaUtm = rentaAfecta / utm;
+
+        List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
+        for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
+            if ((viu.getCotaMin() == null || rentaAfecta > viu.getCotaMin().floatValue()) &&
+                    (viu.getCotaMax() == null || rentaAfecta <= viu.getCotaMax().floatValue())) {
+                return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
+            }
+        }
+        return -1.0;
     }
 
     public String ingresarLiquidacionOtros() {

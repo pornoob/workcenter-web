@@ -7,12 +7,20 @@ import javax.persistence.*;
  */
 @Entity
 @Table(name = "valores_impuesto_unico", schema = "")
+@NamedQueries({
+        @NamedQuery(
+                name = "ValorImpuestoUnico.findVigentes",
+                query = "SELECT viu From ValorImpuestoUnico viu WHERE viu.anioVigencia = (" +
+                        "SELECT MAX(vigente.anioVigencia) FROM ValorImpuestoUnico vigente ORDER BY vigente.cotaMin ASC)"
+        )
+})
 public class ValorImpuestoUnico {
     private Integer id;
     private Integer anioVigencia;
     private Float cotaMin;
     private Float cotaMax;
     private Float factor;
+    private Float substraendo;
 
     @Id
     @Column(name = "id")
@@ -64,6 +72,16 @@ public class ValorImpuestoUnico {
         this.factor = factor;
     }
 
+    @Basic
+    @Column(name = "substraendo")
+    public Float getSubstraendo() {
+        return substraendo;
+    }
+
+    public void setSubstraendo(Float substraendo) {
+        this.substraendo = substraendo;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -77,5 +95,10 @@ public class ValorImpuestoUnico {
     @Override
     public int hashCode() {
         return 31 * (id == null ? 0 : id.hashCode());
+    }
+
+    @Override
+    public String toString() {
+        return "ValorImpuestoUnico{id: "+this.getId()+"}";
     }
 }

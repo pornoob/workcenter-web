@@ -9,9 +9,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import workcenter.dao.LiquidacionDao;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.*;
 
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -25,9 +23,19 @@ public class LogicaLiquidaciones {
 		
 		return liquidacionDao.obtenerDatosContrato(p);
 	}
-	
+
+    @Transactional(readOnly = true)
+    public Variable obtenerValorUtm(Integer mes, Integer anio) {
+        return liquidacionDao.obtenerValorUtm(mes, anio);
+    }
+
+    @Transactional(readOnly = true)
 	public List<ValorPrevisionPersonal> obtenerDatosPrevision(Integer numeroContrato){
 		return liquidacionDao.obtenerDatosPrevision(numeroContrato);
 	}
 
+    @Transactional(readOnly = true)
+    public List<ValorImpuestoUnico> obtenerValoresVigentesImpUnico() {
+        return liquidacionDao.obtenerValoresVigentesImpUnico();
+    }
 }

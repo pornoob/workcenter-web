@@ -24,26 +24,25 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author claudio
  */
 @Entity
 @Table(name = "variables")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Variable.findAll", query = "SELECT v FROM Variable v"),
-    @NamedQuery(name = "Variable.findById", query = "SELECT v FROM Variable v WHERE v.id = :id"),
-    @NamedQuery(name = "Variable.findByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave"),
-    @NamedQuery(name = "Variable.findActualByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave ORDER BY v.fecha DESC"),
-    @NamedQuery(name = "Variable.findByFecha", query = "SELECT v FROM Variable v WHERE v.fecha = :fecha"),
-    @NamedQuery(name = "Variable.findByValor", query = "SELECT v FROM Variable v WHERE v.valor = :valor"),
-    @NamedQuery(name = "Variable.findByAmbito", query = "SELECT v FROM Variable v WHERE v.ambito = :ambito"),
-    @NamedQuery(name = "Variable.findByRut", query = "SELECT v FROM Variable v WHERE v.rut = :rut")})
+        @NamedQuery(name = "Variable.findAll", query = "SELECT v FROM Variable v"),
+        @NamedQuery(name = "Variable.findById", query = "SELECT v FROM Variable v WHERE v.id = :id"),
+        @NamedQuery(name = "Variable.findByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave"),
+        @NamedQuery(name = "Variable.findActualByLlave", query = "SELECT v FROM Variable v WHERE v.llave = :llave ORDER BY v.fecha DESC"),
+        @NamedQuery(
+                name = "Variable.findByLlaveMesAnio",
+                query = "SELECT v FROM Variable v WHERE v.llave=:llave and YEAR(v.fecha) = :anio and MONTH(v.fecha) = :mes"
+        )
+})
 public class Variable implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -138,20 +137,17 @@ public class Variable implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof Variable)) {
             return false;
         }
         Variable other = (Variable) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().intValue() == other.getId().intValue();
     }
 
     @Override
     public String toString() {
         return "workcenter.entities.Variable[ id=" + id + " ]";
     }
-    
+
 }

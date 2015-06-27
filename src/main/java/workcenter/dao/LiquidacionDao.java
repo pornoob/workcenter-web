@@ -8,9 +8,7 @@ import javax.persistence.Query;
 
 import org.springframework.stereotype.Repository;
 
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.*;
 
 @Repository
 public class LiquidacionDao {
@@ -45,5 +43,24 @@ public class LiquidacionDao {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public Variable obtenerValorUtm(Integer mes, Integer anio) {
+        Query q = em.createNamedQuery("Variable.findByLlaveMesAnio");
+        q.setParameter("mes", mes);
+        q.setParameter("anio", anio);
+        q.setParameter("llave", "utm");
+
+        try {
+            return (Variable) q.getSingleResult();
+        } catch (Exception e) {
+            Variable v = new Variable();
+            v.setValor("0");
+            return v;
+        }
+    }
+
+    public List<ValorImpuestoUnico> obtenerValoresVigentesImpUnico() {
+        return em.createNamedQuery("ValorImpuestoUnico.findVigentes").getResultList();
     }
 }
