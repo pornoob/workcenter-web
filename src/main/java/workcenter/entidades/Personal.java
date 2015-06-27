@@ -44,7 +44,7 @@ import org.springframework.util.StringUtils;
                 + "WHERE p.rut = :rut"),
         @NamedQuery(
                 name = "Personal.findByRutWithLiquidacion",
-                query = "SELECT p FROM Personal p INNER JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+                query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
         )
 })
 public class Personal implements Serializable {
