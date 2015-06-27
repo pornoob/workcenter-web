@@ -15,6 +15,7 @@ import workcenter.entidades.Remuneracion;
 import workcenter.entidades.ValorPrevisionPersonal;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.util.components.Constantes;
 
 /**
  * Created by claudio on 16-05-15.
@@ -88,8 +89,8 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() -
                 (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
         // seguro cesantia
-        Double seguroEmpresa = (liquidacion.getTotalImponible() * 2.4) / 100;
-        Double seguroTrabajador = (liquidacion.getTotalImponible() * 0.6) / 100;
+        Double seguroEmpresa = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeEmpleador()) / 100;
+    	Double seguroTrabajador = (liquidacion.getTotalImponible()*constantes.getAportePorcentajeTrabajador()) / 100;
         liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
         liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
         liquidacion.setAlcanceLiquido(liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador());

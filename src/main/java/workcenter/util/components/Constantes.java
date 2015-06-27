@@ -28,6 +28,8 @@ public class Constantes implements Serializable {
     // Zona de remuneraciones
     private int filtroEmpleador = 1;
     private int filtroConductor = 2;
+    private Double aportePorcentajeTrabajador=0.6;
+    private Double aportePorcentajeEmpleador=2.4;
 
     // Zona de personal
     private int cargoConductor = 3;
@@ -466,4 +468,20 @@ public class Constantes implements Serializable {
     public Random getRandom() {
         return random;
     }
+
+	public Double getAportePorcentajeTrabajador() {
+		return aportePorcentajeTrabajador;
+	}
+
+	public void setAportePorcentajeTrabajador(Double aportePorcentajeTrabajador) {
+		this.aportePorcentajeTrabajador = aportePorcentajeTrabajador;
+	}
+
+	public Double getAportePorcentajeEmpleador() {
+		return aportePorcentajeEmpleador;
+	}
+
+	public void setAportePorcentajeEmpleador(Double aportePorcentajeEmpleador) {
+		this.aportePorcentajeEmpleador = aportePorcentajeEmpleador;
+	}
 }
