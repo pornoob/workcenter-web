@@ -1,6 +1,7 @@
 package workcenter.presentacion.personal;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -31,6 +32,10 @@ public class MantenedorLiquidaciones implements Serializable {
     private List<BonoDescuentoPersonal> bonoImponibles;
 
     private List<ValorPrevisionPersonal> valorprevision;
+    
+    private List<BonoDescuentoPersonal> bonoDescuentoPersonal;
+    
+    private List<Remuneracion> listaRemuneraciones;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -42,7 +47,9 @@ public class MantenedorLiquidaciones implements Serializable {
     private Constantes constantes;
 
     private Remuneracion liquidacion;
+    
     private Integer anio;
+    
     private String mes;
 
     public void inicio() {
@@ -51,6 +58,11 @@ public class MantenedorLiquidaciones implements Serializable {
 
         anio = Integer.parseInt(fechaActual.split("-")[1]);
         mes = fechaActual.split("-")[0];
+        
+        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        
+        bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
+        
         liquidacion = new Remuneracion();
     }
 
@@ -78,6 +90,7 @@ public class MantenedorLiquidaciones implements Serializable {
         // sueldo base y gratificacion
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
         valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp.getNumero());
+        liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(),mes,anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
         Double gratificacion = (cp.getSueldoBase() * 0.25);
         liquidacion.setGratificacion(gratificacion.intValue());
@@ -95,28 +108,51 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
-        liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
+        try {
+			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
         // seguro cesantia
         Double seguroEmpresa = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
         Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
         liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
         liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
-        liquidacion.setAlcanceLiquido(liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador());
+        liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador()) - liquidacion.getAnticipoSueldo());
         liquidacion.setHorasExtras(0);
+        SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
+		try {
+			liquidacion.setFechaLiquidacion(formatoDeFecha.parse((anio.toString()+"-"+mes.toString()+"-"+"01")));
+			} catch (ParseException ex) {
+			ex.printStackTrace();
+			}	
+        liquidacion.setEsGenerica(true);
     }
 
-    public Double calcularImpuestoUnico(int rentaAfecta, int utm) {
-        float rentaAfectaUtm = rentaAfecta / utm;
-
-        List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
-        for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
-            if ((viu.getCotaMin() == null || rentaAfecta > viu.getCotaMin().floatValue()) &&
-                    (viu.getCotaMax() == null || rentaAfecta <= viu.getCotaMax().floatValue())) {
-                return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
-            }
-        }
+    public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
+    	
+    	try {
+    		 float rentaAfectaUtm = rentaAfecta / utm;
+    	     List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
+    	        for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
+    	            if ((viu.getCotaMin() == null || rentaAfecta > viu.getCotaMin().floatValue()) &&
+    	                    (viu.getCotaMax() == null || rentaAfecta <= viu.getCotaMax().floatValue())) {
+    	                return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
+    	            }
+    	        }
+		} catch (Exception e) {
+			throw e;
+		}
         return -1.0;
+    }
+    
+    public String guardarDatosLiquidacion(){
+    	logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
+    	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+    	return "flowMenuLiquidaciones";
     }
 
     public String ingresarLiquidacionOtros() {
@@ -184,4 +220,21 @@ public class MantenedorLiquidaciones implements Serializable {
     public void setMes(String mes) {
         this.mes = mes;
     }
+
+	public List<BonoDescuentoPersonal> getBonoDescuentoPersonal() {
+		return bonoDescuentoPersonal;
+	}
+
+	public void setBonoDescuentoPersonal(
+			List<BonoDescuentoPersonal> bonoDescuentoPersonal) {
+		this.bonoDescuentoPersonal = bonoDescuentoPersonal;
+	}
+
+	public List<Remuneracion> getListaRemuneraciones() {
+		return listaRemuneraciones;
+	}
+
+	public void setListaRemuneraciones(List<Remuneracion> listaRemuneraciones) {
+		this.listaRemuneraciones = listaRemuneraciones;
+	}
 }

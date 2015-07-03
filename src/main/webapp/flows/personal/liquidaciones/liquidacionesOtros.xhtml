@@ -11,11 +11,15 @@
         <h:form id="frmLiquidaciones">
             <p:commandButton icon="fa fa-plus" value="Ingresar Nueva" action="#{mantenedorLiquidaciones.ingresarLiquidacionOtros()}"/>
 
-            <p:dataTable emptyMessage="No se han encontrado resultados">
-                <p:column headerText="Nombre"></p:column>
+            <p:dataTable emptyMessage="No se han encontrado resultados" value="#{mantenedorLiquidaciones.listaRemuneraciones}" var="liquidacion">
+                <p:column headerText="Nombre">
+                <p:outputLabel value="#{liquidacion.idPersonal.nombres}"/>
+                </p:column>
                 <p:column headerText="Apellido Paterno"></p:column>
                 <p:column headerText="Apellido Materno"></p:column>
-                <p:column headerText="Fecha"></p:column>
+                <p:column headerText="Fecha">
+                <p:outputLabel value="#{liquidacion.fechaLiquidacion}"/>
+                </p:column>
             </p:dataTable>
         </h:form>
     </ui:define>

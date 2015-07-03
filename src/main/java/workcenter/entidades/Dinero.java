@@ -41,7 +41,9 @@ import javax.xml.bind.annotation.XmlRootElement;
     @NamedQuery(name = "Dinero.findByFechaactivo", query = "SELECT d FROM Dinero d WHERE d.fechaactivo = :fechaactivo"),
     @NamedQuery(name = "Dinero.findByComentario", query = "SELECT d FROM Dinero d WHERE d.comentario = :comentario"),
     @NamedQuery(name = "Dinero.findByReceptor", query = "SELECT d FROM Dinero d WHERE d.receptor = :receptor"),
-    @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga")})
+    @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga"),
+    @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "
+    		+ "WHERE d.fechareal = :fechareal and d.receptor = :receptor")})
 public class Dinero implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

@@ -38,4 +38,23 @@ public class LogicaLiquidaciones {
     public List<ValorImpuestoUnico> obtenerValoresVigentesImpUnico() {
         return liquidacionDao.obtenerValoresVigentesImpUnico();
     }
+    @Transactional(readOnly = false)
+    public void guardarDatosLiquidacion(Remuneracion liquidacion){
+    	liquidacionDao.guardarDatosLiquidacion(liquidacion);
+    }
+    
+    @Transactional(readOnly = true)
+	public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
+		return liquidacionDao.obtenerBonosDescuentos();
+	}
+
+    @Transactional(readOnly = true)
+	public Integer obtenerAnticipoSueldo(Integer idPers, String mes,
+			Integer anio) {
+		return liquidacionDao.obtenerAnticipoSueldo(idPers,mes,anio) ;
+	}
+
+	public List<Remuneracion> obtenerListaRemuneraciones() {
+		return liquidacionDao.obtenerListaRemuneraciones();
+	}
 }

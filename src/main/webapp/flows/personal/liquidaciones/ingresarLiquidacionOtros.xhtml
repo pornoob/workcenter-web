@@ -19,6 +19,8 @@
                             <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
                             <f:selectItems value="#{constantes.meses}" var="m" itemLabel="#{m.nombre}"
                                            itemValue="#{m.id}"/>
+                            <p:ajax event="change" listener="#{mantenedorLiquidaciones.cargarDatos()}"
+                                    update="frmLiquidaciones"/>
                         </p:selectOneMenu>
                     </td>
 
@@ -98,7 +100,7 @@
 
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}"/></td>
                 </tr>
 
                 <tr>
@@ -176,9 +178,16 @@
 
                     <td><b></b></td>
                     <td><br/><br/><p:commandButton value="Imprimir Liquidación"/></td>
-                    <td><br/><br/><p:commandButton value="Guardar Liquidación"/></td>
+                    <td><br/><br/><p:commandButton value="Guardar Liquidación" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}">
+                        <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
+                    </p:commandButton>
+                    </td>
                 </tr>
             </table>
+            <p:confirmDialog global="true" showEffect="fade">
+                 <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                  <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+             </p:confirmDialog>
         </h:form>
     </ui:define>
 </ui:composition>
