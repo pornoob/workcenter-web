@@ -53,8 +53,14 @@ public class LogicaLiquidaciones {
 			Integer anio) {
 		return liquidacionDao.obtenerAnticipoSueldo(idPers,mes,anio) ;
 	}
-
+    
+    @Transactional(readOnly = true)
 	public List<Remuneracion> obtenerListaRemuneraciones() {
 		return liquidacionDao.obtenerListaRemuneraciones();
+	}
+    
+    @Transactional(readOnly = true)
+	public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
+		return liquidacionDao.obtenerBonosFaltantes(p);
 	}
 }

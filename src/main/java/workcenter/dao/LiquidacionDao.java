@@ -112,4 +112,20 @@ public class LiquidacionDao {
 	      q.setParameter("esGenerica", c.getGenericaAdministrativo());
 	      return q.getResultList();
 	}
+
+	public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
+		StringBuilder sb = new StringBuilder();
+        sb.append("SELECT ");
+        sb.append("bdp.id_personal,bd.id as id_bonodescuento,0 as id, bdp.fecha,bdp.fechadesde,bdp.fechahasta,bdp.monto ");
+        sb.append("FROM ");
+        sb.append("(select bdp1.* ");
+        sb.append("FROM ");		
+        sb.append("bonosdescuentospersonal bdp1 ");
+        sb.append("WHERE ");
+        sb.append("bdp1.id_personal =:id_personal) bdp");
+        sb.append(" RIGHT JOIN bonosdescuentos bd on bd.id = bdp.id_bonodescuento where bdp.id_personal is null");
+        Query q = em.createNativeQuery(sb.toString(), BonoDescuentoPersonal.class);
+        q.setParameter("id_personal", p.getRut());
+        return q.getResultList();
+        }
 }

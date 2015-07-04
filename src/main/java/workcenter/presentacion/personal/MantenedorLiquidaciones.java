@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -36,6 +37,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private List<BonoDescuentoPersonal> bonoDescuentoPersonal;
     
     private List<Remuneracion> listaRemuneraciones;
+    
+    private DualListModel bonos;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -64,10 +67,10 @@ public class MantenedorLiquidaciones implements Serializable {
         bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
         
         liquidacion = new Remuneracion();
+        bonos = new DualListModel();
     }
 
-    public void cargarDatos() {
-        Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
+    public void cargarDatos(){
 
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
@@ -76,8 +79,11 @@ public class MantenedorLiquidaciones implements Serializable {
         Integer totalImponible = 0;
 
         if (liquidacion.getIdPersonal() == null) return;
-
+        
+		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
+		
         liquidacion.setIdPersonal(logicaPersonal.obtenerConDatosLiquidacion(liquidacion.getIdPersonal()));
+        bonos = new DualListModel<BonoDescuentoPersonal>(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()),liquidacion.getIdPersonal().getBonosDescuentos());
         for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
             if (bDP.getIdBonodescuento().getImponible()) {
                 bonoImponibles.add(bDP);
@@ -237,4 +243,13 @@ public class MantenedorLiquidaciones implements Serializable {
 	public void setListaRemuneraciones(List<Remuneracion> listaRemuneraciones) {
 		this.listaRemuneraciones = listaRemuneraciones;
 	}
+
+	public void setBonos(DualListModel bonos) {
+		this.bonos = bonos;
+	}
+
+	public DualListModel getBonos() {
+		return bonos;
+	}
+
 }
