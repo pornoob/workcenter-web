@@ -31,6 +31,7 @@ public class Constantes implements Serializable {
     private Double aportePorcentajeTrabajador=0.6;
     private Double aportePorcentajeEmpleador=2.4;
     private String diasAnticipo="15";
+    private Integer diasTrabajados=30;
     private int conceptoAnticipo = 9;
     private Boolean genericaAdministrativo = true;
     private Boolean genericaConductores = false;
@@ -503,5 +504,9 @@ public class Constantes implements Serializable {
 
 	public Boolean getGenericaConductores() {
 		return genericaConductores;
+	}
+
+	public Integer getDiasTrabajados() {
+		return diasTrabajados;
 	}
 }

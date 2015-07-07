@@ -12,7 +12,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
-import workcenter.entidades.*;
+import workcenter.entidades.BonoDescuentoPersonal;
+import workcenter.entidades.ContratoPersonal;
+import workcenter.entidades.Personal;
+import workcenter.entidades.Remuneracion;
+import workcenter.entidades.ValorImpuestoUnico;
+import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.Variable;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
@@ -38,7 +44,7 @@ public class MantenedorLiquidaciones implements Serializable {
     
     private List<Remuneracion> listaRemuneraciones;
     
-    private DualListModel bonos;
+    private DualListModel<BonoDescuentoPersonal> bonos;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -67,7 +73,7 @@ public class MantenedorLiquidaciones implements Serializable {
         bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
         
         liquidacion = new Remuneracion();
-        bonos = new DualListModel();
+        bonos = new DualListModel<BonoDescuentoPersonal>();
     }
 
     public void cargarDatos(){
@@ -83,7 +89,9 @@ public class MantenedorLiquidaciones implements Serializable {
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
 		
         liquidacion.setIdPersonal(logicaPersonal.obtenerConDatosLiquidacion(liquidacion.getIdPersonal()));
-        bonos = new DualListModel<BonoDescuentoPersonal>(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()),liquidacion.getIdPersonal().getBonosDescuentos());
+        //bonos = new DualListModel<BonoDescuentoPersonal>();
+        bonos.setSource(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()));
+        bonos.setTarget(liquidacion.getIdPersonal().getBonosDescuentos());
         for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
             if (bDP.getIdBonodescuento().getImponible()) {
                 bonoImponibles.add(bDP);
@@ -98,7 +106,12 @@ public class MantenedorLiquidaciones implements Serializable {
         valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp.getNumero());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(),mes,anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
-        Double gratificacion = (cp.getSueldoBase() * 0.25);
+        
+        if (liquidacion.getDiasTrabajados() != constantes.getDiasTrabajados() && liquidacion.getDiasTrabajados() != null){	
+           	Double sBase =  (double) ((cp.getSueldoBase()/constantes.getDiasTrabajados())*liquidacion.getDiasTrabajados());
+        	liquidacion.setSueldoBase(sBase.intValue());
+        }        	
+        Double gratificacion = (liquidacion.getSueldoBase() * 0.25);
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
@@ -244,12 +257,12 @@ public class MantenedorLiquidaciones implements Serializable {
 		this.listaRemuneraciones = listaRemuneraciones;
 	}
 
-	public void setBonos(DualListModel bonos) {
-		this.bonos = bonos;
+	public DualListModel<BonoDescuentoPersonal> getBonos() {
+		return bonos;
 	}
 
-	public DualListModel getBonos() {
-		return bonos;
+	public void setBonos(DualListModel<BonoDescuentoPersonal> bonos) {
+		this.bonos = bonos;
 	}
 
 }
