@@ -34,7 +34,7 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(
                 name = "BonoDescuento.findFaltantesByPersonal",
                 query = "SELECT b FROM BonoDescuento b WHERE b NOT IN " +
-                        "(SELECT bdp FROM BonoDescuentoPersonal bdp WHERE bdp.idPersonal = :personal)"
+                        "(SELECT bdp.idBonodescuento FROM BonoDescuentoPersonal bdp WHERE bdp.idPersonal = :personal)"
         )
 })
 public class BonoDescuento implements Serializable {

@@ -14,28 +14,27 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
- *
  * @author claudio
  */
 @Entity
 @Table(name = "bonosdescuentospersonal")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "BonoDescuentoPersonal.findAll", query = "SELECT b FROM BonoDescuentoPersonal b"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findById", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.id = :id"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByIdBonodescuento", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.idBonodescuento = :idBonodescuento"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByIdPersonal", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.idPersonal = :idPersonal"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByFecha", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fecha = :fecha"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByMonto", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.monto = :monto"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByFechadesde", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fechadesde = :fechadesde"),
-    @NamedQuery(name = "BonoDescuentoPersonal.findByFechahasta", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fechahasta = :fechahasta")})
+        @NamedQuery(name = "BonoDescuentoPersonal.findAll", query = "SELECT b FROM BonoDescuentoPersonal b"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findById", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.id = :id"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByIdBonodescuento", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.idBonodescuento = :idBonodescuento"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByIdPersonal", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.idPersonal = :idPersonal"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByFecha", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fecha = :fecha"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByMonto", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.monto = :monto"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByFechadesde", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fechadesde = :fechadesde"),
+        @NamedQuery(name = "BonoDescuentoPersonal.findByFechahasta", query = "SELECT b FROM BonoDescuentoPersonal b WHERE b.fechahasta = :fechahasta")})
 public class BonoDescuentoPersonal implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Long id;
-//    @ManyToOne(fetch = FetchType.LAZY)
+    //    @ManyToOne(fetch = FetchType.LAZY)
     @OneToOne
     @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
     private BonoDescuento idBonodescuento;
@@ -137,7 +136,7 @@ public class BonoDescuentoPersonal implements Serializable {
 
     @Override
     public String toString() {
-        return "workcenter.entities.BonoDescuentoPersonal[ id=" + id + " ]";
+        return "workcenter.entities.BonoDescuentoPersonal[ id=" + id + ", idBonoDescuento=" + idBonodescuento + " ]";
     }
-    
+
 }
