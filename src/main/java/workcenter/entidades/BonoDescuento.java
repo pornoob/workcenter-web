@@ -33,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "BonoDescuento.findAll", query = "SELECT b FROM BonoDescuento b"),
         @NamedQuery(
                 name = "BonoDescuento.findFaltantesByPersonal",
-                query = "SELECT b FROM BonoDescuento b WHERE b.id NOT IN " +
+                query = "SELECT b FROM BonoDescuento b WHERE b NOT IN " +
                         "(SELECT bdp FROM BonoDescuentoPersonal bdp WHERE bdp.idPersonal = :personal)"
         )
 })
