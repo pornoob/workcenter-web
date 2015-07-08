@@ -30,16 +30,13 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "bonosdescuentos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "BonoDescuento.findAll", query = "SELECT b FROM BonoDescuento b"),
-    @NamedQuery(name = "BonoDescuento.findById", query = "SELECT b FROM BonoDescuento b WHERE b.id = :id"),
-    @NamedQuery(name = "BonoDescuento.findByDescripcion", query = "SELECT b FROM BonoDescuento b WHERE b.descripcion = :descripcion"),
-    @NamedQuery(name = "BonoDescuento.findByMonto", query = "SELECT b FROM BonoDescuento b WHERE b.monto = :monto"),
-    @NamedQuery(name = "BonoDescuento.findByIdTipoUnidad", query = "SELECT b FROM BonoDescuento b WHERE b.idTipoUnidad = :idTipoUnidad"),
-    @NamedQuery(name = "BonoDescuento.findByIdTipoBonodescuento", query = "SELECT b FROM BonoDescuento b WHERE b.idTipoBonodescuento = :idTipoBonodescuento"),
-    @NamedQuery(name = "BonoDescuento.findByIndefinido", query = "SELECT b FROM BonoDescuento b WHERE b.indefinido = :indefinido"),
-    @NamedQuery(name = "BonoDescuento.findByDuracion", query = "SELECT b FROM BonoDescuento b WHERE b.duracion = :duracion"),
-    @NamedQuery(name = "BonoDescuento.findByPorPersona", query = "SELECT b FROM BonoDescuento b WHERE b.porPersona = :porPersona"),
-    @NamedQuery(name = "BonoDescuento.findByImponible", query = "SELECT b FROM BonoDescuento b WHERE b.imponible = :imponible")})
+        @NamedQuery(name = "BonoDescuento.findAll", query = "SELECT b FROM BonoDescuento b"),
+        @NamedQuery(
+                name = "BonoDescuento.findFaltantesByPersonal",
+                query = "SELECT b FROM BonoDescuento b WHERE b.id NOT IN " +
+                        "(SELECT bdp FROM BonoDescuentoPersonal bdp WHERE bdp.idPersonal = :personal)"
+        )
+})
 public class BonoDescuento implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id

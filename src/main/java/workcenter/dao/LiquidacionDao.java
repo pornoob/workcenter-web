@@ -2,6 +2,7 @@ package workcenter.dao;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
@@ -21,10 +22,10 @@ public class LiquidacionDao {
 
     @PersistenceContext
     private EntityManager em;
-    
+
     @Autowired
     private Constantes c;
-    
+
     public ContratoPersonal obtenerDatosContrato(Personal p) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cp.* from contratospersonal cp ");
@@ -72,61 +73,60 @@ public class LiquidacionDao {
     public List<ValorImpuestoUnico> obtenerValoresVigentesImpUnico() {
         return em.createNamedQuery("ValorImpuestoUnico.findVigentes").getResultList();
     }
-    
-    public void guardarDatosLiquidacion(Remuneracion liquidacion){
-    	try {
+
+    public void guardarDatosLiquidacion(Remuneracion liquidacion) {
+        try {
             em.persist(liquidacion);
         } catch (Exception e) {
             System.out.println(e.getMessage());
         }
     }
 
-	public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
-		return em.createNamedQuery("BonoDescuentoPersonal.findAll").getResultList();		
-	}
+    public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
+        return em.createNamedQuery("BonoDescuentoPersonal.findAll").getResultList();
+    }
 
-	@SuppressWarnings("unchecked")
-	public Integer obtenerAnticipoSueldo(Integer idPers, String mes,
-			Integer anio) {
-		
-			Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
-			SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
-			try {
-				q.setParameter("fechareal",  formatoDeFecha.parse((anio.toString()+"-"+mes+"-"+c.getDiasAnticipo()).trim()));
-				} catch (ParseException ex) {
-				ex.printStackTrace();
-				}			
-			q.setParameter("receptor", idPers);
-			
-            for (Dinero listaDineros :(List<Dinero>) q.getResultList()) {
-				if(listaDineros.getConcepto().getId() == c.getConceptoAnticipo()){
-					return listaDineros.getMonto();
-				}
-			}
-            Dinero d = new Dinero();
-            d.setMonto(0);
-            return d.getMonto();
-	}
+    @SuppressWarnings("unchecked")
+    public Integer obtenerAnticipoSueldo(Integer idPers, String mes,
+                                         Integer anio) {
 
-	public List<Remuneracion> obtenerListaRemuneraciones() {
-		  Query q = em.createNamedQuery("Remuneracion.findAllByGenerica");
-	      q.setParameter("esGenerica", c.getGenericaAdministrativo());
-	      return q.getResultList();
-	}
-
-	public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
-		StringBuilder sb = new StringBuilder();
-        sb.append("SELECT ");
-        sb.append("bdp.id_personal,bd.id as id_bonodescuento,0 as id, bdp.fecha,bdp.fechadesde,bdp.fechahasta,bdp.monto ");
-        sb.append("FROM ");
-        sb.append("(select bdp1.* ");
-        sb.append("FROM ");		
-        sb.append("bonosdescuentospersonal bdp1 ");
-        sb.append("WHERE ");
-        sb.append("bdp1.id_personal =:id_personal) bdp");
-        sb.append(" RIGHT JOIN bonosdescuentos bd on bd.id = bdp.id_bonodescuento where bdp.id_personal is null");
-        Query q = em.createNativeQuery(sb.toString(), BonoDescuentoPersonal.class);
-        q.setParameter("id_personal", p.getRut());
-        return q.getResultList();
+        Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
+        SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
+        try {
+            q.setParameter("fechareal", formatoDeFecha.parse((anio.toString() + "-" + mes + "-" + c.getDiasAnticipo()).trim()));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
         }
+        q.setParameter("receptor", idPers);
+
+        for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
+            if (listaDineros.getConcepto().getId() == c.getConceptoAnticipo()) {
+                return listaDineros.getMonto();
+            }
+        }
+        Dinero d = new Dinero();
+        d.setMonto(0);
+        return d.getMonto();
+    }
+
+    public List<Remuneracion> obtenerListaRemuneraciones() {
+        Query q = em.createNamedQuery("Remuneracion.findAllByGenerica");
+        q.setParameter("esGenerica", c.getGenericaAdministrativo());
+        return q.getResultList();
+    }
+
+    public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
+        Query q = em.createNamedQuery("BonoDescuento.findFaltantesByPersonal");
+        q.setParameter("personal", p);
+        List<BonoDescuento> bonosDescuentos = q.getResultList();
+
+        List<BonoDescuentoPersonal> retorno = new ArrayList<BonoDescuentoPersonal>();
+        for (BonoDescuento b : bonosDescuentos) {
+            BonoDescuentoPersonal bdp = new BonoDescuentoPersonal();
+            bdp.setIdPersonal(p);
+            bdp.setIdBonodescuento(b);
+            retorno.add(bdp);
+        }
+        return retorno;
+    }
 }
