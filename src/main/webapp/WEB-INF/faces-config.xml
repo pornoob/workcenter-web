@@ -34,6 +34,11 @@
         <converter-id>mesConverter</converter-id>
         <converter-class>workcenter.util.converters.MesConverter</converter-class>
     </converter>
+    
+    <converter>
+        <converter-id>pickListConverter</converter-id>
+        <converter-class>workcenter.util.converters.PickListConverter</converter-class>
+    </converter>
 
     <application>
         <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver>

@@ -62,43 +62,49 @@ public class MantenedorLiquidaciones implements Serializable {
     private String mes;
 
     public void inicio() {
+    	
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
         String fechaActual = sdf.format(new Date());
-
         anio = Integer.parseInt(fechaActual.split("-")[1]);
-        mes = fechaActual.split("-")[0];
-        
-        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-        
-        bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
-        
+        mes = fechaActual.split("-")[0];        
+        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();        
+        bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();        
         liquidacion = new Remuneracion();
+        liquidacion.setDiasTrabajados(constantes.getDiasTrabajados());
         bonos = new DualListModel<BonoDescuentoPersonal>();
     }
 
     public void cargarDatos(){
-
+    	
+    	if (liquidacion.getIdPersonal() == null) return;
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         valorprevision = new ArrayList<ValorPrevisionPersonal>();
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
-
-        if (liquidacion.getIdPersonal() == null) return;
         
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
 		
         liquidacion.setIdPersonal(logicaPersonal.obtenerConDatosLiquidacion(liquidacion.getIdPersonal()));
-        //bonos = new DualListModel<BonoDescuentoPersonal>();
         bonos.setSource(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()));
         bonos.setTarget(liquidacion.getIdPersonal().getBonosDescuentos());
         for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
             if (bDP.getIdBonodescuento().getImponible()) {
                 bonoImponibles.add(bDP);
-                totalImponible = totalImponible + bDP.getMonto().intValue();
+                if ( bDP.getMonto() != null){
+                	totalImponible = totalImponible + bDP.getMonto().intValue();
+                }else{
+                	totalImponible = totalImponible + 0;
+                }
+                
             } else {
                 bonoNoImponibles.add(bDP);
-                totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
+                if ( bDP.getMonto() != null){
+                	totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
+                }else{
+                	totalNoImponible = totalNoImponible + 0;
+                }
+                
             }
         }
         // sueldo base y gratificacion
@@ -106,11 +112,10 @@ public class MantenedorLiquidaciones implements Serializable {
         valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp.getNumero());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(),mes,anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
-        
-        if (liquidacion.getDiasTrabajados() != constantes.getDiasTrabajados() && liquidacion.getDiasTrabajados() != null){	
-           	Double sBase =  (double) ((cp.getSueldoBase()/constantes.getDiasTrabajados())*liquidacion.getDiasTrabajados());
-        	liquidacion.setSueldoBase(sBase.intValue());
-        }        	
+        	if(liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()){
+           	double sBase =  (double)((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
+        	liquidacion.setSueldoBase((int)sBase);
+        	}
         Double gratificacion = (liquidacion.getSueldoBase() * 0.25);
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
@@ -166,6 +171,10 @@ public class MantenedorLiquidaciones implements Serializable {
 			throw e;
 		}
         return -1.0;
+    }
+    
+    public void agregarBonos(){
+    	
     }
     
     public String guardarDatosLiquidacion(){

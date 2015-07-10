@@ -113,9 +113,7 @@
                         <p:dataTable emptyMessage="Sin bonos" value="#{mantenedorLiquidaciones.bonoImponibles}" var="l">
                             <f:facet name="header">
                                 <div style="text-align: right">
-                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();">
-                                    <p:ajax event="click" update="frmLiquidaciones"/>
-                                </p:commandButton>
+                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();"/>
                                 </div>
                                 <div>Bonos Imponibles</div>
                             </f:facet>
@@ -196,14 +194,13 @@
                  <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                   <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
              </p:confirmDialog>
-        </h:form>
-        <h:form id="frmBonosDescuentosPersonal">
-        <p:dialog header="Descuentos Personal" widgetVar="dlg1" width="400" height="300">
-        
-            <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}" var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}" itemValue="#{bonos}" converter="entityConverter" /> 
-            <p:commandButton id="bonoSubmit" value="Submit" style="margin-top:5px" />
-            
-        </p:dialog>
+            <p:dialog header="Descuentos Personal" widgetVar="dlg1" width="460" height="250">        
+            <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}"
+                        var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}"
+                        itemValue="#{bonos}"
+                        converter="pickListConverter">
+            </p:pickList> 
+            </p:dialog>
         </h:form>
     </ui:define>
 </ui:composition>
