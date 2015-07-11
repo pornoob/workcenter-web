@@ -36,8 +36,8 @@
     </converter>
     
     <converter>
-        <converter-id>pickListConverter</converter-id>
-        <converter-class>workcenter.util.converters.PickListConverter</converter-class>
+        <converter-id>pickListBdpConverter</converter-id>
+        <converter-class>workcenter.util.converters.PickListConverterBonoDescuentoPersonal</converter-class>
     </converter>
 
     <application>

@@ -127,7 +127,6 @@ public class LiquidacionDao {
             bdp.setIdBonodescuento(b);
             retorno.add(bdp);
         }
-        System.err.println("Retorno: "+retorno);
         return retorno;
     }
 }
