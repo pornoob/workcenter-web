@@ -29,9 +29,9 @@ public class LiquidacionDao {
     public ContratoPersonal obtenerDatosContrato(Personal p) {
         StringBuilder sb = new StringBuilder();
         sb.append("select cp.* from contratospersonal cp ");
-        sb.append("where numero = ");
-        sb.append("(select MAX(numero) from contratospersonal"
-                + " where rut=:rut)");
+        sb.append("where rut=:rut ");
+        sb.append("ORDER BY fecha DESC ,numero DESC ");
+        sb.append("LIMIT 1");
         Query q = em.createNativeQuery(sb.toString(), ContratoPersonal.class);
         q.setParameter("rut", p.getRut());
         try {

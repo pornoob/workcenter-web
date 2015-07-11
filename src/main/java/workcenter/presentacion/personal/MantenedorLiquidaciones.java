@@ -161,8 +161,14 @@ public class MantenedorLiquidaciones implements Serializable {
         // seguro cesantia
         Double seguroEmpresa = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
         Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
-        liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
-        liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
+        if (cp.getVencimiento() != null){
+        	 Double noIndefinido = seguroEmpresa+seguroTrabajador;
+             liquidacion.setAporteMontoEmpresa(noIndefinido.intValue());
+         	 liquidacion.setAporteMontoTrabajador(0);
+        }else{
+	       	 liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
+	         liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
+        }
         liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador()) - liquidacion.getAnticipoSueldo());
         liquidacion.setHorasExtras(0);
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");

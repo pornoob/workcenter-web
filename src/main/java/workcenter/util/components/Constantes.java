@@ -30,6 +30,7 @@ public class Constantes implements Serializable {
     private int filtroConductor = 2;
     private Double aportePorcentajeTrabajador=0.6;
     private Double aportePorcentajeEmpleador=2.4;
+    private Double aporteContradoNoIdefinido=3.0;
     private String diasAnticipo="15";
     private Integer diasTrabajados=30;
     private int conceptoAnticipo = 9;
@@ -508,5 +509,9 @@ public class Constantes implements Serializable {
 
 	public Integer getDiasTrabajados() {
 		return diasTrabajados;
+	}
+
+	public Double getAporteContradoNoIdefinido() {
+		return aporteContradoNoIdefinido;
 	}
 }
