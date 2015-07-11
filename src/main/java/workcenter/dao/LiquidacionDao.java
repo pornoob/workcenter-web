@@ -42,20 +42,28 @@ public class LiquidacionDao {
     }
 
     @SuppressWarnings("unchecked")
-    public List<ValorPrevisionPersonal> obtenerDatosPrevision(Integer numeroContrato) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select vpp.* from valoresprevisionpersonal vpp ");
-        sb.append("where contrato = :contrato ");
-        Query q = em.createNativeQuery(sb.toString(), ValorPrevisionPersonal.class);
-        q.setParameter("contrato", numeroContrato);
-        try {
-            return q.getResultList();
-        } catch (Exception e) {
-            return null;
-        }
+    public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp) {
+        Query q = em.createNamedQuery("ValorPrevisionPersonal.findByContrato");
+        q.setParameter("contrato", cp);
+        return q.getResultList();
     }
 
     public Variable obtenerValorUtm(Integer mes, Integer anio) {
+        Query q = em.createNamedQuery("Variable.findByLlaveMesAnio");
+        q.setParameter("mes", mes);
+        q.setParameter("anio", anio);
+        q.setParameter("llave", "utm");
+
+        try {
+            return (Variable) q.getSingleResult();
+        } catch (Exception e) {
+            Variable v = new Variable();
+            v.setValor("0");
+            return v;
+        }
+    }
+
+    public Variable obtenerValorUf(Integer mes, Integer anio) {
         Query q = em.createNamedQuery("Variable.findByLlaveMesAnio");
         q.setParameter("mes", mes);
         q.setParameter("anio", anio);

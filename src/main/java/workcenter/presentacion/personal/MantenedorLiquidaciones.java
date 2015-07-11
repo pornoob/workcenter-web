@@ -84,6 +84,7 @@ public class MantenedorLiquidaciones implements Serializable {
         Integer totalImponible = 0;
         
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
+        Variable uf = logicaLiquidaciones.obtenerValorUf(Integer.parseInt(mes), anio);
 		
         liquidacion.setIdPersonal(logicaPersonal.obtenerConDatosLiquidacion(liquidacion.getIdPersonal()));
         bonos.setSource(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()));
@@ -109,29 +110,46 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         // sueldo base y gratificacion
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
-        valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp.getNumero());
-        liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(),mes,anio));
+        valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
+
+        liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
-        	if(liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()){
-           	double sBase =  (double)((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
-        	liquidacion.setSueldoBase((int)sBase);
-        	}
+
+        if (liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()) {
+            double sBase = (double) ((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
+            liquidacion.setSueldoBase((int) sBase);
+        }
+
         Double gratificacion = (liquidacion.getSueldoBase() * 0.25);
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
+
         //calculo afp y salud
         for (ValorPrevisionPersonal vPP : valorprevision) {
-            Double descuentoPrevision = (liquidacion.getTotalImponible() * vPP.getValor() / 100);
-            Double descuentoAfp = liquidacion.getTotalImponible() * vPP.getValor() / 100;
+
             if (vPP.getPrevision().getTipo().equals("salud")) {
-                liquidacion.setDctoPrevision(descuentoPrevision.intValue());
+                if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
+                    liquidacion.setDctoPrevision((int) vPP.getValor());
+                } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
+                    liquidacion.setDctoPrevision((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
+                } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
+                    liquidacion.setDctoPrevision((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
+                }
             } else {
-                liquidacion.setDectoAFP(descuentoAfp.intValue());
+                if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
+                    liquidacion.setDectoAFP((int) vPP.getValor());
+                } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
+                    liquidacion.setDectoAFP((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
+                } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
+                    liquidacion.setDectoAFP((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
+                }
             }
         }
+
         liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
+
         try {
 			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
 		} catch (NumberFormatException e) {
@@ -157,19 +175,20 @@ public class MantenedorLiquidaciones implements Serializable {
     }
 
     public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
-    	
-    	try {
-    		 float rentaAfectaUtm = rentaAfecta / utm;
-    	     List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
-    	        for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
-    	            if ((viu.getCotaMin() == null || rentaAfecta > viu.getCotaMin().floatValue()) &&
-    	                    (viu.getCotaMax() == null || rentaAfecta <= viu.getCotaMax().floatValue())) {
-    	                return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
-    	            }
-    	        }
-		} catch (Exception e) {
-			throw e;
-		}
+
+        try {
+            float rentaAfectaUtm = rentaAfecta / utm;
+            List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
+
+            for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
+                if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
+                        (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
+                    return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
         return -1.0;
     }
     

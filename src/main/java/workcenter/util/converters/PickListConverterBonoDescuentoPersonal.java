@@ -29,7 +29,6 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
             BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) dl.getSource().get(i);
             if (bdp.getIdBonodescuento().getId().intValue() == idBono.intValue()
                     && bdp.getIdPersonal().getRut().intValue() == idPersonal) {
-                System.err.println("Converter O: "+bdp);
                 return bdp;
             }
         }
@@ -38,7 +37,6 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
             BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) dl.getTarget().get(i);
             if (bdp.getIdBonodescuento().getId().intValue() == idBono.intValue()
                     && bdp.getIdPersonal().getRut().intValue() == idPersonal) {
-                System.err.println("Converter O: "+bdp);
                 return bdp;
             }
         }
@@ -48,7 +46,6 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent component, Object value) {
         BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) value;
 
-        System.err.println("Converter S: {\"idBono\":\"" + bdp.getIdBonodescuento().getId() + "\", \"rutPersonal\": \"" + bdp.getIdPersonal().getRut() + "\"}");
         return "{\"idBono\":\"" + bdp.getIdBonodescuento().getId() + "\", \"rutPersonal\": \"" + bdp.getIdPersonal().getRut() + "\"}";
     }
 }

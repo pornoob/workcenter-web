@@ -99,6 +99,13 @@ public class ValorImpuestoUnico {
 
     @Override
     public String toString() {
-        return "ValorImpuestoUnico{id: "+this.getId()+"}";
+        return "ValorImpuestoUnico{" +
+                "id=" + id +
+                ", anioVigencia=" + anioVigencia +
+                ", cotaMin=" + cotaMin +
+                ", cotaMax=" + cotaMax +
+                ", factor=" + factor +
+                ", substraendo=" + substraendo +
+                '}';
     }
 }

@@ -30,8 +30,13 @@ public class LogicaLiquidaciones {
     }
 
     @Transactional(readOnly = true)
-	public List<ValorPrevisionPersonal> obtenerDatosPrevision(Integer numeroContrato){
-		return liquidacionDao.obtenerDatosPrevision(numeroContrato);
+    public Variable obtenerValorUf(Integer mes, Integer anio) {
+        return liquidacionDao.obtenerValorUf(mes, anio);
+    }
+
+    @Transactional(readOnly = true)
+	public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp){
+		return liquidacionDao.obtenerDatosPrevision(cp);
 	}
 
     @Transactional(readOnly = true)
@@ -49,10 +54,9 @@ public class LogicaLiquidaciones {
 	}
 
     @Transactional(readOnly = true)
-	public Integer obtenerAnticipoSueldo(Integer idPers, String mes,
-			Integer anio) {
-		return liquidacionDao.obtenerAnticipoSueldo(idPers,mes,anio) ;
-	}
+    public Integer obtenerAnticipoSueldo(Integer idPers, String mes, Integer anio) {
+        return liquidacionDao.obtenerAnticipoSueldo(idPers, mes, anio);
+    }
     
     @Transactional(readOnly = true)
 	public List<Remuneracion> obtenerListaRemuneraciones() {
