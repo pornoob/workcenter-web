@@ -137,4 +137,12 @@ public class LiquidacionDao {
         }
         return retorno;
     }
+    
+    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp){
+    	
+    	for (BonoDescuentoPersonal bonoDescuentoPersonal : bdp) {
+    		BonoDescuentoPersonal b = em.find(BonoDescuentoPersonal.class, bonoDescuentoPersonal.getId());
+    		em.remove(b);
+		}
+    }
 }

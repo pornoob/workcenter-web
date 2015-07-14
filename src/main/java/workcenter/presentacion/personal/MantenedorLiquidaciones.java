@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -45,7 +46,9 @@ public class MantenedorLiquidaciones implements Serializable {
     private List<Remuneracion> listaRemuneraciones;
     
     private DualListModel<BonoDescuentoPersonal> bonos;
-
+    
+    private List<BonoDescuentoPersonal> bDPersonal;
+    
     @Autowired
     private LogicaPersonal logicaPersonal;
 
@@ -58,6 +61,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private Remuneracion liquidacion;
     
     private Integer anio;
+    
+    private Integer cantidadBonos;
     
     private String mes;
 
@@ -80,6 +85,8 @@ public class MantenedorLiquidaciones implements Serializable {
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         valorprevision = new ArrayList<ValorPrevisionPersonal>();
+        bDPersonal = new ArrayList<BonoDescuentoPersonal>();
+        cantidadBonos = 0;
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
         
@@ -107,6 +114,8 @@ public class MantenedorLiquidaciones implements Serializable {
                 }
                 
             }
+            bDPersonal.add(bDP);
+            cantidadBonos = cantidadBonos + 1; 
         }
         // sueldo base y gratificacion
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
@@ -199,15 +208,65 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public void agregarBonos(){
-    	
+    		
+    	 List<BonoDescuentoPersonal> listaBonos = new ArrayList<BonoDescuentoPersonal>();
+    	 List<BonoDescuentoPersonal> tmpBDPEliminar = new ArrayList<BonoDescuentoPersonal>();
+    	 
+    	 for (BonoDescuentoPersonal bDP : bonos.getTarget()) {
+    		 listaBonos.add(bDP);
+    	 }    	 
+    	 if (bonos.getTarget().size() < cantidadBonos ){
+    		
+    		for (BonoDescuentoPersonal bDP : bDPersonal) {
+    			if (!(bonos.getTarget().contains(bDP))){
+    				tmpBDPEliminar.add(bDP);
+    			}
+			}
+    		logicaLiquidaciones.eliminarBonosPersonal(tmpBDPEliminar);
+    	 } else{
+    	 liquidacion.getIdPersonal().setBonosDescuentos(listaBonos);
+    	 logicaPersonal.guardar(liquidacion.getIdPersonal());
+    	 }
+    	 cargarDatos();
     }
     
     public String guardarDatosLiquidacion(){
+    	
+    	liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
     	logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+    	
     	return "flowMenuLiquidaciones";
     }
-
+    
+    public void onRowEdit(RowEditEvent event) {
+    	
+       for (int i = 0; i < bonoImponibles.size(); i++) {
+			if (bonoImponibles.get(i).getId() == ((BonoDescuentoPersonal)event.getObject()).getId()){
+				bonoImponibles.get(i).setMonto(((BonoDescuentoPersonal)event.getObject()).getMonto());
+			}
+       }
+       liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
+       logicaPersonal.guardar(liquidacion.getIdPersonal());
+       cargarDatos();
+    }
+    
+    public List<BonoDescuentoPersonal> unirBonosPersonal(){
+    	
+    	List<BonoDescuentoPersonal> unionBonos = new ArrayList<BonoDescuentoPersonal>();
+        for (BonoDescuentoPersonal bdp : bonoImponibles) {
+ 			unionBonos.add(bdp);
+ 		}
+        for (BonoDescuentoPersonal bdp : bonoNoImponibles) {
+ 			unionBonos.add(bdp);
+ 		}
+    	return unionBonos;
+    }
+     
+    public void onRowCancel(RowEditEvent event) {
+    	((BonoDescuentoPersonal) event.getObject()).getId();
+    }
+    
     public String ingresarLiquidacionOtros() {
         personal = logicaPersonal.obtenerTodos();
         return "flowAgregarLiqOtros";

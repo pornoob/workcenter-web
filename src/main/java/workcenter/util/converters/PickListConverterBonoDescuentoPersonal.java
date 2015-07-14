@@ -15,15 +15,18 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
     public Object getAsObject(FacesContext facesContext, UIComponent component, String json) {
         PickList p = (PickList) component;
         DualListModel dl = (DualListModel) p.getValue();
+//        System.err.println(json);
+//        String regexp = "\"idBono\": \"(.*)\", \"rutPersonal\": \"(.*)\"";
+//        Pattern pattern = Pattern.compile(regexp);
+//        Matcher matcher = pattern.matcher(json);
 
-        String regexp = "\"idBono\": \"(.*)\", \"rutPersonal\": \"(.*)\"";
-        Pattern pattern = Pattern.compile(regexp);
-        Matcher matcher = pattern.matcher(json);
-
-        if (!matcher.find()) return null;
-
-        Integer idBono = Integer.parseInt(matcher.group(1));
-        Integer idPersonal = Integer.parseInt(matcher.group(2));
+//        if (!matcher.find()) return null;
+        String[] tmpArreglo = json.split("-");
+        for (int i = 0; i < tmpArreglo.length; i++) {
+            System.out.println(tmpArreglo[i]);
+        }
+        Integer idBono = Integer.parseInt(tmpArreglo[0]);
+        Integer idPersonal = Integer.parseInt(tmpArreglo[1]);
 
         for (int i = 0; i < dl.getSource().size(); i++) {
             BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) dl.getSource().get(i);
@@ -45,7 +48,9 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
 
     public String getAsString(FacesContext facesContext, UIComponent component, Object value) {
         BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) value;
-
-        return "{\"idBono\":\"" + bdp.getIdBonodescuento().getId() + "\", \"rutPersonal\": \"" + bdp.getIdPersonal().getRut() + "\"}";
+        String reg = bdp.getIdBonodescuento().getId().toString()+"-"+ bdp.getIdPersonal().getRut().toString();
+        System.out.println(reg.trim());
+        return reg.trim();
+        //return "{\"idBono\":\"" + bdp.getIdBonodescuento().getId() + "\", \"rutPersonal\": \"" + bdp.getIdPersonal().getRut() + "\"}";
     }
 }

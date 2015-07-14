@@ -67,4 +67,9 @@ public class LogicaLiquidaciones {
 	public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
 		return liquidacionDao.obtenerBonosFaltantes(p);
 	}
+    
+    @Transactional(readOnly = false)
+    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp){
+    	liquidacionDao.eliminarBonosPersonal(bdp);
+    }
 }
