@@ -114,7 +114,8 @@
                                      value="#{mantenedorLiquidaciones.bonoImponibles}"
                                      var="l"
                                      editable="true"
-                                     >
+                                     editMode="cell"
+                                     id="imponible">
                             <f:facet name="header">
                                 <div style="text-align: right">
                                 <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();"/>
@@ -125,16 +126,15 @@
                             <h:outputText value="#{l.idBonodescuento.descripcion}"/>
                             </p:column>
                             <p:column headerText="Monto">
-                            <p:cellEditor>
-                                <f:facet name="output"><h:outputText value="#{l.monto}" /></f:facet>
-                                <f:facet name="input"><p:inputText value="#{l.monto}" style="width:100%"/></f:facet>
-                            </p:cellEditor>
+                            <h:outputText value="#{l.monto}" />
                             </p:column>
                             <p:column style="width:32px">
-                                <p:rowEditor />
+                             <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                              actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                              update="formEditarBonos"
+                                              icon="fa fa-edit"
+                                              title="Editar Monto"/>
                             </p:column>
-                            <p:ajax event="rowEdit" listener="#{mantenedorLiquidaciones.onRowEdit}" update="frmLiquidaciones"/>
-                            <p:ajax event="rowEditCancel" listener="#{mantenedorLiquidaciones.onRowCancel}"/>
                         </p:dataTable>
                     </td>
                     <td colspan="3">
@@ -152,7 +152,11 @@
 
                 <tr>
                     <td colspan="3">
-                        <p:dataTable emptyMessage="Sin bonos" value="#{mantenedorLiquidaciones.bonoNoImponibles}" var="l">
+                        <p:dataTable emptyMessage="Sin bonos"
+                                     value="#{mantenedorLiquidaciones.bonoNoImponibles}"
+                                     var="l"
+                                     editable="true"
+                                     id="noImponible">
                             <f:facet name="header">
 <!--                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/> -->
 <!--                                 </div> -->
@@ -161,7 +165,14 @@
                             <p:column headerText="Detalle">
                             <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
                             <p:column headerText="Monto">
-                            <h:outputText value="#{l.monto}"/>
+                            <h:outputText value="#{l.monto}" />
+                            </p:column>
+                            <p:column style="width:32px">
+                             <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                            actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                            update="formEditarBonos"
+                                            icon="fa fa-edit"
+                                            title="Editar Monto"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -206,7 +217,7 @@
                  <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                   <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
              </p:confirmDialog>
-            <p:dialog header="Descuentos Personal" widgetVar="dlg1" width="460" height="250" closable="false">        
+            <p:dialog id="idDlgDescuento" header="Descuentos Personal" widgetVar="dlg1" width="460" height="250" closable="false">        
             <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}"
                         var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}"
                         itemValue="#{bonos}"
@@ -215,7 +226,18 @@
             </p:pickList>
             <p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.agregarBonos()}" update="frmLiquidaciones">
             </p:commandButton>
-            </p:dialog>
+            </p:dialog>            
         </h:form>
+        <p:dialog header="Editar Monto" widgetVar="dlgBonos" width="300" height="40">
+            <h:form id="formEditarBonos">
+            <table>
+            <tr>
+                <td><h:outputText value="#{mantenedorLiquidaciones.bonoEditar.idBonodescuento.descripcion}"/></td>
+                <td><p:inputText value="#{mantenedorLiquidaciones.bonoEditar.monto}" /></td>
+                <td><p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.onRowEdit()}" update="frmLiquidaciones" oncomplete="PF('dlgBonos').hide();"/></td>
+            </tr>
+            </table>
+            </h:form>
+        </p:dialog>
     </ui:define>
 </ui:composition>

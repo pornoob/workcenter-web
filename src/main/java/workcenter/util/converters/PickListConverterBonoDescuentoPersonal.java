@@ -22,9 +22,6 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
 
 //        if (!matcher.find()) return null;
         String[] tmpArreglo = json.split("-");
-        for (int i = 0; i < tmpArreglo.length; i++) {
-            System.out.println(tmpArreglo[i]);
-        }
         Integer idBono = Integer.parseInt(tmpArreglo[0]);
         Integer idPersonal = Integer.parseInt(tmpArreglo[1]);
 
@@ -49,7 +46,6 @@ public class PickListConverterBonoDescuentoPersonal implements Converter {
     public String getAsString(FacesContext facesContext, UIComponent component, Object value) {
         BonoDescuentoPersonal bdp = (BonoDescuentoPersonal) value;
         String reg = bdp.getIdBonodescuento().getId().toString()+"-"+ bdp.getIdPersonal().getRut().toString();
-        System.out.println(reg.trim());
         return reg.trim();
         //return "{\"idBono\":\"" + bdp.getIdBonodescuento().getId() + "\", \"rutPersonal\": \"" + bdp.getIdPersonal().getRut() + "\"}";
     }

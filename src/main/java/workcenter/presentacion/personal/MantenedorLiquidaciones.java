@@ -49,6 +49,8 @@ public class MantenedorLiquidaciones implements Serializable {
     
     private List<BonoDescuentoPersonal> bDPersonal;
     
+    private BonoDescuentoPersonal bonoEditar;
+    
     @Autowired
     private LogicaPersonal logicaPersonal;
 
@@ -86,6 +88,7 @@ public class MantenedorLiquidaciones implements Serializable {
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         valorprevision = new ArrayList<ValorPrevisionPersonal>();
         bDPersonal = new ArrayList<BonoDescuentoPersonal>();
+        bonoEditar =  new BonoDescuentoPersonal();
         cantidadBonos = 0;
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
@@ -239,16 +242,21 @@ public class MantenedorLiquidaciones implements Serializable {
     	return "flowMenuLiquidaciones";
     }
     
-    public void onRowEdit(RowEditEvent event) {
-    	
-       for (int i = 0; i < bonoImponibles.size(); i++) {
-			if (bonoImponibles.get(i).getId() == ((BonoDescuentoPersonal)event.getObject()).getId()){
-				bonoImponibles.get(i).setMonto(((BonoDescuentoPersonal)event.getObject()).getMonto());
-			}
+    public void onRowEdit() {
+       if (bonoEditar == null) return;
+       for (int i = 0; i < bonoImponibles.size(); i++) {		
+				if (bonoImponibles.get(i).getId() == (bonoEditar.getId())){
+					bonoImponibles.get(i).setMonto(bonoEditar.getMonto());
+				}  
        }
        liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
        logicaPersonal.guardar(liquidacion.getIdPersonal());
        cargarDatos();
+    }
+    
+    public void editarBono(BonoDescuentoPersonal b){
+    	
+    	bonoEditar = b;
     }
     
     public List<BonoDescuentoPersonal> unirBonosPersonal(){
@@ -261,10 +269,6 @@ public class MantenedorLiquidaciones implements Serializable {
  			unionBonos.add(bdp);
  		}
     	return unionBonos;
-    }
-     
-    public void onRowCancel(RowEditEvent event) {
-    	((BonoDescuentoPersonal) event.getObject()).getId();
     }
     
     public String ingresarLiquidacionOtros() {
@@ -356,6 +360,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setBonos(DualListModel<BonoDescuentoPersonal> bonos) {
 		this.bonos = bonos;
+	}
+
+	public BonoDescuentoPersonal getBonoEditar() {
+		return bonoEditar;
+	}
+
+	public void setBonoEditar(BonoDescuentoPersonal bonoEditar) {
+		this.bonoEditar = bonoEditar;
 	}
 
 }
