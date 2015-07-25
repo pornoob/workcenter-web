@@ -248,7 +248,7 @@ public class Remuneracion implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestroGuia", fetch = FetchType.EAGER)
     private List<BonoDescuentoRemuneracion> remuneracionBonoDescuentoList;
     @JoinColumn(name = "idPersonal", referencedColumnName = "rut")
-    @ManyToOne(optional = false, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    @ManyToOne(optional = false, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
     private Personal idPersonal;
     @Basic
     @Column(name = "generica")

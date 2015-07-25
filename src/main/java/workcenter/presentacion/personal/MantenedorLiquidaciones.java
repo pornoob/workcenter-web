@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
-import org.primefaces.event.RowEditEvent;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -123,7 +122,8 @@ public class MantenedorLiquidaciones implements Serializable {
         // sueldo base y gratificacion
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
         valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
-
+        liquidacion.setEmpleador(cp.getEmpleador().getNombre());
+        liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString()+"-"+cp.getEmpleador().getDigitoverificador());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
 
@@ -235,14 +235,14 @@ public class MantenedorLiquidaciones implements Serializable {
     
     public String guardarDatosLiquidacion(){
     	
-    	liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
+    	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
     	logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
     	
     	return "flowMenuLiquidaciones";
     }
     
-    public void onRowEdit() {
+    public void editarMontoBono() {
        if (bonoEditar == null) return;
        for (int i = 0; i < bonoImponibles.size(); i++) {		
 				if (bonoImponibles.get(i).getId() == (bonoEditar.getId())){
@@ -254,8 +254,7 @@ public class MantenedorLiquidaciones implements Serializable {
        cargarDatos();
     }
     
-    public void editarBono(BonoDescuentoPersonal b){
-    	
+    public void editarBono(BonoDescuentoPersonal b){   	
     	bonoEditar = b;
     }
     

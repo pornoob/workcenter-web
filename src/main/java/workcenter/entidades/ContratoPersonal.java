@@ -81,7 +81,7 @@ public class ContratoPersonal implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date inicio;
     @JoinColumn(name = "empleador", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private Empresa empleador;
     @Column(name = "subcontrato")
     private Integer subcontrato;

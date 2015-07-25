@@ -3,8 +3,6 @@ package workcenter.dao;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.persistence.EntityManager;
@@ -14,7 +12,15 @@ import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import workcenter.entidades.*;
+import workcenter.entidades.BonoDescuento;
+import workcenter.entidades.BonoDescuentoPersonal;
+import workcenter.entidades.ContratoPersonal;
+import workcenter.entidades.Dinero;
+import workcenter.entidades.Personal;
+import workcenter.entidades.Remuneracion;
+import workcenter.entidades.ValorImpuestoUnico;
+import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.Variable;
 import workcenter.util.components.Constantes;
 
 @Repository
@@ -133,6 +139,7 @@ public class LiquidacionDao {
             BonoDescuentoPersonal bdp = new BonoDescuentoPersonal();
             bdp.setIdPersonal(p);
             bdp.setIdBonodescuento(b);
+            bdp.setMonto(b.getMonto());
             retorno.add(bdp);
         }
         return retorno;

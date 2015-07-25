@@ -46,25 +46,39 @@
 
                     <td><p:outputLabel value="Salud"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dctoPrevision}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dctoPrevision}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td><p:outputLabel value="Sueldo base"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}"/></td>
-
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                     <td><p:outputLabel value="AFP"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dectoAFP}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dectoAFP}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td><p:outputLabel value="Gratificación"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte trabajador)"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoTrabajador}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoTrabajador}">
+                           <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td><p:outputLabel value="Horas extra"/></td>
@@ -73,7 +87,10 @@
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte empleador)"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoEmpresa}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoEmpresa}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td>Días trabajados</td>
@@ -87,7 +104,10 @@
 
                     <td><p:outputLabel value="Renta afecta"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.rentaAfecta}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.rentaAfecta}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -105,7 +125,10 @@
 
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
 
                 <tr>
@@ -118,7 +141,7 @@
                                      id="imponible">
                             <f:facet name="header">
                                 <div style="text-align: right">
-                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();"/>
+                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();" immediate="true"/>
                                 </div>
                                 <div>Bonos Imponibles</div>
                             </f:facet>
@@ -133,7 +156,8 @@
                                               actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
                                               update="formEditarBonos"
                                               icon="fa fa-edit"
-                                              title="Editar Monto"/>
+                                              title="Editar Monto"
+                                              immediate="true"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -172,7 +196,8 @@
                                             actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
                                             update="formEditarBonos"
                                             icon="fa fa-edit"
-                                            title="Editar Monto"/>
+                                            title="Editar Monto"
+                                            immediate="true"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -183,9 +208,10 @@
                 <tr>
                     <td><p:outputLabel value="Total imponible"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalImponible}"/></td>
-
-
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalImponible}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                     <td><p:outputLabel value="Total descuentos  "/></td>
                     <td>:</td>
                     <td><p:inputText/></td>
@@ -194,11 +220,16 @@
                 <tr>
                     <td><b><p:outputLabel value="Total haberes"/></b></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalHaberes}"/></td>
-
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalHaberes}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                     <td><b>Alcance líquido</b></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}"/></td>
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}">
+                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td></td>
@@ -206,7 +237,7 @@
                     <td></td>
 
                     <td><b></b></td>
-                    <td><br/><br/><p:commandButton value="Imprimir Liquidación"/></td>
+                    <td><br/><br/><p:commandButton value="Imprimir Liquidación" icon="fa fa-print"> <p:printer target=":frmLiquidaciones" /></p:commandButton></td>
                     <td><br/><br/><p:commandButton value="Guardar Liquidación" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}">
                         <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
                     </p:commandButton>
@@ -224,7 +255,7 @@
                         converter="pickListBdpConverter">
                <p:ajax event="transfer"/>
             </p:pickList>
-            <p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.agregarBonos()}" update="frmLiquidaciones">
+            <p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.agregarBonos()}" update="frmLiquidaciones" immediate="true">
             </p:commandButton>
             </p:dialog>            
         </h:form>
@@ -234,7 +265,11 @@
             <tr>
                 <td><h:outputText value="#{mantenedorLiquidaciones.bonoEditar.idBonodescuento.descripcion}"/></td>
                 <td><p:inputText value="#{mantenedorLiquidaciones.bonoEditar.monto}" /></td>
-                <td><p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.onRowEdit()}" update="frmLiquidaciones" oncomplete="PF('dlgBonos').hide();"/></td>
+                <td><p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.editarMontoBono()}"
+                                     update="frmLiquidaciones"
+                                     oncomplete="PF('dlgBonos').hide();"
+                                     />
+                </td>
             </tr>
             </table>
             </h:form>
