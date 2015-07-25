@@ -38,7 +38,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
     private List<BonoDescuentoPersonal> bonoImponibles;
 
-    private List<ValorPrevisionPersonal> valorprevision;
+    private List<ValorPrevisionPersonal> valorPrevision;
     
     private List<BonoDescuentoPersonal> bonoDescuentoPersonal;
     
@@ -46,10 +46,8 @@ public class MantenedorLiquidaciones implements Serializable {
     
     private DualListModel<BonoDescuentoPersonal> bonos;
     
-    private List<BonoDescuentoPersonal> bDPersonal;
-    
     private BonoDescuentoPersonal bonoEditar;
-    
+
     @Autowired
     private LogicaPersonal logicaPersonal;
 
@@ -62,8 +60,6 @@ public class MantenedorLiquidaciones implements Serializable {
     private Remuneracion liquidacion;
     
     private Integer anio;
-    
-    private Integer cantidadBonos;
     
     private String mes;
 
@@ -85,10 +81,8 @@ public class MantenedorLiquidaciones implements Serializable {
     	if (liquidacion.getIdPersonal() == null) return;
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
-        valorprevision = new ArrayList<ValorPrevisionPersonal>();
-        bDPersonal = new ArrayList<BonoDescuentoPersonal>();
+        valorPrevision = new ArrayList<ValorPrevisionPersonal>();
         bonoEditar =  new BonoDescuentoPersonal();
-        cantidadBonos = 0;
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
         
@@ -116,12 +110,10 @@ public class MantenedorLiquidaciones implements Serializable {
                 }
                 
             }
-            bDPersonal.add(bDP);
-            cantidadBonos = cantidadBonos + 1; 
         }
         // sueldo base y gratificacion
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
-        valorprevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
+        valorPrevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
         liquidacion.setEmpleador(cp.getEmpleador().getNombre());
         liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString()+"-"+cp.getEmpleador().getDigitoverificador());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(), mes, anio));
@@ -138,7 +130,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
 
         //calculo afp y salud
-        for (ValorPrevisionPersonal vPP : valorprevision) {
+        for (ValorPrevisionPersonal vPP : valorPrevision) {
 
             if (vPP.getPrevision().getTipo().equals("salud")) {
                 if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
@@ -210,27 +202,10 @@ public class MantenedorLiquidaciones implements Serializable {
         return -1.0;
     }
     
-    public void agregarBonos(){
-    		
-    	 List<BonoDescuentoPersonal> listaBonos = new ArrayList<BonoDescuentoPersonal>();
-    	 List<BonoDescuentoPersonal> tmpBDPEliminar = new ArrayList<BonoDescuentoPersonal>();
-    	 
-    	 for (BonoDescuentoPersonal bDP : bonos.getTarget()) {
-    		 listaBonos.add(bDP);
-    	 }    	 
-    	 if (bonos.getTarget().size() < cantidadBonos ){
-    		
-    		for (BonoDescuentoPersonal bDP : bDPersonal) {
-    			if (!(bonos.getTarget().contains(bDP))){
-    				tmpBDPEliminar.add(bDP);
-    			}
-			}
-    		logicaLiquidaciones.eliminarBonosPersonal(tmpBDPEliminar);
-    	 } else{
-    	 liquidacion.getIdPersonal().setBonosDescuentos(listaBonos);
-    	 logicaPersonal.guardar(liquidacion.getIdPersonal());
-    	 }
-    	 cargarDatos();
+    public void agregarQuitarBonos(){
+        liquidacion.getIdPersonal().setBonosDescuentos(bonos.getTarget());
+        logicaPersonal.guardar(liquidacion.getIdPersonal());
+        cargarDatos();
     }
     
     public String guardarDatosLiquidacion(){
@@ -312,12 +287,12 @@ public class MantenedorLiquidaciones implements Serializable {
         this.bonoImponibles = bonoImponibles;
     }
 
-    public List<ValorPrevisionPersonal> getValorprevision() {
-        return valorprevision;
+    public List<ValorPrevisionPersonal> getValorPrevision() {
+        return valorPrevision;
     }
 
-    public void setValorprevision(List<ValorPrevisionPersonal> valorprevision) {
-        this.valorprevision = valorprevision;
+    public void setValorPrevision(List<ValorPrevisionPersonal> valorPrevision) {
+        this.valorPrevision = valorPrevision;
     }
 
     public Integer getAnio() {

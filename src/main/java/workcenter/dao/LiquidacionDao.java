@@ -1,5 +1,6 @@
 package workcenter.dao;
 
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -139,7 +140,7 @@ public class LiquidacionDao {
             BonoDescuentoPersonal bdp = new BonoDescuentoPersonal();
             bdp.setIdPersonal(p);
             bdp.setIdBonodescuento(b);
-            bdp.setMonto(b.getMonto());
+            bdp.setMonto(BigInteger.valueOf(b.getMonto()));
             retorno.add(bdp);
         }
         return retorno;

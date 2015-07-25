@@ -122,7 +122,7 @@ public class Personal implements Serializable {
     )
     private List<Servicio> servicios;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonoDescuentoPersonal> bonosDescuentos;
 
 
