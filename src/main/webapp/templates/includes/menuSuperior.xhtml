@@ -62,6 +62,9 @@
             <p:menuitem id="mFicha_Viajes" styleClass="fa fa-files-o fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/ficha_viajes" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
+            <p:menuitem id="mHoja_Servicio" styleClass="fa fa-pencil-square-o fa-1x" style="color: black; font-size: 1.26em"
+                        url="/m/hoja_servicio" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>

@@ -255,7 +255,11 @@
                         converter="pickListBdpConverter">
                <p:ajax event="transfer"/>
             </p:pickList>
-            <p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.agregarQuitarBonos()}" update="frmLiquidaciones" immediate="true">
+            <p:commandButton value="Aceptar"
+                             action="#{mantenedorLiquidaciones.agregarQuitarBonos()}"
+                             update="frmLiquidaciones"
+                             immediate="true"
+                             oncomplete="PF('dlgBonos').hide();">
             </p:commandButton>
             </p:dialog>            
         </h:form>

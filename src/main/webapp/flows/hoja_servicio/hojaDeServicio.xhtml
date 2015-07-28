@@ -1,0 +1,62 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h3>Hoja de Servicios</h3>
+    <h:form id="frmHojaDeServicios">
+	    <p:tabView>
+	<!--         <p:ajax event="tabChange" listener="#{tabbedView.onTabChange}" update=":form:msgs"/> -->
+	<!--         <p:ajax event="tabClose" listener="#{tabbedView.onTabClose}" update=":form:msgs"/> -->
+	 
+	        <p:tab title="Cargas Familiares/Liquidacion">
+	            <h:panelGrid columns="2" cellpadding="10">
+	                <p:dataTable id="dtCargasFamiliares" emptyMessage="No se han encontrado resultados"
+	                             value="#{mantenedorCargarFamiliares.listaCargasFamiliares}"
+	                             var="c">
+	                <f:facet name="header">
+                                <div style="text-align: left">
+                                <p:commandButton value="Agregar" icon="fa fa-plus"/>
+                                </div>
+                    </f:facet>
+	                <p:column headerText="Desde">
+                        <h:outputText value="#{c.desde}" />
+                    </p:column>
+ 
+				    <p:column headerText="Hasta">
+				        <h:outputText value="#{c.hasta}" />
+				    </p:column>
+				 
+				    <p:column headerText="Fecha">
+				        <h:outputText value="#{c.fechaVigencia}" />
+				    </p:column>
+ 
+				    <p:column headerText="Monto">
+				        <h:outputText value="#{c.monto}" />
+				    </p:column>
+				    
+				    <p:column headerText="Acción">
+				        <center>
+	                        <p:commandButton icon="fa fa-pencil" title="Editar"/>
+	                        <p:commandButton icon="fa fa-remove" title="Eliminar"/>
+                        </center>
+                    </p:column>
+	                </p:dataTable>
+	            </h:panelGrid>
+	        </p:tab>
+	        <p:tab title="Pestaña 2">
+	            <h:panelGrid columns="2" cellpadding="10">
+
+	            </h:panelGrid>
+	        </p:tab>
+	        <p:tab title="Pestaña 3">
+	            <h:panelGrid columns="2" cellpadding="10">
+
+	            </h:panelGrid>
+	        </p:tab>
+	    </p:tabView>
+    </h:form>   
+    </ui:define>
+</ui:composition>
