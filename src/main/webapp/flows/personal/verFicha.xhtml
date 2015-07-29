@@ -74,7 +74,7 @@
                                            itemLabel="#{filtro.nombre}" />
                                           <!--<f:ajax listener="#{mantenedorPersonal.agregarServicio}" update="frmPersonal:serAsociados"/>  -->  
                  </p:selectOneMenu>
-                <p:dataTable id="serAsociados" value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s" >
+                <p:dataTable id="serAsociados" value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s" emptyMessage="Sin Faenas Asignadas" >
                     <p:column headerText="ID">
                         #{s.id}
                     </p:column>
@@ -85,7 +85,30 @@
                     <p:commandLink styleClass="ui-icon ui-icon-trash" action="#{mantenedorPersonal.eliminarServicio(s)}" update="serAsociados"/></p:column>
                 </p:dataTable>
             </p:panel>
-
+            
+            <p:panel header="Cargas Familiares" id="pCargasFamiliares">
+               <p:commandButton icon="fa fa-plus" value="Agregar"/>
+                <p:dataTable id="CargasAsociadas" emptyMessage="No tiene cargas Familiares Asociadas">
+                    <p:column headerText="rut">
+                        
+                    </p:column>
+                    <p:column headerText="Nombres">
+                        
+                    </p:column>
+                    
+                    <p:column headerText="Apellidos">
+                        
+                    </p:column>
+                    
+                    <p:column headerText="Fecha Nacimiento">
+                        
+                    </p:column>
+                    
+                    <p:column headerText="Acciones">
+                    <p:commandLink styleClass="ui-icon ui-icon-trash"/></p:column>
+                </p:dataTable>
+            </p:panel>
+            
             <p:panel header="Documentos de Carpeta" id="pDocumentos">
                 <p:commandButton icon="ui-icon-plus"
                                  rendered="#{!mantenedorPersonal.tiposDocumentos.isEmpty() and (sesionCliente.esEditor(constantes.moduloPersonal) or sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal))}"

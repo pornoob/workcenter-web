@@ -18,7 +18,7 @@
 	                             var="c">
 	                <f:facet name="header">
                                 <div style="text-align: left">
-                                <p:commandButton value="Agregar" icon="fa fa-plus"/>
+                                <p:commandButton value="Agregar" icon="fa fa-plus" oncomplete="PF('pdAVCF').show();"/>
                                 </div>
                     </f:facet>
 	                <p:column headerText="Desde">
@@ -39,8 +39,8 @@
 				    
 				    <p:column headerText="Acción">
 				        <center>
-	                        <p:commandButton icon="fa fa-pencil" title="Editar"/>
-	                        <p:commandButton icon="fa fa-remove" title="Eliminar"/>
+	                        <p:commandButton icon="fa fa-pencil" title="Editar" actionListener="#{mantenedorCargarFamiliares.modificarValores(c)}" oncomplete="PF('pdMVCF').show();" update=":frmModificarValoresCargas"/>
+	                        <p:commandButton icon="fa fa-remove" title="Eliminar" actionListener="#{mantenedorCargarFamiliares.eliminarValores(c)}" update="frmHojaDeServicios" />
                         </center>
                     </p:column>
 	                </p:dataTable>
@@ -57,6 +57,51 @@
 	            </h:panelGrid>
 	        </p:tab>
 	    </p:tabView>
-    </h:form>   
+    </h:form>
+    <h:form id="frmAgregarValoresCargas">
+    <p:dialog id="pdAgregar" widgetVar="pdAVCF" width="800" height="50" header="Agregar Valores C. Familiares">
+	    <div>
+	       <table>
+	            <tr>
+	               <td> <p:outputLabel value="Fecha"></p:outputLabel></td>
+	               <td><p:calendar pattern="yyyy-MM-dd" value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.fechaVigencia}"/></td>
+	               <td><p:outputLabel value="Desde"></p:outputLabel></td>
+	               <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.desde}"/></td>
+	               <td><p:outputLabel value="Hasta"></p:outputLabel></td>
+	               <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.hasta}"/></td>
+	               <td><p:outputLabel value="Monto"></p:outputLabel></td>
+	               <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.monto}"/></td>
+	               <td><p:commandLink styleClass="fa fa-plus" title="Agregar" actionListener="#{mantenedorCargarFamiliares.agregarValores()}" update=":frmHojaDeServicios" onclick="PF('pdAVCF').hide();"/></td>
+	            </tr>
+	       </table>
+	    </div>
+    </p:dialog>
+    </h:form>
+     <h:form id="frmModificarValoresCargas">
+    <p:dialog id="pdModificar" widgetVar="pdMVCF"  width="800" height="50" header="Modificar Valores C. Familiares">
+        <div>
+           <table>
+                <tr>
+                   <td> <p:outputLabel value="Fecha"></p:outputLabel></td>
+                   <td><p:calendar pattern="yyyy-MM-dd" value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.fechaVigencia}"/></td>
+                   <td><p:outputLabel value="Desde"></p:outputLabel></td>
+                   <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.desde}"/></td>
+                   <td><p:outputLabel value="Hasta"></p:outputLabel></td>
+                   <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.hasta}"/></td>
+                   <td><p:outputLabel value="Monto"></p:outputLabel></td>
+                   <td><p:inputText value="#{mantenedorCargarFamiliares.oBjValoresCargasFamiliares.monto}"/></td>
+                   <td><p:commandLink styleClass="fa fa-plus" title="Agregar" actionListener="#{mantenedorCargarFamiliares.agregarValores()}" update=":frmHojaDeServicios" oncomplete="PF('pdMVCF').hide();">
+                            <p:confirm header="Confirmación" message="Estas Seguro de eliminar?" icon="ui-icon-alert" />
+                       </p:commandLink>
+                   </td>
+                </tr>
+           </table>
+        </div>
+    </p:dialog>
+    <p:confirmDialog global="true" hideEffect="fade">
+        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+    </p:confirmDialog>
+    </h:form>    
     </ui:define>
 </ui:composition>

@@ -17,9 +17,25 @@ public class CargasFamiliaresDao {
     private EntityManager em;
 	
 	@SuppressWarnings("unchecked")
-	public List<ValoresCargasFamiliares> obtenerCargasFamiliares() {
+	public List<ValoresCargasFamiliares> obtenerValoresCargasFamiliares() {
         Query q = em.createNamedQuery("ValoresCargasFamiliare.findAll" );     
         return q.getResultList();
     }
+
+	public void guardarValoresCargasFamiliares(
+			ValoresCargasFamiliares oBjValoresCargasFamiliares) {
+		
+		if (oBjValoresCargasFamiliares.getId() == 0) {
+            em.persist(oBjValoresCargasFamiliares);
+        } else {
+            em.merge(oBjValoresCargasFamiliares);
+        }	
+		
+	}
+
+	public void eliminarValorCargaFamiliar(ValoresCargasFamiliares vCF) {
+		ValoresCargasFamiliares valorEliminar = em.find(ValoresCargasFamiliares.class, vCF.getId());
+			em.remove(valorEliminar);
+	}
 
 }

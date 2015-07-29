@@ -1,7 +1,9 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
+
 import javax.persistence.*;
+
 import java.util.Date;
 
 @Entity
@@ -11,7 +13,7 @@ public class ValoresCargasFamiliares implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	@GeneratedValue(strategy=GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
 	@Column(name="desde", nullable=true)
@@ -24,8 +26,8 @@ public class ValoresCargasFamiliares implements Serializable {
 	@Column(name="hasta", nullable=true)
 	private Integer hasta;
 	
-	@Column(name="monto")
-	private int monto;
+	@Column(name="monto", nullable=true)
+	private Integer monto;
 
 	public ValoresCargasFamiliares() {
 	}
@@ -62,11 +64,11 @@ public class ValoresCargasFamiliares implements Serializable {
 		this.hasta = hasta;
 	}
 
-	public int getMonto() {
+	public Integer getMonto() {
 		return this.monto;
 	}
 
-	public void setMonto(int monto) {
+	public void setMonto(Integer monto) {
 		this.monto = monto;
 	}
 

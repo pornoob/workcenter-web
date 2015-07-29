@@ -365,4 +365,5 @@ public class Personal implements Serializable {
     public void setBonosDescuentos(List<BonoDescuentoPersonal> bonosDescuentos) {
         this.bonosDescuentos = bonosDescuentos;
     }
+
 }

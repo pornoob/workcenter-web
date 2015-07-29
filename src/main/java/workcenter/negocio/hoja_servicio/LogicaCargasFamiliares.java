@@ -19,8 +19,20 @@ public class LogicaCargasFamiliares {
     CargasFamiliaresDao cargasFamiliaresDao;
 	
 	@Transactional(readOnly = true)
-    public List<ValoresCargasFamiliares> obtenerCargasFamiliares() {
-        return cargasFamiliaresDao.obtenerCargasFamiliares();
+    public List<ValoresCargasFamiliares> obtenerValoresCargasFamiliares() {
+        return cargasFamiliaresDao.obtenerValoresCargasFamiliares();
     }
+	
+	@Transactional(readOnly = false)
+	public void guardarValoresCargasFamiliares(
+			ValoresCargasFamiliares oBjValoresCargasFamiliares) {
+	
+		cargasFamiliaresDao.guardarValoresCargasFamiliares(oBjValoresCargasFamiliares);
+	}
+	
+	@Transactional(readOnly = false)
+	public void eliminarValorCargaFamiliar(ValoresCargasFamiliares vCF) {
+		cargasFamiliaresDao.eliminarValorCargaFamiliar(vCF);		
+	}
 
 }
