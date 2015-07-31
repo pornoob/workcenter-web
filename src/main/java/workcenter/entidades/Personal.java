@@ -124,7 +124,9 @@ public class Personal implements Serializable {
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonoDescuentoPersonal> bonosDescuentos;
-
+    
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rutPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<CargasFamiliares> lstCargasFamiliares;
 
     public Personal() {
     }
@@ -365,5 +367,13 @@ public class Personal implements Serializable {
     public void setBonosDescuentos(List<BonoDescuentoPersonal> bonosDescuentos) {
         this.bonosDescuentos = bonosDescuentos;
     }
+
+	public List<CargasFamiliares> getLstCargasFamiliares() {
+		return lstCargasFamiliares;
+	}
+
+	public void setLstCargasFamiliares(List<CargasFamiliares> lstCargasFamiliares) {
+		this.lstCargasFamiliares = lstCargasFamiliares;
+	}
 
 }

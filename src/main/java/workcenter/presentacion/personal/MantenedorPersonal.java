@@ -5,6 +5,7 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
@@ -65,6 +66,7 @@ public class MantenedorPersonal implements Serializable {
     private transient UploadedFile archivo;
     private List<Servicio> listaServicios;
     private Servicio servicioSeleccionado;
+    private CargasFamiliares cargaFamiliares;
 
     private enum TipoOperacion {
         EDITAR,
@@ -114,6 +116,7 @@ public class MantenedorPersonal implements Serializable {
         opcionesSalud.add(new FilterOption(constantes.getIsapre(), "ISAPRE"));
 
         listaServicios = logicaServicio.obtenerTodos();
+        cargaFamiliares = new CargasFamiliares();
         return irListaPersonal();
     }
 
@@ -195,6 +198,41 @@ public class MantenedorPersonal implements Serializable {
     public void eliminarServicio(Servicio s){
     	personalSeleccionado.getServicios().remove(s);
     	logicaPersonal.guardar(personalSeleccionado);
+    }
+    
+    public void agregarCargaFamiliar(){
+    	if (!personalSeleccionado.getLstCargasFamiliares().contains(cargaFamiliares)){
+    		cargaFamiliares.setRutPersonal(personalSeleccionado);
+    		personalSeleccionado.getLstCargasFamiliares().add(cargaFamiliares);
+    	}
+    	personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
+    	logicaPersonal.guardar(personalSeleccionado);
+    	cargaFamiliares = new CargasFamiliares();
+    	
+    }
+    
+    public void eliminarCargarFamiliar(CargasFamiliares c){
+    	personalSeleccionado.getLstCargasFamiliares().remove(c);
+    	personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
+    	logicaPersonal.guardar(personalSeleccionado);
+    }
+    
+    public void editarCargarFamiliar(CargasFamiliares c){
+    	cargaFamiliares = c;
+    }
+    
+    public void ModificarDatosCargaFamiliar(){
+    	List<CargasFamiliares> tmpLista = personalSeleccionado.getLstCargasFamiliares();
+    	for (int i = 0; i < tmpLista.size(); i++) {
+			if (tmpLista.get(i).getRutCarga() == cargaFamiliares.getRutCarga()){
+				tmpLista.get(i).setNombres(cargaFamiliares.getNombres());
+				tmpLista.get(i).setApellidos(cargaFamiliares.getApellidos());
+				tmpLista.get(i).setNacimiento(cargaFamiliares.getNacimiento());
+			}			
+		}
+    	personalSeleccionado.setLstCargasFamiliares(tmpLista);
+    	logicaPersonal.guardar(personalSeleccionado);
+    	cargaFamiliares = new CargasFamiliares();
     }
 
     // se agrega filtro faena
@@ -703,6 +741,14 @@ public class MantenedorPersonal implements Serializable {
 
 	public void setServicioSeleccionado(Servicio servicioSeleccionado) {
 		this.servicioSeleccionado = servicioSeleccionado;
+	}
+
+	public CargasFamiliares getCargaFamiliares() {
+		return cargaFamiliares;
+	}
+
+	public void setCargaFamiliares(CargasFamiliares cargaFamiliares) {
+		this.cargaFamiliares = cargaFamiliares;
 	}
     
 }
