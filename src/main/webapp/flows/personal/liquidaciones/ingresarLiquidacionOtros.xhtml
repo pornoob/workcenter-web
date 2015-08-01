@@ -232,18 +232,20 @@
                     </td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
-                    <td><b></b></td>
-                    <td><br/><br/><p:commandButton value="Imprimir Liquidación" icon="fa fa-print"> <p:printer target=":frmLiquidaciones" /></p:commandButton></td>
-                    <td><br/><br/><p:commandButton value="Guardar Liquidación" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}">
-                        <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
-                    </p:commandButton>
+                    <td colspan="6" style="text-align: right">
+                        <p:commandButton value="Imprimir Liquidación" icon="fa fa-print" action="#{renderPdf.generarLiquidacion(mantenedorLiquidaciones.liquidacion)}">
+                        </p:commandButton>
+                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}">
+                            <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
+                        </p:commandButton>
                     </td>
                 </tr>
             </table>
+            <!--<div id="pdfWrapper" style="display: none;">-->
+                <!--<object type="application/pdf" data="/showcase/resources/demo/media/guide.pdf?pfdrid_c=true" height="300px" width="100%" internalinstanceid="6">-->
+                    <!--Your browser can't display pdf, <a href="/resources/demo/media/guide.pdf">click</a> to download pdf instead.-->
+                <!--</object>-->
+            <!--</div>-->
             <p:confirmDialog global="true" showEffect="fade">
                  <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                   <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />

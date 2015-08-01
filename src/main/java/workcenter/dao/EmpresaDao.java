@@ -1,11 +1,12 @@
 package workcenter.dao;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.Empresa;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.springframework.stereotype.Repository;
-import workcenter.entidades.Empresa;
+import java.util.List;
 
 /**
  * @author colivares
@@ -29,5 +30,13 @@ public class EmpresaDao {
 
     public List<Empresa> obtenerEmpresas() {
         return em.createNamedQuery("Empresa.findAll").getResultList();
+    }
+
+    public Empresa obtenerEmpresa(Integer rut) {
+        try {
+            return (Empresa) em.createNamedQuery("Empresa.findByRut").setParameter("rut", rut).getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }
