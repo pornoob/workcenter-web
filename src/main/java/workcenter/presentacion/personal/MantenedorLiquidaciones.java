@@ -13,12 +13,15 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import workcenter.entidades.BonoDescuentoPersonal;
+import workcenter.entidades.CargasFamiliares;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
 import workcenter.entidades.ValorImpuestoUnico;
 import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.ValoresCargasFamiliares;
 import workcenter.entidades.Variable;
+import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
@@ -53,6 +56,9 @@ public class MantenedorLiquidaciones implements Serializable {
 
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
+    
+    @Autowired
+    private LogicaCargasFamiliares logicaCargasFamiliares;
 
     @Autowired
     private Constantes constantes;
@@ -128,7 +134,17 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
-
+        
+        // asiganacion familiar
+        
+        for (ValoresCargasFamiliares vCF : logicaCargasFamiliares.obtenerValoresCargasFamiliares()) {
+			if (vCF.getHasta() == null){
+				
+			}else if (vCF.getHasta()>=liquidacion.getTotalImponible()){
+				liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+(liquidacion.getIdPersonal().getLstCargasFamiliares().size()*vCF.getMonto()));
+			}
+		}
+        
         //calculo afp y salud
         for (ValorPrevisionPersonal vPP : valorPrevision) {
 

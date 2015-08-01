@@ -74,7 +74,7 @@
                                            itemLabel="#{filtro.nombre}" />
                                           <!--<f:ajax listener="#{mantenedorPersonal.agregarServicio}" update="frmPersonal:serAsociados"/>  -->  
                  </p:selectOneMenu>
-                <p:dataTable id="serAsociados" value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s" >
+                <p:dataTable id="serAsociados" value="#{mantenedorPersonal.personalSeleccionado.servicios}" var="s" emptyMessage="Sin Faenas Asignadas" >
                     <p:column headerText="ID">
                         #{s.id}
                     </p:column>
@@ -82,10 +82,37 @@
                         #{s.nombre}
                     </p:column>
                     <p:column headerText="Acciones">
-                    <p:commandLink styleClass="ui-icon ui-icon-trash" action="#{mantenedorPersonal.eliminarServicio(s)}" update="serAsociados"/></p:column>
+                    <p:commandLink styleClass="ui-icon ui-icon-trash" action="#{mantenedorPersonal.eliminarServicio(s)}" update="frmPersonal"/></p:column>
                 </p:dataTable>
             </p:panel>
-
+            
+            <p:panel header="Cargas Familiares" id="pCargasFamiliares">
+               <p:commandButton icon="fa fa-plus" value="Agregar" oncomplete="PF('pdlACF').show();" update="frmAgregarCargas"/>
+                <p:dataTable id="CargasAsociadas" emptyMessage="No tiene cargas Familiares Asociadas" value="#{mantenedorPersonal.personalSeleccionado.lstCargasFamiliares}" var="car">
+                    <p:column headerText="rut">
+                       <h:outputText value="#{car.rutCarga}"/> 
+                    </p:column>
+                    <p:column headerText="Nombres">
+                       <h:outputText value="#{car.nombres}"/>
+                    </p:column>
+                    
+                    <p:column headerText="Apellidos">
+                       <h:outputText value="#{car.apellidos}"/> 
+                    </p:column>
+                    
+                    <p:column headerText="Fecha Nacimiento">
+                        <h:outputText value="#{car.nacimiento}" >
+                             <f:convertDateTime pattern="yyyy-MM-dd"/>
+                        </h:outputText>
+                    </p:column>
+                    
+                    <p:column headerText="Acciones">
+                    <p:commandLink styleClass="fa fa-pencil" actionListener="#{mantenedorPersonal.editarCargarFamiliar(car)}" update="frmModificarCargas" oncomplete="PF('pdlMCF').show();"/>
+                    <p:commandLink styleClass="fa fa-trash" actionListener="#{mantenedorPersonal.eliminarCargarFamiliar(car)}" update="CargasAsociadas"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+            
             <p:panel header="Documentos de Carpeta" id="pDocumentos">
                 <p:commandButton icon="ui-icon-plus"
                                  rendered="#{!mantenedorPersonal.tiposDocumentos.isEmpty() and (sesionCliente.esEditor(constantes.moduloPersonal) or sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal))}"
@@ -141,6 +168,47 @@
                 </p:panel>
             </p:panel>
         </h:form>
-
+        <h:form id="frmAgregarCargas">
+        <p:dialog id="pdlagregar" widgetVar="pdlACF" width="900" height="50" modal="true" header="Agregar Carga Familiar">
+            <div>
+                <table>
+                    <tr>
+                        <td><p:outputLabel value="Rut"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.rutCarga}"/></td>
+                        <td><p:outputLabel value="D. Verificador"/></td>
+                        <td><p:inputText maxlength="1" size="1" value="#{mantenedorPersonal.cargaFamiliares.dvVerificadorCarga}"/></td>
+                        <td><p:outputLabel value="Nombres"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.nombres}"/></td>
+                        <td><p:outputLabel value="Apellidos"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.apellidos}"/></td>
+                        <td><p:outputLabel value="Fecha Nacimiento"/></td>
+                        <td><p:calendar pattern="yyyy-MM-dd" navigator="true" value="#{mantenedorPersonal.cargaFamiliares.nacimiento}"/></td>
+                        <td><p:commandLink styleClass="fa fa-plus" title="Agregar" onclick="PF('pdlACF').hide();" update=":frmPersonal" actionListener="#{mantenedorPersonal.agregarCargaFamiliar()}"/></td>
+                    </tr>
+                </table>
+            </div>
+        </p:dialog>
+        </h:form>
+        <h:form id="frmModificarCargas">
+        <p:dialog id="pdlmodificar" widgetVar="pdlMCF" width="900" height="50" modal="true" header="Modificar Carga Familiar">
+            <div>
+                <table>
+                    <tr>
+                        <td><p:outputLabel value="Rut"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.rutCarga}"/></td>
+                        <td><p:outputLabel value="D. Verificador"/></td>
+                        <td><p:inputText maxlength="1" size="1" value="#{mantenedorPersonal.cargaFamiliares.dvVerificadorCarga}"/></td>
+                        <td><p:outputLabel value="Nombres"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.nombres}"/></td>
+                        <td><p:outputLabel value="Apellidos"/></td>
+                        <td><p:inputText value="#{mantenedorPersonal.cargaFamiliares.apellidos}"/></td>
+                        <td><p:outputLabel value="Fecha Nacimiento"/></td>
+                        <td><p:calendar pattern="yyyy-MM-dd" navigator="true" value="#{mantenedorPersonal.cargaFamiliares.nacimiento}"/></td>
+                        <td><p:commandLink styleClass="fa fa-pencil" title="Modificar" onclick="PF('pdlMCF').hide();" update=":frmPersonal" actionListener="#{mantenedorPersonal.ModificarDatosCargaFamiliar()}"/></td>
+                    </tr>
+                </table>
+            </div>
+        </p:dialog>
+        </h:form>
     </ui:define>
 </ui:composition>

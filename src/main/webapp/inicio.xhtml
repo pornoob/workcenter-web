@@ -149,6 +149,15 @@
                         <i class="fa fa-files-o fa-5x"></i>
                         <h:outputLabel value="Control de Despachos" style="margin-top: 10px"/>
                     </h:commandLink>
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
+                                   action="#{facesUtil.redirigir('/m/hoja_servicio')}"
+                                   class="menuWorkcenter" style="display: block"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)"
+                                   title="Hoja de Servicio">
+                        <i class="fa fa-pencil-square-o fa-5x"></i>
+                        <h:outputLabel value="Hoja de Servicio" style="margin-top: 10px"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
         </h:form>
