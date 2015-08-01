@@ -75,6 +75,15 @@
                         <h:graphicImage value="/img/icons/64/m_remuneraciones.png"/>
                         <h:outputLabel value="Libro de Remuneraciones"/>
                     </h:commandLink>
+
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"
+                                   action="#{facesUtil.redirigir('/m/carga_masiva')}"
+                                   class="menuWorkcenter" style="display: block"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <i class="fa fa-upload fa-5x"></i>
+                        <h:outputLabel value="Carga Masiva" style="margin-top: 10px"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
 

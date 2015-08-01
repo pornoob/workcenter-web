@@ -45,6 +45,8 @@
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
             <p:menuitem id="mPiir" styleClass="ui-icon ui-icon-m-incidencias" url="/m/incidencias" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
+            <p:menuitem id="mCargaMasiva" styleClass="fa fa-upload fa-1x" url="/m/carga_masiva" ajax="false" style="color: black; font-size: 1.26em"
+                        rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
             <p:menuitem id="mAlarmasGPS" styleClass="ui-icon ui-icon-m-alarmas-gps" url="/m/alarmas_gps" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
             <p:menuitem id="mInfActividades" styleClass="ui-icon ui-icon-m-informe-actividades"
