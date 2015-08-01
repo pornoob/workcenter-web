@@ -1,28 +1,16 @@
 package workcenter.dao;
 
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.*;
+import workcenter.util.components.Constantes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import workcenter.entidades.BonoDescuento;
-import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Dinero;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
-import workcenter.entidades.ValorImpuestoUnico;
-import workcenter.entidades.ValorPrevisionPersonal;
-import workcenter.entidades.Variable;
-import workcenter.util.components.Constantes;
+import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.List;
 
 @Repository
 public class LiquidacionDao {
@@ -106,12 +94,8 @@ public class LiquidacionDao {
                                          Integer anio) {
 
         Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
-        SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
-        try {
-            q.setParameter("fechareal", formatoDeFecha.parse((anio.toString() + "-" + mes + "-" + c.getDiasAnticipo()).trim()));
-        } catch (ParseException ex) {
-            ex.printStackTrace();
-        }
+        q.setParameter("mes", Integer.parseInt(mes));
+        q.setParameter("anio", anio);
         q.setParameter("receptor", idPers);
 
         for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
