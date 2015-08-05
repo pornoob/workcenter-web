@@ -42,6 +42,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         
 		<security:intercept-url pattern="/m/ficha_viajes" access="hasRole('MODULO_ALARMAS_GPS')"/>
 		<security:intercept-url pattern="/m/hoja_servicio" access="hasRole('MODULO_MANTENCIONES')"/>
+		<security:intercept-url pattern="/m/carga_masiva" access="hasRole('MODULO_CARGA_MASIVA')"/>
 		 
         <security:logout invalidate-session="true"
                          delete-cookies="jsessionid"
