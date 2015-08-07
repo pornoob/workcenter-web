@@ -141,7 +141,7 @@
                                      id="imponible">
                             <f:facet name="header">
                                 <div style="text-align: right">
-                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();" immediate="true"/>
+                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();" immediate="true" update="formAgregarQuitarBonos"/>
                                 </div>
                                 <div>Bonos Imponibles</div>
                             </f:facet>
@@ -226,7 +226,7 @@
                     </td>
                     <td><b>Alcance líquido</b></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}">
+                    <td><p:inputText id="idAlcanceLiquido" value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
@@ -249,8 +249,10 @@
             <p:confirmDialog global="true" showEffect="fade">
                  <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
                   <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-             </p:confirmDialog>
-            <p:dialog id="idDlgDescuento" header="Descuentos Personal" widgetVar="dlg1" width="460" height="250" closable="false">        
+             </p:confirmDialog>            
+        </h:form>
+        <p:dialog id="idDlgDescuento" header="Descuentos Personal" widgetVar="dlg1" width="460" height="250" closable="false">        
+            <h:form id="formAgregarQuitarBonos">
             <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}"
                         var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}"
                         itemValue="#{bonos}"
@@ -261,10 +263,10 @@
                              action="#{mantenedorLiquidaciones.agregarQuitarBonos()}"
                              update="frmLiquidaciones"
                              immediate="true"
-                             oncomplete="PF('dlgBonos').hide();">
+                             oncomplete="PF('dlg1').hide();">
             </p:commandButton>
-            </p:dialog>            
-        </h:form>
+            </h:form>
+        </p:dialog>
         <p:dialog header="Editar Monto" widgetVar="dlgBonos" width="300" height="40">
             <h:form id="formEditarBonos">
             <table>

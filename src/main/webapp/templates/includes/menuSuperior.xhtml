@@ -22,28 +22,38 @@
                        rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
             <p:tooltip for="mProgramaActividades" value="Programa Actividades"
                        rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
+            <p:tooltip for="mConsultaDoc" value="Consulta Documentos"
+                       rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
+            <p:tooltip for="mFicha_Viajes" value="Control de Despachos"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
+            <p:tooltip for="mHoja_Servicio" value="Hoja de Servicio"
+                       rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"/>
+            <p:tooltip for="mCargaMasiva" value="Carga Masiva"
+                       rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
+            <p:tooltip for="mLiquiciones" value="Liquidaciones"
+                       rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
         </ui:fragment>
 
         <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
-            <p:menuitem id="mInicio" styleClass="ui-icon ui-icon-m-inicio" url="/inicio.jsf" ajax="false"/>
-            <p:menuitem id="mPersonal" styleClass="ui-icon ui-icon-m-personal" url="/m/personal" ajax="false"
+            <p:menuitem id="mInicio" styleClass="fa fa-home fa-1x" style="color: black; font-size: 1.26em" url="/inicio.jsf" ajax="false"/>
+            <p:menuitem id="mPersonal" styleClass="fa fa-user fa-1x" style="color: black; font-size: 1.26em" url="/m/personal" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"/>
-            <p:menuitem id="mEquipos" styleClass="ui-icon ui-icon-m-equipos" url="/m/equipos" ajax="false"
+            <p:menuitem id="mEquipos" styleClass="fa fa-truck fa-1x" style="color: black; font-size: 1.26em" url="/m/equipos" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"/>
-            <p:menuitem id="mMantenciones" styleClass="ui-icon ui-icon-m-mantenciones" url="/m/equipos/mantenciones"
+            <p:menuitem id="mMantenciones" styleClass="fa fa-wrench fa-1x" style="color: black; font-size: 1.26em" url="/m/equipos/mantenciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"/>
-            <p:menuitem id="mUsuarios" styleClass="ui-icon ui-icon-m-usuarios" url="/m/usuarios" ajax="false"
+            <p:menuitem id="mUsuarios" styleClass="fa fa-users fa-1x" style="color: black; font-size: 1.26em" url="/m/usuarios" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
             <p:menuitem id="mRegistros" styleClass="ui-icon ui-icon-m-registros" url="/m/registros" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
             <p:menuitem id="mLiquiciones" styleClass="fa fa-usd fa-1x" style="color: black; font-size: 1.26em" url="/m/personal/liquidaciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
-            <p:menuitem id="mRemuneraciones" styleClass="ui-icon ui-icon-m-remuneraciones" url="/m/remuneraciones"
+            <p:menuitem id="mRemuneraciones" styleClass="fa fa-book fa-1x" style="color: black; font-size: 1.26em" url="/m/remuneraciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
-            <p:menuitem id="mPiir" styleClass="ui-icon ui-icon-m-incidencias" url="/m/incidencias" ajax="false"
+            <p:menuitem id="mPiir" styleClass="ui-icon ui-icon-m-incidencias" style="color: black; font-size: 1.26em" url="/m/incidencias" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
             <p:menuitem id="mCargaMasiva" styleClass="fa fa-upload fa-1x" url="/m/carga_masiva" ajax="false" style="color: black; font-size: 1.26em"
                         rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
@@ -52,13 +62,13 @@
             <p:menuitem id="mInfActividades" styleClass="ui-icon ui-icon-m-informe-actividades"
                         url="/m/informe_actividades" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
-            <p:menuitem id="mProgramaActividades" styleClass="ui-icon ui-icon-m-programa-actividades"
+            <p:menuitem id="mProgramaActividades" styleClass="fa fa-calendar fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/programa_actividades" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
             <p:menuitem id="mReportesSII" styleClass="ui-icon ui-icon-m-reportes-sii"
                         url="/m/reportes_sii" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
-            <p:menuitem id="mConsultaDoc" styleClass="ui-icon ui-icon-m-consulta-doc"
+            <p:menuitem id="mConsultaDoc" styleClass="fa fa-file-text fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/consulta_doc" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
             <p:menuitem id="mFicha_Viajes" styleClass="fa fa-files-o fa-1x" style="color: black; font-size: 1.26em"

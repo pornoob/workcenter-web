@@ -53,16 +53,15 @@ public class ImportadorDatosCaja {
                 d.setFechareal(sdf.parse(fechaActual));
                 d.setFechaactivo(sdf.parse(fechaCarga));
                 d.setConcepto(conceptoSeleccionado);
-                try {
-                	
+                try {              	
                 	logicaCargaMasiva.guardarDinero(d);
-                	System.out.println(d.getReceptor()+"  "+fechaActual+"   "+fechaCarga);
                 } catch (PersistenceException e) {
                 }
            
             }
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se han actualizado los datos");
-            }
+           }
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
+            
         } catch (IOException e) {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
