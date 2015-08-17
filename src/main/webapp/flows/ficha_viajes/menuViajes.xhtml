@@ -8,9 +8,75 @@
         <h2>Listado de Despachos</h2>
 
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
-        <h:form id="frmFichaViajes">
-            <p:commandButton icon="fa fa-plus" value="Agregar Ficha" action="flowAgregarFicha"/>
-            
+        
+        <p:panel id="panelIngreso" header="Ingreso De Guias">  
+        <h:form id="frmFichaViajesIngreso">     
+        <table style="margin-top: 2%" id="tdatos">
+            <tr align="center">
+                <td>TRACTO</td>
+                <td>PATENTE</td>
+                <td>CONDUCTOR</td>
+                <td>GUIA</td>
+                <td>TONELAJE</td>
+                <td>DESTINO</td>
+                <td>FECHA</td>
+                <td>HORA</td>
+            </tr>
+            <tr>
+                <td><p:inputText style="width:41px" id="numero" value="#{mantenedorFicha.viajes.numerTracto}">
+                        <p:ajax event="blur" update="patente" listener="#{mantenedorFicha.obtenerPatente()}"/>
+                    </p:inputText>
+                </td>
+                <td><p:outputLabel id="patente" value="#{mantenedorFicha.viajes.nomTracto}" style="color:red"/></td>
+                <td>
+                    <p:selectOneMenu style="width:250px" filter="true" filterMatchMode="contains" value="#{mantenedorFicha.viajes.nom_conductor}">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorFicha.personal}" var="c" itemLabel="#{c.nombreCompleto}" itemValue="#{c.nombreCompleto}"/>
+                    </p:selectOneMenu>
+                </td>
+                <td>
+                    <p:inputText value="#{mantenedorFicha.viajes.numGuia}" onkeypress="return reemplazar(this);" onblur="return reemplazar(this);"/>
+                </td>
+                <td>
+                    <p:inputText value="#{mantenedorFicha.viajes.tonelaje}" onkeypress="return reemplazar(this);" onblur="return reemplazar(this);"/>
+                </td>
+                <td>
+                    <p:selectOneMenu style="width:110px" filter="true" filterMatchMode="contains" value="#{mantenedorFicha.viajes.destino}">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorFicha.destino}" var="d" itemLabel="#{d}" itemValue="#{d}"/>
+                    </p:selectOneMenu>
+                </td>
+                <td>
+                <p:calendar pattern="dd-MM-yyyy" id="ifecha" value="#{mantenedorFicha.viajes.fecha}" />
+                </td>
+                <td>
+                <p:inputMask mask="99:99" value="#{mantenedorFicha.viajes.hora}" style="width:41px" /> 
+                </td>
+            </tr>
+            <tr>
+            <td colspan="7" align="left"></td>
+            </tr>
+            <tr>
+                <td colspan="7" align="right">
+                <p:commandButton value="Regresar" action="#{mantenedorFicha.regresarListado()}" >
+                <p:confirm header="Confirmación" message="¿Desea regresar a Listar Despachos?" icon="ui-icon-alert"  />
+                </p:commandButton>
+                <p:commandButton value="Guardar" action="#{mantenedorFicha.guardarFicha()}" update="frmFichaViajes,frmFichaViajesIngreso">
+                <p:confirm header="Comfirmación" message="¿Desea Usted Guarda los datos?" icon="ui-icon-alert">
+                </p:confirm>
+                </p:commandButton>
+                </td>
+            </tr>
+        </table> 
+        <p:confirmDialog global="true" showEffect="fade">
+        <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+        <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+       </p:confirmDialog>
+        </h:form>
+        </p:panel>
+        
+        <p:panel id="panelListado" header="Listado de Guias" style="margin-top: 2%">
+        <h:form id="frmFichaViajes">            
             <p:dataTable id="tblDespachos"
             			 var="f" value="#{mantenedorFicha.lViajes}"
             			 emptyMessage="No se han encontrado resultados"
@@ -53,5 +119,6 @@
                 </p:column>    
             </p:dataTable>
         </h:form>
+        </p:panel>
     </ui:define>
 </ui:composition>

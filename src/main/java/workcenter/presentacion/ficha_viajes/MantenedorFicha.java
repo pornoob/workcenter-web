@@ -3,11 +3,7 @@ package workcenter.presentacion.ficha_viajes;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
-import javax.faces.context.FacesContext;
-
-import org.apache.taglibs.standard.tag.common.fmt.ParseDateSupport;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -27,7 +23,6 @@ public class MantenedorFicha implements Serializable {
 	private static final long serialVersionUID = 1L;
 	private static final int SUBTIPO = 1;
 	private List<Equipo> equipos;
-	private Equipo equipo;
 	private List<Personal> personal;
 	private List<ViajesTortola> lViajes;
 	private Personal persona;
@@ -68,21 +63,25 @@ public class MantenedorFicha implements Serializable {
 		return destinoFiltro;
 	}
 	public  void obtenerPatente(){
-	    Map<String, String> requestParamMap = FacesContext.getCurrentInstance().getExternalContext().getRequestParameterMap();
-	    if (requestParamMap.containsKey("numero")) {
-	        String numPatente = requestParamMap.get("numero");
-	        boolean encontrarPatente = false;
-		    for (Equipo e : equipos) {
-
-			if (e.getNumero().intValue() == Integer.parseInt(numPatente)) {
-				equipo = e;
-				encontrarPatente = true;
+		try {
+			Boolean encontrado = false;
+			for (Equipo e : equipos) {
+				   
+				if (e.getNumero().intValue() == viajes.getNumerTracto().intValue()) {
+					encontrado = true;
+					viajes.setNomTracto(e.getPatente().toString());
+				}
 			}
+		if (encontrado == false){
+			FacesUtil.mostrarMensajeError("Error de busqueda", "No se ha encontrado el tracto con numero: "+viajes.getNumerTracto());
 		}
-		if (!encontrarPatente){equipo = new Equipo();}
-	    }
+			  	
+		} catch (Exception e) {
+			System.err.println(e.getCause());
+		}
+		    
+    }
 
-	}
 
 	public void guardarFicha() {
 		if (viajes.getNumerTracto() == null || viajes.getDestino() == null
@@ -110,6 +109,7 @@ public class MantenedorFicha implements Serializable {
 						"Se ha guardado correctamente la ficha con ID: "
 								.concat(viajes.getId()));
 				viajes = new ViajesTortola();
+				lViajes = logicaFicha.obtenerTodasFichaViajes();
 			} else
 				FacesUtil.mostrarMensajeError("Operación Fallida",
 						"Numero de Guía Duplicada : ".concat(viajes
@@ -119,6 +119,7 @@ public class MantenedorFicha implements Serializable {
 
 	public String regresarListado() {
 		lViajes = logicaFicha.obtenerTodasFichaViajes();
+		viajes = new ViajesTortola();
 		return "flowMenuViajes";
 	}
 
@@ -168,14 +169,6 @@ public class MantenedorFicha implements Serializable {
 
 	public void setlViajes(List<ViajesTortola> lViajes) {
 		this.lViajes = lViajes;
-	}
-
-	public Equipo getEquipo() {
-	    return equipo;
-	}
-
-	public void setEquipo(Equipo equipo) {
-	    this.equipo = equipo;
 	}
 
 }

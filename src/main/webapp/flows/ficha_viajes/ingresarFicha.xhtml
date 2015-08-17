@@ -22,7 +22,7 @@
 			</tr>
 			<tr>
 				<td><p:inputText style="width:41px" id="numero" value="#{mantenedorFicha.viajes.numerTracto}" onchange="cargar(this);" onblur="cargar(this);" />
-					<p:remoteCommand name="patente" actionListener="#{mantenedorFicha.obtenerPatente}" update="@form"/> 
+					<p:remoteCommand name="patente" actionListener="#{mantenedorFicha.obtenerPatente}" update="frmFichaViajes"/> 
 				</td>
 				<td><p:outputLabel value="#{mantenedorFicha.equipo.patente}" style="color:red"/></td>
 				<td>
