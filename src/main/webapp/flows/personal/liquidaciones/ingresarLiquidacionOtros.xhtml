@@ -119,10 +119,17 @@
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.impUnico}"/></td>
                 </tr>
                 <tr>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-
+                    <td><h:outputLabel value="Asignacion Familiar " /></td>
+                    <td>:</td>
+                    <td>
+			         <p:outputPanel>
+			            <p:spinner value="#{mantenedorLiquidaciones.cantidadCargasFamiliares}" min="0">
+			                <p:ajax update="frmLiquidaciones" process="@this" listener="#{mantenedorLiquidaciones.cargarDatos()}"/>
+			            </p:spinner>
+			            <h:outputText value="#{mantenedorLiquidaciones.asignacionFamiliarMonto}" style="padding-left: 10px" />
+			        </p:outputPanel>
+                    </td>
+                    
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}">

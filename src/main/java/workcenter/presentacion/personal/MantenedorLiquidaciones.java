@@ -13,7 +13,6 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
 import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.CargasFamiliares;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
@@ -50,6 +49,10 @@ public class MantenedorLiquidaciones implements Serializable {
     private DualListModel<BonoDescuentoPersonal> bonos;
     
     private BonoDescuentoPersonal bonoEditar;
+    
+    private Integer asignacionFamiliarMonto;
+    
+    private int cantidadCargasFamiliares;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -91,6 +94,7 @@ public class MantenedorLiquidaciones implements Serializable {
         bonoEditar =  new BonoDescuentoPersonal();
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
+        asignacionFamiliarMonto = 0;
         
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
         Variable uf = logicaLiquidaciones.obtenerValorUf(Integer.parseInt(mes), anio);
@@ -141,7 +145,12 @@ public class MantenedorLiquidaciones implements Serializable {
 			if (vCF.getHasta() == null){
 				
 			}else if (vCF.getHasta()>=liquidacion.getTotalImponible()){
-				liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+(liquidacion.getIdPersonal().getLstCargasFamiliares().size()*vCF.getMonto()));
+				if (asignacionFamiliarMonto != null){
+					asignacionFamiliarMonto = cantidadCargasFamiliares*vCF.getMonto();
+				}
+				//OJO : verificar calculo
+				liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
+				//liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+(asiganacionFamiliar*vCF.getMonto()));
 			}
 		}
         
@@ -196,11 +205,19 @@ public class MantenedorLiquidaciones implements Serializable {
 			liquidacion.setFechaLiquidacion(formatoDeFecha.parse((anio.toString()+"-"+mes.toString()+"-"+"01")));
 			} catch (ParseException ex) {
 			ex.printStackTrace();
-			}	
+			}
         liquidacion.setEsGenerica(true);
     }
 
-    public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
+    public Integer getAsignacionFamiliarMonto() {
+		return asignacionFamiliarMonto;
+	}
+
+	public void setAsignacionFamiliarMonto(Integer asignacionFamiliarMonto) {
+		this.asignacionFamiliarMonto = asignacionFamiliarMonto;
+	}
+
+	public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
 
         try {
             float rentaAfectaUtm = rentaAfecta / utm;
@@ -358,6 +375,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setBonoEditar(BonoDescuentoPersonal bonoEditar) {
 		this.bonoEditar = bonoEditar;
+	}
+
+	public int getCantidadCargasFamiliares() {
+		return cantidadCargasFamiliares;
+	}
+
+	public void setCantidadCargasFamiliares(int cantidadCargasFamiliares) {
+		this.cantidadCargasFamiliares = cantidadCargasFamiliares;
 	}
 
 }

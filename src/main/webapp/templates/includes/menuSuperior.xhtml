@@ -45,7 +45,7 @@
                         rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"/>
             <p:menuitem id="mUsuarios" styleClass="fa fa-users fa-1x" style="color: black; font-size: 1.26em" url="/m/usuarios" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
-            <p:menuitem id="mRegistros" styleClass="ui-icon ui-icon-m-registros" url="/m/registros" ajax="false"
+            <p:menuitem id="mRegistros" styleClass="fa fa-pencil-square-o fa-1x" style="color: black; font-size: 1.26em" url="/m/registros" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
             <p:menuitem id="mLiquiciones" styleClass="fa fa-usd fa-1x" style="color: black; font-size: 1.26em" url="/m/personal/liquidaciones"
                         ajax="false"
@@ -74,7 +74,7 @@
             <p:menuitem id="mFicha_Viajes" styleClass="fa fa-files-o fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/ficha_viajes" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
-            <p:menuitem id="mHoja_Servicio" styleClass="fa fa-pencil-square-o fa-1x" style="color: black; font-size: 1.26em"
+            <p:menuitem id="mHoja_Servicio" styleClass="fa fa-gear fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/hoja_servicio" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"/>
         </p:tabMenu>
