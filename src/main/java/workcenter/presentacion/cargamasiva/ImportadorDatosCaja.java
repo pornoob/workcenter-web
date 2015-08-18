@@ -39,7 +39,6 @@ public class ImportadorDatosCaja {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Integer rutParteNumerica = 0;
             while ((row = ws.getRow(numRow++)) != null) {
-            	if (row.getCell(1).getStringCellValue() != null){
                 Dinero d = new Dinero();
                 try {
                 	rutParteNumerica = obtenerRut(row.getCell(1).getStringCellValue());
@@ -57,11 +56,8 @@ public class ImportadorDatosCaja {
                 	logicaCargaMasiva.guardarDinero(d);
                 } catch (PersistenceException e) {
                 }
-           
-            }
            }
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
-            
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");           
         } catch (IOException e) {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
