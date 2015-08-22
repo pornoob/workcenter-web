@@ -196,6 +196,7 @@ public class MantenedorLiquidaciones implements Serializable {
 	         liquidacion.setAporteTrabajador(seguroTrabajador);
         }
         liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteTrabajador().intValue()) - liquidacion.getAnticipoSueldo());
+        liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido());
         liquidacion.setHorasExtras(0);
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -203,6 +204,8 @@ public class MantenedorLiquidaciones implements Serializable {
 			} catch (ParseException ex) {
 			ex.printStackTrace();
 			}
+		liquidacion.setRentaAfecta(liquidacion.getRentaAfecta()- liquidacion.getAporteTrabajador().intValue());
+		liquidacion.setTotalDctos(liquidacion.getTotalImponible() - liquidacion.getRentaAfecta());
         liquidacion.setEsGenerica(true);
     }
 
@@ -239,6 +242,28 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public String guardarDatosLiquidacion(){
+    	
+    	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
+    	for (BonoDescuentoPersonal bI : bonoImponibles ){
+    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+    		bdr.setIdMaestroGuia(liquidacion);
+    		bdr.setBono(true);
+    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+    		bdr.setImponible(true);
+    		bdr.setMonto(bI.getMonto());    		
+    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+    	}
+    	
+    	for (BonoDescuentoPersonal bI : bonoNoImponibles ){
+    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+    		bdr.setIdMaestroGuia(liquidacion);
+    		bdr.setBono(true);
+    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+    		bdr.setImponible(false);
+    		bdr.setMonto(bI.getMonto());    		
+    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+    	}
+    	
         renderPdf.generarLiquidacion(liquidacion);
         if (true) return null;
     	

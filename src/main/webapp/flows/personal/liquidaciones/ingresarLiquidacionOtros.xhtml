@@ -75,7 +75,7 @@
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte trabajador)"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoTrabajador}">
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteTrabajador}">
                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
@@ -87,7 +87,7 @@
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte empleador)"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoEmpresa}">
+                    <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteEmpresa}">
                         <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                     </p:inputText>
                     </td>
@@ -221,7 +221,11 @@
                     </td>
                     <td><p:outputLabel value="Total descuentos  "/></td>
                     <td>:</td>
-                    <td><p:inputText/></td>
+                    <td>
+                        <p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalDctos}">
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                        </p:inputText>
+                    </td>
                 </tr>
 
                 <tr>
