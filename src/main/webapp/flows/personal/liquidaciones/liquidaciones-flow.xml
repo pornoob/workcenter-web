@@ -18,5 +18,6 @@
 
     <view-state id="ingresarLiquidacionOtros">
         <transition on="flowMenuLiquidaciones" to="liquidacionesOtros"/>
+        <transition on="flowIngresar" to="ingresarLiquidacionOtros"/>
     </view-state>
 </flow>

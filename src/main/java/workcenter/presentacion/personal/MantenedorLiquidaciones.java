@@ -12,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
+import com.itextpdf.text.log.SysoCounter;
+
 import workcenter.entidades.BonoDescuentoPersonal;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Personal;
@@ -24,6 +26,7 @@ import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
 import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 
 /**
  * Created by claudio on 16-05-15.
@@ -244,10 +247,22 @@ public class MantenedorLiquidaciones implements Serializable {
     public String guardarDatosLiquidacion(){
     	
     	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
-    	logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-    	
-    	return "flowMenuLiquidaciones";
+    	Boolean encotrado = false;
+    	for ( Remuneracion lstRemuneracion : listaRemuneraciones) {
+			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())){
+				FacesUtil.mostrarMensajeError("Ingreso Fallido", "La liquidacion ya existe con esa Fecha");
+				encotrado = true;
+			}
+		}
+    	if (!encotrado){
+    		logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
+        	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        	FacesUtil.mostrarMensajeError("Ingreso Exitoso", "La liquidacion fué registrada");
+        	return "flowMenuLiquidaciones";
+    	}else {
+    		return "flowIngresar";
+    	}
     }
     
     public void editarMontoBono() {

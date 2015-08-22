@@ -53,13 +53,13 @@
             <p:menuitem id="mRemuneraciones" styleClass="fa fa-book fa-1x" style="color: black; font-size: 1.26em" url="/m/remuneraciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
-            <p:menuitem id="mPiir" styleClass="ui-icon ui-icon-m-incidencias" style="color: black; font-size: 1.26em" url="/m/incidencias" ajax="false"
+            <p:menuitem id="mPiir" styleClass="fa fa-exclamation-triangle fa-1x" style="color: black; font-size: 1.26em" url="/m/incidencias" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
             <p:menuitem id="mCargaMasiva" styleClass="fa fa-upload fa-1x" url="/m/carga_masiva" ajax="false" style="color: black; font-size: 1.26em"
                         rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
             <p:menuitem id="mAlarmasGPS" styleClass="ui-icon ui-icon-m-alarmas-gps" url="/m/alarmas_gps" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
-            <p:menuitem id="mInfActividades" styleClass="ui-icon ui-icon-m-informe-actividades"
+            <p:menuitem id="mInfActividades" styleClass="fa fa-bar-chart fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/informe_actividades" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
             <p:menuitem id="mProgramaActividades" styleClass="fa fa-calendar fa-1x" style="color: black; font-size: 1.26em"
@@ -68,10 +68,10 @@
             <p:menuitem id="mReportesSII" styleClass="ui-icon ui-icon-m-reportes-sii"
                         url="/m/reportes_sii" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>
-            <p:menuitem id="mConsultaDoc" styleClass="fa fa-file-text fa-1x" style="color: black; font-size: 1.26em"
+            <p:menuitem id="mConsultaDoc" styleClass="fa fa-search fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/consulta_doc" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
-            <p:menuitem id="mFicha_Viajes" styleClass="fa fa-files-o fa-1x" style="color: black; font-size: 1.26em"
+            <p:menuitem id="mFicha_Viajes" styleClass="fa fa-clipboard fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/ficha_viajes" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
             <p:menuitem id="mHoja_Servicio" styleClass="fa fa-gear fa-1x" style="color: black; font-size: 1.26em"

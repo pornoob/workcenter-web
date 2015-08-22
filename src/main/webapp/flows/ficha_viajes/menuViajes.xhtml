@@ -47,7 +47,7 @@
                     </p:selectOneMenu>
                 </td>
                 <td>
-                <p:calendar pattern="dd-MM-yyyy" id="ifecha" value="#{mantenedorFicha.viajes.fecha}" />
+                <p:calendar pattern="dd-MM-yyyy" id="ifecha" value="#{mantenedorFicha.viajes.fecha}" locale="es" />
                 </td>
                 <td>
                 <p:inputMask mask="99:99" value="#{mantenedorFicha.viajes.hora}" style="width:41px" /> 
@@ -58,9 +58,6 @@
             </tr>
             <tr>
                 <td colspan="7" align="right">
-                <p:commandButton value="Regresar" action="#{mantenedorFicha.regresarListado()}" >
-                <p:confirm header="Confirmación" message="¿Desea regresar a Listar Despachos?" icon="ui-icon-alert"  />
-                </p:commandButton>
                 <p:commandButton value="Guardar" action="#{mantenedorFicha.guardarFicha()}" update="frmFichaViajes,frmFichaViajesIngreso">
                 <p:confirm header="Comfirmación" message="¿Desea Usted Guarda los datos?" icon="ui-icon-alert">
                 </p:confirm>

@@ -39,7 +39,13 @@ public class ImportadorDatosCaja {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Integer rutParteNumerica = 0;
             while ((row = ws.getRow(numRow++)) != null) {
-                Dinero d = new Dinero();
+            	try {
+            		row.getCell(0).getNumericCellValue();	
+				} catch (Exception e) {
+					continue;
+				}
+                
+            	Dinero d = new Dinero();
                 try {
                 	rutParteNumerica = obtenerRut(row.getCell(1).getStringCellValue());
                     d.setReceptor(rutParteNumerica);
@@ -57,6 +63,7 @@ public class ImportadorDatosCaja {
                 } catch (PersistenceException e) {
                 }
            }
+                
             FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");           
         } catch (IOException e) {
             e.printStackTrace();
@@ -69,9 +76,7 @@ public class ImportadorDatosCaja {
     }
     
     public Integer obtenerRut(String rut){
-    	String cadena = rut.replace(".", "");
-    	cadena = cadena.replace(",", "");
-    	cadena = cadena.trim();
+    	String cadena = rut.replace(".", "").replace(",", "").trim();
     	String[] arregloCadena = cadena.split("-");
     	return Integer.parseInt(arregloCadena[0]);
     }

@@ -47,7 +47,7 @@
                     <td><p:outputLabel value="Salud"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dctoPrevision}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -55,13 +55,13 @@
                     <td><p:outputLabel value="Sueldo base"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><p:outputLabel value="AFP"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dectoAFP}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -69,14 +69,14 @@
                     <td><p:outputLabel value="Gratificación"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte trabajador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoTrabajador}">
-                           <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                           <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -88,7 +88,7 @@
                     <td><p:outputLabel value="Seguro de Cesantia(aporte empleador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteMontoEmpresa}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                     </p:inputText>
                     </td>
                 </tr>
@@ -105,7 +105,7 @@
                     <td><p:outputLabel value="Renta afecta"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.rentaAfecta}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -133,7 +133,7 @@
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -216,7 +216,7 @@
                     <td><p:outputLabel value="Total imponible"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalImponible}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><p:outputLabel value="Total descuentos  "/></td>
@@ -228,13 +228,13 @@
                     <td><b><p:outputLabel value="Total haberes"/></b></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalHaberes}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><b>Alcance líquido</b></td>
                     <td>:</td>
                     <td><p:inputText id="idAlcanceLiquido" value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>

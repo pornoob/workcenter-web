@@ -109,7 +109,7 @@
                                    action="#{facesUtil.redirigir('/m/informe_actividades')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
-                        <h:graphicImage value="/img/icons/64/m_informe_actividades.png"/>
+                        <i class="fa fa-bar-chart fa-5x"></i>
                         <h:outputLabel value="Informe de Actividades"/>
                     </h:commandLink>
 
@@ -137,7 +137,7 @@
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
-                        <i class="fa fa-file-text fa-5x"></i>
+                        <i class="fa fa-search fa-5x"></i>
                         <h:outputLabel value="Consulta Documentos"/>
                     </h:commandLink>
                     
@@ -146,7 +146,7 @@
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
-                        <i class="fa fa-files-o fa-5x"></i>
+                        <i class="fa fa-clipboard fa-5x"></i>
                         <h:outputLabel value="Control de Despachos" style="margin-top: 10px"/>
                     </h:commandLink>
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
