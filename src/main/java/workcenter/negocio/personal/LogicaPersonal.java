@@ -1,6 +1,5 @@
 package workcenter.negocio.personal;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -9,8 +8,10 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.CargoDao;
 import workcenter.dao.PersonalDao;
 import workcenter.entidades.*;
-import workcenter.util.pojo.Md5;
 import workcenter.util.components.Constantes;
+import workcenter.util.pojo.Md5;
+
+import java.util.List;
 
 /**
  * @author colivares
@@ -27,7 +28,7 @@ public class LogicaPersonal {
     
     @Autowired
     Constantes constantes;
-    
+
     @Transactional(readOnly = true)
     public List<Personal> obtenerTodos() {
         return personalDao.obtenerTodos();
@@ -166,5 +167,10 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public Personal obtenerConDatosLiquidacion(Personal p) {
         return personalDao.obtenerConDatosLiquidacion(p);
+    }
+
+    @Transactional(readOnly = true)
+    public ContratoPersonal obtenerContratoActual(Personal personal) {
+        return personalDao.obtenerContratoActual(personal);
     }
 }

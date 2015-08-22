@@ -7,9 +7,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.Remuneracion;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
@@ -17,6 +17,7 @@ import workcenter.util.components.SesionCliente;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
 /**
@@ -24,18 +25,21 @@ import java.text.SimpleDateFormat;
  */
 @Component
 @Scope("request")
-public class RenderPdf {
+public class RenderPdf implements Serializable {
     @Autowired
-    Constantes constantes;
+    private Constantes constantes;
 
     @Autowired
-    SesionCliente sesionCliente;
+    private SesionCliente sesionCliente;
 
     @Autowired
-    Formato formato;
+    private Formato formato;
 
     @Autowired
-    LogicaEmpresas logicaEmpresas;
+    private LogicaEmpresas logicaEmpresas;
+
+    @Autowired
+    private LogicaPersonal logicaPersonal;
 
     public boolean generarLiquidacion(Remuneracion liquidacion) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
@@ -63,8 +67,18 @@ public class RenderPdf {
 
         // formateamos rut empleador y empleado
         String rutEmpleado = formato.numeroAgrupado(liquidacion.getIdPersonal().getRut()) + "-" + liquidacion.getIdPersonal().getDigitoverificador();
-        Empresa e = logicaEmpresas.obtenerEmpresa(Integer.parseInt(liquidacion.getRutEmpleador()));
+        Empresa e = logicaEmpresas.obtenerEmpresa(Integer.parseInt(liquidacion.getRutEmpleador().split("-")[0]));
         String rutEmpresa = formato.numeroAgrupado(e.getRut()) + "-" + e.getDigitoverificador();
+        ContratoPersonal contrato = logicaPersonal.obtenerContratoActual(liquidacion.getIdPersonal());
+        Prevision salud = null;
+        Prevision afp = null;
+
+        for (PrevisionContrato p : contrato.getPrevisiones()) {
+            if ("salud".equalsIgnoreCase(p.getPrevision().getTipo()))
+                salud = p.getPrevision();
+            else
+                afp = p.getPrevision();
+        }
 
         // cambiamos el patron de fecha al que necesitamos en la liquidación
         sdf.applyPattern("dd/MM/yyyy");
@@ -91,9 +105,23 @@ public class RenderPdf {
             texto.setAlignment(Element.ALIGN_LEFT);
             pdf.add(texto);
 
+            texto = new Paragraph(
+                "",
+                fuenteEncabezado
+            );
+            texto.setAlignment(Element.ALIGN_LEFT);
+            pdf.add(texto);
+
             // titulo
             texto = new Paragraph(
                 "Liquidación de Sueldo",
+                fuenteTitulo
+            );
+            texto.setAlignment(Element.ALIGN_CENTER);
+            pdf.add(texto);
+
+            texto = new Paragraph(
+                "",
                 fuenteTitulo
             );
             texto.setAlignment(Element.ALIGN_CENTER);
@@ -112,9 +140,98 @@ public class RenderPdf {
             celda.setPhrase(new Phrase("Fecha: " + sdf.format(liquidacion.getFechaLiquidacion()), fuenteCuerpo));
             tabla.addCell(celda);
 
+            celda.setPhrase(new Phrase("Días trabajados: " + liquidacion.getDiasTrabajados(), fuenteCuerpo));
+            tabla.addCell(celda);
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            pdf.add(tabla);
+            tabla = new PdfPTable(2);
+
+            celda.setPhrase(new Phrase("Sueldo base: " + formato.numeroAgrupado(liquidacion.getSueldoBase()), fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getDectoAFP().intValue() != 0) {
+                celda.setPhrase(new Phrase("AFP " + afp.getNombre() + ": " + formato.numeroAgrupado(liquidacion.getDectoAFP()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            if (liquidacion.getGratificacion().intValue() != 0) {
+                celda.setPhrase(new Phrase("Gratificación : " + formato.numeroAgrupado(liquidacion.getGratificacion()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            if (liquidacion.getDctoPrevision().intValue() != 0) {
+                celda.setPhrase(new Phrase("Salud " + salud.getNombre() + ": " + formato.numeroAgrupado(liquidacion.getDctoPrevision()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getAporteTrabajador().intValue() != 0) {
+                celda.setPhrase(new Phrase("Seguro cesantía (aporte trabajador): " + formato.numeroAgrupado(liquidacion.getAporteTrabajador().intValue()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getAporteEmpresa().intValue() != 0) {
+                celda.setPhrase(new Phrase("Seguro cesantía (aporte empresa): " + formato.numeroAgrupado(liquidacion.getAporteEmpresa().intValue()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            if (liquidacion.getHorasExtras().intValue() != 0) {
+                celda.setPhrase(new Phrase("Horas extras: " + formato.numeroAgrupado(liquidacion.getHorasExtras()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            if (liquidacion.getRentaAfecta().intValue() != 0) {
+                celda.setPhrase(new Phrase("Renta afecta: " + formato.numeroAgrupado(liquidacion.getRentaAfecta()), fuenteCuerpoNegrita));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getImpUnico().intValue() != 0) {
+                celda.setPhrase(new Phrase("Impuesto único: " + formato.numeroAgrupado(liquidacion.getImpUnico()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+
             pdf.add(tabla);
             pdf.close();
         } catch (DocumentException de) {
+            System.err.println("No se pudo crear fichero");
             de.printStackTrace();
             return false;
         }

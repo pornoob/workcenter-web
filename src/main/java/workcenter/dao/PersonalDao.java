@@ -1,12 +1,12 @@
 package workcenter.dao;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.*;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-import workcenter.entidades.*;
+import java.util.List;
 
 /**
  * @author colivares
@@ -218,5 +218,16 @@ public class PersonalDao {
         Query q = em.createNamedQuery("Personal.findByRutWithLiquidacion" );
         q.setParameter("personal", p);
         return (Personal) q.getSingleResult();
+    }
+
+    public ContratoPersonal obtenerContratoActual(Personal personal) {
+        Query q = em.createNamedQuery("Personal.findContratoActual");
+        q.setParameter("personal", personal);
+        q.setMaxResults(1);
+        try {
+            return (ContratoPersonal) q.getSingleResult();
+        } catch (Exception e) {
+            return null;
+        }
     }
 }

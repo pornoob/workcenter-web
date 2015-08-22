@@ -1,31 +1,16 @@
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
-import javax.persistence.ManyToMany;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.springframework.util.StringUtils;
+
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.util.StringUtils;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -45,6 +30,14 @@ import org.springframework.util.StringUtils;
         @NamedQuery(
                 name = "Personal.findByRutWithLiquidacion",
                 query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+        ),
+        @NamedQuery(
+                name = "Personal.findContratoActual",
+                query = "SELECT cp FROM Personal p " +
+                        "INNER JOIN p.contratospersonalCollection cp " +
+                        "INNER JOIN FETCH cp.previsiones " +
+                        "WHERE p = :personal " +
+                        "ORDER BY cp.fecha DESC, cp.numero DESC"
         )
 })
 public class Personal implements Serializable {

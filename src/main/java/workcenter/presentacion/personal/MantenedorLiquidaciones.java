@@ -1,32 +1,23 @@
 package workcenter.presentacion.personal;
 
+import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import workcenter.entidades.*;
+import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
+import workcenter.negocio.personal.LogicaLiquidaciones;
+import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
+import workcenter.util.others.RenderPdf;
+
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import org.primefaces.model.DualListModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import com.itextpdf.text.log.SysoCounter;
-
-import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
-import workcenter.entidades.ValorImpuestoUnico;
-import workcenter.entidades.ValorPrevisionPersonal;
-import workcenter.entidades.ValoresCargasFamiliares;
-import workcenter.entidades.Variable;
-import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
-import workcenter.negocio.personal.LogicaLiquidaciones;
-import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.util.components.Constantes;
-import workcenter.util.components.FacesUtil;
 
 /**
  * Created by claudio on 16-05-15.
@@ -68,6 +59,9 @@ public class MantenedorLiquidaciones implements Serializable {
 
     @Autowired
     private Constantes constantes;
+
+    @Autowired
+    private RenderPdf renderPdf;
 
     private Remuneracion liquidacion;
     
@@ -201,7 +195,7 @@ public class MantenedorLiquidaciones implements Serializable {
 	       	 liquidacion.setAporteEmpresa(seguroEmpresa);
 	         liquidacion.setAporteTrabajador(seguroTrabajador);
         }
-        liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador()) - liquidacion.getAnticipoSueldo());
+        liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteTrabajador().intValue()) - liquidacion.getAnticipoSueldo());
         liquidacion.setHorasExtras(0);
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -245,6 +239,8 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public String guardarDatosLiquidacion(){
+        renderPdf.generarLiquidacion(liquidacion);
+        if (true) return null;
     	
     	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
