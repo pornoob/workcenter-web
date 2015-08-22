@@ -121,7 +121,7 @@ public class RenderPdf implements Serializable {
             pdf.add(texto);
 
             texto = new Paragraph(
-                "",
+                "\n",
                 fuenteTitulo
             );
             texto.setAlignment(Element.ALIGN_CENTER);
@@ -130,6 +130,8 @@ public class RenderPdf implements Serializable {
             tabla = new PdfPTable(3); // 3 columnas
             celda = new PdfPCell();
             celda.setBorder(Rectangle.NO_BORDER);
+
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("Nombre Empleado: " + liquidacion.getIdPersonal().getNombreCompleto(), fuenteCuerpo));
             tabla.addCell(celda);
@@ -140,6 +142,8 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("Fecha: " + sdf.format(liquidacion.getFechaLiquidacion()), fuenteCuerpo));
             tabla.addCell(celda);
 
+            /* ---------------------------------------------------------------- */
+
             celda.setPhrase(new Phrase("Días trabajados: " + liquidacion.getDiasTrabajados(), fuenteCuerpo));
             tabla.addCell(celda);
 
@@ -148,6 +152,8 @@ public class RenderPdf implements Serializable {
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
+
+            /* ---------------------------------------------------------------- */
 
             pdf.add(tabla);
             tabla = new PdfPTable(2);
@@ -162,6 +168,7 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
 
             if (liquidacion.getGratificacion().intValue() != 0) {
                 celda.setPhrase(new Phrase("Gratificación : " + formato.numeroAgrupado(liquidacion.getGratificacion()), fuenteCuerpo));
@@ -178,6 +185,7 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
@@ -189,6 +197,7 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
@@ -200,6 +209,7 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
 
             if (liquidacion.getHorasExtras().intValue() != 0) {
                 celda.setPhrase(new Phrase("Horas extras: " + formato.numeroAgrupado(liquidacion.getHorasExtras()), fuenteCuerpo));
@@ -216,6 +226,7 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
@@ -227,6 +238,81 @@ public class RenderPdf implements Serializable {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
             }
+            /* ---------------------------------------------------------------- */
+
+            // falta bonos
+//            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+//            }
+
+            celda.setPhrase(new Phrase("Total imponible: " + formato.numeroAgrupado(liquidacion.getTotalImponible()), fuenteCuerpoNegrita));
+            tabla.addCell(celda);
+
+            celda.setPhrase(new Phrase("Descuento por viático anticipado: " + formato.numeroAgrupado(liquidacion.getAnticipoViatico()), fuenteCuerpo));
+            tabla.addCell(celda);
+            /* ---------------------------------------------------------------- */
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getTotalDctos() != null && liquidacion.getTotalDctos().intValue() != 0) {
+                celda.setPhrase(new Phrase("Total descuentos: " + formato.numeroAgrupado(liquidacion.getTotalDctos()), fuenteCuerpoNegrita));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+            /* ---------------------------------------------------------------- */
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            celda.setPhrase(new Phrase("Alcance líquido: " + formato.numeroAgrupado(liquidacion.getTotalDctos()), fuenteCuerpoNegrita));
+            tabla.addCell(celda);
+            /* ---------------------------------------------------------------- */
+
+            celda.setPhrase(new Phrase("Total haberes: " + formato.numeroAgrupado(liquidacion.getTotalHaberes()), fuenteCuerpoNegrita));
+            tabla.addCell(celda);
+
+            if (liquidacion.getAnticipoSueldo() != null && liquidacion.getAnticipoSueldo().intValue() != 0) {
+                celda.setPhrase(new Phrase("- Anticipo de sueldo: " + formato.numeroAgrupado(liquidacion.getAnticipoSueldo()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+            /* ---------------------------------------------------------------- */
+
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getPagoPrestamo() != null && liquidacion.getPagoPrestamo().intValue() != 0) {
+                celda.setPhrase(new Phrase("- Pago de prestamos: " + formato.numeroAgrupado(liquidacion.getPagoPrestamo()), fuenteCuerpo));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+            /* ---------------------------------------------------------------- */
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            if (liquidacion.getLiqPagar() != null && liquidacion.getLiqPagar().intValue() != 0) {
+                celda.setPhrase(new Phrase("= Líquido a pagar: " + formato.numeroAgrupado(liquidacion.getLiqPagar()), fuenteCuerpoNegrita));
+                tabla.addCell(celda);
+            } else {
+                celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+            /* ---------------------------------------------------------------- */
+
+            celda.setPhrase(new Phrase("Certifico que he recibido a mi entera satisfacción "
+                    + "el saldo líquido indicado en la presente liquidación y no tengo "
+                    + "cargo ni cobro alguno posterior que hacer, por ninguno de los conceptos "
+                    + "comprendidos en ella. Autorizo descuento de asignación de caja.", fuenteCuerpo));
+            tabla.addCell(celda);
+
+            celda.setPhrase(new Phrase("______________________", fuenteCuerpo));
+            tabla.addCell(celda);
 
             pdf.add(tabla);
             pdf.close();

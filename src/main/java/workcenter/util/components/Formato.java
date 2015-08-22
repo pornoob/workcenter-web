@@ -11,7 +11,7 @@ import java.io.Serializable;
 public class Formato implements Serializable {
     public String numeroAgrupado(Integer numero) {
         StringBuilder sb = new StringBuilder();
-        String tmp = String.valueOf(numero);
+        String tmp = String.valueOf(numero == null ? 0 : numero);
         int cont = 1;
         for (int i = tmp.length() - 1; i >= 0; i--) {
             sb.insert(0, tmp.charAt(i));
@@ -25,7 +25,7 @@ public class Formato implements Serializable {
 
     public String numeroAgrupado(Double numero) {
         StringBuilder sb = new StringBuilder();
-        String tmp = String.valueOf(numero).split(".")[0];
+        String tmp = String.valueOf(numero == null ? 0 : numero).split(".")[0];
         int cont = 1;
         for (int i = tmp.length() - 1; i >= 0; i--) {
             sb.insert(0, tmp.charAt(i));
