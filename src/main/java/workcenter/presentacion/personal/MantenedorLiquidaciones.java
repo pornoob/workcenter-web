@@ -195,11 +195,11 @@ public class MantenedorLiquidaciones implements Serializable {
         Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
         if (cp.getVencimiento() != null){
         	 Double noIndefinido = seguroEmpresa+seguroTrabajador;
-             liquidacion.setAporteMontoEmpresa(noIndefinido.intValue());
-         	 liquidacion.setAporteMontoTrabajador(0);
+             liquidacion.setAporteEmpresa(noIndefinido);
+         	 liquidacion.setAporteTrabajador(0.0);
         }else{
-	       	 liquidacion.setAporteMontoEmpresa(seguroEmpresa.intValue());
-	         liquidacion.setAporteMontoTrabajador(seguroTrabajador.intValue());
+	       	 liquidacion.setAporteEmpresa(seguroEmpresa);
+	         liquidacion.setAporteTrabajador(seguroTrabajador);
         }
         liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteMontoTrabajador()) - liquidacion.getAnticipoSueldo());
         liquidacion.setHorasExtras(0);

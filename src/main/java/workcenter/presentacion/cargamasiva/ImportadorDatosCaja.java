@@ -33,8 +33,8 @@ public class ImportadorDatosCaja {
         XSSFWorkbook wb = null;
         try {
             wb = new XSSFWorkbook(archivo.getInputstream());
-            XSSFSheet ws = wb.getSheet("Hoja1");
-            int numRow = 3;
+            XSSFSheet ws = wb.getSheetAt(0);
+            int numRow = 0;
             XSSFRow row;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Integer rutParteNumerica = 0;
