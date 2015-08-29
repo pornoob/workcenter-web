@@ -2,17 +2,12 @@ package workcenter.util.components;
 
 
 import java.io.IOException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
+
 import javax.faces.application.FacesMessage;
-import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
-import javax.servlet.RequestDispatcher;
-import javax.servlet.ServletException;
-import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 
@@ -53,6 +48,14 @@ public class FacesUtil {
     public static void redirigir(String url) {
         try {
             FacesContext.getCurrentInstance().getExternalContext().redirect(obtenerHttpServletRequest().getContextPath()+url);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+    
+    public static void irEnlaceDocumento(String url) {
+        try {
+            FacesContext.getCurrentInstance().getExternalContext().redirect(url);
         } catch (IOException e) {
             e.printStackTrace();
         }

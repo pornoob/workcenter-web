@@ -1,23 +1,33 @@
 package workcenter.presentacion.personal;
 
-import org.primefaces.model.DualListModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import workcenter.entidades.*;
-import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
-import workcenter.negocio.personal.LogicaLiquidaciones;
-import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.util.components.Constantes;
-import workcenter.util.components.FacesUtil;
-import workcenter.util.others.RenderPdf;
-
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+
+import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+
+import workcenter.entidades.BonoDescuentoPersonal;
+import workcenter.entidades.BonoDescuentoRemuneracion;
+import workcenter.entidades.ContratoPersonal;
+import workcenter.entidades.Personal;
+import workcenter.entidades.Remuneracion;
+import workcenter.entidades.ValorImpuestoUnico;
+import workcenter.entidades.ValorPrevisionPersonal;
+import workcenter.entidades.ValoresCargasFamiliares;
+import workcenter.entidades.Variable;
+import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
+import workcenter.negocio.personal.LogicaLiquidaciones;
+import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.negocio.personal.LogicaVariables;
+import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
+import workcenter.util.others.RenderPdf;
 
 /**
  * Created by claudio on 16-05-15.
@@ -47,6 +57,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private Integer asignacionFamiliarMonto;
     
     private int cantidadCargasFamiliares;
+    
+    private Variable variable;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -59,6 +71,9 @@ public class MantenedorLiquidaciones implements Serializable {
 
     @Autowired
     private Constantes constantes;
+    
+    @Autowired
+    private LogicaVariables logicaVariables;
 
     @Autowired
     private RenderPdf renderPdf;
@@ -71,6 +86,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
     public void inicio() {
     	
+    	variable = logicaVariables.obtenerSueldoMinimoActual();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
         String fechaActual = sdf.format(new Date());
         anio = Integer.parseInt(fechaActual.split("-")[1]);
@@ -130,8 +146,8 @@ public class MantenedorLiquidaciones implements Serializable {
             double sBase = (double) ((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
             liquidacion.setSueldoBase((int) sBase);
         }
-
-        Double gratificacion = (liquidacion.getSueldoBase() * 0.25);
+        Double gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
+        				(liquidacion.getSueldoBase() / 4): (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
@@ -174,7 +190,6 @@ public class MantenedorLiquidaciones implements Serializable {
         }
 
         liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
-        liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
 
         try {
 			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
@@ -195,8 +210,6 @@ public class MantenedorLiquidaciones implements Serializable {
 	       	 liquidacion.setAporteEmpresa(seguroEmpresa);
 	         liquidacion.setAporteTrabajador(seguroTrabajador);
         }
-        liquidacion.setAlcanceLiquido((liquidacion.getAlcanceLiquido() - liquidacion.getAporteTrabajador().intValue()) - liquidacion.getAnticipoSueldo());
-        liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido());
         liquidacion.setHorasExtras(0);
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
 		try {
@@ -206,6 +219,8 @@ public class MantenedorLiquidaciones implements Serializable {
 			}
 		liquidacion.setRentaAfecta(liquidacion.getRentaAfecta()- liquidacion.getAporteTrabajador().intValue());
 		liquidacion.setTotalDctos(liquidacion.getTotalImponible() - liquidacion.getRentaAfecta());
+		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
+	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
     }
 
@@ -264,7 +279,9 @@ public class MantenedorLiquidaciones implements Serializable {
     		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
     	}
     	
-        renderPdf.generarLiquidacion(liquidacion);
+    		String path = renderPdf.generarLiquidacion(liquidacion);
+    		FacesUtil.irEnlaceDocumento(crearUrl(path));
+        
         if (true) return null;
     	
     	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
@@ -284,6 +301,11 @@ public class MantenedorLiquidaciones implements Serializable {
     	}else {
     		return "flowIngresar";
     	}
+    }
+    
+    public String crearUrl(String ruta){
+    	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length());    	
+    	return ruta;
     }
     
     public void editarMontoBono() {
@@ -419,6 +441,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setCantidadCargasFamiliares(int cantidadCargasFamiliares) {
 		this.cantidadCargasFamiliares = cantidadCargasFamiliares;
+	}
+
+	public Variable getVariable() {
+		return variable;
+	}
+
+	public void setVariable(Variable variable) {
+		this.variable = variable;
 	}
 
 }

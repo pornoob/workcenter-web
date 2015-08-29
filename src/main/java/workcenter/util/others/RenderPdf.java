@@ -1,24 +1,41 @@
 package workcenter.util.others;
 
-import com.itextpdf.text.*;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.*;
+
+import workcenter.entidades.BonoDescuentoRemuneracion;
+import workcenter.entidades.ContratoPersonal;
+import workcenter.entidades.Empresa;
+import workcenter.entidades.Prevision;
+import workcenter.entidades.PrevisionContrato;
+import workcenter.entidades.Remuneracion;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
+import com.itextpdf.text.BaseColor;
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Element;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.PdfWriter;
 
 /**
  * Created by claudio on 25-07-15.
@@ -26,7 +43,10 @@ import java.text.SimpleDateFormat;
 @Component
 @Scope("request")
 public class RenderPdf implements Serializable {
-    @Autowired
+
+	private static final long serialVersionUID = 1L;
+
+	@Autowired
     private Constantes constantes;
 
     @Autowired
@@ -41,7 +61,7 @@ public class RenderPdf implements Serializable {
     @Autowired
     private LogicaPersonal logicaPersonal;
 
-    public boolean generarLiquidacion(Remuneracion liquidacion) {
+    public String generarLiquidacion(Remuneracion liquidacion) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 
         String fecha = sdf.format(liquidacion.getFechaLiquidacion());
@@ -62,7 +82,7 @@ public class RenderPdf implements Serializable {
             fileOutputStream = new FileOutputStream(path);
         } catch (FileNotFoundException fnfe) {
             fnfe.printStackTrace();
-            return false;
+            return "";
         }
 
         // formateamos rut empleador y empleado
@@ -93,9 +113,9 @@ public class RenderPdf implements Serializable {
             // fuentes
             Font fuenteEncabezado = FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK);
             Font fuenteTitulo = FontFactory.getFont("arial", 16, Font.BOLD, BaseColor.BLACK);
-            Font fuenteCuerpo = FontFactory.getFont("arial", 9, Font.NORMAL, BaseColor.BLACK);
-            Font fuenteCuerpoNegrita = FontFactory.getFont("arial", 9, Font.BOLD, BaseColor.BLACK);
-            Font fuenteCuerpoAzul = FontFactory.getFont("arial", 9, Font.NORMAL, BaseColor.BLUE);
+            Font fuenteCuerpo = FontFactory.getFont("arial", 12, Font.NORMAL, BaseColor.BLACK);
+            Font fuenteCuerpoNegrita = FontFactory.getFont("arial", 11, Font.BOLD, BaseColor.BLACK);
+            Font fuenteCuerpoAzul = FontFactory.getFont("arial", 11, Font.NORMAL, BaseColor.BLUE);
 
             // encabezado
             Paragraph texto = new Paragraph(
@@ -240,10 +260,21 @@ public class RenderPdf implements Serializable {
             }
             /* ---------------------------------------------------------------- */
 
-            // falta bonos
-//            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
-//            }
-
+            // Bonos imponibles
+            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+            	if (bdr.getBono()){
+            		if (bdr.getImponible()){
+            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+                        tabla.addCell(celda);
+                        
+                        celda.setPhrase(new Phrase("", fuenteCuerpo));
+                        tabla.addCell(celda);
+            		}
+            	}
+            }
+            
+            /* ---------------------------------------------------------------- */
+            
             celda.setPhrase(new Phrase("Total imponible: " + formato.numeroAgrupado(liquidacion.getTotalImponible()), fuenteCuerpoNegrita));
             tabla.addCell(celda);
 
@@ -266,8 +297,23 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
 
-            celda.setPhrase(new Phrase("Alcance líquido: " + formato.numeroAgrupado(liquidacion.getTotalDctos()), fuenteCuerpoNegrita));
+            celda.setPhrase(new Phrase("Alcance líquido: " + formato.numeroAgrupado(liquidacion.getAlcanceLiquido()), fuenteCuerpoNegrita));
             tabla.addCell(celda);
+            /* ---------------------------------------------------------------- */
+            
+            // Bonos No Imponibles
+            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+            	if (bdr.getBono()){
+            		if (!bdr.getImponible()){
+            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+                        tabla.addCell(celda);
+                        
+                        celda.setPhrase(new Phrase("", fuenteCuerpo));
+                        tabla.addCell(celda);
+            		}
+            	}
+            }
+            
             /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("Total haberes: " + formato.numeroAgrupado(liquidacion.getTotalHaberes()), fuenteCuerpoNegrita));
@@ -304,6 +350,13 @@ public class RenderPdf implements Serializable {
                 tabla.addCell(celda);
             }
             /* ---------------------------------------------------------------- */
+            
+            celda.setPhrase(new Phrase("\n", fuenteCuerpo));
+            tabla.addCell(celda);
+            celda.setPhrase(new Phrase("\n", fuenteCuerpo));
+            tabla.addCell(celda);
+            
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("Certifico que he recibido a mi entera satisfacción "
                     + "el saldo líquido indicado en la presente liquidación y no tengo "
@@ -313,15 +366,30 @@ public class RenderPdf implements Serializable {
 
             celda.setPhrase(new Phrase("______________________", fuenteCuerpo));
             tabla.addCell(celda);
-
+            
             pdf.add(tabla);
             pdf.close();
+            
+            /* -----------------------documento generado a byte-------------------- */
+            PdfReader read;
+			try {
+			 read = new PdfReader(path);
+			 byte[] byteArray = read.getPageContent(1);
+			 liquidacion.setArchivo(byteArray);
+			 liquidacion.setExtension("pdf");
+			 liquidacion.setNombreArchivo(liquidacion.getIdPersonal().getRut() + ".pdf");
+	         return path;
+			} catch (IOException e1) {				
+				e1.printStackTrace();
+	            return "";
+			}
+            
+            
         } catch (DocumentException de) {
             System.err.println("No se pudo crear fichero");
             de.printStackTrace();
-            return false;
+            return "";
         }
 
-        return true;
     }
 }
