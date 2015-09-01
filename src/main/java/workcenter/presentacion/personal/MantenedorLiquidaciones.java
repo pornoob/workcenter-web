@@ -304,7 +304,8 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public String crearUrl(String ruta){
-    	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length());    	
+    	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length()).replace("//", "/");
+    	System.out.println(ruta);
     	return ruta;
     }
     
