@@ -134,7 +134,7 @@ public class RenderPdf implements Serializable {
 
             // titulo
             texto = new Paragraph(
-                "Liquidación de Sueldo",
+                "\nLiquidación de Sueldo\n",
                 fuenteTitulo
             );
             texto.setAlignment(Element.ALIGN_CENTER);
@@ -153,7 +153,7 @@ public class RenderPdf implements Serializable {
 
             /* ---------------------------------------------------------------- */
 
-            celda.setPhrase(new Phrase("Nombre Empleado: " + liquidacion.getIdPersonal().getNombreCompleto(), fuenteCuerpo));
+            celda.setPhrase(new Phrase("Nombre Empleado: " + liquidacion.getIdPersonal().getNombreCompleto() + "\n\n", fuenteCuerpo));
             tabla.addCell(celda);
 
             celda.setPhrase(new Phrase("Rut: " + rutEmpleado, fuenteCuerpo));
@@ -261,17 +261,17 @@ public class RenderPdf implements Serializable {
             /* ---------------------------------------------------------------- */
 
             // Bonos imponibles
-            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
-            	if (bdr.getBono()){
-            		if (bdr.getImponible()){
-            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
-                        tabla.addCell(celda);
-                        
-                        celda.setPhrase(new Phrase("", fuenteCuerpo));
-                        tabla.addCell(celda);
-            		}
-            	}
-            }
+//            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+//            	if (bdr.getBono()){
+//            		if (bdr.getImponible()){
+//            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+//                        tabla.addCell(celda);
+//
+//                        celda.setPhrase(new Phrase("", fuenteCuerpo));
+//                        tabla.addCell(celda);
+//            		}
+//            	}
+//            }
             
             /* ---------------------------------------------------------------- */
             
@@ -302,17 +302,17 @@ public class RenderPdf implements Serializable {
             /* ---------------------------------------------------------------- */
             
             // Bonos No Imponibles
-            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
-            	if (bdr.getBono()){
-            		if (!bdr.getImponible()){
-            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
-                        tabla.addCell(celda);
-                        
-                        celda.setPhrase(new Phrase("", fuenteCuerpo));
-                        tabla.addCell(celda);
-            		}
-            	}
-            }
+//            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+//            	if (bdr.getBono()){
+//            		if (!bdr.getImponible()){
+//            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+//                        tabla.addCell(celda);
+//
+//                        celda.setPhrase(new Phrase("", fuenteCuerpo));
+//                        tabla.addCell(celda);
+//            		}
+//            	}
+//            }
             
             /* ---------------------------------------------------------------- */
 
@@ -351,7 +351,7 @@ public class RenderPdf implements Serializable {
             }
             /* ---------------------------------------------------------------- */
             
-            celda.setPhrase(new Phrase("\n", fuenteCuerpo));
+            celda.setPhrase(new Phrase("\n\n\n\n\n", fuenteCuerpo));
             tabla.addCell(celda);
             celda.setPhrase(new Phrase("\n", fuenteCuerpo));
             tabla.addCell(celda);
@@ -364,7 +364,7 @@ public class RenderPdf implements Serializable {
                     + "comprendidos en ella. Autorizo descuento de asignación de caja.", fuenteCuerpo));
             tabla.addCell(celda);
 
-            celda.setPhrase(new Phrase("______________________", fuenteCuerpo));
+            celda.setPhrase(new Phrase("\n\n\n______________________", fuenteCuerpo));
             tabla.addCell(celda);
             
             pdf.add(tabla);
