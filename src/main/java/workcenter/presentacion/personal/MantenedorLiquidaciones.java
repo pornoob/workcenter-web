@@ -59,6 +59,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private int cantidadCargasFamiliares;
     
     private Variable variable;
+    
+    private String urlArchivo;
 
     @Autowired
     private LogicaPersonal logicaPersonal;
@@ -280,9 +282,10 @@ public class MantenedorLiquidaciones implements Serializable {
     	}
     	
     		String path = renderPdf.generarLiquidacion(liquidacion);
-    		FacesUtil.irEnlaceDocumento(crearUrl(path));
+    		urlArchivo = crearUrl(path);
+    		//FacesUtil.irEnlaceDocumento(crearUrl(path));
         
-        if (true) return null;
+//        if (true) return null;
     	
     	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
@@ -307,6 +310,11 @@ public class MantenedorLiquidaciones implements Serializable {
     	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length()).replace("//", "/");
     	System.out.println(ruta);
     	return ruta;
+    }
+    
+    public void imprimirLiquidacion(){
+    	String path = renderPdf.generarLiquidacion(liquidacion);
+		urlArchivo = crearUrl(path);
     }
     
     public void editarMontoBono() {
@@ -450,6 +458,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setVariable(Variable variable) {
 		this.variable = variable;
+	}
+
+	public String getUrlArchivo() {
+		return urlArchivo;
+	}
+
+	public void setUrlArchivo(String urlArchivo) {
+		this.urlArchivo = urlArchivo;
 	}
 
 }

@@ -245,11 +245,12 @@
                 </tr>
                 <tr>
                     <td colspan="6" style="text-align: right">
-                        <p:commandButton value="Imprimir Liquidación" icon="fa fa-print" action="#{renderPdf.generarLiquidacion(mantenedorLiquidaciones.liquidacion)}">
+                        <p:commandButton value="Imprimir Liquidación" icon="fa fa-print"
+                                         action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" 
+                                         oncomplete="window.open('#{mantenedorLiquidaciones.urlArchivo}')" update="frmLiquidaciones">
                         </p:commandButton>
-                        <p:commandButton value="Subir Liquidación" oncomplete="PF('dlgSubir').show();"/>
-                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" oncomplete="PF('dlgSubir').show();">
-                            <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
+                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones">
+                            <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert" />
                         </p:commandButton>
                     </td>
                 </tr>

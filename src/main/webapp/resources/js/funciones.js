@@ -33,3 +33,10 @@ function cargar(e){
 	
 	patente( [ { name: 'numero', value: numero }] );;
 }
+
+function nuevaVentana(e){
+	
+	var obj=document.getElementbyID('redireccionar');
+	alert(obj)
+	obj.click();
+}
