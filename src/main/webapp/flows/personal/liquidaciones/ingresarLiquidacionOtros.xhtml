@@ -247,7 +247,7 @@
                     <td colspan="6" style="text-align: right">
                         <p:commandButton value="Imprimir Liquidación" icon="fa fa-print"
                                          action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" 
-                                         oncomplete="window.open('#{mantenedorLiquidaciones.urlArchivo}')" update="frmLiquidaciones">
+                                         oncomplete="window.open('#{mantenedorLiquidaciones.urlArchivo}')">
                         </p:commandButton>
                         <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones">
                             <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert" />

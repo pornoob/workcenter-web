@@ -261,25 +261,7 @@ public class MantenedorLiquidaciones implements Serializable {
     public String guardarDatosLiquidacion(){
     	
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
-    	for (BonoDescuentoPersonal bI : bonoImponibles ){
-    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
-    		bdr.setIdMaestroGuia(liquidacion);
-    		bdr.setBono(true);
-    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
-    		bdr.setImponible(true);
-    		bdr.setMonto(bI.getMonto());    		
-    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
-    	}
-    	
-    	for (BonoDescuentoPersonal bI : bonoNoImponibles ){
-    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
-    		bdr.setIdMaestroGuia(liquidacion);
-    		bdr.setBono(true);
-    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
-    		bdr.setImponible(false);
-    		bdr.setMonto(bI.getMonto());    		
-    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
-    	}
+    	unirBonosRemuneracion();
     	
     		String path = renderPdf.generarLiquidacion(liquidacion);
     		urlArchivo = crearUrl(path);
@@ -312,7 +294,31 @@ public class MantenedorLiquidaciones implements Serializable {
     	return ruta;
     }
     
+    public void unirBonosRemuneracion(){
+      	for (BonoDescuentoPersonal bI : bonoImponibles ){
+    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+    		bdr.setIdMaestroGuia(liquidacion);
+    		bdr.setBono(true);
+    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+    		bdr.setImponible(true);
+    		bdr.setMonto(bI.getMonto());    		
+    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+    	}
+    	
+    	for (BonoDescuentoPersonal bI : bonoNoImponibles ){
+    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+    		bdr.setIdMaestroGuia(liquidacion);
+    		bdr.setBono(true);
+    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+    		bdr.setImponible(false);
+    		bdr.setMonto(bI.getMonto());    		
+    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+    	}
+    }
+    
     public void imprimirLiquidacion(){
+    	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
+    	unirBonosRemuneracion();
     	String path = renderPdf.generarLiquidacion(liquidacion);
 		urlArchivo = crearUrl(path);
     }
