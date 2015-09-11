@@ -247,10 +247,10 @@
                     <td colspan="6" style="text-align: right">
                         <p:commandButton value="Imprimir Liquidación" icon="fa fa-print"
                                          action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" 
-                                         oncomplete="window.open('#{mantenedorLiquidaciones.urlArchivo}')">
+                                         oncomplete="window.open('#{mantenedorLiquidaciones.urlArchivo}')" update="frmLiquidaciones" disabled="false">
                         </p:commandButton>
-                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones">
-                            <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert" />
+                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones" disabled="false">
+                            <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
                         </p:commandButton>
                     </td>
                 </tr>

@@ -11,16 +11,27 @@
         <h:form id="frmLiquidaciones">
             <p:commandButton icon="fa fa-plus" value="Ingresar Nueva" action="#{mantenedorLiquidaciones.ingresarLiquidacionOtros()}"/>
 
-            <p:dataTable emptyMessage="No se han encontrado resultados" value="#{mantenedorLiquidaciones.listaRemuneraciones}" var="liquidacion">
+            <p:dataTable emptyMessage="No se han encontrado resultados"
+                         value="#{mantenedorLiquidaciones.listaRemuneraciones}"
+                         var="liquidacion"
+                         widgetVar="wVliquidaciones"
+                         id="dtLiquidaciones">
                 <p:column headerText="Nombre">
                 <p:outputLabel value="#{liquidacion.idPersonal.nombres}"/>
                 </p:column>
                 <p:column headerText="Apellidos">
                 <p:outputLabel value="#{liquidacion.idPersonal.apellidos}"/>
                 </p:column>
-                <p:column headerText="Fecha">
-                <p:outputLabel value="#{liquidacion.fechaLiquidacion}"/>
+                <p:column headerText="Fecha" sortBy="#{liquidacion.fechaLiquidacion}">
+                <p:outputLabel value="#{liquidacion.fechaLiquidacion}">
+                      <f:convertDateTime pattern="yyyy-MM-dd" />
+                </p:outputLabel>
                 </p:column>
+                <p:column headerText="Acción" width="50">
+                    <p:commandLink title="Visualizar Liquidación" action="#{mantenedorLiquidaciones.visualizarPDF(liquidacion)}" ajax="false" target="_blank">
+                        <i class="fa fa-eye  fa-2x"></i>
+                    </p:commandLink>
+                </p:column>                
             </p:dataTable>
         </h:form>
     </ui:define>

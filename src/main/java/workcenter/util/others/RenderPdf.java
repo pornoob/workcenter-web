@@ -1,9 +1,9 @@
 package workcenter.util.others;
 
 import java.io.File;
+import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 
@@ -34,7 +34,6 @@ import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.PdfWriter;
 
 /**
@@ -65,7 +64,7 @@ public class RenderPdf implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
 
         String fecha = sdf.format(liquidacion.getFechaLiquidacion());
-        String path = constantes.getPathArchivos() + "/tmp/" + sesionCliente.getUsuario().getRut()+"/liquidaciones/"+fecha;
+        String path = constantes.getPathArchivos() + "/tmp/" +liquidacion.getIdPersonal().getRut()+"/liquidaciones/"+fecha;
 
         // nos aseguramos que cree la carpeta
         new File(path).mkdirs();
@@ -371,19 +370,22 @@ public class RenderPdf implements Serializable {
             pdf.close();
             
             /* -----------------------documento generado a byte-------------------- */
-            PdfReader read;
-			try {
-			 read = new PdfReader(path);
-			 byte[] byteArray = read.getPageContent(1);
-			 liquidacion.setArchivo(byteArray);
-			 liquidacion.setExtension("pdf");
-			 liquidacion.setNombreArchivo(liquidacion.getIdPersonal().getRut() + ".pdf");
-	         return path;
-			} catch (IOException e1) {				
-				e1.printStackTrace();
-	            return "";
-			}
             
+            FileInputStream fileInputStream=null;
+            File file = new File(path);            
+            byte[] bFile = new byte[(int) file.length()];
+            try {
+        	    fileInputStream = new FileInputStream(file);
+        	    fileInputStream.read(bFile);
+   			    liquidacion.setArchivo(bFile);
+   			    liquidacion.setExtension("pdf");
+   			    liquidacion.setNombreArchivo(liquidacion.getIdPersonal().getRut() + ".pdf");
+        	    fileInputStream.close();
+        	    return path;
+			} catch (Exception e2) {
+				e2.printStackTrace();
+				return "";
+			}
             
         } catch (DocumentException de) {
             System.err.println("No se pudo crear fichero");
