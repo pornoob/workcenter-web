@@ -199,14 +199,6 @@ public class MantenedorLiquidaciones implements Serializable {
 
         liquidacion.setRentaAfecta(liquidacion.getTotalImponible() - (liquidacion.getDctoPrevision() + liquidacion.getDectoAFP()));
 
-        try {
-			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-
         // seguro cesantia
         Double seguroEmpresa = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
         Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
@@ -226,6 +218,14 @@ public class MantenedorLiquidaciones implements Serializable {
 			ex.printStackTrace();
 			}
 		liquidacion.setRentaAfecta(liquidacion.getRentaAfecta()- liquidacion.getAporteTrabajador().intValue());
+		
+        try {
+			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 		liquidacion.setTotalDctos(liquidacion.getTotalImponible() - liquidacion.getRentaAfecta());
 		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
 	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
@@ -244,19 +244,24 @@ public class MantenedorLiquidaciones implements Serializable {
 	public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
 
         try {
-            float rentaAfectaUtm = rentaAfecta / utm;
+            double rentaAfectaUtm = (double)rentaAfecta / (double)utm;
             System.out.println(rentaAfectaUtm);
             List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
 
             for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
                 if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
                         (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
-                		System.out.println(rentaAfectaUtm * viu.getFactor().floatValue());
-                		System.out.println(viu.getSubstraendo().floatValue());
-                		System.out.println(rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue());
-                		System.out.println((rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue())* utm);
-                    //return Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm);
-                    return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().floatValue() - viu.getSubstraendo().floatValue()) * utm)*Math.pow(10,0))/Math.pow(10,0);
+                		System.out.println("Renta afecta : "+rentaAfecta);
+                		System.out.println("utm actual : "+utm);
+                		System.out.println("Factor actual :"+rentaAfectaUtm * viu.getFactor().floatValue());
+                		System.out.println("Substraendo: " + viu.getSubstraendo());                		
+                		System.out.println("Renta afecta / utm : "+rentaAfectaUtm);
+                		System.out.println("renta afecta utm  * factor : "+rentaAfectaUtm * viu.getFactor().floatValue());
+                		//System.out.println("renta afecta factor  - substraendo : "+ rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue();
+                		//System.out.println(rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue());
+                		//System.out.println((rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue())* utm);
+                    //return Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm);
+                    return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm)*Math.pow(10,0))/Math.pow(10,0);
                 }
             }
         } catch (Exception e) {
@@ -348,9 +353,25 @@ public class MantenedorLiquidaciones implements Serializable {
     	}
     }
     
-    public void imprimirLiquidacion(){
+    public void imprimirLiquidacion() throws IOException{
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
     	unirBonosRemuneracion();
+    	renderPdf.generarLiquidacion(liquidacion);
+   	    FacesContext facesContext = FacesContext.getCurrentInstance();
+	    ExternalContext externalContext = facesContext.getExternalContext();
+	    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+	    response.reset();
+	    response.setContentType("application/pdf");
+	    //response.setHeader("Content-disposition", "attachment; filename=cuaquierwea.pdf");
+	    //response.setHeader("Content-disposition", "inline; filename=cuaquierwea.pdf");
+	    response.setHeader("Content-disposition", "filename=cuaquierwea.pdf");
+
+	    OutputStream output = response.getOutputStream();
+	    output.write(liquidacion.getArchivo());
+	    output.close();
+
+	    facesContext.responseComplete();
     }
     
     public void editarMontoBono() {

@@ -251,8 +251,9 @@ public class RenderPdf implements Serializable {
             tabla.addCell(celda);
 
             if (liquidacion.getImpUnico().intValue() != 0) {
-                celda.setPhrase(new Phrase("Impuesto único: " + formato.numeroAgrupado(liquidacion.getImpUnico()), fuenteCuerpo));
-                tabla.addCell(celda);
+                //celda.setPhrase(new Phrase("Impuesto único: " + formato.numeroAgrupado(Double.parseDouble(liquidacion.getImpUnico().toString().split(".")[0])), fuenteCuerpo));
+            	celda.setPhrase(new Phrase("Impuesto único: " + liquidacion.getImpUnico(), fuenteCuerpo));
+            	tabla.addCell(celda);
             } else {
                 celda.setPhrase(new Phrase("", fuenteCuerpo));
                 tabla.addCell(celda);
