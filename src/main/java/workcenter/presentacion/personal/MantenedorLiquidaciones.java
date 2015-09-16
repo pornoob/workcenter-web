@@ -66,8 +66,6 @@ public class MantenedorLiquidaciones implements Serializable {
     
     private Variable variable;
     
-    private String urlArchivo;
-
     @Autowired
     private LogicaPersonal logicaPersonal;
 
@@ -230,7 +228,6 @@ public class MantenedorLiquidaciones implements Serializable {
 		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
 	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
-        urlArchivo = "/static/workcenter/tmp/"+liquidacion.getIdPersonal().getRut()+"/"+"liquidaciones/"+anio+mes+"/"+liquidacion.getIdPersonal().getRut()+".pdf";
     }
 
     public Integer getAsignacionFamiliarMonto() {
@@ -245,21 +242,11 @@ public class MantenedorLiquidaciones implements Serializable {
 
         try {
             double rentaAfectaUtm = (double)rentaAfecta / (double)utm;
-            System.out.println(rentaAfectaUtm);
             List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
 
             for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
                 if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
                         (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
-                		System.out.println("Renta afecta : "+rentaAfecta);
-                		System.out.println("utm actual : "+utm);
-                		System.out.println("Factor actual :"+rentaAfectaUtm * viu.getFactor().floatValue());
-                		System.out.println("Substraendo: " + viu.getSubstraendo());                		
-                		System.out.println("Renta afecta / utm : "+rentaAfectaUtm);
-                		System.out.println("renta afecta utm  * factor : "+rentaAfectaUtm * viu.getFactor().floatValue());
-                		//System.out.println("renta afecta factor  - substraendo : "+ rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue();
-                		//System.out.println(rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue());
-                		//System.out.println((rentaAfectaUtm * viu.getFactor().floatValue()-viu.getSubstraendo().floatValue())* utm);
                     //return Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm);
                     return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm)*Math.pow(10,0))/Math.pow(10,0);
                 }
@@ -280,10 +267,7 @@ public class MantenedorLiquidaciones implements Serializable {
     	
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
     	unirBonosRemuneracion();
-    	
-    		String path = renderPdf.generarLiquidacion(liquidacion);
-    		urlArchivo = crearUrl(path);
-    		//FacesUtil.irEnlaceDocumento(crearUrl(path));
+    	renderPdf.generarLiquidacion(liquidacion);
         
 //        if (true) return null;
     	
@@ -308,7 +292,6 @@ public class MantenedorLiquidaciones implements Serializable {
     
     public String crearUrl(String ruta){
     	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length()).replace("//", "/");
-    	System.out.println(ruta);
     	return ruta;
     }
     
@@ -516,14 +499,6 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setVariable(Variable variable) {
 		this.variable = variable;
-	}
-
-	public String getUrlArchivo() {
-		return urlArchivo;
-	}
-
-	public void setUrlArchivo(String urlArchivo) {
-		this.urlArchivo = urlArchivo;
 	}
 
 }

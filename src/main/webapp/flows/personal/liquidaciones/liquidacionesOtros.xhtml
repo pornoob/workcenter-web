@@ -16,13 +16,15 @@
                          var="liquidacion"
                          widgetVar="wVliquidaciones"
                          id="dtLiquidaciones">
-                <p:column headerText="Nombre">
-                <p:outputLabel value="#{liquidacion.idPersonal.nombres}"/>
+                <p:column filterMatchMode="contains" filterBy="#{liquidacion.idPersonal.getNombreCompleto()}" >
+                <p:outputLabel value="#{liquidacion.idPersonal.getNombreCompleto()}"/>
                 </p:column>
-                <p:column headerText="Apellidos">
-                <p:outputLabel value="#{liquidacion.idPersonal.apellidos}"/>
-                </p:column>
-                <p:column headerText="Fecha" sortBy="#{liquidacion.fechaLiquidacion}">
+                <p:column filterBy="#{liquidacion.fechaLiquidacion}" filterMatchMode="contains">
+	                <f:facet name="filter">
+	                   <p:calendar  pattern="yyyy-MM-dd" placeholder="seleccione fecha">
+	                       <p:ajax event="dateSelect" oncomplete="PF('wVliquidaciones').filter()" update="dtLiquidaciones" />
+	                   </p:calendar>
+	               </f:facet>
                 <p:outputLabel value="#{liquidacion.fechaLiquidacion}">
                       <f:convertDateTime pattern="yyyy-MM-dd" />
                 </p:outputLabel>

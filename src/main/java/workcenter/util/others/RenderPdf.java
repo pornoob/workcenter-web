@@ -5,7 +5,11 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.Serializable;
+import java.net.URL;
 import java.text.SimpleDateFormat;
+
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -29,6 +33,7 @@ import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Element;
 import com.itextpdf.text.Font;
 import com.itextpdf.text.FontFactory;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Phrase;
 import com.itextpdf.text.Rectangle;
@@ -62,10 +67,15 @@ public class RenderPdf implements Serializable {
 
     public String generarLiquidacion(Remuneracion liquidacion) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
-
+        
+        //obtenemos url + contexto de la aplicación
+        FacesContext context = FacesContext.getCurrentInstance();
+        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+        String requestURL = request.getRequestURL().toString();
+        String url = requestURL.split("/m")[0];
+        
         String fecha = sdf.format(liquidacion.getFechaLiquidacion());
         String path = constantes.getPathArchivos() + "/tmp/" +liquidacion.getIdPersonal().getRut()+"/liquidaciones/"+fecha;
-
         // nos aseguramos que cree la carpeta
         new File(path).mkdirs();
         path += "/" + liquidacion.getIdPersonal().getRut() + ".pdf";
@@ -108,6 +118,17 @@ public class RenderPdf implements Serializable {
             pdfWriter.setInitialLeading(20);
 
             pdf.open();
+            
+            //agregamos logo en el pdf
+            try {
+            	
+                Image logo = Image.getInstance(new URL(url+"/resources/css/img/theme/logoSuperior.png"));
+                logo.setAbsolutePosition(450f, 740f);
+                logo.scaleAbsolute(75f, 75f);
+                pdf.add(logo);
+    		} catch (Exception ex1) {
+    			ex1.printStackTrace();
+    		}
 
             // fuentes
             Font fuenteEncabezado = FontFactory.getFont("arial", 10, Font.BOLD, BaseColor.BLACK);
