@@ -170,14 +170,26 @@
                         </p:dataTable>
                     </td>
                     <td colspan="3">
-                        <p:dataTable emptyMessage="Sin descuentos">
+                        <p:dataTable emptyMessage="Sin descuentos"
+                                     value="#{mantenedorLiquidaciones.descuentos}"
+                                     var="l">
                             <f:facet name="header">
                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/>
                                 </div>
                                 <div>Descuentos</div>
                             </f:facet>
-                            <p:column headerText="Detalle"></p:column>
-                            <p:column headerText="Monto"></p:column>
+                            <p:column headerText="Detalle">
+                             <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
+                            <p:column headerText="Monto">
+                            <h:outputText value="#{l.monto}" /></p:column>
+                            <p:column style="width:32px">
+                            <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                            actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                            update="formEditarBonos"
+                                            icon="fa fa-edit"
+                                            title="Editar Monto"
+                                            immediate="true"/>
+                            </p:column>
                         </p:dataTable>
                     </td>
                 </tr>

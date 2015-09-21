@@ -302,6 +302,21 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("Descuento por viático anticipado: " + formato.numeroAgrupado(liquidacion.getAnticipoViatico()), fuenteCuerpo));
             tabla.addCell(celda);
             /* ---------------------------------------------------------------- */
+            
+            // Descuentos
+            for (BonoDescuentoRemuneracion bdr : liquidacion.getRemuneracionBonoDescuentoList()) {
+            	if (!bdr.getBono()){
+            		if (!bdr.getImponible()){
+            			celda.setPhrase(new Phrase("", fuenteCuerpo));
+                        tabla.addCell(celda);
+                        
+            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+                        tabla.addCell(celda);
+            		}
+            	}
+            }
+            
+            /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);

@@ -49,6 +49,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private List<BonoDescuentoPersonal> bonoNoImponibles;
 
     private List<BonoDescuentoPersonal> bonoImponibles;
+    
+    private List<BonoDescuentoPersonal> descuentos;
 
     private List<ValorPrevisionPersonal> valorPrevision;
     
@@ -109,10 +111,12 @@ public class MantenedorLiquidaciones implements Serializable {
     	if (liquidacion.getIdPersonal() == null) return;
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
+        descuentos = new ArrayList<BonoDescuentoPersonal>();
         valorPrevision = new ArrayList<ValorPrevisionPersonal>();
         bonoEditar =  new BonoDescuentoPersonal();
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
+        Integer totalDescuentos = 0;
         asignacionFamiliarMonto = 0;
         
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
@@ -130,14 +134,21 @@ public class MantenedorLiquidaciones implements Serializable {
                 	totalImponible = totalImponible + 0;
                 }
                 
-            } else {
+            } else if ( !bDP.getIdBonodescuento().getImponible() &&
+            		bDP.getIdBonodescuento().getIdTipoBonodescuento().getDescripcion().equals(new String("Bono")) ) {
                 bonoNoImponibles.add(bDP);
                 if ( bDP.getMonto() != null){
                 	totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
                 }else{
                 	totalNoImponible = totalNoImponible + 0;
-                }
-                
+                }   
+            }else {
+            	descuentos.add(bDP);
+            	if ( bDP.getMonto() != null){
+            		totalDescuentos = totalDescuentos + bDP.getMonto().intValue();
+                }else{
+                	totalDescuentos = totalDescuentos + 0;
+                }             	
             }
         }
         // sueldo base y gratificacion
@@ -224,7 +235,7 @@ public class MantenedorLiquidaciones implements Serializable {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		liquidacion.setTotalDctos(liquidacion.getTotalImponible() - liquidacion.getRentaAfecta());
+		liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
 		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
 	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
@@ -334,6 +345,18 @@ public class MantenedorLiquidaciones implements Serializable {
     		bdr.setMonto(bI.getMonto());    		
     		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
     	}
+    	
+    	for (BonoDescuentoPersonal bI : descuentos ){
+    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+    		bdr.setIdMaestroGuia(liquidacion);
+    		bdr.setBono(false);
+    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+    		bdr.setImponible(false);
+    		bdr.setMonto(bI.getMonto());    		
+    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+    	}
+    	
+    	
     }
     
     public void imprimirLiquidacion() throws IOException{
@@ -382,6 +405,10 @@ public class MantenedorLiquidaciones implements Serializable {
         for (BonoDescuentoPersonal bdp : bonoNoImponibles) {
  			unionBonos.add(bdp);
  		}
+        
+        for (BonoDescuentoPersonal bdp : descuentos) {
+        	unionBonos.add(bdp);
+        }
     	return unionBonos;
     }
     
@@ -499,6 +526,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	public void setVariable(Variable variable) {
 		this.variable = variable;
+	}
+
+	public List<BonoDescuentoPersonal> getDescuentos() {
+		return descuentos;
+	}
+
+	public void setDescuentos(List<BonoDescuentoPersonal> descuentos) {
+		this.descuentos = descuentos;
 	}
 
 }
