@@ -286,7 +286,8 @@ public class MantenedorLiquidaciones implements Serializable {
     	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
     	Boolean encotrado = false;
     	for ( Remuneracion lstRemuneracion : listaRemuneraciones) {
-			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())){
+			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
+					&& lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())){
 				FacesUtil.mostrarMensajeError("Ingreso Fallido", "La liquidacion ya existe con esa Fecha");
 				encotrado = true;
 			}
