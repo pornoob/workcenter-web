@@ -309,6 +309,7 @@ public class MantenedorLiquidaciones implements Serializable {
     
     public void visualizarPDF(Remuneracion verLiquidacion) throws IOException{
     	
+    	 if (verLiquidacion == null) return;
     	 FacesContext facesContext = FacesContext.getCurrentInstance();
     	    ExternalContext externalContext = facesContext.getExternalContext();
     	    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
@@ -317,7 +318,7 @@ public class MantenedorLiquidaciones implements Serializable {
     	    response.setContentType("application/pdf");
     	    //response.setHeader("Content-disposition", "attachment; filename=cuaquierwea.pdf");
     	    //response.setHeader("Content-disposition", "inline; filename=cuaquierwea.pdf");
-    	    response.setHeader("Content-disposition", "filename=cuaquierwea.pdf");
+    	    response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
 
     	    OutputStream output = response.getOutputStream();
     	    output.write(verLiquidacion.getArchivo());
@@ -361,6 +362,7 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public void imprimirLiquidacion() throws IOException{
+    	if (liquidacion.getIdPersonal() == null) return;
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
     	unirBonosRemuneracion();
     	renderPdf.generarLiquidacion(liquidacion);

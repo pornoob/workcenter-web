@@ -32,6 +32,8 @@
                        rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
             <p:tooltip for="mLiquiciones" value="Liquidaciones"
                        rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
+            <p:tooltip for="mCaja" value="Modulo Caja"
+                       rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
         </ui:fragment>
 
         <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
@@ -77,6 +79,9 @@
             <p:menuitem id="mHoja_Servicio" styleClass="fa fa-gear fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/hoja_servicio" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"/>
+            <p:menuitem id="mCaja" styleClass="fa fa-bank fa-1x" style="color: black; font-size: 1.26em"
+                        url="/m/caja" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>
