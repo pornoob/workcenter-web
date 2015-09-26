@@ -97,15 +97,15 @@ public class LiquidacionDao {
         q.setParameter("mes", Integer.parseInt(mes));
         q.setParameter("anio", anio);
         q.setParameter("receptor", idPers);
-
+        /**se modifica el ciclo for ya que la persona puede tener mas de un anticipo en el mes registrado (caso especial),
+        //por ende se debera acumular el monto para luego retornarlo**/
+        Integer monto = 0;
         for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
             if (listaDineros.getConcepto().getId() == c.getConceptoAnticipo()) {
-                return listaDineros.getMonto();
+                monto = monto + listaDineros.getMonto();
             }
         }
-        Dinero d = new Dinero();
-        d.setMonto(0);
-        return d.getMonto();
+        return monto;
     }
 
     public List<Remuneracion> obtenerListaRemuneraciones() {
