@@ -1,10 +1,5 @@
 package workcenter.dao;
 
-import java.io.Serializable;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.MueUsuarioExterno;
 import workcenter.entidades.Permiso;
@@ -12,11 +7,16 @@ import workcenter.entidades.Proyecto;
 import workcenter.entidades.Usuario;
 import workcenter.util.dto.UsuarioDto;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
+
 /**
  * @author colivares
  */
 @Repository
-public class UsuarioDao implements Serializable {
+public class UsuarioDao {
     
     @PersistenceContext
     private EntityManager em;
