@@ -11,22 +11,23 @@
     http://www.springframework.org/schema/faces http://www.springframework.org/schema/faces/spring-faces-2.2.xsd
 http://www.springframework.org/schema/task http://www.springframework.org/schema/task/spring-task-3.0.xsd">
     
-    <faces:resources />
+    <faces:resources/>
     
     <!--permite las anotaciones-->
     <mvc:annotation-driven/>
     <task:annotation-driven />
-    
+
     <!--permite procesar solicitudes de recursos estaticos-->
     <mvc:default-servlet-handler />
+
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping">
+        <property name="order" value="1" />
+    </bean>
 
     <!--activamos el mapeo del flow-->
     <bean class="org.springframework.webflow.mvc.servlet.FlowHandlerMapping">
         <property name="order" value="1"/>
         <property name="flowRegistry" ref="flowRegistry" />
-        <property name="defaultHandler">
-            <bean class="org.springframework.web.servlet.mvc.UrlFilenameViewController" />
-        </property>
     </bean>
 
     <bean id="faceletsViewResolver" class="org.springframework.web.servlet.view.UrlBasedViewResolver">

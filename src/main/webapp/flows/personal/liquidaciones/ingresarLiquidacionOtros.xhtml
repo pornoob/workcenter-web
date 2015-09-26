@@ -3,7 +3,8 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                template="/templates/default.xhtml">
+                template="/templates/default.xhtml"
+                xmlns:pe="http://primefaces.org/ui/extensions">
     <ui:define name="contenido">
 
         <h2>Ingresar Nueva Liquidación</h2>
@@ -169,14 +170,26 @@
                         </p:dataTable>
                     </td>
                     <td colspan="3">
-                        <p:dataTable emptyMessage="Sin descuentos">
+                        <p:dataTable emptyMessage="Sin descuentos"
+                                     value="#{mantenedorLiquidaciones.descuentos}"
+                                     var="l">
                             <f:facet name="header">
                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/>
                                 </div>
                                 <div>Descuentos</div>
                             </f:facet>
-                            <p:column headerText="Detalle"></p:column>
-                            <p:column headerText="Monto"></p:column>
+                            <p:column headerText="Detalle">
+                             <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
+                            <p:column headerText="Monto">
+                            <h:outputText value="#{l.monto}" /></p:column>
+                            <p:column style="width:32px">
+                            <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                            actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                            update="formEditarBonos"
+                                            icon="fa fa-edit"
+                                            title="Editar Monto"
+                                            immediate="true"/>
+                            </p:column>
                         </p:dataTable>
                     </td>
                 </tr>
@@ -235,18 +248,21 @@
                             <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
-                    <td><b>Alcance líquido</b></td>
+                    <td><b>Líquido a Pagar</b></td>
                     <td>:</td>
-                    <td><p:inputText id="idAlcanceLiquido" value="#{mantenedorLiquidaciones.liquidacion.alcanceLiquido}">
+                    <td><p:inputText id="idAlcanceLiquido" value="#{mantenedorLiquidaciones.liquidacion.liqPagar}">
                             <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
                 <tr>
-                    <td colspan="6" style="text-align: right">
-                        <p:commandButton value="Imprimir Liquidación" icon="fa fa-print" action="#{renderPdf.generarLiquidacion(mantenedorLiquidaciones.liquidacion)}">
-                        </p:commandButton>
-                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}">
+                    <td colspan="3" style="text-align: right" align="right">
+                         <p:commandLink title="Imprimir Liquidación" action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" ajax="false" target="_blank">
+                             <i class="fa fa-print  fa-2x"></i>
+                         </p:commandLink> 
+                    </td>
+                    <td colspan="3" align="right">
+                     <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones" disabled="false">
                             <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
                         </p:commandButton>
                     </td>

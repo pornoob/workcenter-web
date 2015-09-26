@@ -158,6 +158,15 @@
                         <i class="fa fa-gear fa-5x"></i>
                         <h:outputLabel value="Hoja de Servicio" style="margin-top: 10px"/>
                     </h:commandLink>
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CAJA')}"
+                                   action="#{facesUtil.redirigir('/m/caja')}"
+                                   class="menuWorkcenter" style="display: block"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)"
+                                   title="Modulo Caja">
+                        <i class="fa fa-bank fa-5x"></i>
+                        <h:outputLabel value="Caja" style="margin-top: 10px"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
         </h:form>
