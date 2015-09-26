@@ -1,17 +1,17 @@
 package workcenter.util.components;
 
-import java.io.Serializable;
-import javax.servlet.http.HttpServletRequest;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import workcenter.dao.UsuarioDao;
 import workcenter.entidades.Permiso;
+import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
 
 /**
  * @author colivares
@@ -21,7 +21,7 @@ import workcenter.util.dto.UsuarioDto;
 public class SesionCliente implements Serializable {
 
     @Autowired
-    UsuarioDao usuarioDao;
+    LogicaUsuario logicaUsuario;
 
     @Autowired
     Constantes constantes;
@@ -41,9 +41,9 @@ public class SesionCliente implements Serializable {
         } else if (!a.getName().equals("anonymousUser")) {
             try {
                 if (usuario == null || !usuario.getRut().equals(Integer.valueOf(a.getName())))
-                    usuario = usuarioDao.obtenerUsuario(Integer.valueOf(a.getName()));
+                    usuario = logicaUsuario.obtenerUsuario(Integer.valueOf(a.getName()));
             } catch (NumberFormatException nfe) {
-                usuario = usuarioDao.obtenerUsuario(a.getName());
+                usuario = logicaUsuario.obtenerUsuario(a.getName());
             }
         }
         return usuario;
@@ -84,9 +84,9 @@ public class SesionCliente implements Serializable {
         Permiso p = null;
         if (this.getUsuario() == null) return false;
         if (!this.getUsuario().isExterno())
-            p = usuarioDao.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
+            p = logicaUsuario.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
         else
-            p = usuarioDao.obtenerPermiso(this.getUsuario().getUsuario(), permiso, nivel);
+            p = logicaUsuario.obtenerPermiso(this.getUsuario().getUsuario(), permiso, nivel);
         return p != null;
     }
 
