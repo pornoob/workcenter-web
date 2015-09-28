@@ -1,5 +1,21 @@
 package workcenter.presentacion.personal;
 
+import org.primefaces.model.DualListModel;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import workcenter.entidades.*;
+import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
+import workcenter.negocio.personal.LogicaLiquidaciones;
+import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.negocio.personal.LogicaVariables;
+import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
+import workcenter.util.others.RenderPdf;
+
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
@@ -8,32 +24,6 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
-
-import org.primefaces.model.DualListModel;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-
-import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
-import workcenter.entidades.ValorImpuestoUnico;
-import workcenter.entidades.ValorPrevisionPersonal;
-import workcenter.entidades.ValoresCargasFamiliares;
-import workcenter.entidades.Variable;
-import workcenter.negocio.hoja_servicio.LogicaCargasFamiliares;
-import workcenter.negocio.personal.LogicaLiquidaciones;
-import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.negocio.personal.LogicaVariables;
-import workcenter.util.components.Constantes;
-import workcenter.util.components.FacesUtil;
-import workcenter.util.others.RenderPdf;
 
 /**
  * Created by claudio on 16-05-15.
@@ -163,8 +153,15 @@ public class MantenedorLiquidaciones implements Serializable {
             double sBase = (double) ((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
             liquidacion.setSueldoBase((int) sBase);
         }
-        Double gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
+
+        Double gratificacion;
+
+        if (cp.getSinTope() == Boolean.TRUE)
+            gratificacion = liquidacion.getSueldoBase() * 0.25;
+        else
+            gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
         				(liquidacion.getSueldoBase() / 4): (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
+
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
