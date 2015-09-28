@@ -40,6 +40,7 @@ import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
+import com.lowagie.tools.split_pdf;
 
 /**
  * Created by claudio on 25-07-15.
@@ -81,6 +82,8 @@ public class RenderPdf implements Serializable {
         path += "/" + liquidacion.getIdPersonal().getRut() + ".pdf";
 
         // variables a ocupar para generar el pdf
+        SimpleDateFormat sdfa = new SimpleDateFormat("yyyy-MM");
+        fecha = sdfa.format(liquidacion.getFechaLiquidacion());
         Document pdf = new Document();
         PdfPTable tabla;
         PdfPCell celda;
@@ -179,7 +182,8 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("Rut: " + rutEmpleado, fuenteCuerpo));
             tabla.addCell(celda);
 
-            celda.setPhrase(new Phrase("Fecha: " + sdf.format(liquidacion.getFechaLiquidacion()), fuenteCuerpo));
+            //celda.setPhrase(new Phrase("Fecha: " + sdf.format(liquidacion.getFechaLiquidacion()), fuenteCuerpo));
+            celda.setPhrase(new Phrase("Fecha: " +obtenerUltimoDíaMes(fecha) , fuenteCuerpo));
             tabla.addCell(celda);
 
             /* ---------------------------------------------------------------- */
@@ -430,5 +434,32 @@ public class RenderPdf implements Serializable {
             return "";
         }
 
+    }
+    
+    public String obtenerUltimoDíaMes(String a){
+    	String mes = a.split("-")[1];
+    	String anio = a.split("-")[0];
+    	switch(Integer.parseInt(mes)){
+    	case 1:  // Enero
+    	case 3:  // Marzo
+    	case 5:  // Mayo
+    	case 7:  // Julio
+    	case 8:  // Agosto
+    	case 10:  // Octubre
+    	case 12: // Diciembre
+    	return "31/"+mes+"/"+anio;
+    	case 4:  // Abril
+    	case 6:  // Junio
+    	case 9:  // Septiembre
+    	case 11: // Noviembre
+    	return "30/"+mes+"/"+anio;
+    	case 2:  // Febrero
+    	if ( ((Integer.parseInt(anio)%100 == 0) && (Integer.parseInt(anio)%400 == 0)) ||
+    	((Integer.parseInt(anio)%100 != 0) && (Integer.parseInt(anio)%  4 == 0))   )
+    	return "29/"+mes+"/"+anio;  // Año Bisiesto
+    	else
+    	return "28"+mes+"/"+anio;
+    	}
+		return "00/00/0000";
     }
 }

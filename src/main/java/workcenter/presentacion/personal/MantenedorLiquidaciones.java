@@ -182,6 +182,8 @@ public class MantenedorLiquidaciones implements Serializable {
 		}
         
         //calculo afp y salud
+        liquidacion.setDctoPrevision(0);
+        liquidacion.setDectoAFP(0);
         for (ValorPrevisionPersonal vPP : valorPrevision) {
 
             if (vPP.getPrevision().getTipo().equals("salud")) {
@@ -313,8 +315,6 @@ public class MantenedorLiquidaciones implements Serializable {
 
     	    response.reset();
     	    response.setContentType("application/pdf");
-    	    //response.setHeader("Content-disposition", "attachment; filename=cuaquierwea.pdf");
-    	    //response.setHeader("Content-disposition", "inline; filename=cuaquierwea.pdf");
     	    response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
 
     	    OutputStream output = response.getOutputStream();
@@ -369,9 +369,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	    response.reset();
 	    response.setContentType("application/pdf");
-	    //response.setHeader("Content-disposition", "attachment; filename=cuaquierwea.pdf");
-	    //response.setHeader("Content-disposition", "inline; filename=cuaquierwea.pdf");
-	    response.setHeader("Content-disposition", "filename=cuaquierwea.pdf");
+	    response.setHeader("Content-disposition", "filename="+liquidacion.getIdPersonal().getRut()+".pdf");
 
 	    OutputStream output = response.getOutputStream();
 	    output.write(liquidacion.getArchivo());

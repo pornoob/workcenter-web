@@ -76,7 +76,7 @@ public class CargasMasivas {
                 break;
             }
         }
-
+        String resultado = "{ \"resultado\": \"Sin documento Prevevio\" }";
         if (existente != null) {
             Documento d = new Documento();
             d.setFecha(new Date());
@@ -99,8 +99,9 @@ public class CargasMasivas {
                 e.printStackTrace();
             }
             logicaDocumentos.asociarDocumento(d, respaldo);
+            resultado = "{ \"resultado\": \"Documento respaldado\" }";
         }
 
-        return "{ \"resultado\": \"Documento respaldado\" }";
+        return resultado;
     }
 }
