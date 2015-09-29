@@ -77,11 +77,11 @@ public class LiquidacionDao {
         return em.createNamedQuery("ValorImpuestoUnico.findVigentes").getResultList();
     }
 
-    public void guardarDatosLiquidacion(Remuneracion liquidacion) {
-        try {
+    public void guardarDatosLiquidacion(Remuneracion liquidacion) {	
+    	if (liquidacion.getIdMaestro() != null){    	
+			em.merge(liquidacion);
+    	}else{
             em.persist(liquidacion);
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
         }
     }
 

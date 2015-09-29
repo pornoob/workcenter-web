@@ -66,7 +66,7 @@ public class RenderPdf implements Serializable {
     @Autowired
     private LogicaPersonal logicaPersonal;
 
-    public String generarLiquidacion(Remuneracion liquidacion) {
+    public String generarLiquidacion(Remuneracion liquidacion, Integer asignacionFamiliarMonto) {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyyMM");
         
         //obtenemos url + contexto de la aplicación
@@ -353,6 +353,18 @@ public class RenderPdf implements Serializable {
             		}
             	}
             }
+            
+            /* ---------------------------------------------------------------- */
+            if (asignacionFamiliarMonto != null && asignacionFamiliarMonto.intValue() != 0){
+            celda.setPhrase(new Phrase("Asignación Familiar: " + formato.numeroAgrupado(asignacionFamiliarMonto), fuenteCuerpo));
+            tabla.addCell(celda);
+            }else{
+            	celda.setPhrase(new Phrase("", fuenteCuerpo));
+                tabla.addCell(celda);
+            }
+            
+            celda.setPhrase(new Phrase("", fuenteCuerpo));
+            tabla.addCell(celda);
             
             /* ---------------------------------------------------------------- */
 

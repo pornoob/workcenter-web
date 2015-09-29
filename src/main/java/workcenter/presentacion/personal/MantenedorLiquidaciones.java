@@ -108,6 +108,7 @@ public class MantenedorLiquidaciones implements Serializable {
         Integer totalImponible = 0;
         Integer totalDescuentos = 0;
         asignacionFamiliarMonto = 0;
+        cantidadCargasFamiliares = 0;
         
 		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
         Variable uf = logicaLiquidaciones.obtenerValorUf(Integer.parseInt(mes), anio);
@@ -165,21 +166,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
-        
-        // asiganacion familiar
-        
-        for (ValoresCargasFamiliares vCF : logicaCargasFamiliares.obtenerValoresCargasFamiliares()) {
-			if (vCF.getHasta() == null){
-				
-			}else if (vCF.getHasta()>=liquidacion.getTotalImponible()){
-				if (asignacionFamiliarMonto != null){
-					asignacionFamiliarMonto = cantidadCargasFamiliares*vCF.getMonto();
-				}
-				//OJO : verificar calculo
-				liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
-				//liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+(asiganacionFamiliar*vCF.getMonto()));
-			}
-		}
+       
         
         //calculo afp y salud
         liquidacion.setDctoPrevision(0);
@@ -277,7 +264,7 @@ public class MantenedorLiquidaciones implements Serializable {
     	
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
     	unirBonosRemuneracion();
-    	renderPdf.generarLiquidacion(liquidacion);
+    	renderPdf.generarLiquidacion(liquidacion,asignacionFamiliarMonto);
         
 //        if (true) return null;
     	
@@ -287,8 +274,10 @@ public class MantenedorLiquidaciones implements Serializable {
     	for ( Remuneracion lstRemuneracion : listaRemuneraciones) {
 			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
 					&& lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())){
-				FacesUtil.mostrarMensajeError("Ingreso Fallido", "La liquidacion ya existe con esa Fecha");
+				FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
+				logicaLiquidaciones.guardarDatosLiquidacion(lstRemuneracion);
 				encotrado = true;
+				
 			}
 		}
     	if (!encotrado){
@@ -323,6 +312,31 @@ public class MantenedorLiquidaciones implements Serializable {
 
     	    facesContext.responseComplete();
     	}
+    
+    public void cargasFamiliares(){
+    	
+        // asiganacion familiar
+        
+        for (ValoresCargasFamiliares vCF : logicaCargasFamiliares.obtenerValoresCargasFamiliares()) {
+			
+			if (vCF.getDesde() == null) {
+				if (liquidacion.getTotalImponible() <= vCF.getHasta()){
+					asignacionFamiliarMonto = cantidadCargasFamiliares * vCF.getMonto();
+					liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
+				break;
+				}
+				}else if (vCF.getHasta() == null){
+					if (liquidacion.getTotalImponible() >= vCF.getDesde()){
+						break;
+					}	
+				}else if(liquidacion.getTotalImponible() >= vCF.getDesde() && liquidacion.getTotalImponible() <= vCF.getHasta()){
+					asignacionFamiliarMonto = cantidadCargasFamiliares * vCF.getMonto();
+					liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
+					break;
+				}
+		}
+    	
+    }
     
     public void unirBonosRemuneracion(){
       	for (BonoDescuentoPersonal bI : bonoImponibles ){
@@ -362,7 +376,7 @@ public class MantenedorLiquidaciones implements Serializable {
     	if (liquidacion.getIdPersonal() == null) return;
     	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
     	unirBonosRemuneracion();
-    	renderPdf.generarLiquidacion(liquidacion);
+    	renderPdf.generarLiquidacion(liquidacion,asignacionFamiliarMonto);
    	    FacesContext facesContext = FacesContext.getCurrentInstance();
 	    ExternalContext externalContext = facesContext.getExternalContext();
 	    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
