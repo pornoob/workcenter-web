@@ -313,16 +313,16 @@ public class MantenedorLiquidaciones implements Serializable {
     	    facesContext.responseComplete();
     	}
     
-    public void cargasFamiliares(){
-    	
+    public void cargasFamiliares(){	
         // asiganacion familiar
-        
         for (ValoresCargasFamiliares vCF : logicaCargasFamiliares.obtenerValoresCargasFamiliares()) {
 			
 			if (vCF.getDesde() == null) {
 				if (liquidacion.getTotalImponible() <= vCF.getHasta()){
 					asignacionFamiliarMonto = cantidadCargasFamiliares * vCF.getMonto();
 					liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
+					liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
+					liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
 				break;
 				}
 				}else if (vCF.getHasta() == null){
@@ -332,10 +332,12 @@ public class MantenedorLiquidaciones implements Serializable {
 				}else if(liquidacion.getTotalImponible() >= vCF.getDesde() && liquidacion.getTotalImponible() <= vCF.getHasta()){
 					asignacionFamiliarMonto = cantidadCargasFamiliares * vCF.getMonto();
 					liquidacion.setTotalHaberes(liquidacion.getTotalHaberes()+asignacionFamiliarMonto);
+					liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
+					liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
 					break;
 				}
-		}
-    	
+			}
+          	
     }
     
     public void unirBonosRemuneracion(){
