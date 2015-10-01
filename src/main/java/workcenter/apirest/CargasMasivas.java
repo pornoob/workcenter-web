@@ -66,24 +66,26 @@ public class CargasMasivas {
         //String archivo = "Documentos/personal/" + rut + "/".concat(tdp.getEtiqueta() + ".pdf");
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         Date fecha;
+
         // agrege  este bloque ya que se caía debido a los documentos sin fecha los traía como un "null" string
-        if (vencimiento.equals(new String("null"))){
-        	fecha=null;
-        }else{
-        	fecha = sdf.parse(vencimiento);	
+        if ("null".equals(vencimiento) || "".equals(vencimiento.trim())) {
+            fecha = null;
+        } else {
+            fecha = sdf.parse(vencimiento);
         }
+
         DocumentoPersonal existente = null;
         Personal personal = logicaPersonal.obtener(Integer.parseInt(rut.split("-")[0].replaceAll("\\.", "")));
         // esta condicion la cree ya que existen personal sin documentos asociados y lanzaba excepcion null
-        if (!logicaPersonal.obtenerDocumentos(personal).isEmpty()){
-        personal.setDocumentos(logicaPersonal.obtenerDocumentos(personal));
-        for (DocumentoPersonal dp : personal.getDocumentos()) {
-            if (dp.getTipo().equals(tdp)) {
-                existente = dp;
-                break;
+        if (!logicaPersonal.obtenerDocumentos(personal).isEmpty()) {
+            personal.setDocumentos(logicaPersonal.obtenerDocumentos(personal));
+            for (DocumentoPersonal dp : personal.getDocumentos()) {
+                if (dp.getTipo().equals(tdp)) {
+                    existente = dp;
+                    break;
+                }
             }
         }
-     }
 
         String resultado = "{ \"resultado\": \"Sin documento Prevevio\" }";
         if (existente != null) {
@@ -109,15 +111,22 @@ public class CargasMasivas {
             }
             logicaDocumentos.asociarDocumento(d, respaldo);
             resultado = "{ \"resultado\": \"Documento respaldado\" }";
-        }else{
-        	//se crea el objeto DocumentosPersonal si este no lo tiene para ser ingresado
-        	DocumentoPersonal dP = new DocumentoPersonal();
-        	dP.setArchivo(path);
-        	dP.setNumero(numero.toString());
-        	dP.setPersonal(personal);
-        	dP.setTipo(tdp);
-        	dP.setVencimiento(fecha);
-        	logicaPersonal.guardarDocumento(dP);
+
+            existente.setArchivo(path);
+            existente.setNumero(numero.toString());
+            existente.setPersonal(personal);
+            existente.setTipo(tdp);
+            existente.setVencimiento(fecha);
+            logicaPersonal.guardarDocumento(existente);
+        } else {
+            //se crea el objeto DocumentosPersonal si este no lo tiene para ser ingresado
+            existente = new DocumentoPersonal();
+            existente.setArchivo(path);
+            existente.setNumero(numero.toString());
+            existente.setPersonal(personal);
+            existente.setTipo(tdp);
+            existente.setVencimiento(fecha);
+            logicaPersonal.guardarDocumento(existente);
         }
 
         return resultado;
