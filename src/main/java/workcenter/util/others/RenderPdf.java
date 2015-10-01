@@ -205,13 +205,8 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("Sueldo base: " + formato.numeroAgrupado(liquidacion.getSueldoBase()), fuenteCuerpo));
             tabla.addCell(celda);
 
-            if (liquidacion.getDectoAFP().intValue() != 0) {
-                celda.setPhrase(new Phrase("AFP " + afp.getNombre() + ": " + formato.numeroAgrupado(liquidacion.getDectoAFP()), fuenteCuerpo));
-                tabla.addCell(celda);
-            } else {
-                celda.setPhrase(new Phrase("", fuenteCuerpo));
-                tabla.addCell(celda);
-            }
+            celda.setPhrase(new Phrase("AFP " + afp.getNombre() + ": " + formato.numeroAgrupado(liquidacion.getDectoAFP()), fuenteCuerpo));
+            tabla.addCell(celda);
             /* ---------------------------------------------------------------- */
 
             if (liquidacion.getGratificacion().intValue() != 0) {
