@@ -1,46 +1,24 @@
 package workcenter.util.others;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.Serializable;
-import java.net.URL;
-import java.text.SimpleDateFormat;
-
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
-
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.Prevision;
-import workcenter.entidades.PrevisionContrato;
-import workcenter.entidades.Remuneracion;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
 
-import com.itextpdf.text.BaseColor;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Element;
-import com.itextpdf.text.Font;
-import com.itextpdf.text.FontFactory;
-import com.itextpdf.text.Image;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Phrase;
-import com.itextpdf.text.Rectangle;
-import com.itextpdf.text.pdf.PdfPCell;
-import com.itextpdf.text.pdf.PdfPTable;
-import com.itextpdf.text.pdf.PdfWriter;
-import com.lowagie.tools.split_pdf;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletRequest;
+import java.io.*;
+import java.net.URL;
+import java.text.SimpleDateFormat;
 
 /**
  * Created by claudio on 25-07-15.
@@ -304,7 +282,7 @@ public class RenderPdf implements Serializable {
             			celda.setPhrase(new Phrase("", fuenteCuerpo));
                         tabla.addCell(celda);
                         
-            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(Integer.parseInt(bdr.getMonto().toString())), fuenteCuerpo));
+            			celda.setPhrase(new Phrase(bdr.getDescripcion() + " : " + formato.numeroAgrupado(bdr.getMonto() == null ? 0 : bdr.getMonto().intValue()), fuenteCuerpo));
                         tabla.addCell(celda);
             		}
             	}
