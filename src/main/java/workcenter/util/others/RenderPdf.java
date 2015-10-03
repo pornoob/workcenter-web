@@ -229,13 +229,8 @@ public class RenderPdf implements Serializable {
             celda.setPhrase(new Phrase("", fuenteCuerpo));
             tabla.addCell(celda);
 
-            if (liquidacion.getAporteTrabajador().intValue() != 0) {
                 celda.setPhrase(new Phrase("Seguro cesantía (aporte trabajador): " + formato.numeroAgrupado(liquidacion.getAporteTrabajador().intValue()), fuenteCuerpo));
                 tabla.addCell(celda);
-            } else {
-                celda.setPhrase(new Phrase("", fuenteCuerpo));
-                tabla.addCell(celda);
-            }
             /* ---------------------------------------------------------------- */
 
             celda.setPhrase(new Phrase("", fuenteCuerpo));

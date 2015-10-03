@@ -54,6 +54,7 @@ public class CargasMasivas {
         if (rut == null) return "{\"resultado\": \"Rut inválido\"}";
 
         boolean rutValido = Pattern.matches("\\d{1,2}\\.\\d{3}.\\d{3}-[kK0-9]", rut);
+        System.out.println(rut+"-"+idTipoDoc+"-"+vencimiento+"-"+numero);
 
         if (!rutValido) return "{\"resultado\": \"Rut inválido\"}";
 
@@ -76,6 +77,8 @@ public class CargasMasivas {
 
         DocumentoPersonal existente = null;
         Personal personal = logicaPersonal.obtener(Integer.parseInt(rut.split("-")[0].replaceAll("\\.", "")));
+        if (personal == null) return "{\"resultado\": \"Personal no encotrado\"}";
+        System.out.println(personal);
         // esta condicion la cree ya que existen personal sin documentos asociados y lanzaba excepcion null
         if (!logicaPersonal.obtenerDocumentos(personal).isEmpty()) {
             personal.setDocumentos(logicaPersonal.obtenerDocumentos(personal));
