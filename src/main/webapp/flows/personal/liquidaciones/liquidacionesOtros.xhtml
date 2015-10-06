@@ -15,22 +15,15 @@
                          value="#{mantenedorLiquidaciones.listaRemuneraciones}"
                          var="liquidacion"
                          widgetVar="wVliquidaciones"
-                         id="dtLiquidaciones">
+                         id="dtLiquidaciones"
+                         paginator="true"
+                         paginatorTemplate="#{constantes.paginadorTemplate}"
+                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                         rows="#{constantes.cantidadFilasTablas}">
                 <p:column filterMatchMode="contains" filterBy="#{liquidacion.idPersonal.getNombreCompleto()}" >
                 <p:outputLabel value="#{liquidacion.idPersonal.getNombreCompleto()}"/>
                 </p:column>
-                <p:column filterBy="#{liquidacion.fechaLiquidacion}" filterMatchMode="equals">
-	                <f:facet name="filter">
-	                   <p:calendar  pattern="yyyy-MM-dd"
-	                                placeholder="seleccione fecha"
-	                                onchange="PF('wVliquidaciones').filter()"
-	                                onselect="PF('wVliquidaciones').filter()"
-	                                onblur="PF('wVliquidaciones').filter()">
-	                   <p:ajax event="change" oncomplete="PF('wVliquidaciones').filter()" update="dtLiquidaciones"/>
-	                   <p:ajax event="dateSelect" oncomplete="PF('wVliquidaciones').filter()" update="dtLiquidaciones"/>
-	                   <p:ajax event="blur" oncomplete="PF('wVliquidaciones').filter()" update="dtLiquidaciones"/>
-	                   </p:calendar>
-	               </f:facet>
+                <p:column filterBy="#{liquidacion.fechaLiquidacion}" filterMatchMode="contains">
                 <p:outputLabel value="#{liquidacion.fechaLiquidacion}">
                       <f:convertDateTime pattern="yyyy-MM-dd" />
                 </p:outputLabel>
