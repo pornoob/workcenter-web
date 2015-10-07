@@ -138,7 +138,7 @@
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <i class="fa fa-search fa-5x"></i>
-                        <h:outputLabel value="Consulta Documentos"/>
+                        <h:outputLabel value="Consulta Documentos Personal"/>
                     </h:commandLink>
                     
                     <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
@@ -166,6 +166,14 @@
                                    title="Modulo Caja">
                         <i class="fa fa-bank fa-5x"></i>
                         <h:outputLabel value="Caja" style="margin-top: 10px"/>
+                    </h:commandLink>
+                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
+                                   action="#{facesUtil.redirigir('/m/consulta_doc_equipo')}"
+                                   class="menuWorkcenter"
+                                   onmouseover="WebCenter.Menu.mouseover(this)"
+                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                        <i class="fa fa-search fa-5x"></i>
+                        <h:outputLabel value="Consulta Documentos Equipo"/>
                     </h:commandLink>
                 </h:panelGrid>
             </p:panel>

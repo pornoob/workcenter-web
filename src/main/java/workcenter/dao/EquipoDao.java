@@ -2,6 +2,7 @@ package workcenter.dao;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
+
 import workcenter.entidades.*;
 import workcenter.util.components.Constantes;
 
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
+
 import java.util.Date;
 import java.util.List;
 
@@ -186,4 +188,9 @@ public class EquipoDao {
         else
             em.merge(retiro);
     }
+
+	public List<Equipo> obtenerEquipoTipo(TipoEquipo tipo) {
+		return em.createNamedQuery("Equipo.findByTipo")
+                .setParameter("tipo", tipo).getResultList();
+	}
 }

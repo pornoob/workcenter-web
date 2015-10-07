@@ -22,7 +22,7 @@
                        rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"/>
             <p:tooltip for="mProgramaActividades" value="Programa Actividades"
                        rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"/>
-            <p:tooltip for="mConsultaDoc" value="Consulta Documentos"
+            <p:tooltip for="mConsultaDoc" value="Consulta Documentos Personal"
                        rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
             <p:tooltip for="mFicha_Viajes" value="Control de Despachos"
                        rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
@@ -34,6 +34,8 @@
                        rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
             <p:tooltip for="mCaja" value="Modulo Caja"
                        rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
+            <p:tooltip for="mConsultaDocEquipo" value="Consulta Documentos Equipos"
+                       rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
         </ui:fragment>
 
         <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
@@ -82,6 +84,9 @@
             <p:menuitem id="mCaja" styleClass="fa fa-bank fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/caja" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
+            <p:menuitem id="mConsultaDocEquipo" styleClass="fa fa-search fa-1x" style="color: black; font-size: 1.26em"
+                        url="/m/consulta_doc_equipo" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>

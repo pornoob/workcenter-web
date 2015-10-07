@@ -1,0 +1,57 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Consulta Documentos Equipo</h2>
+        <p:growl autoUpdate="true" showDetail="true"/>
+
+        <h:form id="formConsultaDocEquipo">
+            <p:panel header="Filtros">
+                <h:panelGrid columns="3">
+                    <h:outputLabel>Tipo de Equipo</h:outputLabel>:
+                    <p:selectOneMenu filter="true" filterMatchMode="contains" value="#{mantenedorConsultaDocEquipo.tipoEquipo}"
+                                     converter="entityConverter">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorConsultaDocEquipo.lstTipoEquipo}" var="e" itemLabel="#{e.etiqueta}"/>
+                    </p:selectOneMenu>
+                </h:panelGrid>
+                <p:commandButton icon="ui-icon ui-icon-search"
+                                 value="Buscar"
+                                 update="tblDocsEquipo"
+                                 action="#{mantenedorConsultaDocEquipo.buscarEquipo()}"/>
+            </p:panel>
+            
+            <p:panel header="Detalle" id="pDocsEquipo">
+
+                <p:dataTable id="tblDocsEquipo" value="#{mantenedorConsultaDocEquipo.equipoDocs.keySet().toArray()}" var="e"
+                             emptyMessage="No se han encontrado documentos" widgetVar="tblDocsEquipo" filterEvent="enter"
+                             styleClass="tblDocsEquipo tblScroll" reflow="true" rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="1000" paginator="true" selectionMode="single" selection="true" rowKey="#{e}">
+                    <f:facet name="header">
+                        <p:outputPanel>
+                            <p:commandButton id="btnSelColumnas" icon="fa fa-filter" value="Filtrar Documentos"/>
+                        </p:outputPanel>
+                        <p:columnToggler widgetVar="columnToggler" trigger="btnSelColumnas" datasource="tblDocsEquipo"/>
+                    </f:facet>
+                    <p:ajax event="page" oncomplete="WebCenter.ColumnToggler.fix('columnToggler')"/>
+                    <p:column headerText="Equipo" filterBy="#{e.patente}"
+                              filterFunction="#{dataTableFilter.filtroInsensitivo}" toggleable="false" styleClass="text-left">
+                        #{e.patente}
+                    </p:column>
+                    <p:columns var="td" value="#{mantenedorConsultaDocEquipo.tiposDocs}" styleClass="text-center">
+                        <f:facet name="header">#{td.etiqueta}</f:facet>
+
+                        <p:commandLink ajax="false" rendered="#{mantenedorConsultaDocEquipo.obtenerLuz(e, td) != null}">
+                            <h:graphicImage value="/img/icons/#{mantenedorConsultaDocEquipo.obtenerLuz(e, td)}.png"
+                                            title="#{e.patente}#{mantenedorConsultaDocEquipo.obtenerMensaje(e, td)}"/>
+                        </p:commandLink>
+                    </p:columns>
+                </p:dataTable>
+            </p:panel>
+            
+        </h:form>
+    </ui:define>
+</ui:composition>

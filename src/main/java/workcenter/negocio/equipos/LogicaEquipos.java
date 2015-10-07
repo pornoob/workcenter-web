@@ -80,8 +80,8 @@ public class LogicaEquipos {
     }
     
     @Transactional(readOnly = true)
-    public List<Equipo> obtenerEquipo( int tipo) {
-        return equipoDao.obtenerTractos();
+    public List<Equipo> obtenerEquipoTipo( TipoEquipo tipo) {
+        return equipoDao.obtenerEquipoTipo(tipo);
     }
 
     @Transactional(readOnly = false)
