@@ -16,6 +16,7 @@ import org.springframework.stereotype.Component;
 
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
+import workcenter.entidades.Personal;
 import workcenter.negocio.cargamasiva.LogicaCargaMasiva;
 import workcenter.util.components.FacesUtil;
 
@@ -48,7 +49,9 @@ public class ImportadorDatosCaja {
             	Dinero d = new Dinero();
                 try {
                 	rutParteNumerica = obtenerRut(row.getCell(1).getStringCellValue());
-                    d.setReceptor(rutParteNumerica);
+                    Personal p  = new Personal();
+                    p.setRut(rutParteNumerica);
+                    d.setReceptor(p);
 				} catch (Exception e) {
 					e.printStackTrace();
 				}
