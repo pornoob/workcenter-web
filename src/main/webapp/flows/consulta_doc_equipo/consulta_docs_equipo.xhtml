@@ -47,6 +47,7 @@
                         <p:commandLink ajax="false" rendered="#{mantenedorConsultaDocEquipo.obtenerLuz(e, td) != null}">
                             <h:graphicImage value="/img/icons/#{mantenedorConsultaDocEquipo.obtenerLuz(e, td)}.png"
                                             title="#{e.patente}#{mantenedorConsultaDocEquipo.obtenerMensaje(e, td)}"/>
+                           <p:fileDownload value="#{mantenedorConsultaDocEquipo.generaDescargable(e, td)}"/>
                         </p:commandLink>
                     </p:columns>
                 </p:dataTable>

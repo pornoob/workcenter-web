@@ -1,5 +1,6 @@
 package workcenter.presentacion.consulta_doc_equipo;
 
+import java.io.File;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
@@ -9,6 +10,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +20,8 @@ import workcenter.entidades.Equipo;
 import workcenter.entidades.TipoDocumentoEquipo;
 import workcenter.entidades.TipoEquipo;
 import workcenter.negocio.equipos.LogicaEquipos;
+import workcenter.util.components.Constantes;
+import workcenter.util.pojo.Descargable;
 
 @Component
 @Scope("flow")
@@ -33,6 +37,9 @@ public class MantenedorConsultaDocEquipo implements Serializable {
     
     @Autowired
     private LogicaEquipos logicaEquipo;
+    
+    @Autowired
+    private Constantes constantes;
 	
 	public void inicio(){
 		lstTipoEquipo = logicaEquipo.obtenerTipos();
@@ -88,11 +95,25 @@ public class MantenedorConsultaDocEquipo implements Serializable {
         }
         return null;
     }
-	
-	// GETTER AND SETTER
-	public Map<Equipo, List<DocumentoEquipo>> getEquipoDocs() {
-		return equipoDocs;
-	}
+
+	public StreamedContent generaDescargable(Equipo e, TipoDocumentoEquipo td) {
+		List<DocumentoEquipo> docs = logicaEquipo.obtenerDocumentosActualizados(e);
+
+        Descargable d = null;
+        for (DocumentoEquipo dp : docs) {
+            if (dp.getTipo().equals(td)) {
+                d = new Descargable(new File(constantes.getPathArchivos() + "/" + dp.getArchivo()));
+                break;
+            }
+        }
+        if (d != null) return d.getStreamedContent();
+        else return null;
+    }
+
+    // GETTER AND SETTER
+    public Map<Equipo, List<DocumentoEquipo>> getEquipoDocs() {
+        return equipoDocs;
+    }
 
 	public void setEquipoDocs(Map<Equipo, List<DocumentoEquipo>> equipoDocs) {
 		this.equipoDocs = equipoDocs;

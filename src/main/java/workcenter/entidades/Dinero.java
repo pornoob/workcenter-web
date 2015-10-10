@@ -58,8 +58,9 @@ public class Dinero implements Serializable {
     @Size(max = 200)
     @Column(name = "comentario")
     private String comentario;
-    @Column(name = "receptor")
-    private Integer receptor;
+    @JoinColumn(name = "receptor", referencedColumnName = "rut")
+    @ManyToOne
+    private Personal receptor;
     @Column(name = "ordendecarga")
     private Integer ordendecarga;
 
@@ -125,11 +126,11 @@ public class Dinero implements Serializable {
         this.comentario = comentario;
     }
 
-    public Integer getReceptor() {
+    public Personal getReceptor() {
         return receptor;
     }
 
-    public void setReceptor(Integer receptor) {
+    public void setReceptor(Personal receptor) {
         this.receptor = receptor;
     }
 
