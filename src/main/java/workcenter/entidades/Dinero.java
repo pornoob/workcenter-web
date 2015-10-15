@@ -21,7 +21,7 @@ import java.util.Date;
 @Table(name = "dineros")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Dinero.findAll", query = "SELECT d FROM Dinero d"),
+    @NamedQuery(name = "Dinero.findAll", query = "SELECT d FROM Dinero d ORDER BY d.id DESC"),
     @NamedQuery(name = "Dinero.findById", query = "SELECT d FROM Dinero d WHERE d.id = :id"),
     @NamedQuery(name = "Dinero.findByMonto", query = "SELECT d FROM Dinero d WHERE d.monto = :monto"),
     @NamedQuery(name = "Dinero.findByConcepto", query = "SELECT d FROM Dinero d WHERE d.concepto = :concepto"),

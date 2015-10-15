@@ -1,0 +1,64 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmRendirAsiganacion">
+            <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
+            <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}" footer="" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:contextMenu for="rendicion">
+                        <p:menuitem value="Rendir" icon="fa fa-check" update="frmRendir:dlgRendir" oncomplete="PF('tablaRendir').show();"/>
+                    </p:contextMenu>
+
+                    <p:dataTable id="rendicion"
+                                 var="ren"
+                                 value="#{mantenedorCaja.lstDinerosRendicion}"
+                                 rowKey="#{ren.id}"
+                                 selectionMode="single"
+                                 widgetVar="tablaRendicion" filteredValue="#{mantenedorCaja.lstDinerosRendicionFiltro}"
+                                 selection="#{mantenedorCaja.dinero}"
+                                 paginator="true"
+                                 paginatorAlwaysVisible="true"
+                                 paginatorTemplate="#{constantes.paginadorTemplate}"
+                                 rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                                 rows="#{constantes.cantidadFilasTablas}">
+                        <f:facet name="header">
+                            <p:outputPanel>
+                                <h:outputText value="Buscar:" />
+                                <p:inputText id="filtroGlobal" onkeyup="PF('tablaRendicion').filter()" style="width:150px" placeholder="Palabra Clave"  />
+                            </p:outputPanel>
+                        </f:facet>
+                        <p:column headerText="ID">
+                            <h:outputText value="#{ren.id}" />
+                        </p:column>
+                        <p:column headerText="Personal">
+                            <h:outputText value="#{ren.receptor.nombreCompleto}" />
+                        </p:column>
+                        <p:column headerText="FECHA">
+                            <h:outputText value="#{ren.fechaactivo}" />
+                        </p:column>
+                        <p:column headerText="MONTO">
+                            <h:outputText value="#{ren.monto}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form id="frmRendir">
+            <p:dialog id="dlgRendir"
+                      header="#{mantenedorCaja.dinero.fechareal} - #{mantenedorCaja.dinero.receptor.nombreCompleto}"
+                      widgetVar="tablaRendir"
+                      height="400"
+                      width="600"
+                      modal="true">
+                <h:outputText value="#{mantenedorCaja.dinero.id}" /><br/>
+                <h:outputText value="#{mantenedorCaja.dinero.monto}" />
+                <p:commandButton value="Guardar" icon="fa fa-floppy-o"/>
+            </p:dialog>
+        </h:form>
+    </ui:define>
+</ui:composition>
