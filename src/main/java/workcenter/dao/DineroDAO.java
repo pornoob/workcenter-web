@@ -14,8 +14,14 @@ public class DineroDAO {
     @PersistenceContext
     EntityManager em;
     
-    public void guardarDatosDineros(Dinero d) {
-            em.persist(d);
+    public Boolean guardarDatosDineros(Dinero d) {
+            try {
+                em.persist(d);
+                return true;
+            }catch (Exception ex){
+                ex.printStackTrace();
+                return false;
+            }
     }
 
     public List<Dinero> obtenerDineros() {

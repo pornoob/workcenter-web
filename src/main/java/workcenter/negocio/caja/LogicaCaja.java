@@ -21,4 +21,7 @@ public class LogicaCaja {
 
     @Transactional(readOnly = true)
     public List<Dinero> obtenerDineros() {return dineroDao.obtenerDineros();}
+
+    @Transactional(readOnly = false)
+    public Boolean guardarEntradas(Dinero dinero){return dineroDao.guardarDatosDineros(dinero);}
 }

@@ -10,11 +10,12 @@ import workcenter.negocio.caja.LogicaCaja;
 import workcenter.negocio.concepto.LogicaConceptos;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 
 import java.io.Serializable;
 import java.text.DateFormat;
-import java.util.ArrayList;
-import java.util.List;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by renholders on 09-10-2015.
@@ -52,13 +53,21 @@ public class MantenedorCaja implements Serializable {
     	if (dinero.getReceptor() == null) return;
         dinero.setConcepto(concepto);
         dinero.setFechareal(dinero.getFechaactivo());
-    	System.err.println(dinero.getReceptor().getNombreCompleto());
-    	System.err.println(dinero.getMonto());
-    	System.err.println(dinero.getFechaactivo());
-        System.err.println(dinero.getFechareal());
-    	System.err.println(dinero.getComentario());
-        System.err.println(dinero.getConcepto().getEtiqueta());
-//      logicaCaja.guardar();
+        if (logicaCaja.guardarEntradas(dinero)){
+            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", dinero.getId().toString()
+                                                                    +" "+dinero.getConcepto().getEtiqueta()
+                                                                    +" "+dinero.getReceptor().getNombreCompleto()
+                                                                    +" "+dinero.getMonto());
+            dinero = new Dinero();
+        }else{
+            FacesUtil.mostrarMensajeError("Ingreso Fallido",
+                    "Se ha producido un erro al ingresar: "+dinero.getId()
+                            +" "+dinero.getConcepto().getEtiqueta()
+                            +""+dinero.getReceptor().getNombreCompleto()
+                            +" "+dinero.getMonto());
+            dinero = new Dinero();
+        }
+
     }
 
     public void asignarConcepto(int t){
@@ -86,6 +95,23 @@ public class MantenedorCaja implements Serializable {
         System.err.println("Cantidad de Registro CONCEPTO 6 :"+lstDinerosRendicion.size() );
         System.err.println("Probando redeploy");
         return "flowRendirAsignacion";
+    }
+
+    public String irConsultaCaja(){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
+        GregorianCalendar fecha = new GregorianCalendar();
+        for (int i = 0; i < 12; i++) {
+            String fechaActual = sdf.format(fecha.getTime());
+            if (fecha.get(Calendar.MONTH) == 0) {
+                fecha.roll(Calendar.YEAR, false);
+            }
+            fecha.roll(Calendar.MONTH, false);
+            String anio = fechaActual.split("-")[1];
+            String mes = fechaActual.split("-")[0];
+            System.err.println(mes+"-"+anio);
+        }
+        return "flowConsultaCaja";
     }
 
     public List<Dinero> getLstDineros() {

@@ -41,7 +41,7 @@ public class Dinero implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "monto")
-    private int monto;
+    private Integer monto;
     @JoinColumn(name = "concepto", referencedColumnName = "id")
     @ManyToOne
     private Concepto concepto;
@@ -86,11 +86,11 @@ public class Dinero implements Serializable {
         this.id = id;
     }
 
-    public int getMonto() {
+    public Integer getMonto() {
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(Integer monto) {
         this.monto = monto;
     }
 
