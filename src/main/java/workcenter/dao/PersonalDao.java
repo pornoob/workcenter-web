@@ -252,7 +252,7 @@ public class PersonalDao {
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
             personal.get(Personal_.rut);
-            cq.where(cb.like(personal.get(Personal_.rut), "16301"));
+//            cq.where(cb.like(personal.get(Personal_.rut), "16301"));
             System.err.println("m "+entry.getKey());
             System.err.println("m "+entry.getValue());
         }

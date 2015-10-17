@@ -11,7 +11,7 @@
         <h:form rendered="#{sesionCliente.estaAutentificado()}" id="frmWorkcenter">
             <p:panel header="Módulos Mantenedores">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"
                                    action="#{facesUtil.redirigir('/m/personal')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -35,14 +35,14 @@
                         <h:outputLabel value="Módulo de Mantenciones"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
+                    <h:commandLink rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
                                    class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
                         <h:graphicImage value="/img/icons/64/m_empresas.png"/>
                         <h:outputLabel value="Mantenedor de Empresas"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/usuarios')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -50,7 +50,7 @@
                         <h:outputLabel value="Mantenedor de Usuarios"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/registros')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -58,7 +58,7 @@
                         <h:outputLabel value="Administrador de Registros"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"
                                    action="#{facesUtil.redirigir('/m/personal/liquidaciones')}"
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -67,7 +67,7 @@
                         <h:outputLabel value="Liquidaciones" style="margin-top: 10px"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false"
+                    <h:commandLink
                                    rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -76,7 +76,7 @@
                         <h:outputLabel value="Libro de Remuneraciones"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"
                                    action="#{facesUtil.redirigir('/m/carga_masiva')}"
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -89,7 +89,7 @@
 
             <p:panel header="Módulos Gestión">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
                                    action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -97,7 +97,7 @@
                         <h:outputLabel value="PIIR"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
                                    action="#{facesUtil.redirigir('/m/alarmas_gps')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -105,7 +105,7 @@
                         <h:outputLabel value="Alarmas GPS"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"
                                    action="#{facesUtil.redirigir('/m/informe_actividades')}" class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
                                    onmouseout="WebCenter.Menu.mouseout(this)">
@@ -113,7 +113,7 @@
                         <h:outputLabel value="Informe de Actividades"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"
                                    action="#{facesUtil.redirigir('/m/programa_actividades')}"
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -123,7 +123,7 @@
                     </h:commandLink>
 
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                                    action="#{facesUtil.redirigir('/m/reportes_sii')}"
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -132,7 +132,7 @@
                         <h:outputLabel value="Reportes para SII"/>
                     </h:commandLink>
 
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
                                    action="#{facesUtil.redirigir('/m/consulta_doc')}"
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -141,7 +141,7 @@
                         <h:outputLabel value="Consulta Documentos Personal"/>
                     </h:commandLink>
                     
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
                                    action="#{facesUtil.redirigir('/m/ficha_viajes')}"
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -149,7 +149,7 @@
                         <i class="fa fa-clipboard fa-5x"></i>
                         <h:outputLabel value="Control de Despachos" style="margin-top: 10px"/>
                     </h:commandLink>
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
                                    action="#{facesUtil.redirigir('/m/hoja_servicio')}"
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -158,7 +158,7 @@
                         <i class="fa fa-gear fa-5x"></i>
                         <h:outputLabel value="Hoja de Servicio" style="margin-top: 10px"/>
                     </h:commandLink>
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CAJA')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('CAJA')}"
                                    action="#{facesUtil.redirigir('/m/caja')}"
                                    class="menuWorkcenter" style="display: block"
                                    onmouseover="WebCenter.Menu.mouseover(this)"
@@ -167,7 +167,7 @@
                         <i class="fa fa-bank fa-5x"></i>
                         <h:outputLabel value="Caja" style="margin-top: 10px"/>
                     </h:commandLink>
-                    <h:commandLink ajax="false" rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
                                    action="#{facesUtil.redirigir('/m/consulta_doc_equipo')}"
                                    class="menuWorkcenter"
                                    onmouseover="WebCenter.Menu.mouseover(this)"

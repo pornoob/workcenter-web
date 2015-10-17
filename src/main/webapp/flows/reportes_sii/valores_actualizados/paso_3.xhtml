@@ -11,10 +11,10 @@
             <p:panel header="Filtros Informe">
                 <h:panelGrid columns="3">
                     <h:outputLabel value="Empleador"/>:
-                    <p:selectOneMenu value="#{mantenedorValoresActualizados.empleador}" converter="entityConverter">
+                    <p:selectOneMenu  filter="true" filterMatchMode="contains" value="#{mantenedorValoresActualizados.empleador}" converter="entityConverter">
                         <f:selectItem value="#{null}" itemLabel="-- Seleccione --"/>
                         <f:selectItems value="#{mantenedorValoresActualizados.empleadores}" var="e"
-                                       itemLabel="#{e.nombre}" filter="true" filterMatchMode="contains"/>
+                                       itemLabel="#{e.nombre}"/>
                     </p:selectOneMenu>
 
                     <h:outputLabel value="Año"/>:

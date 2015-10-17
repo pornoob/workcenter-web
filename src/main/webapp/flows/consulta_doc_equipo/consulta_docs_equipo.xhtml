@@ -34,7 +34,7 @@
                         <p:outputPanel>
                             <p:commandButton id="btnSelColumnas" icon="fa fa-filter" value="Filtrar Documentos"/>
                         </p:outputPanel>
-                        <p:columnToggler widgetVar="columnToggler" trigger="btnSelColumnas" datasource="tblDocsEquipo"/>
+                        <p:columnToggler id="columnToggler" trigger="btnSelColumnas" datasource="tblDocsEquipo"/>
                     </f:facet>
                     <p:ajax event="page" oncomplete="WebCenter.ColumnToggler.fix('columnToggler')"/>
                     <p:column headerText="Equipo" filterBy="#{e.patente}"
