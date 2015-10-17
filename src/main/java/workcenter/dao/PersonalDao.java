@@ -3,7 +3,7 @@ package workcenter.dao;
 import org.primefaces.model.SortMeta;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
-import workcenter.entidades.metamodels.Personal_;
+import workcenter.entidades.Personal_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -251,10 +251,9 @@ public class PersonalDao {
         Root<Personal> personal = cq.from(Personal.class);
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
-            personal.get(Personal_.rut);
-//            cq.where(cb.like(personal.get(Personal_.rut), "16301"));
-            System.err.println("m "+entry.getKey());
-            System.err.println("m "+entry.getValue());
+            
+            if ("rut".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.rut).as(String.class), "%"+entry.getValue().toString()+"%"));
         }
 
         cq.select(personal);

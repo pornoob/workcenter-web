@@ -1,6 +1,4 @@
-package workcenter.entidades.metamodels;
-
-import workcenter.entidades.Personal;
+package workcenter.entidades;
 
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
