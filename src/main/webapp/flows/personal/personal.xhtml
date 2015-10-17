@@ -8,8 +8,7 @@
         <h2>Listado de Personal</h2>
         <p:growl autoUpdate="true" showDetail="true"/>
         <h:form id="frmPersonal">
-            <p:dataTable value="#{mantenedorPersonal.listaPersonal}"
-                         filteredValue="#{mantenedorPersonal.listaFiltradaPersonal}"
+            <p:dataTable value="#{mantenedorPersonal.listaPersonalLazy}" lazy="true"
                          emptyMessage="No se han encontrado registros"
                          filterEvent="enter"
                          paginator="true"

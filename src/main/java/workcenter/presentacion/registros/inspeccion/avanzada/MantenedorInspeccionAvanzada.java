@@ -585,7 +585,6 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         return retorno;
     }
 
-    @Override
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
         if (comprobantesInspeccion == null) comprobantesInspeccion = new HashMap<String, List<Documento>>();
@@ -600,7 +599,6 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
         }
     }
 
-    @Override
     public void enlazar(Descargable descargable) {
         Documento d = logicaDocumentos.obtenerPorCodigo(descargable.getArchivo().getName());
         if (comprobantesInspeccion == null) comprobantesInspeccion = new HashMap<String, List<Documento>>();

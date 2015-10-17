@@ -1,5 +1,6 @@
 package workcenter.negocio.personal;
 
+import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -12,6 +13,7 @@ import workcenter.util.components.Constantes;
 import workcenter.util.pojo.Md5;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author colivares
@@ -172,5 +174,14 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public ContratoPersonal obtenerContratoActual(Personal personal) {
         return personalDao.obtenerContratoActual(personal);
+    }
+
+    @Transactional(readOnly = true)
+    public int obtenerConteoPersonal() {
+        return personalDao.obtenerConteoPersonal();
+    }
+
+    public List<Personal> obtenerTodosLazy(int first, int end, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+        return personalDao.obtenerTodosLazy(first, end, multiSortMeta, filters);
     }
 }

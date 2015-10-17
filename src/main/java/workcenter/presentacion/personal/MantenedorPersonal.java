@@ -1,5 +1,6 @@
 package workcenter.presentacion.personal;
 
+import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.StreamedContent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,7 @@ import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
+import workcenter.util.lazymodels.PersonalLazyModel;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.FilterOption;
@@ -37,8 +39,7 @@ import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 @Scope("flow")
 public class MantenedorPersonal implements Serializable {
 
-    private List<Personal> listaPersonal;
-    private List<Personal> listaFiltradaPersonal;
+    private LazyDataModel<Personal> listaPersonalLazy;
     private Personal personalSeleccionado;
     private List<FilterOption> opcionesFiltroEstado;
     private List<FilterOption> opcionesSalud;
@@ -319,7 +320,7 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public String irListaPersonal() {
-        listaPersonal = logicaPersonal.obtenerTodos();
+        listaPersonalLazy = new PersonalLazyModel(logicaPersonal);
         return "flowListarPersonal";
     }
 
@@ -525,22 +526,6 @@ public class MantenedorPersonal implements Serializable {
     public StreamedContent generaDescargable(DocumentoPersonal dp) {
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + "/" + dp.getArchivo()));
         return d.getStreamedContent();
-    }
-
-    public List<Personal> getListaPersonal() {
-        return listaPersonal;
-    }
-
-    public void setListaPersonal(List<Personal> listaPersonal) {
-        this.listaPersonal = listaPersonal;
-    }
-
-    public List<Personal> getListaFiltradaPersonal() {
-        return listaFiltradaPersonal;
-    }
-
-    public void setListaFiltradaPersonal(List<Personal> listaFiltradaPersonal) {
-        this.listaFiltradaPersonal = listaFiltradaPersonal;
     }
 
     public Personal getPersonalSeleccionado() {
@@ -750,5 +735,12 @@ public class MantenedorPersonal implements Serializable {
 	public void setCargaFamiliares(CargasFamiliares cargaFamiliares) {
 		this.cargaFamiliares = cargaFamiliares;
 	}
-    
+
+    public LazyDataModel<Personal> getListaPersonalLazy() {
+        return listaPersonalLazy;
+    }
+
+    public void setListaPersonalLazy(LazyDataModel<Personal> listaPersonalLazy) {
+        this.listaPersonalLazy = listaPersonalLazy;
+    }
 }

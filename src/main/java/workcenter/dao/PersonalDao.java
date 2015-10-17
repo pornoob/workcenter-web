@@ -1,12 +1,21 @@
 package workcenter.dao;
 
+import org.primefaces.model.SortMeta;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
+import workcenter.entidades.metamodels.Personal_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import javax.persistence.metamodel.EntityType;
+import javax.persistence.metamodel.Metamodel;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author colivares
@@ -229,5 +238,32 @@ public class PersonalDao {
         } catch (Exception e) {
             return null;
         }
+    }
+
+    public int obtenerConteoPersonal() {
+        Query q = em.createQuery("select count(p) from Personal p");
+        return ((Long) q.getSingleResult()).intValue();
+    }
+
+    public List<Personal> obtenerTodosLazy(int first, int end, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Personal> cq = cb.createQuery(Personal.class);
+        Root<Personal> personal = cq.from(Personal.class);
+
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            personal.get(Personal_.rut);
+            cq.where(cb.like(personal.get(Personal_.rut), "16301"));
+            System.err.println("m "+entry.getKey());
+            System.err.println("m "+entry.getValue());
+        }
+
+        cq.select(personal);
+        TypedQuery tq = em.createQuery(cq);
+
+
+        tq.setMaxResults(end - first);
+        tq.setFirstResult(first);
+
+        return tq.getResultList();
     }
 }

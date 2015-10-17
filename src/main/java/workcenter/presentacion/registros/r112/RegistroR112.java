@@ -264,7 +264,6 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         return "flowNuevoR112";
     }
 
-    @Override
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
         if (d == null) {
@@ -281,7 +280,6 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha subido el fichero");
     }
 
-    @Override
     public void enlazar(Descargable descargable) {
         Documento d = logicaDocumentos.obtenerPorCodigo(descargable.getArchivo().getName());
         switch (logicaUpload) {
