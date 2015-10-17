@@ -11,5 +11,18 @@
       </on-start>
 
       <view-state id="menu">
+          <transition on="flowIngresaCaja" to="ingresoCaja"/>
+          <transition on="flowRendirAsignacion" to="renderAsignaciones"/>
+          <transition on="flowConsultaCaja" to="consultaCaja"/>
       </view-state>
+
+    <view-state id="ingresoCaja">
+        <transition on="flowMenu" to="menu"/>
+    </view-state>
+
+    <view-state id="renderAsignaciones">
+    </view-state>
+
+    <view-state id="consultaCaja">
+    </view-state>
 </flow>

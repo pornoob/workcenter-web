@@ -7,15 +7,15 @@
     <ui:define name="contenido">
         <h2>Menu Caja</h2>
         <p:messages autoUpdate="true" closable="true"/>
-        <h:form id="frmCaja">
+        <h:form id="frmMenuCaja">
             <div class="ui-grid">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-6">
                         <p:panel id="pEntrada" header="Entrada De Dineros">
                             <h:panelGrid columns="1" cellpadding="10">
-                                <p:commandButton value="Ingreso a Caja"/>
-                                <p:commandButton value="Prestamo Temporal"/>
-                                <p:commandButton value="Rendición de Asignaciones"/>
+                                <p:commandButton value="Ingreso a Caja" action="#{mantenedorCaja.irIngresoCaja(constantes.INGRESO)}"/>
+                                <p:commandButton value="Prestamo Temporal" action="#{mantenedorCaja.irIngresoCaja(constantes.PRESTAMO_TEMPORAL)}"/>
+                                <p:commandButton value="Rendición de Asignaciones" action="#{mantenedorCaja.irRendirAsignacion(constantes.RENDICION_ASIGNACION)}"/>
                             </h:panelGrid>
                         </p:panel>
                     </div>
@@ -26,7 +26,7 @@
                                 <p:commandButton value="Prestamo en Cuotas"/>
                                 <p:commandButton value="Sueldo-Anticipo-Finiquito-Bono"/>
                                 <p:commandButton value="Devolución de prestamos Temporales"/>
-                                <p:commandButton value="Asignación de Viajes (CONDUCTORES)"/>
+                                <p:commandButton value="Asignación de Viajes (CONDUCTORES)" action="#{mantenedorCaja.irIngresoCaja(constantes.ASIGNACION_CONDUCTORES)}"/>
                             </h:panelGrid>
                         </p:panel>
                     </div>
@@ -35,7 +35,7 @@
             <div class="ui-grid ui-grid-responsive">
                 <div class="ui-grid-row">
                     <div class="ui-grid-col-4"><p:commandButton value="Imprimir"/></div>
-                    <div class="ui-grid-col-4"><p:commandButton value="Consultar"/> </div>
+                    <div class="ui-grid-col-4"><p:commandButton value="Consultar" action="#{mantenedorCaja.irConsultaCaja}"/> </div>
                     <div class="ui-grid-col-4"></div>
                     <div class="ui-grid-col-4"></div>
                     <div class="ui-grid-col-4"></div>

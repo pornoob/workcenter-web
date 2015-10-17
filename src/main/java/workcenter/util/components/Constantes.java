@@ -57,6 +57,22 @@ public class Constantes implements Serializable {
     private int registroR112 = 1;
     private int registroInspeccionAvanzada = 2;
 
+    //Zona caja
+    private int INGRESO = 1;
+    private int PRESTAMO_TEMPORAL = 2;
+    private int RENDICION_ASIGNACION = 3;
+    private int ASIGNACION_CONDUCTORES = 4;
+
+    private int SUELDO = 5;
+    private int ANTICIPO = 9;
+    private int FINIQUITO = 10;
+    private int BONO_ANTICIPADO = 11;
+    private int AGUINALDO_ANTICIPADO = 13;
+
+    private int ASIGNACION_CAJA = 6;
+    private int PRESTAMO_CUOTAS = 7;
+    private int DEVOLUCION_TEMPORAL = 8;
+
     // Zona PIIR
     private int piirEstadoInicial = 1;
     private int piirEstadoCerradaPorSistema = 3;
@@ -514,4 +530,52 @@ public class Constantes implements Serializable {
 	public Double getAporteContradoNoIdefinido() {
 		return aporteContradoNoIdefinido;
 	}
+
+    public int getINGRESO() {
+        return INGRESO;
+    }
+
+    public int getPRESTAMO_TEMPORAL() {
+        return PRESTAMO_TEMPORAL;
+    }
+
+    public int getRENDICION_ASIGNACION() {
+        return RENDICION_ASIGNACION;
+    }
+
+    public int getASIGNACION_CONDUCTORES() {
+        return ASIGNACION_CONDUCTORES;
+    }
+
+    public int getSUELDO() {
+        return SUELDO;
+    }
+
+    public int getANTICIPO() {
+        return ANTICIPO;
+    }
+
+    public int getFINIQUITO() {
+        return FINIQUITO;
+    }
+
+    public int getBONO_ANTICIPADO() {
+        return BONO_ANTICIPADO;
+    }
+
+    public int getAGUINALDO_ANTICIPADO() {
+        return AGUINALDO_ANTICIPADO;
+    }
+
+    public int getASIGNACION_CAJA() {
+        return ASIGNACION_CAJA;
+    }
+
+    public int getPRESTAMO_CUOTAS() {
+        return PRESTAMO_CUOTAS;
+    }
+
+    public int getDEVOLUCION_TEMPORAL() {
+        return DEVOLUCION_TEMPORAL;
+    }
 }
