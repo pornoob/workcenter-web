@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -62,8 +52,9 @@ public class Descuento implements Serializable {
     @Size(max = 100)
     @Column(name = "descripcion")
     private String descripcion;
-    @Column(name = "motivo")
-    private Integer motivo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "motivo", referencedColumnName = "id")
+    private Dinero motivo;
 
     public Descuento() {
     }
@@ -126,11 +117,11 @@ public class Descuento implements Serializable {
         this.descripcion = descripcion;
     }
 
-    public Integer getMotivo() {
+    public Dinero getMotivo() {
         return motivo;
     }
 
-    public void setMotivo(Integer motivo) {
+    public void setMotivo(Dinero motivo) {
         this.motivo = motivo;
     }
 

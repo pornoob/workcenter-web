@@ -47,17 +47,51 @@
                     </p:dataTable>
                 </h:panelGrid>
             </p:panel>
+            <p:commandButton value="Regresar" icon="fa fa-arrow-left" action="flowMenu" immediate="true"/>
         </h:form>
         <h:form id="frmRendir">
             <p:dialog id="dlgRendir"
                       header="#{mantenedorCaja.dinero.fechareal} - #{mantenedorCaja.dinero.receptor.nombreCompleto}"
                       widgetVar="tablaRendir"
-                      height="400"
+                      height="500"
                       width="600"
                       modal="true">
-                <h:outputText value="#{mantenedorCaja.dinero.id}" /><br/>
-                <h:outputText value="#{mantenedorCaja.dinero.monto}" />
-                <p:commandButton value="Guardar" icon="fa fa-floppy-o"/>
+                <p:panel id="pnlRendir" style="margin-bottom:20px">
+                    <h:panelGrid columns="2" cellpadding="10">
+                        <p:outputLabel value="ID: "/>
+                        <p:inputText value="#{mantenedorCaja.dinero.id}" disabled="true"/>
+                        <p:outputLabel value="MONTO ASIGNADO: "/>
+                        <p:inputText value="#{mantenedorCaja.dinero.monto}" disabled="true"/>
+                        <p:outputLabel value="MONTO GASTADO: "/>
+                        <p:inputText value="#{mantenedorCaja.gastos}">
+                            <p:ajax listener="#{mantenedorCaja.calculoRendicion}" update="inSaldo"/>
+                        </p:inputText>
+                        <p:outputLabel value="MONTO DEVUELTO: "/>
+                        <p:inputText value="#{mantenedorCaja.devolucion}">
+                            <p:ajax listener="#{mantenedorCaja.calculoRendicion}" update="inSaldo"/>
+                        </p:inputText>
+                        <p:outputLabel value="MOTIVO: "/>
+                        <p:selectOneMenu value="#{mantenedorCaja.dinero.comentario}">
+                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorCaja.motivos}" var="m"
+                                           itemLabel="#{m}"
+                                           itemValue="#{m}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel id="pnlRendirDetalle" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="SALDO DEUDA: " />
+                    <p:inputText id="inSaldo" value="#{mantenedorCaja.dinero.lstDescuentos.get(0).monto}"/>
+                    <p:outputLabel value="DETALLE: "/>
+                    <p:inputTextarea value="#{mantenedorCaja.detalleRendicion}" />
+                </h:panelGrid>
+                </p:panel>
+                <p:commandButton value="Guardar"
+                                 icon="fa fa-floppy-o"
+                                 action="#{mantenedorCaja.guardarRendicion()}"
+                                 update="frmRendirAsiganacion:rendicion"
+                                 onclick="PF('tablaRendicion').hide()"/>
             </p:dialog>
         </h:form>
     </ui:define>

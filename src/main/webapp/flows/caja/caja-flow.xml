@@ -14,6 +14,8 @@
           <transition on="flowIngresaCaja" to="ingresoCaja"/>
           <transition on="flowRendirAsignacion" to="renderAsignaciones"/>
           <transition on="flowConsultaCaja" to="consultaCaja"/>
+          <transition on="flowAsignacionCaja" to="asignacionCaja"/>
+          <transition on="flowSueldoCaja" to="sueldoCaja"/>
       </view-state>
 
     <view-state id="ingresoCaja">
@@ -21,8 +23,16 @@
     </view-state>
 
     <view-state id="renderAsignaciones">
+        <transition on="flowMenu" to="menu"/>
     </view-state>
 
     <view-state id="consultaCaja">
+    </view-state>
+
+    <view-state id="asignacionCaja">
+        <transition on="flowMenu" to="menu"/>
+    </view-state>
+    <view-state id="sueldoCaja">
+        <transition on="flowMenu" to="menu"/>
     </view-state>
 </flow>
