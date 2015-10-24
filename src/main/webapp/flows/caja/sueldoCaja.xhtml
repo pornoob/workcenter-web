@@ -6,11 +6,43 @@
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <p:messages autoUpdate="true" closable="true"/>
-        <h:form id="frmSueldoCaja" class="datePickerYearAndMonth">
-            <h:panelGroup id="editClusterStartDatePanel">
-                <p:calendar id="editClusterStartDate" navigator="true" required="true"
-                            locale="es" />
-            </h:panelGroup>
+        <h:form id="frmSueldoCaja">
+            <h2><p:outputLabel value="Sueldo-Anticipo-Finiquito-Bono"/></h2>
+            <p:panel id="salida" header="Salida" footer="(*) campos obligatorios" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10" >
+                    <p:outputLabel/>
+                    <p:calendar navigator="true"
+                                locale="es"
+                                pattern="yyyy-MM-dd"
+                                value="#{mantenedorCaja.dinero.fechareal}"/>
+                    <p:outputLabel value="Entregado a: (*) " />
+                    <p:selectOneMenu filterMatchMode="contains" filter="true"
+                                     value="#{mantenedorCaja.dinero.receptor}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Personal Requerido">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
+                                       itemLabel="#{p.nombreCompleto}"
+                                       itemValue="#{p}"/>
+                        </p:selectOneMenu>
+                    <p:outputLabel value="Concepto: (*) " />
+                    <p:selectOneMenu filterMatchMode="contains" filter="true"
+                                     value="#{mantenedorCaja.dinero.concepto}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Concepto Requerido">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorCaja.lstConpcetosFiltrada}" var="c"
+                                       itemLabel="#{c.etiqueta}"
+                                       itemValue="#{c}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Monto: (*) " />
+                    <p:inputText value="#{mantenedorCaja.dinero.monto}"/>
+                    <p:commandButton value="Guardar" icon="fa fa-floppy-o" update="frmSueldoCaja"/>
+                    <p:commandButton value="Regresar" icon="fa fa-arrow-left" action="flowMenu" immediate="true"/>
+                </h:panelGrid>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -44,16 +44,19 @@
                     </p:selectOneMenu>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
-                    <p:commandButton value="Buscar" icon="fa fa-search" action="#{mantenedorCaja.filtrarDinerosConsulta()}" update="rendicion"/>
+                    <p:commandButton value="Buscar"
+                                     icon="fa fa-search"
+                                     action="#{mantenedorCaja.filtrarDinerosConsulta()}"
+                                     update="consultaTabla"/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
-        <p:dataTable id="rendicion"
+        <p:dataTable id="consultaTabla"
                      var="dinero"
-                     value="#{mantenedorCaja.lstDineros}"
+                     value="#{mantenedorCaja.lstDinerosConsultaFiltro}"
                      rowKey="#{dinero.id}"
                      selectionMode="single"
                      widgetVar="tablaRendicion"
@@ -75,6 +78,9 @@
             <p:column headerText="FECHA REAL">
                 <h:outputText value="#{dinero.fechareal}" />
             </p:column>
+            <p:column headerText="ENTRADA"></p:column>
+            <p:column headerText="SALIDA"></p:column>
+            <p:column headerText="SALDO"></p:column>
         </p:dataTable>
     </ui:define>
 </ui:composition>

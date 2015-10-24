@@ -15,6 +15,7 @@ import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.TipoDinero;
 
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.*;
 
 /**
@@ -41,6 +42,7 @@ public class MantenedorCaja implements Serializable {
     private List<Dinero> lstDinerosConsultaFiltro;
     private List<Personal> lstPersonal;
     private List<Concepto> lstConceptos;
+    private List<Concepto> lstConpcetosFiltrada;
     private Dinero dinero;
     private Concepto concepto;
     @Autowired LogicaCaja logicaCaja;
@@ -51,6 +53,7 @@ public class MantenedorCaja implements Serializable {
     public void inicio(){
         inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
+        System.err.println("TAMAÑO obtenerDinerosConDescuentos() "+lstDineros.size());
         lstPersonal = logicaPersonal.obtenerTodos();
         lstConceptos = logicaConceptos.obtenerConceptos();
     }
@@ -102,6 +105,7 @@ public class MantenedorCaja implements Serializable {
 
     public String irIngresoCaja(int tipoConcepto){
         asignarConcepto(tipoConcepto);
+        dinero = new Dinero();
         return "flowIngresaCaja";
     }
 
@@ -151,16 +155,46 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irConsultaCaja(){
+        System.err.println("MODULO irConsultaCaja()");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        lstDinerosConsultaFiltro = new ArrayList<Dinero>();
+        System.err.println("TAMAÑO ARREGLO DINEROS: " + lstDineros.size());
+        if (fechaDesde == null || fechaHasta == null){
+            String fechaHoy = sdf.format(new Date());
+            for (Dinero d : lstDineros){
+                String fechaDinero = sdf.format(d.getFechareal());
+                if (fechaHoy.equals(fechaDinero)){
+                    lstDinerosConsultaFiltro.add(d);
+                }
+            }
+        }
+        System.err.println("TAMAÑO ARREGLO lstDinerosConsultaFiltro "+lstDinerosConsultaFiltro.size());
         return "flowConsultaCaja";
     }
 
     public void filtrarDinerosConsulta(){
+        System.err.println("MODULO filtrarDinerosConsulta()");
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         lstDinerosConsultaFiltro = new ArrayList<Dinero>();
-        for (Dinero d : lstDineros){
-            if (personal.equals(d.getReceptor())){
-                lstDinerosConsultaFiltro.add(d);
-            }
-        }
+        System.err.println("Fechas :" +fechaDesde+" - "+fechaHasta);
+        System.err.println("Personal :" +personal.getNombreCompleto());
+        System.err.println("Concepto :"+concepto.getEtiqueta());
+//        for (Dinero d : lstDineros){
+//            String fechaString = sdf.format(d.getFechareal()) ;
+//            Date fechaConsulta = new Date();
+//            try {
+//                fechaConsulta = sdf.parse(fechaString);
+//            }catch ( Exception ex) {
+//                ex.printStackTrace();
+//            }
+
+//            if ((d.getFechareal().getTime() >= fechaDesde.getTime() && d.getFechareal().getTime() <= fechaHasta.getTime())
+//                    && d.getReceptor().equals(personal)
+//                    && d.getConcepto().equals(concepto)){
+//                lstDinerosConsultaFiltro.add(d);
+//            }
+//        }
+        System.err.println("TAMAÑO ARREGLO lstDinerosConsultaFiltro "+lstDinerosConsultaFiltro.size());
     }
 
     public String irAsignacionCaja(int tipoConcepto){
@@ -169,6 +203,22 @@ public class MantenedorCaja implements Serializable {
         dinero.setFechareal(new Date());
         dinero.setFechaactivo(new Date());
         return "flowAsignacionCaja";
+    }
+
+    public String irSueldoCaja(){
+        dinero = new Dinero();
+        lstConpcetosFiltrada = new ArrayList<Concepto>();
+        for (Concepto c : lstConceptos){
+            if (c.getId() == constantes.getANTICIPO() ||
+                    c.getId() == constantes.getAGUINALDO_ANTICIPADO() ||
+                    c.getId() == constantes.getSUELDO() ||
+                    c.getId() == constantes.getFINIQUITO()||
+                    c.getId() == constantes.getBONO_ANTICIPADO()){
+                lstConpcetosFiltrada.add(c);
+            }
+        }
+        dinero.setFechareal(new Date());
+        return "flowSueldoCaja";
     }
 
     public List<Dinero> getLstDineros() {
@@ -305,5 +355,13 @@ public class MantenedorCaja implements Serializable {
 
     public void setPersonal(Personal personal) {
         this.personal = personal;
+    }
+
+    public List<Concepto> getLstConpcetosFiltrada() {
+        return lstConpcetosFiltrada;
+    }
+
+    public void setLstConpcetosFiltrada(List<Concepto> lstConpcetosFiltrada) {
+        this.lstConpcetosFiltrada = lstConpcetosFiltrada;
     }
 }

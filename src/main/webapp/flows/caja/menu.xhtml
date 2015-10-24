@@ -24,7 +24,7 @@
                             <h:panelGrid columns="1" cellpadding="10">
                                 <p:commandButton value="Asignación de Caja" action="#{mantenedorCaja.irAsignacionCaja(constantes.ASIGNACION_CAJA)}"/>
                                 <p:commandButton value="Prestamo en Cuotas"/>
-                                <p:commandButton value="Sueldo-Anticipo-Finiquito-Bono" action="flowSueldoCaja"/>
+                                <p:commandButton value="Sueldo-Anticipo-Finiquito-Bono" action="#{mantenedorCaja.irSueldoCaja}"/>
                                 <p:commandButton value="Devolución de prestamos Temporales"/>
                                 <p:commandButton value="Asignación de Viajes (CONDUCTORES)" action="#{mantenedorCaja.irIngresoCaja(constantes.ASIGNACION_CONDUCTORES)}"/>
                             </h:panelGrid>

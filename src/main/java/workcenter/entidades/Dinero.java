@@ -34,7 +34,7 @@ import java.util.List;
     @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "
     		+ "WHERE MONTH(d.fechaactivo) = :mes and YEAR(d.fechaactivo) = :anio and d.receptor = :receptor"),
     @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d "
-            + "INNER JOIN FETCH d.lstDescuentos des ORDER BY d.id DESC")})
+            + "LEFT JOIN FETCH d.lstDescuentos des ORDER BY d.id DESC")})
 public class Dinero implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
