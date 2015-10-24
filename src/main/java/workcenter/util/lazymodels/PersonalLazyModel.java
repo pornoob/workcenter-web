@@ -26,6 +26,7 @@ public class PersonalLazyModel extends LazyDataModel<Personal> {
 
     @Override
     public void setRowCount(int rowCount) {
+        System.err.println("LLEGO CON "+rowCount);
         this.rowCount = rowCount;
     }
 
@@ -33,7 +34,7 @@ public class PersonalLazyModel extends LazyDataModel<Personal> {
     public List<Personal> load(int first, int pageSize, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         int end = first + pageSize;
         List<Personal> retorno = logicaPersonal.obtenerTodosLazy(first, end, multiSortMeta, filters);
-//        setRowCount(logicaPersonal.obtenerConteoLazy(first, end, multiSortMeta, filters));
+        setRowCount(logicaPersonal.obtenerConteoLazy(filters));
         return retorno;
     }
 

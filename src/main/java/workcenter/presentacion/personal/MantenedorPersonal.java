@@ -17,7 +17,6 @@ import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
-import workcenter.util.lazymodels.PersonalLazyModel;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.FilterOption;
@@ -40,6 +39,7 @@ import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 public class MantenedorPersonal implements Serializable {
 
     private LazyDataModel<Personal> listaPersonalLazy;
+    private List<Personal> listaPersonal;
     private Personal personalSeleccionado;
     private List<FilterOption> opcionesFiltroEstado;
     private List<FilterOption> opcionesSalud;
@@ -320,7 +320,8 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public String irListaPersonal() {
-        listaPersonalLazy = new PersonalLazyModel(logicaPersonal);
+//        listaPersonalLazy = new PersonalLazyModel(logicaPersonal);
+        listaPersonal = logicaPersonal.obtenerTodos();
         return "flowListarPersonal";
     }
 
@@ -742,5 +743,13 @@ public class MantenedorPersonal implements Serializable {
 
     public void setListaPersonalLazy(LazyDataModel<Personal> listaPersonalLazy) {
         this.listaPersonalLazy = listaPersonalLazy;
+    }
+
+    public List<Personal> getListaPersonal() {
+        return listaPersonal;
+    }
+
+    public void setListaPersonal(List<Personal> listaPersonal) {
+        this.listaPersonal = listaPersonal;
     }
 }

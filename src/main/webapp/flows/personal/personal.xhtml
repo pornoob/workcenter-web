@@ -8,7 +8,7 @@
         <h2>Listado de Personal</h2>
         <p:growl autoUpdate="true" showDetail="true"/>
         <h:form id="frmPersonal">
-            <p:dataTable value="#{mantenedorPersonal.listaPersonalLazy}" lazy="true"
+            <p:dataTable value="#{mantenedorPersonal.listaPersonal}"
                          emptyMessage="No se han encontrado registros"
                          filterEvent="enter"
                          paginator="true"
@@ -39,8 +39,7 @@
                     <h:outputText value="#{personal.celular}"/>
                 </p:column>
 
-                <p:column filterBy="#{personal}" filterFunction="#{mantenedorPersonal.filtroEmpleador}"
-                          headerText="Empleador">
+                <p:column filterBy="#{personal}" headerText="Empleador" filterFunction="#{mantenedorPersonal.filtroEmpleador}">
                     <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}"/>
                 </p:column>
 

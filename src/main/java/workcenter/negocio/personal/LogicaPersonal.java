@@ -184,4 +184,8 @@ public class LogicaPersonal {
     public List<Personal> obtenerTodosLazy(int first, int end, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         return personalDao.obtenerTodosLazy(first, end, multiSortMeta, filters);
     }
+    
+    public int obtenerConteoLazy(Map<String, Object> filters) {
+        return personalDao.obtenerConteoLazy(filters);
+    }
 }

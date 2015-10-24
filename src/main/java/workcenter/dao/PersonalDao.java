@@ -244,6 +244,29 @@ public class PersonalDao {
         Query q = em.createQuery("select count(p) from Personal p");
         return ((Long) q.getSingleResult()).intValue();
     }
+    
+    public int obtenerConteoLazy(Map<String, Object> filters) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Long> cq = cb.createQuery(Long.class);
+        Root<Personal> personal = cq.from(Personal.class);
+
+        for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            
+            if ("rut".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.rut).as(String.class), entry.getValue().toString()+"%"));
+            else if ("nombres".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.nombres).as(String.class), "%"+entry.getValue().toString()+"%"));
+            else if ("apellidos".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.apellidos).as(String.class), "%"+entry.getValue().toString()+"%"));
+            else if ("celular".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.celular).as(String.class), "%"+entry.getValue().toString()+"%"));
+        }
+
+        cq.select(cb.count(personal));
+        TypedQuery tq = em.createQuery(cq);
+
+        return ((Long)tq.getSingleResult()).intValue();
+    }
 
     public List<Personal> obtenerTodosLazy(int first, int end, List<SortMeta> multiSortMeta, Map<String, Object> filters) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
@@ -251,9 +274,16 @@ public class PersonalDao {
         Root<Personal> personal = cq.from(Personal.class);
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
+            System.err.println("FILTRO " + entry.getKey());
             
             if ("rut".equals(entry.getKey()))
-                cq.where(cb.like(personal.get(Personal_.rut).as(String.class), "%"+entry.getValue().toString()+"%"));
+                cq.where(cb.like(personal.get(Personal_.rut).as(String.class), entry.getValue().toString()+"%"));
+            else if ("nombres".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.nombres).as(String.class), "%"+entry.getValue().toString()+"%"));
+            else if ("apellidos".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.apellidos).as(String.class), "%"+entry.getValue().toString()+"%"));
+            else if ("celular".equals(entry.getKey()))
+                cq.where(cb.like(personal.get(Personal_.celular).as(String.class), "%"+entry.getValue().toString()+"%"));
         }
 
         cq.select(personal);
