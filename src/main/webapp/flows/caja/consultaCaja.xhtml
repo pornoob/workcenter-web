@@ -10,13 +10,21 @@
             <p:panel id="pnlFiltros" header="Filtros">
                 <h:panelGrid columns="4" cellpadding="5">
                     <p:outputLabel value="Fecha Desde: "/>
-                    <p:calendar navigator="true" pattern="MM-yyyy" placeholder="Desde..." />
+                    <p:calendar navigator="true"
+                                pattern="yyyy-MM-dd"
+                                placeholder="Desde..."
+                                locale="es"
+                                value="#{mantenedorCaja.fechaDesde}"/>
                     <p:outputLabel value="Hasta: "/>
-                    <p:calendar navigator="true" pattern="MM-yyyy" placeholder="Hasta..." />
+                    <p:calendar navigator="true"
+                                pattern="yyyy-MM-dd"
+                                placeholder="Hasta..."
+                                locale="es"
+                                value="#{mantenedorCaja.fechaHasta}" />
                     <p:outputLabel value="Personal: "/>
                     <p:selectOneMenu filterMatchMode="contains"
                                      filter="true"
-                                     converter="entityConverter">
+                                     converter="entityConverter" value="#{mantenedorCaja.personal}">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
                                        itemLabel="#{p.nombreCompleto}"
@@ -27,7 +35,8 @@
                     <p:outputLabel value="Concepto: "/>
                     <p:selectOneMenu filterMatchMode="contains"
                                      filter="true"
-                                     converter="entityConverter">
+                                     converter="entityConverter"
+                                     value="#{mantenedorCaja.concepto}">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstConceptos}" var="c"
                                        itemLabel="#{c.etiqueta}"
@@ -35,16 +44,19 @@
                     </p:selectOneMenu>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
-                    <p:commandButton value="Buscar" icon="fa fa-search"/>
+                    <p:commandButton value="Buscar"
+                                     icon="fa fa-search"
+                                     action="#{mantenedorCaja.filtrarDinerosConsulta()}"
+                                     update="consultaTabla"/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
-        <p:dataTable id="rendicion"
+        <p:dataTable id="consultaTabla"
                      var="dinero"
-                     value="#{mantenedorCaja.lstDineros}"
+                     value="#{mantenedorCaja.lstDinerosConsultaFiltro}"
                      rowKey="#{dinero.id}"
                      selectionMode="single"
                      widgetVar="tablaRendicion"
@@ -66,6 +78,9 @@
             <p:column headerText="FECHA REAL">
                 <h:outputText value="#{dinero.fechareal}" />
             </p:column>
+            <p:column headerText="ENTRADA"></p:column>
+            <p:column headerText="SALIDA"></p:column>
+            <p:column headerText="SALDO"></p:column>
         </p:dataTable>
     </ui:define>
 </ui:composition>

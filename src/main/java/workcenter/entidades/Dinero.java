@@ -12,6 +12,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -31,7 +32,9 @@ import java.util.Date;
     @NamedQuery(name = "Dinero.findByReceptor", query = "SELECT d FROM Dinero d WHERE d.receptor = :receptor"),
     @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga"),
     @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "
-    		+ "WHERE MONTH(d.fechaactivo) = :mes and YEAR(d.fechaactivo) = :anio and d.receptor = :receptor")})
+    		+ "WHERE MONTH(d.fechaactivo) = :mes and YEAR(d.fechaactivo) = :anio and d.receptor = :receptor"),
+    @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d "
+            + "LEFT JOIN FETCH d.lstDescuentos des ORDER BY d.id DESC")})
 public class Dinero implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -63,6 +66,8 @@ public class Dinero implements Serializable {
     private Personal receptor;
     @Column(name = "ordendecarga")
     private Integer ordendecarga;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "motivo", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Descuento> lstDescuentos;
 
     public Dinero() {
     }
@@ -140,6 +145,14 @@ public class Dinero implements Serializable {
 
     public void setOrdendecarga(Integer ordendecarga) {
         this.ordendecarga = ordendecarga;
+    }
+
+    public List<Descuento> getLstDescuentos() {
+        return lstDescuentos;
+    }
+
+    public void setLstDescuentos(List<Descuento> lstDescuentos) {
+        this.lstDescuentos = lstDescuentos;
     }
 
     @Override

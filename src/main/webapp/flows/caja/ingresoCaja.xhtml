@@ -5,7 +5,7 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
-        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <p:messages autoUpdate="true" closable="true"  />
         <h:form id="frmIngresoCaja">
          <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
         <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}" footer="(*) campos obligatorios" style="margin-bottom:20px">
@@ -13,7 +13,9 @@
             <p:outputLabel value="Entregado Por: (*) " />
             <p:selectOneMenu filterMatchMode="contains" filter="true"
                                      value="#{mantenedorCaja.dinero.receptor}"
-                                     converter="entityConverter">
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Personal Requerido">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
                                        itemLabel="#{p.nombreCompleto}"
@@ -22,7 +24,7 @@
             </p:selectOneMenu>
             
             <p:outputLabel value="Monto: (*)" />
-            <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true" requiredMessage="Campo Obligatorio">
+            <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true" requiredMessage="Monto Requerido">
                 <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
             </p:inputText>
             
@@ -31,9 +33,13 @@
                         navigator="true"
                         pattern="yyyy-MM-dd"
                         required="true"
-                        requiredMessage="Campo Obligatorio"
+                        requiredMessage="Fecha Requerida"
                         value="#{mantenedorCaja.dinero.fechaactivo}" />
-            
+            <p:outputLabel value="Orden Carga:(*) " rendered="#{mantenedorCaja.concepto.id eq 4}"/>
+            <p:inputText value="#{mantenedorCaja.dinero.ordendecarga}"
+                         rendered="#{mantenedorCaja.concepto.id eq 4}"
+                         required="true"
+                         requiredMessage="Orden Carga Requerida"/>
             <p:outputLabel value="Comentario: " />
             <p:inputTextarea autoResize="false" value="#{mantenedorCaja.dinero.comentario}" style="width: 50%"/>
             

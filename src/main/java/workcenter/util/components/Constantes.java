@@ -11,6 +11,7 @@ import workcenter.entidades.TipoUnidad;
 import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
+import workcenter.util.dto.TipoDinero;
 
 import java.io.Serializable;
 import java.security.SecureRandom;
@@ -72,6 +73,9 @@ public class Constantes implements Serializable {
     private int ASIGNACION_CAJA = 6;
     private int PRESTAMO_CUOTAS = 7;
     private int DEVOLUCION_TEMPORAL = 8;
+
+    private List<String> lstMotivos;
+    private List<TipoDinero> lstTipoDineros;
 
     // Zona PIIR
     private int piirEstadoInicial = 1;
@@ -316,7 +320,23 @@ public class Constantes implements Serializable {
 
         tiposUnidad = null;
         random = new SecureRandom();
-    }
+
+        lstMotivos  = new ArrayList<String>();
+        lstMotivos.add("Herramientas Taller");
+        lstMotivos.add("Revisión Técnica");
+        lstMotivos.add("Gasto de Representación");
+        lstMotivos.add("Insumos Transporte");
+        lstMotivos.add("Insumos Oficina");
+        lstMotivos.add("Gastos Generales (agua- luz- telefono)");
+        lstMotivos.add("Servicios Profesionales");
+        lstMotivos.add("Otros");
+
+        lstTipoDineros = new ArrayList<TipoDinero>();
+        lstTipoDineros.add(new TipoDinero(1, "Efectivo"));
+        lstTipoDineros.add(new TipoDinero(2, "Cheque"));
+        lstTipoDineros.add(new TipoDinero(3, "Transferencia Electrónica"));
+
+        }
 
     public int getCargoConductor() {
         return cargoConductor;
@@ -577,5 +597,13 @@ public class Constantes implements Serializable {
 
     public int getDEVOLUCION_TEMPORAL() {
         return DEVOLUCION_TEMPORAL;
+    }
+
+    public List<String> getLstMotivos() {
+        return lstMotivos;
+    }
+
+    public List<TipoDinero> getLstTipoDineros() {
+        return lstTipoDineros;
     }
 }
