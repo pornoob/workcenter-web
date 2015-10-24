@@ -155,46 +155,12 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irConsultaCaja(){
-        System.err.println("MODULO irConsultaCaja()");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
-        lstDinerosConsultaFiltro = new ArrayList<Dinero>();
-        System.err.println("TAMAÑO ARREGLO DINEROS: " + lstDineros.size());
-        if (fechaDesde == null || fechaHasta == null){
-            String fechaHoy = sdf.format(new Date());
-            for (Dinero d : lstDineros){
-                String fechaDinero = sdf.format(d.getFechareal());
-                if (fechaHoy.equals(fechaDinero)){
-                    lstDinerosConsultaFiltro.add(d);
-                }
-            }
-        }
-        System.err.println("TAMAÑO ARREGLO lstDinerosConsultaFiltro "+lstDinerosConsultaFiltro.size());
+        filtrarDinerosConsulta();
         return "flowConsultaCaja";
     }
 
     public void filtrarDinerosConsulta(){
-        System.err.println("MODULO filtrarDinerosConsulta()");
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-        lstDinerosConsultaFiltro = new ArrayList<Dinero>();
-        System.err.println("Fechas :" +fechaDesde+" - "+fechaHasta);
-        System.err.println("Personal :" +personal.getNombreCompleto());
-        System.err.println("Concepto :"+concepto.getEtiqueta());
-//        for (Dinero d : lstDineros){
-//            String fechaString = sdf.format(d.getFechareal()) ;
-//            Date fechaConsulta = new Date();
-//            try {
-//                fechaConsulta = sdf.parse(fechaString);
-//            }catch ( Exception ex) {
-//                ex.printStackTrace();
-//            }
-
-//            if ((d.getFechareal().getTime() >= fechaDesde.getTime() && d.getFechareal().getTime() <= fechaHasta.getTime())
-//                    && d.getReceptor().equals(personal)
-//                    && d.getConcepto().equals(concepto)){
-//                lstDinerosConsultaFiltro.add(d);
-//            }
-//        }
-        System.err.println("TAMAÑO ARREGLO lstDinerosConsultaFiltro "+lstDinerosConsultaFiltro.size());
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosFiltros(personal,concepto,fechaDesde,fechaHasta);
     }
 
     public String irAsignacionCaja(int tipoConcepto){

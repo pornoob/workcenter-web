@@ -6,8 +6,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.DineroDAO;
+import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
+import workcenter.entidades.Personal;
 
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -27,4 +30,9 @@ public class LogicaCaja {
 
     @Transactional(readOnly = false)
     public Boolean guardarEntradas(Dinero dinero){return dineroDao.guardarDatosDineros(dinero);}
+
+    @Transactional(readOnly = true)
+    public List<Dinero> obtenerDinerosFiltros(Personal personal, Concepto concepto, Date fechaDesde, Date fechaHasta) {
+        return dineroDao.obtenerDinerosFiltros(personal, concepto, fechaDesde, fechaHasta);
+    }
 }
