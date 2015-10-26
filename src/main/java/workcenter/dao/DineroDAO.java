@@ -4,15 +4,13 @@ import javax.persistence.EntityManager;
 import javax.persistence.JoinColumn;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Join;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 
 import org.springframework.stereotype.Repository;
 
 import workcenter.entidades.*;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -55,11 +53,27 @@ public class DineroDAO {
         CriteriaQuery<Dinero> cqDinero = cb.createQuery(Dinero.class);
         Root<Dinero> dinero = cqDinero.from(Dinero.class);
         Join<Dinero,Personal> receptor = dinero.join(Dinero_.receptor);
+
+        List<Predicate> predicates = new ArrayList<Predicate>();
         if (personal != null){
-            cqDinero.where(cb.equal(dinero.get(Dinero_.receptor).get(Personal_.rut),personal.getRut()));
+            predicates.add(cb.equal(dinero.get(Dinero_.receptor),personal));
         }
 
-        cqDinero.select(dinero);
+        if (concepto != null){
+            predicates.add(cb.equal(dinero.get(Dinero_.concepto),concepto));
+        }
+
+        if (fechaDesde != null && fechaHasta == null){
+            predicates.add(cb.greaterThanOrEqualTo(dinero.get(Dinero_.fechaactivo),fechaDesde));
+        }
+        if (fechaDesde == null && fechaHasta != null){
+            predicates.add(cb.lessThanOrEqualTo(dinero.get(Dinero_.fechaactivo), fechaHasta));
+        }
+        if (fechaDesde != null && fechaHasta != null){
+            predicates.add(cb.between(dinero.get(Dinero_.fechaactivo),fechaDesde,fechaHasta));
+        }
+
+        cqDinero.select(dinero).where(predicates.toArray(new Predicate[]{})).orderBy(cb.asc(dinero.get(Dinero_.fechaactivo)));
         TypedQuery tq = em.createQuery(cqDinero);
         return tq.getResultList();
     }

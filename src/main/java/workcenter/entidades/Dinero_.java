@@ -9,7 +9,8 @@ package workcenter.entidades;
  */
 @StaticMetamodel(Dinero.class)
 public class Dinero_ {
+    public static volatile SingularAttribute<Dinero,Integer> id;
     public static volatile SingularAttribute<Dinero,Personal> receptor;
     public static volatile SingularAttribute<Dinero,Concepto> concepto;
-    public static volatile SingularAttribute<Dinero,Date> fechaReal;
+    public static volatile SingularAttribute<Dinero,Date> fechaactivo;
 }

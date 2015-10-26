@@ -53,7 +53,6 @@ public class MantenedorCaja implements Serializable {
     public void inicio(){
         inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
-        System.err.println("TAMAÑO obtenerDinerosConDescuentos() "+lstDineros.size());
         lstPersonal = logicaPersonal.obtenerTodos();
         lstConceptos = logicaConceptos.obtenerConceptos();
     }
@@ -161,6 +160,23 @@ public class MantenedorCaja implements Serializable {
 
     public void filtrarDinerosConsulta(){
         lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosFiltros(personal,concepto,fechaDesde,fechaHasta);
+        Integer totalMesEntrada = 0;
+        Integer totalMesSalida = 0;
+        Integer totalMes = 0;
+        if (fechaDesde != null){
+            for (Dinero sum : lstDinerosConsultaFiltro){
+                    if (sum.getConcepto().getSalida()){
+                        totalMesSalida = totalMesSalida + sum.getMonto();
+                    }else{
+                        totalMesEntrada = totalMesEntrada - sum.getMonto();
+                }
+
+            }
+            totalMes = totalMesEntrada - totalMesSalida;
+        }
+        System.err.println(totalMesEntrada);
+        System.err.println(totalMesSalida);
+        System.err.println(totalMes);
     }
 
     public String irAsignacionCaja(int tipoConcepto){

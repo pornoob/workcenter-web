@@ -63,6 +63,7 @@
                      selection="#{mantenedorCaja.dinero}"
                      paginator="true"
                      paginatorAlwaysVisible="true"
+                     paginatorPosition="top"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
                      rows="#{constantes.cantidadFilasTablas}">
@@ -78,9 +79,21 @@
             <p:column headerText="FECHA REAL">
                 <h:outputText value="#{dinero.fechareal}" />
             </p:column>
-            <p:column headerText="ENTRADA"></p:column>
-            <p:column headerText="SALIDA"></p:column>
+            <p:column headerText="ENTRADA">
+                <h:outputText rendered="#{!dinero.concepto.salida}" value="#{dinero.monto}" />
+            </p:column>
+            <p:column headerText="SALIDA">
+                <h:outputText rendered="#{dinero.concepto.salida}" value="#{dinero.monto}" />
+            </p:column>
             <p:column headerText="SALDO"></p:column>
+            <p:summaryRow>
+                <p:column colspan="6" style="text-align:right">
+                    <h:outputText value="Entrada:" />
+                </p:column>
+                <p:column>
+                    <h:outputText value="Salida:" />
+                </p:column>
+            </p:summaryRow>
         </p:dataTable>
     </ui:define>
 </ui:composition>
