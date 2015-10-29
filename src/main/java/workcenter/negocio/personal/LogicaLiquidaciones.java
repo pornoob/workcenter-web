@@ -54,7 +54,7 @@ public class LogicaLiquidaciones {
 	}
 
     @Transactional(readOnly = true)
-    public Integer obtenerAnticipoSueldo(Integer idPers, String mes, Integer anio) {
+    public Integer obtenerAnticipoSueldo(Personal idPers, String mes, Integer anio) {
         return liquidacionDao.obtenerAnticipoSueldo(idPers, mes, anio);
     }
     

@@ -1,5 +1,6 @@
 package workcenter.presentacion.caja;
 
+import com.itextpdf.text.log.SysoLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -14,6 +15,7 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.TipoDinero;
 
+import javax.crypto.spec.DESedeKeySpec;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -33,6 +35,10 @@ public class MantenedorCaja implements Serializable {
     private String detalleRendicion;
     private Date fechaDesde;
     private Date fechaHasta;
+    private Integer montoEntrada;
+    private Integer montoSalida;
+    private List<Descuento> lstDescuento;
+    private Integer numeroCuotas;
     private Personal personal;
     private List<String> motivos;
     private List<TipoDinero> lstTipoDinero;
@@ -154,29 +160,45 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irConsultaCaja(){
+        saldo = 0;
+        // Obtener Mes actual
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String fechaDesdeTmp = sdf.format(new Date());
+        String fechaHastaTmp = sdf.format(new Date());
+        try{
+            fechaDesdeTmp = fechaDesdeTmp.concat("-01");
+            int anio= Integer.parseInt(fechaDesdeTmp.split("-")[0]);
+            int mes=Integer.parseInt(fechaDesdeTmp.split("-")[1]);
+            Calendar calendario =Calendar.getInstance();
+            calendario.set(anio,mes-1,1);
+            int ultimoDiaMes=calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+            fechaHastaTmp = fechaHastaTmp.concat("-".concat(String.valueOf(ultimoDiaMes)));
+            SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
+            fechaDesde = sdfParse.parse(fechaDesdeTmp);
+            fechaHasta = sdfParse.parse(fechaHastaTmp);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
         filtrarDinerosConsulta();
         return "flowConsultaCaja";
     }
 
     public void filtrarDinerosConsulta(){
+        saldo = 0;
+        montoEntrada = 0;
+        montoSalida  = 0;
         lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosFiltros(personal,concepto,fechaDesde,fechaHasta);
-        Integer totalMesEntrada = 0;
-        Integer totalMesSalida = 0;
-        Integer totalMes = 0;
-        if (fechaDesde != null){
-            for (Dinero sum : lstDinerosConsultaFiltro){
-                    if (sum.getConcepto().getSalida()){
-                        totalMesSalida = totalMesSalida + sum.getMonto();
-                    }else{
-                        totalMesEntrada = totalMesEntrada - sum.getMonto();
-                }
+    }
 
+    public Integer saldoConsulta(Dinero dinero){
+            if (dinero.getConcepto().getSalida()){
+                saldo = saldo - dinero.getMonto();
+                montoSalida = montoSalida + dinero.getMonto();
+            }else{
+                saldo = saldo + dinero.getMonto();
+                montoEntrada = montoEntrada + dinero.getMonto();
             }
-            totalMes = totalMesEntrada - totalMesSalida;
-        }
-        System.err.println(totalMesEntrada);
-        System.err.println(totalMesSalida);
-        System.err.println(totalMes);
+        return saldo;
     }
 
     public String irAsignacionCaja(int tipoConcepto){
@@ -201,6 +223,33 @@ public class MantenedorCaja implements Serializable {
         }
         dinero.setFechareal(new Date());
         return "flowSueldoCaja";
+    }
+
+    public String irPrestamoCuotas(int tipoConcepto){
+        asignarConcepto(tipoConcepto);
+        dinero = new Dinero();
+        dinero.setFechaactivo(new Date());
+        return "flowPrestamoCuotas";
+    }
+
+    public void guardarPrestamoCuotas(){
+
+       logicaCaja.guardarEntradas(dinero);
+    }
+
+    public void calcularCuotas(){
+        if(numeroCuotas == null || dinero.getMonto() ==null || dinero.getMonto() == 0) return;
+        lstDescuento = new ArrayList<Descuento>();
+        //Settear la fecha segundo el mes primera cuota en adelante
+        Integer montoCuotas = dinero.getMonto() / numeroCuotas;
+        for (int i=1; i<=numeroCuotas; i++){
+            Descuento descuentoTmp = new Descuento();
+            descuentoTmp.setMonto(montoCuotas);
+            descuentoTmp.setNombre("Prestamo Cuotas");
+            descuentoTmp.setPersona(dinero.getReceptor().getRut());
+            lstDescuento.add(descuentoTmp);
+        }
+        dinero.setLstDescuentos(lstDescuento);
     }
 
     public List<Dinero> getLstDineros() {
@@ -345,5 +394,37 @@ public class MantenedorCaja implements Serializable {
 
     public void setLstConpcetosFiltrada(List<Concepto> lstConpcetosFiltrada) {
         this.lstConpcetosFiltrada = lstConpcetosFiltrada;
+    }
+
+    public Integer getMontoEntrada() {
+        return montoEntrada;
+    }
+
+    public void setMontoEntrada(Integer montoEntrada) {
+        this.montoEntrada = montoEntrada;
+    }
+
+    public Integer getMontoSalida() {
+        return montoSalida;
+    }
+
+    public void setMontoSalida(Integer montoSalida) {
+        this.montoSalida = montoSalida;
+    }
+
+    public List<Descuento> getLstDescuento() {
+        return lstDescuento;
+    }
+
+    public void setLstDescuento(List<Descuento> lstDescuento) {
+        this.lstDescuento = lstDescuento;
+    }
+
+    public Integer getNumeroCuotas() {
+        return numeroCuotas;
+    }
+
+    public void setNumeroCuotas(Integer numeroCuotas) {
+        this.numeroCuotas = numeroCuotas;
     }
 }

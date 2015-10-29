@@ -11,6 +11,7 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
+import workcenter.util.dto.Mes;
 import workcenter.util.others.RenderPdf;
 
 import javax.faces.context.ExternalContext;
@@ -149,7 +150,7 @@ public class MantenedorLiquidaciones implements Serializable {
         valorPrevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
         liquidacion.setEmpleador(cp.getEmpleador().getNombre());
         liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString()+"-"+cp.getEmpleador().getDigitoverificador());
-        liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal().getRut(), mes, anio));
+        liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
 
         if (liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()) {
@@ -298,7 +299,7 @@ public class MantenedorLiquidaciones implements Serializable {
     }
     
     public void visualizarPDF(Remuneracion verLiquidacion) throws IOException{
-    	
+
     	 if (verLiquidacion == null) return;
     	 FacesContext facesContext = FacesContext.getCurrentInstance();
     	    ExternalContext externalContext = facesContext.getExternalContext();
@@ -306,7 +307,16 @@ public class MantenedorLiquidaciones implements Serializable {
 
     	    response.reset();
     	    response.setContentType("application/pdf");
-    	    response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
+             String mesSeleccionado = "";
+            for (Mes m:constantes.getMeses()){
+                if (m.getId().equals(mes)){
+                    System.out.println(m.getNombre());
+                    mesSeleccionado = m.getNombre();
+                }
+            }
+            response.setHeader("Content-disposition", "filename="+"Liquidacion-"+
+                mesSeleccionado+"-"+anio+"-"+verLiquidacion.getIdPersonal().getRut()+".pdf");
+    	    //response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
 
     	    OutputStream output = response.getOutputStream();
     	    output.write(verLiquidacion.getArchivo());
@@ -393,7 +403,15 @@ public class MantenedorLiquidaciones implements Serializable {
 
 	    response.reset();
 	    response.setContentType("application/pdf");
-	    response.setHeader("Content-disposition", "filename="+liquidacion.getIdPersonal().getRut()+".pdf");
+        String mesSeleccionado = "";
+        for (Mes m:constantes.getMeses()){
+            if (m.getId().equals(mes)){
+                System.out.println(m.getNombre());
+                mesSeleccionado = m.getNombre();
+            }
+        }
+	    response.setHeader("Content-disposition", "filename="+"Liquidacion-"+
+                mesSeleccionado+"-"+anio+"-"+liquidacion.getIdPersonal().getRut()+".pdf");
 
 	    OutputStream output = response.getOutputStream();
 	    output.write(liquidacion.getArchivo());

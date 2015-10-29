@@ -47,13 +47,17 @@
                     <p:commandButton value="Buscar"
                                      icon="fa fa-search"
                                      action="#{mantenedorCaja.filtrarDinerosConsulta()}"
-                                     update="consultaTabla"/>
+                                     update="idConsultaCaja:consultaTabla"/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                     <p:outputLabel value=""/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
+        <h:form id="idConsultaCaja">
+            <p:contextMenu for="consultaTabla">
+                <p:menuitem value="Ver Detalle" update="dlgConsultaDetalle" icon="ui-icon-search" oncomplete="PF('detalleDinero').show()"/>
+            </p:contextMenu>
         <p:dataTable id="consultaTabla"
                      var="dinero"
                      value="#{mantenedorCaja.lstDinerosConsultaFiltro}"
@@ -61,12 +65,14 @@
                      selectionMode="single"
                      widgetVar="tablaRendicion"
                      selection="#{mantenedorCaja.dinero}"
-                     paginator="true"
-                     paginatorAlwaysVisible="true"
-                     paginatorPosition="top"
-                     paginatorTemplate="#{constantes.paginadorTemplate}"
-                     rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
-                     rows="#{constantes.cantidadFilasTablas}">
+                     scrollable="true"
+                     scrollHeight="400">
+            <f:facet name="header">
+                <h:commandButton image="/img/icons/excel.png" title="Exportar a Excel" >
+                    <p:dataExporter target="consultaTabla" type="xls" fileName="Consulta_Caja">
+                    </p:dataExporter>
+                </h:commandButton>
+            </f:facet>
             <p:column headerText="ID">
                 <h:outputText value="#{dinero.id}" />
             </p:column>
@@ -78,22 +84,46 @@
             </p:column>
             <p:column headerText="FECHA REAL">
                 <h:outputText value="#{dinero.fechareal}" />
+                <f:facet name="footer">
+                    <h:outputText value="SUB TOTAL: "/>
+                </f:facet>
             </p:column>
             <p:column headerText="ENTRADA">
                 <h:outputText rendered="#{!dinero.concepto.salida}" value="#{dinero.monto}" />
+                <f:facet name="footer">
+                    <h:outputText value="#{mantenedorCaja.montoEntrada}"/>
+                </f:facet>
             </p:column>
             <p:column headerText="SALIDA">
                 <h:outputText rendered="#{dinero.concepto.salida}" value="#{dinero.monto}" />
+                <f:facet name="footer">
+                    <h:outputText value="#{mantenedorCaja.montoSalida}"/>
+                </f:facet>
             </p:column>
-            <p:column headerText="SALDO"></p:column>
-            <p:summaryRow>
-                <p:column colspan="6" style="text-align:right">
-                    <h:outputText value="Entrada:" />
-                </p:column>
-                <p:column>
-                    <h:outputText value="Salida:" />
-                </p:column>
-            </p:summaryRow>
+            <p:column headerText="SALDO">
+                <h:outputText  value="#{mantenedorCaja.saldoConsulta(dinero)}"/>
+            </p:column>
         </p:dataTable>
+        </h:form>
+            <p:dialog id="dlgConsultaDetalle" header="Consulta Detalle" widgetVar="detalleDinero" modal="true" resizable="false">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="ID: "/>
+                    <p:inputText value="#{mantenedorCaja.dinero.id}"/>
+                    <p:outputLabel value="CONCEPTO: "/>
+                    <p:inputText value="#{mantenedorCaja.dinero.concepto.etiqueta}"/>
+                    <p:outputLabel value="#{mantenedorCaja.dinero.concepto.salida ? 'ENTREGADO A:': 'ENTREGADO POR:'}"/>
+                    <p:inputText value="#{mantenedorCaja.dinero.receptor.nombreCompleto}"/>
+                    <p:outputLabel value="FECHA:  "/>
+                    <p:inputText value="#{mantenedorCaja.dinero.fechareal}"/>
+                    <p:outputLabel value="MONTO:  "/>
+                    <p:inputText value="#{mantenedorCaja.dinero.monto}"/>
+                    <p:outputLabel rendered="#{mantenedorCaja.dinero.concepto.id eq constantes.ASIGNACION_CONDUCTORES}"
+                                   value="ORDEN DE CARGA :  "/>
+                    <p:inputText rendered="#{mantenedorCaja.dinero.concepto.id eq constantes.ASIGNACION_CONDUCTORES}"
+                                 value="#{mantenedorCaja.dinero.ordendecarga}"/>
+                    <p:outputLabel value="DETALLE :  "/>
+                    <p:inputTextarea value="#{mantenedorCaja.dinero.comentario}"/>
+                </h:panelGrid>
+            </p:dialog>
     </ui:define>
 </ui:composition>

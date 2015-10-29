@@ -90,7 +90,7 @@ public class LiquidacionDao {
     }
 
     @SuppressWarnings("unchecked")
-    public Integer obtenerAnticipoSueldo(Integer idPers, String mes,
+    public Integer obtenerAnticipoSueldo(Personal idPers, String mes,
                                          Integer anio) {
 
         Query q = em.createNamedQuery("Dinero.findByConceptoFecha");

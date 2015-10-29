@@ -77,6 +77,8 @@ public class Constantes implements Serializable {
     private List<String> lstMotivos;
     private List<TipoDinero> lstTipoDineros;
 
+    private List<Integer> lstCuotas;
+
     // Zona PIIR
     private int piirEstadoInicial = 1;
     private int piirEstadoCerradaPorSistema = 3;
@@ -336,7 +338,17 @@ public class Constantes implements Serializable {
         lstTipoDineros.add(new TipoDinero(2, "Cheque"));
         lstTipoDineros.add(new TipoDinero(3, "Transferencia Electrónica"));
 
-        }
+        lstCuotas = new ArrayList<Integer>();
+        lstCuotas.add(1);
+        lstCuotas.add(2);
+        lstCuotas.add(3);
+        lstCuotas.add(4);
+        lstCuotas.add(5);
+        lstCuotas.add(6);
+
+
+
+    }
 
     public int getCargoConductor() {
         return cargoConductor;
@@ -605,5 +617,9 @@ public class Constantes implements Serializable {
 
     public List<TipoDinero> getLstTipoDineros() {
         return lstTipoDineros;
+    }
+
+    public List<Integer> getLstCuotas() {
+        return lstCuotas;
     }
 }

@@ -73,7 +73,7 @@ public class DineroDAO {
             predicates.add(cb.between(dinero.get(Dinero_.fechaactivo),fechaDesde,fechaHasta));
         }
 
-        cqDinero.select(dinero).where(predicates.toArray(new Predicate[]{})).orderBy(cb.asc(dinero.get(Dinero_.fechaactivo)));
+        cqDinero.select(dinero).where(predicates.toArray(new Predicate[]{})).orderBy(cb.asc(dinero.get(Dinero_.id)));
         TypedQuery tq = em.createQuery(cqDinero);
         return tq.getResultList();
     }
