@@ -14,8 +14,14 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.TipoDinero;
+import workcenter.util.others.RenderPdfCaja;
 
 import javax.crypto.spec.DESedeKeySpec;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -55,6 +61,7 @@ public class MantenedorCaja implements Serializable {
     @Autowired LogicaPersonal logicaPersonal;
     @Autowired LogicaConceptos logicaConceptos;
     @Autowired Constantes constantes;
+    @Autowired RenderPdfCaja renderPdfCaja;
 
     public void inicio(){
         inicializarDinero();
@@ -67,7 +74,7 @@ public class MantenedorCaja implements Serializable {
         dinero = new Dinero();
     }
     
-    public void guardarDatosCaja(){
+    public void guardarDatosCaja() throws IOException {
     	if (dinero.getReceptor() == null) return;
         dinero.setConcepto(concepto);
         dinero.setFechareal(dinero.getFechaactivo());
@@ -87,6 +94,7 @@ public class MantenedorCaja implements Serializable {
                                                                     +" "+dinero.getConcepto().getEtiqueta()
                                                                     +" "+dinero.getReceptor().getNombreCompleto()
                                                                     +" "+dinero.getMonto());
+            imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
             dinero = new Dinero();
         }else{
             FacesUtil.mostrarMensajeError("Ingreso Fallido",
@@ -251,6 +259,24 @@ public class MantenedorCaja implements Serializable {
         }
         dinero.setLstDescuentos(lstDescuento);
     }
+
+    public void imprimirPdf(byte[] pdf) throws IOException {
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+        response.reset();
+        response.setContentType("application/pdf");
+        response.setHeader("Content-disposition", "filename="+"Impresión.pdf");
+
+        OutputStream output = response.getOutputStream();
+        output.write(pdf);
+        output.close();
+
+        facesContext.responseComplete();
+    }
+
 
     public List<Dinero> getLstDineros() {
         return lstDineros;

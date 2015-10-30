@@ -24,10 +24,7 @@
             </p:selectOneMenu>
             
             <p:outputLabel value="Monto: (*)" />
-            <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true" requiredMessage="Monto Requerido">
-                <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
-            </p:inputText>
-            
+            <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true" requiredMessage="Monto Requerido"/>
             <p:outputLabel value="Fecha: (*) " />
             <p:calendar locale="es"
                         navigator="true"
@@ -44,6 +41,9 @@
             <p:inputTextarea autoResize="false" value="#{mantenedorCaja.dinero.comentario}" style="width: 50%"/>
             
             <p:commandButton value="Guardar" icon="fa fa-floppy-o" action="#{mantenedorCaja.guardarDatosCaja()}" update="frmIngresoCaja"/>
+            <p:commandLink title="Imprimir" action="#{mantenedorCaja.guardarDatosCaja()}" ajax="false" target="_blank" update="frmIngresoCaja">
+                <i class="fa fa-save  fa-2x"></i>
+            </p:commandLink>
             <p:commandButton value="Regresar" icon="fa fa-arrow-left" action="flowMenu" immediate="true"/>
         </h:panelGrid>
         </p:panel>
