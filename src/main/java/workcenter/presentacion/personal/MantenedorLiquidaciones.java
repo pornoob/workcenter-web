@@ -345,7 +345,10 @@ public class MantenedorLiquidaciones implements Serializable {
             }
         }
 
-        asignacionFamiliarMonto = cantidadCargasFamiliares * montoCarga;
+        if (montoCarga  != 1 ){
+            asignacionFamiliarMonto = cantidadCargasFamiliares * montoCarga;
+        }else
+            asignacionFamiliarMonto = 0;
 
         if (ultimaCargaFamilia != null) {
             liquidacion.setTotalHaberes(liquidacion.getTotalHaberes() - ultimaCargaFamilia * montoCarga);
