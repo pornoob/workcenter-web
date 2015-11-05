@@ -35,7 +35,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "ValorPrevisionPersonal.findAll", query = "SELECT v FROM ValorPrevisionPersonal v"),
     @NamedQuery(name = "ValorPrevisionPersonal.findById", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.id = :id"),
-    @NamedQuery(name = "ValorPrevisionPersonal.findByContrato", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.contrato = :contrato"),
+    @NamedQuery(name = "ValorPrevisionPersonal.findByContrato", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.contrato = :contrato order by fechaVigencia DESC"),
     @NamedQuery(name = "ValorPrevisionPersonal.findByPrevision", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.prevision = :prevision"),
     @NamedQuery(name = "ValorPrevisionPersonal.findByUnidad", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.unidad = :unidad"),
     @NamedQuery(name = "ValorPrevisionPersonal.findByValor", query = "SELECT v FROM ValorPrevisionPersonal v WHERE v.valor = :valor"),

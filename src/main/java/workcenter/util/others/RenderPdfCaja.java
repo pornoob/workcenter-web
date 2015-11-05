@@ -143,12 +143,27 @@ public class RenderPdfCaja implements Serializable {
             tabla.addCell(celda15);
 
 //          ---------------------------------  fila 9
-            PdfPCell celda16 = new PdfPCell(new Paragraph("Comentario : "+d.getComentario()));
+            PdfPCell celda16 = new PdfPCell(new Paragraph("Comentario : "+d.getComentario(),fuenteCuerpo));
             celda16.setBorder(Rectangle.NO_BORDER);
             celda16.setColspan(2);
             tabla.addCell(celda16);
 
+//          ------------------------------------fila 10
+            PdfPCell celda17 = new PdfPCell(new Paragraph("\n\n\n\n"));
+            celda17.setBorder(Rectangle.NO_BORDER);
+            celda17.setColspan(2);
+            tabla.addCell(celda17);
             pdf.add(tabla);
+
+            Paragraph firma = new Paragraph("_____________________________________________________",fuenteCuerpo);
+            firma.setAlignment(Element.ALIGN_CENTER);
+            pdf.add(firma);
+
+            firma = new Paragraph("Firma y Nombre de quien  recepciona",fuenteCuerpo);
+            firma.setAlignment(Element.ALIGN_CENTER);
+            pdf.add(firma);
+
+
             pdf.close();
         } catch (DocumentException de) {
             System.err.println("No se pudo crear fichero");
