@@ -1,9 +1,6 @@
 package workcenter.dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.JoinColumn;
-import javax.persistence.PersistenceContext;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.*;
 
 import org.springframework.stereotype.Repository;
@@ -76,5 +73,18 @@ public class DineroDAO {
         cqDinero.select(dinero).where(predicates.toArray(new Predicate[]{})).orderBy(cb.asc(dinero.get(Dinero_.id)));
         TypedQuery tq = em.createQuery(cqDinero);
         return tq.getResultList();
+    }
+
+    public List<Dinero> obtenerDinerosNoCancelados(int conceptoParam) {
+
+        StringBuilder sb = new StringBuilder();
+        sb.append("select ");
+        sb.append("d.* ");
+        sb.append("from dineros d ");
+        sb.append("left join prestamoscancelados p on d.id = p.prestamo ");
+        sb.append("where ");
+        sb.append("concepto =:concepto and p.id is null");
+
+        return em.createNativeQuery(sb.toString(), Dinero.class).setParameter("concepto",conceptoParam).getResultList();
     }
 }

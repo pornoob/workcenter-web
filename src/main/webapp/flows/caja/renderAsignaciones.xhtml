@@ -82,7 +82,8 @@
                 <p:panel id="pnlRendirDetalle" style="margin-bottom:20px">
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:outputLabel value="SALDO DEUDA: " />
-                    <p:inputText id="inSaldo" value="#{mantenedorCaja.dinero.lstDescuentos.get(0).monto}"/>
+                    <p:inputText id="inSaldo" rendered="#{mantenedorCaja.dinero.lstDescuentos.size() > 0}"
+                                 value="#{mantenedorCaja.dinero.lstDescuentos.get(0).monto}"/>
                     <p:outputLabel value="DETALLE: "/>
                     <p:inputTextarea value="#{mantenedorCaja.detalleRendicion}" />
                 </h:panelGrid>

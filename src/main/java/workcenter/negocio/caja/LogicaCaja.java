@@ -35,4 +35,9 @@ public class LogicaCaja {
     public List<Dinero> obtenerDinerosFiltros(Personal personal, Concepto concepto, Date fechaDesde, Date fechaHasta) {
         return dineroDao.obtenerDinerosFiltros(personal, concepto, fechaDesde, fechaHasta);
     }
+
+    @Transactional(readOnly = true)
+    public List<Dinero> obtenerDinerosNoCancelados(int conceptoParam){
+        return dineroDao.obtenerDinerosNoCancelados(conceptoParam);
+    }
 }

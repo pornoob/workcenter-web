@@ -4,13 +4,11 @@ import com.itextpdf.text.log.SysoLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Concepto;
-import workcenter.entidades.Descuento;
-import workcenter.entidades.Dinero;
-import workcenter.entidades.Personal;
+import workcenter.entidades.*;
 import workcenter.negocio.caja.LogicaCaja;
 import workcenter.negocio.concepto.LogicaConceptos;
 import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.negocio.prestamo_cancelado.LogicaPrestamoCancelado;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.TipoDinero;
@@ -55,6 +53,8 @@ public class MantenedorCaja implements Serializable {
     private List<Personal> lstPersonal;
     private List<Concepto> lstConceptos;
     private List<Concepto> lstConpcetosFiltrada;
+    private String detalleDevolucionPrestamo;
+    private Integer dineroDevolucion;
     private Dinero dinero;
     private Concepto concepto;
     @Autowired LogicaCaja logicaCaja;
@@ -62,6 +62,8 @@ public class MantenedorCaja implements Serializable {
     @Autowired LogicaConceptos logicaConceptos;
     @Autowired Constantes constantes;
     @Autowired RenderPdfCaja renderPdfCaja;
+    @Autowired
+    LogicaPrestamoCancelado logicaPrestamoCancelado;
 
     public void inicio(){
         inicializarDinero();
@@ -94,16 +96,15 @@ public class MantenedorCaja implements Serializable {
                                                                     +" "+dinero.getConcepto().getEtiqueta()
                                                                     +" "+dinero.getReceptor().getNombreCompleto()
                                                                     +" "+dinero.getMonto());
-            imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
-            dinero = new Dinero();
+            //imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
         }else{
             FacesUtil.mostrarMensajeError("Ingreso Fallido",
-                    "Se ha producido un erro al ingresar: "+dinero.getId()
+                    "Se ha producido un error al ingresar: "+dinero.getId()
                             +" "+dinero.getConcepto().getEtiqueta()
                             +""+dinero.getReceptor().getNombreCompleto()
                             +" "+dinero.getMonto());
-            dinero = new Dinero();
         }
+        inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
     }
 
@@ -118,7 +119,7 @@ public class MantenedorCaja implements Serializable {
 
     public String irIngresoCaja(int tipoConcepto){
         asignarConcepto(tipoConcepto);
-        dinero = new Dinero();
+        inicializarDinero();
         return "flowIngresaCaja";
     }
 
@@ -130,7 +131,7 @@ public class MantenedorCaja implements Serializable {
         motivos = constantes.getLstMotivos();
         lstDinerosRendicion = new ArrayList<Dinero>();
         for (Dinero d : lstDineros){
-            if (d.getConcepto().getId() == constantes.getASIGNACION_CAJA() ){
+            if (d.getConcepto().getId() == constantes.getASIGNACION_CAJA() && d.getLstDescuentos().size() > 0 ){
                 lstDinerosRendicion.add(d);
             }
         }
@@ -143,8 +144,9 @@ public class MantenedorCaja implements Serializable {
     }
 
     public void guardarRendicion(){
+
+        dinero.setComentario(dinero.getComentario()+" "+detalleRendicion);
         if(saldo > 0){
-            dinero.setComentario(dinero.getComentario()+" "+detalleRendicion);
             logicaCaja.guardarEntradas(dinero);
         } else {
             dinero.getLstDescuentos().remove(dinero.getLstDescuentos().get(0));
@@ -162,9 +164,7 @@ public class MantenedorCaja implements Serializable {
             logicaCaja.guardarEntradas(dev);
         }
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
-        devolucion = 0;
-        gastos = 0;
-        saldo = 0;
+        irRendirAsignacion(constantes.getASIGNACION_CAJA());
     }
 
     public String irConsultaCaja(){
@@ -218,7 +218,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irSueldoCaja(){
-        dinero = new Dinero();
+        inicializarDinero();
         lstConpcetosFiltrada = new ArrayList<Concepto>();
         for (Concepto c : lstConceptos){
             if (c.getId() == constantes.getANTICIPO() ||
@@ -235,7 +235,7 @@ public class MantenedorCaja implements Serializable {
 
     public String irPrestamoCuotas(int tipoConcepto){
         asignarConcepto(tipoConcepto);
-        dinero = new Dinero();
+        inicializarDinero();
         dinero.setFechaactivo(new Date());
         return "flowPrestamoCuotas";
     }
@@ -258,6 +258,87 @@ public class MantenedorCaja implements Serializable {
             lstDescuento.add(descuentoTmp);
         }
         dinero.setLstDescuentos(lstDescuento);
+    }
+
+    public String irPrestamosTemporales(int tipoConcepto){
+        asignarConcepto(tipoConcepto);
+        limpiarVariablesPestamos();
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+        return "flowDevolucionPrestamos";
+    }
+
+    public void pagarPrestamosTemporales(int tipo){
+
+        PrestamoCancelado cancelado = new PrestamoCancelado();
+        switch (tipo){
+            case 1:
+                System.err.println("PUM CASE 1");
+                Dinero pagoTotal = new Dinero();
+                Concepto conceptoPagoTotal = new Concepto();
+                conceptoPagoTotal.setId(constantes.getDEVOLUCION_TEMPORAL());
+                pagoTotal.setConcepto(conceptoPagoTotal);
+                pagoTotal.setFechaactivo(new Date());
+                pagoTotal.setFechareal(pagoTotal.getFechaactivo());
+                pagoTotal.setReceptor(dinero.getReceptor());
+                pagoTotal.setMonto(dinero.getMonto());
+                cancelado.setDetalle("Pago 100% en Caja");
+                pagoTotal.setComentario(cancelado.getDetalle());
+                cancelado.setDevolucion(pagoTotal.getMonto());
+                cancelado.setPrestamo(dinero.getId());
+                logicaCaja.guardarEntradas(pagoTotal);
+                logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
+                break;
+            case 2:
+                System.err.println("PUM CASE 2");
+                Dinero pagoParcial = new Dinero();
+                Concepto conceptoPagoParcial = new Concepto();
+                conceptoPagoParcial.setId(constantes.getDEVOLUCION_TEMPORAL());
+                pagoParcial.setConcepto(conceptoPagoParcial);
+                pagoParcial.setFechaactivo(new Date());
+                pagoParcial.setFechareal(pagoParcial.getFechaactivo());
+                pagoParcial.setMonto(dineroDevolucion);
+                pagoParcial.setReceptor(dinero.getReceptor());
+                cancelado.setDetalle(detalleDevolucionPrestamo);
+                pagoParcial.setComentario(cancelado.getDetalle());
+                cancelado.setDevolucion(pagoParcial.getMonto());
+                cancelado.setPrestamo(dinero.getId());
+
+                System.err.println(dineroDevolucion);
+                System.err.println(dinero.getMonto());
+
+
+
+                if (pagoParcial.getMonto() > dinero.getMonto()){
+                    FacesUtil.mostrarMensajeError("Error Al guardar", "Devolución de Monto es mayor a la deuda");
+                    System.err.println("no guarda 1 ");
+                }else if (pagoParcial.getMonto() == dinero.getMonto()){
+                    FacesUtil.mostrarMensajeError("Recomendación", "Seleccione pago 100% en caja");
+                    System.err.println("no guarda 2 ");
+                }else {
+                    System.err.println("GUARDAR");
+                    //logicaCaja.guardarEntradas(pagoParcial);
+                    //logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
+                }
+                break;
+
+            case 3:
+                cancelado.setDetalle(detalleDevolucionPrestamo);
+                cancelado.setDevolucion(dinero.getMonto());
+                cancelado.setPrestamo(dinero.getId());
+                break;
+        }
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+    }
+
+    public void limpiarVariablesPestamos(){
+        System.err.println("ENTRO A LIMPAR VARIABLES");
+        detalleDevolucionPrestamo = new String("");
+        dineroDevolucion = new Integer(0);
+
+    }
+
+    public void mostrarPdf() throws IOException {
+        imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
     }
 
     public void imprimirPdf(byte[] pdf) throws IOException {
@@ -452,5 +533,21 @@ public class MantenedorCaja implements Serializable {
 
     public void setNumeroCuotas(Integer numeroCuotas) {
         this.numeroCuotas = numeroCuotas;
+    }
+
+    public Integer getDineroDevolucion() {
+        return dineroDevolucion;
+    }
+
+    public void setDineroDevolucion(Integer dineroDevolucion) {
+        dineroDevolucion = dineroDevolucion;
+    }
+
+    public String getDetalleDevolucionPrestamo() {
+        return detalleDevolucionPrestamo;
+    }
+
+    public void setDetalleDevolucionPrestamo(String detalleDevolucionPrestamo) {
+        this.detalleDevolucionPrestamo = detalleDevolucionPrestamo;
     }
 }

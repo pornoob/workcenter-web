@@ -52,42 +52,45 @@ public class RenderPdfCaja implements Serializable {
             SimpleDateFormat sdfa = new SimpleDateFormat("yyyy-MM-dd");
             String variableConcepto;
 
+            //Intanciamos un objeto tabla con 2 columnas
+            PdfPTable tabla = new PdfPTable(2);
+            //titulo
             Paragraph texto;
             if (!d.getConcepto().getSalida()){
-                texto = new Paragraph("\nComprobante de Ingreso N°"+d.getId()+"\n",fuenteTitulo);
+                texto = new Paragraph("Comprobante de Ingreso N°"+d.getId()+"\n\n\n",fuenteTitulo);
                 variableConcepto = "Recibido";
             }else{
-                texto = new Paragraph("\nComprobante de Egreso N°"+d.getId()+"\n",fuenteTitulo);
+                texto = new Paragraph("Comprobante de Egreso N°"+d.getId()+"\n\n\n",fuenteTitulo);
                 variableConcepto = "Entregado";
             }
-            texto.setAlignment(Element.ALIGN_CENTER);
-            pdf.add(texto);
-            texto = new Paragraph("\n",fuenteTitulo);
-            texto.setAlignment(Element.ALIGN_CENTER);
-            pdf.add(texto);
 
-//           Detalle Dinero
-            texto = new Paragraph("\n",fuenteTitulo);
-            PdfPTable tabla = new PdfPTable(2);
+            PdfPCell celda0 = new PdfPCell();
+            celda0.setColspan(2);
+            celda0.setPhrase(texto);
+            celda0.setHorizontalAlignment(Element.ALIGN_CENTER);
+            celda0.setBorder(Rectangle.BOTTOM);
+            tabla.addCell(celda0);
 
-//           --------------------------------- fila 1
+//           --------------------------------- fila 1 detalle
             String textoConcepto = "Concepto : "+d.getConcepto().getEtiqueta();
             if (d.getConcepto().getId().intValue() == constantes.getASIGNACION_CONDUCTORES()){
                 textoConcepto = textoConcepto.concat(" Orden Carga: " + d.getOrdendecarga());
             }
             texto = new Paragraph(textoConcepto,fuenteCuerpo);
             PdfPCell celda1 = new PdfPCell(texto);
-            celda1.setBorder(Rectangle.NO_BORDER);
+            celda1.setBorder(Rectangle.LEFT | Rectangle.RIGHT);
             celda1.setColspan(2);
             tabla.addCell(celda1);
 
 //           --------------------------------- fila 2
             PdfPCell celda3 = new PdfPCell(new Paragraph("Fecha : "+sdfa.format(d.getFechaactivo()),fuenteCuerpo));
-            celda3.setBorder(Rectangle.NO_BORDER);
+            celda3.setBorder(Rectangle.LEFT);
             tabla.addCell(celda3);
 
-            PdfPCell celda4 = new PdfPCell(new Paragraph("Monto "+variableConcepto+" :$"+d.getMonto(),fuenteCuerpo));
-            celda4.setBorder(Rectangle.NO_BORDER);
+            Paragraph monto = new Paragraph("Monto "+variableConcepto+" :$"+d.getMonto(),fuenteCuerpo);
+            monto.setAlignment(Element.ALIGN_RIGHT);
+            PdfPCell celda4 = new PdfPCell(monto);
+            celda4.setBorder(Rectangle.RIGHT);
             tabla.addCell(celda4);
 
 //           --------------------------------- fila 3
@@ -95,37 +98,31 @@ public class RenderPdfCaja implements Serializable {
             PdfPCell celda7 = new PdfPCell( !d.getConcepto().getSalida() ?
                     new Paragraph(variableConcepto +" a : ",fuenteCuerpo)
                     :new Paragraph(variableConcepto+" de : ",fuenteCuerpo));
-            celda7.setBorder(Rectangle.NO_BORDER);
+            celda7.setBorder(Rectangle.LEFT);
             tabla.addCell(celda7);
 
             PdfPCell celda8 = new PdfPCell(new Paragraph(""));
-            celda8.setBorder(Rectangle.NO_BORDER);
+            celda8.setBorder(Rectangle.RIGHT);
             tabla.addCell(celda8);
 
 //            ---------------------------------fila 4
             PdfPCell celda9 = new PdfPCell(new Paragraph("Rut : "+d.getReceptor().getRut()
                     +"-"+d.getReceptor().getDigitoverificador(),fuenteCuerpo));
-            celda9.setBorder(Rectangle.NO_BORDER);
+            celda9.setBorder(Rectangle.LEFT);
             tabla.addCell(celda9);
 
             PdfPCell celda10 = new PdfPCell(new Paragraph(""));
-            celda10.setBorder(Rectangle.NO_BORDER);
+            celda10.setBorder(Rectangle.RIGHT);
             tabla.addCell(celda10);
 
 //           --------------------------------- fila 5
             PdfPCell celda11 = new PdfPCell(new Paragraph("Nombre : "+d.getReceptor().getNombreCompleto(),fuenteCuerpo));
-            celda11.setBorder(Rectangle.NO_BORDER);
+            celda11.setBorder(Rectangle.LEFT | Rectangle.BOTTOM);
             tabla.addCell(celda11);
 
             PdfPCell celda12 = new PdfPCell(new Paragraph("\n"));
-            celda12.setBorder(Rectangle.NO_BORDER);
+            celda12.setBorder(Rectangle.RIGHT | Rectangle.BOTTOM);
             tabla.addCell(celda12);
-
-//           --------------------------------- fila 6
-            PdfPCell celda14 = new PdfPCell(new Paragraph("\n"));
-            celda14.setBorder(Rectangle.NO_BORDER);
-            celda14.setColspan(2);
-            tabla.addCell(celda14);
 
 //          -----------------------------------fila 7
 
@@ -136,32 +133,26 @@ public class RenderPdfCaja implements Serializable {
             celda13.setColspan(2);
             tabla.addCell(celda13);
 
-//          --------------------------------  fila 8
-            PdfPCell celda15 = new PdfPCell(new Paragraph("\n\n"));
-            celda15.setBorder(Rectangle.NO_BORDER);
-            celda15.setColspan(2);
-            tabla.addCell(celda15);
-
 //          ---------------------------------  fila 9
-            PdfPCell celda16 = new PdfPCell(new Paragraph("Comentario : "+d.getComentario(),fuenteCuerpo));
+            PdfPCell celda16 = new PdfPCell(new Paragraph("\n\n"+"Comentario : "+d.getComentario(),fuenteCuerpo));
             celda16.setBorder(Rectangle.NO_BORDER);
             celda16.setColspan(2);
             tabla.addCell(celda16);
 
 //          ------------------------------------fila 10
-            PdfPCell celda17 = new PdfPCell(new Paragraph("\n\n\n\n"));
+            PdfPCell celda17 = new PdfPCell(new Paragraph("\n\n\n\n"+"_____________________________________________________"));
             celda17.setBorder(Rectangle.NO_BORDER);
             celda17.setColspan(2);
+            celda17.setHorizontalAlignment(Element.ALIGN_CENTER);
             tabla.addCell(celda17);
+
+            PdfPCell celda18 = new PdfPCell(new Paragraph("Firma y Nombre de quien  recepciona"+"\n\n\n\n"));
+            celda18.setBorder(Rectangle.NO_BORDER);
+            celda18.setColspan(2);
+            celda18.setHorizontalAlignment(Element.ALIGN_CENTER);
+            tabla.addCell(celda18);
             pdf.add(tabla);
-
-            Paragraph firma = new Paragraph("_____________________________________________________",fuenteCuerpo);
-            firma.setAlignment(Element.ALIGN_CENTER);
-            pdf.add(firma);
-
-            firma = new Paragraph("Firma y Nombre de quien  recepciona",fuenteCuerpo);
-            firma.setAlignment(Element.ALIGN_CENTER);
-            pdf.add(firma);
+            pdf.add(tabla);
 
 
             pdf.close();

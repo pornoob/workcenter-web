@@ -1,0 +1,75 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <p:messages autoUpdate="true" closable="true" showDetail="true"  />
+        <h:form id="frmDevolucionPrestamos">
+            <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
+            <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}" footer="(*) campos obligatorios" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:contextMenu for="idPrestamosNoCancelados">
+                        <p:menuitem value="Pagar 100% caja" actionListener="#{mantenedorCaja.pagarPrestamosTemporales(1)}" update="frmDevolucionPrestamos">
+                            <p:confirm header="Confirmación"
+                                       message="¿Desea cancelar la deuda 100% en caja?" icon="ui-icon-alert"/>
+                        </p:menuitem>
+                        <p:menuitem value="Pago Parcial" oncomplete="PF('wvpagoParcial').show()" update="frmDetallePrestamos"/>
+                        <p:menuitem value="Pago Otro Medio" oncomplete="PF('wvpagoOtro').show()" update="frmDetallePrestamos"/>
+                    </p:contextMenu>
+                    <p:dataTable id="idPrestamosNoCancelados"
+                                 emptyMessage="No existen registros"
+                                 value="#{mantenedorCaja.lstDinerosConsultaFiltro}"
+                                 var="dinero"
+                                 selectionMode="single"
+                                 selection="#{mantenedorCaja.dinero}"
+                                 rowKey="#{dinero}">
+                        <p:column headerText="ID">
+                            <h:outputText value="#{dinero.id}" />
+                        </p:column>
+                        <p:column headerText="A QUIEN SE DEBE">
+                            <h:outputText value="#{dinero.receptor.nombreCompleto}" />
+                        </p:column>
+                        <p:column headerText="MONTO">
+                            <h:outputText value="#{dinero.monto}" />
+                        </p:column>
+                        <p:column headerText="FECHA">
+                            <h:outputText value="#{dinero.fechaactivo}" />
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+            </p:panel>
+        </h:form>
+        <h:form id="frmDetallePrestamos">
+            <p:dialog id="pdlPagoParcial" widgetVar="wvpagoParcial" modal="true" header="Pago Parcial" closable="false">
+            <h:panelGrid columns="2" cellpadding="10">
+                <p:outputLabel value="Monto Parcial"/>
+                <p:inputText placeholder="$000000" value="#{mantenedorCaja.dineroDevolucion}"/>
+                <p:outputLabel value="Detalle Pago: "/>
+                <p:inputTextarea value="#{mantenedorCaja.detalleDevolucionPrestamo}"/>
+                <p:commandButton value="guardar" icon="fa fa-save"
+                                 actionListener="#{mantenedorCaja.pagarPrestamosTemporales(2)}"
+                                 oncomplete="PF('wvpagoParcial').hide()" update="frmDevolucionPrestamos"/>
+                <p:commandButton value="Regresar" action="#{mantenedorCaja.limpiarVariablesPestamos}"
+                                 oncomplete="PF('wvpagoParcial').hide()"/>
+            </h:panelGrid>
+        </p:dialog>
+            <p:dialog id="pdlOtroMedio" widgetVar="wvpagoOtro" modal="true" header="Pago Otro medio" closable="false">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="Detalle Otro Medio Pago: "/>
+                    <p:inputTextarea value="#{mantenedorCaja.detalleDevolucionPrestamo}"/>
+                    <p:commandButton value="guardar" icon="fa fa-save"
+                                     action="#{mantenedorCaja.pagarPrestamosTemporales(3)}"
+                                     oncomplete="PF('wvpagoOtro').hide()"/>
+                    <p:commandButton value="Regresar" action="#{mantenedorCaja.limpiarVariablesPestamos}"
+                                     oncomplete="PF('wvpagoOtro').hide()"/>
+                </h:panelGrid>
+            </p:dialog>
+            <p:confirmDialog global="true" id="idConfirmacion">
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check"/>
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -26,9 +26,6 @@ import java.util.List;
     @NamedQuery(name = "Dinero.findById", query = "SELECT d FROM Dinero d WHERE d.id = :id"),
     @NamedQuery(name = "Dinero.findByMonto", query = "SELECT d FROM Dinero d WHERE d.monto = :monto"),
     @NamedQuery(name = "Dinero.findByConcepto", query = "SELECT d FROM Dinero d WHERE d.concepto = :concepto"),
-    @NamedQuery(name = "Dinero.findByFechareal", query = "SELECT d FROM Dinero d WHERE d.fechareal = :fechareal"),
-    @NamedQuery(name = "Dinero.findByFechaactivo", query = "SELECT d FROM Dinero d WHERE d.fechaactivo = :fechaactivo"),
-    @NamedQuery(name = "Dinero.findByComentario", query = "SELECT d FROM Dinero d WHERE d.comentario = :comentario"),
     @NamedQuery(name = "Dinero.findByReceptor", query = "SELECT d FROM Dinero d WHERE d.receptor = :receptor"),
     @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga"),
     @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "

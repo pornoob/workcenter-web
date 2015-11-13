@@ -56,7 +56,8 @@
         </h:form>
         <h:form id="idConsultaCaja">
             <p:contextMenu for="consultaTabla">
-                <p:menuitem value="Ver Detalle" update="dlgConsultaDetalle" icon="ui-icon-search" oncomplete="PF('detalleDinero').show()"/>
+                <p:menuitem value="Ver Detalle" update="dlgConsultaDetalle" icon="fa fa-search" oncomplete="PF('detalleDinero').show()"/>
+                <p:menuitem value="Imprimir" update="dlgConsultaDetalle" icon="fa fa-print" action="#{mantenedorCaja.mostrarPdf()}" ajax="false" target="_blank"/>
             </p:contextMenu>
         <p:dataTable id="consultaTabla"
                      var="dinero"

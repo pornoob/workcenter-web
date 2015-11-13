@@ -74,6 +74,10 @@ public class Constantes implements Serializable {
     private int PRESTAMO_CUOTAS = 7;
     private int DEVOLUCION_TEMPORAL = 8;
 
+    private int PAGO_CAJA = 1;
+    private int PAGO_PARCIAL = 2;
+    private int PAGO_OTRO_MEDIO = 3;
+
     private List<String> lstMotivos;
     private List<TipoDinero> lstTipoDineros;
 
@@ -621,5 +625,17 @@ public class Constantes implements Serializable {
 
     public List<Integer> getLstCuotas() {
         return lstCuotas;
+    }
+
+    public int getPAGO_CAJA() {
+        return PAGO_CAJA;
+    }
+
+    public int getPAGO_PARCIAL() {
+        return PAGO_PARCIAL;
+    }
+
+    public int getPAGO_OTRO_MEDIO() {
+        return PAGO_OTRO_MEDIO;
     }
 }

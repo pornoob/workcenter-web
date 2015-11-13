@@ -17,6 +17,7 @@
           <transition on="flowAsignacionCaja" to="asignacionCaja"/>
           <transition on="flowSueldoCaja" to="sueldoCaja"/>
           <transition on="flowPrestamoCuotas" to="prestamoCuotas"/>
+          <transition on="flowDevolucionPrestamos" to="prestamosTemporales"/>
       </view-state>
 
     <view-state id="ingresoCaja">
@@ -37,6 +38,9 @@
         <transition on="flowMenu" to="menu"/>
     </view-state>
     <view-state id="prestamoCuotas">
+        <transition on="flowMenu" to="menu"/>
+    </view-state>
+    <view-state id="prestamosTemporales">
         <transition on="flowMenu" to="menu"/>
     </view-state>
 </flow>
