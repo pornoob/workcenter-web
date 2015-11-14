@@ -3,7 +3,6 @@ package workcenter.dao;
 import org.primefaces.model.SortMeta;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
-import workcenter.entidades.Personal_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -12,8 +11,6 @@ import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
-import javax.persistence.metamodel.EntityType;
-import javax.persistence.metamodel.Metamodel;
 import java.util.List;
 import java.util.Map;
 
@@ -125,6 +122,26 @@ public class PersonalDao {
 
     public List<ContratoPersonal> obtenerContratos(Personal personal) {
         return em.createNamedQuery("ContratoPersonal.findByRut" ).setParameter("rut", personal).getResultList();
+    }
+
+    public ValorPrevisionPersonal obtenerValorPrevisionAfpActual(ContratoPersonal cp) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("select vpp from ValorPrevisionPersonal vpp ");
+        sb.append("inner join vpp.prevision p ");
+        sb.append("inner join vpp.contrato c ");
+        sb.append("inner join c.previsiones pc ");
+        sb.append("where c = :contrato and pc.fechatermino is null and p.tipo = 'afp' ");
+        sb.append("order by vpp.fechaVigencia desc ");
+
+        try {
+            Query q = em.createQuery(sb.toString(), ValorPrevisionPersonal.class);
+            q.setParameter("contrato", cp);
+            q.setMaxResults(1);
+            return (ValorPrevisionPersonal) q.getSingleResult();
+
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public ValorPrevisionPersonal obtenerValorPrevisionSaludActual(ContratoPersonal cp) {

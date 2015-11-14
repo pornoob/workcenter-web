@@ -6,7 +6,6 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaEmpresas;
@@ -15,10 +14,10 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.personal.LogicaPrevisiones;
 import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.Formato;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.FilterOption;
 
 import java.io.*;
@@ -49,14 +48,13 @@ public class MantenedorPersonal implements Serializable {
     private Integer gratificacionCalculada;
     private ContratoPersonal contratoSeleccionado;
     private List<Empresa> empleadores;
-    private Empresa empleadorSeleccionado;
     private List<Cargo> cargos;
-    private Cargo cargoSeleccionado;
     private List<Prevision> isapres;
     private List<Prevision> afps;
     private Prevision isapreSeleccionada;
     private Prevision afpSeleccionada;
     private ValorPrevisionPersonal valorSalud;
+    private ValorPrevisionPersonal valorAfp;
     private Integer hrsEspera;
     private Integer semanaCorrida;
     private SancionRetiradaPersonal retiroSancion;
@@ -416,10 +414,7 @@ public class MantenedorPersonal implements Serializable {
         setearValoresCalculados();
 
         empleadores = logicaEmpresas.obtenerEmpleadores();
-        empleadorSeleccionado = logicaPersonal.obtenerEmpleador(personalSeleccionado);
-
         cargos = logicaPersonal.obtenerCargos();
-        cargoSeleccionado = cp.getCargo();
 
         isapres = logicaPrevisiones.obtenerIsapres();
         afps = logicaPrevisiones.obtenerAfps();
@@ -451,10 +446,63 @@ public class MantenedorPersonal implements Serializable {
                 }
             }
         }
+
+        valorAfp = logicaPersonal.obtenerValorPrevisionAfpActual(cp);
+        if (valorAfp == null) {
+            valorAfp = new ValorPrevisionPersonal();
+            valorAfp.setContrato(cp);
+            valorAfp.setValor(0);
+            for (TipoUnidad tu : constantes.getTiposUnidad()) {
+                if (tu.getId().intValue() == constantes.getUnidadPesos()) {
+                    valorAfp.setUnidad(tu);
+                    break;
+                }
+            }
+        }
+
         return "flowEditarContrato";
     }
 
     public void guardarContrato() {
+        for (PrevisionContrato pc : contratoSeleccionado.getPrevisiones()) {
+            pc.setFechatermino(new Date());
+        }
+
+        PrevisionContrato afp = new PrevisionContrato();
+        afp.setContrato(contratoSeleccionado);
+        afp.setPrevision(afpSeleccionada);
+        afp.setFechainicio(new Date());
+
+        PrevisionContrato salud = new PrevisionContrato();
+        ValorPrevisionPersonal valorSalud = new ValorPrevisionPersonal();
+
+        if (tipoSalud.intValue() != constantes.getFonasa()) {
+            salud.setContrato(contratoSeleccionado);
+            salud.setPrevision(isapreSeleccionada);
+            salud.setFechainicio(new Date());
+        } else {
+            Prevision fonasa = new Prevision();
+            fonasa.setId(constantes.getFonasa());
+
+            salud.setContrato(contratoSeleccionado);
+            salud.setPrevision(fonasa);
+            salud.setFechainicio(new Date());
+        }
+
+        valorSalud.setContrato(contratoSeleccionado);
+        valorSalud.setPrevision(salud.getPrevision());
+        valorSalud.setFechaVigencia(new Date());
+        valorSalud.setUnidad(valorSalud.getUnidad());
+
+        if (valorSalud.getUnidad().getId().intValue() != constantes.getUnidadPesos()) {
+            int valor = (int) this.valorSalud.getValor();
+            valorSalud.setValor(valor);
+        } else
+            valorSalud.setValor(this.valorSalud.getValor());
+
+        contratoSeleccionado.getPrevisiones().add(afp);
+        contratoSeleccionado.getPrevisiones().add(salud);
+
         logicaPersonal.guardarContrato(contratoSeleccionado);
     }
 
@@ -585,28 +633,12 @@ public class MantenedorPersonal implements Serializable {
         this.empleadores = empleadores;
     }
 
-    public Empresa getEmpleadorSeleccionado() {
-        return empleadorSeleccionado;
-    }
-
-    public void setEmpleadorSeleccionado(Empresa empleadorSeleccionado) {
-        this.empleadorSeleccionado = empleadorSeleccionado;
-    }
-
     public List<Cargo> getCargos() {
         return cargos;
     }
 
     public void setCargos(List<Cargo> cargos) {
         this.cargos = cargos;
-    }
-
-    public Cargo getCargoSeleccionado() {
-        return cargoSeleccionado;
-    }
-
-    public void setCargoSeleccionado(Cargo cargoSeleccionado) {
-        this.cargoSeleccionado = cargoSeleccionado;
     }
 
     public List<Prevision> getIsapres() {
@@ -751,5 +783,13 @@ public class MantenedorPersonal implements Serializable {
 
     public void setListaPersonal(List<Personal> listaPersonal) {
         this.listaPersonal = listaPersonal;
+    }
+
+    public ValorPrevisionPersonal getValorAfp() {
+        return valorAfp;
+    }
+
+    public void setValorAfp(ValorPrevisionPersonal valorAfp) {
+        this.valorAfp = valorAfp;
     }
 }

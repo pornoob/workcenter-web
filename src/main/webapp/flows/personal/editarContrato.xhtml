@@ -16,7 +16,7 @@
             <td><h:outputLabel value="Cargo"/></td>
             <td>:</td>
             <td>
-                <p:selectOneMenu value="#{mantenedorPersonal.cargoSeleccionado}" converter="entityConverter"
+                <p:selectOneMenu value="#{mantenedorPersonal.contratoSeleccionado.cargo}" converter="entityConverter"
                                  filter="true" filterMatchMode="contains">
                     <f:selectItems value="#{mantenedorPersonal.cargos}" var="c" itemLabel="#{c.nombreCargo}"/>
                 </p:selectOneMenu>
@@ -62,7 +62,7 @@
             <td>:</td>
             <td colspan="4">
                 <p:selectOneMenu filter="true" filterMatchMode="contains"
-                                 value="#{mantenedorPersonal.empleadorSeleccionado}"
+                                 value="#{mantenedorPersonal.contratoSeleccionado.empleador}"
                                  converter="entityConverter">
                     <f:selectItems value="#{mantenedorPersonal.empleadores}" var="e" itemLabel="#{e.nombre}"/>
                 </p:selectOneMenu>
@@ -133,11 +133,6 @@
 <p:panel header="4.- Antecedentes Previsionales">
     <table>
         <tr>
-            <td colspan="9">
-                <h4>4.- Antecedentes Previsionales</h4>
-            </td>
-        </tr>
-        <tr>
             <td>AFP</td>
             <td>:</td>
             <td>
@@ -146,7 +141,44 @@
                     <f:selectItems value="#{mantenedorPersonal.afps}" var="a" itemLabel="#{a.nombre}"/>
                 </p:selectOneMenu>
             </td>
+            <td>Tipo moneda</td>
+            <td>:</td>
+            <td>
+                <p:selectOneRadio id="sTipoUnidadAfp" value="#{mantenedorPersonal.valorAfp.unidad}"
+                                  converter="entityConverter">
+                    <f:selectItems value="#{constantes.tiposUnidad}" var="tu" itemLabel="#{tu.etiqueta}"/>
+                    <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidadAfṕ()}" process="@this"
+                            update=":frmPersonal:pValorTipoUnidad"/>
+                </p:selectOneRadio>
+            </td>
+        </tr>
 
+        <tr>
+            <td>Empart</td>
+            <td>:</td>
+            <td><p:selectBooleanCheckbox/></td>
+
+            <td>Valor Afp</td>
+            <td>:</td>
+            <td>
+                <p:outputPanel id="pValorTipoUnidadAfp">
+                    <p:inputText rendered="#{constantes.unidadPesos ne mantenedorPersonal.valorAfp.unidad.id}"
+                                 value="#{mantenedorPersonal.valorAfp.valor}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
+                    </p:inputText>
+                    <p:inputText rendered="#{constantes.unidadPesos eq mantenedorPersonal.valorAfp.unidad.id}"
+                                 value="#{mantenedorPersonal.valorAfp.valor}">
+                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    </p:inputText>
+                </p:outputPanel>
+            </td>
+        </tr>
+
+        <tr>
+            <td><br/><br/><br/></td>
+        </tr>
+
+        <tr>
             <td>Salud</td>
             <td>:</td>
             <td>
@@ -171,10 +203,6 @@
         </tr>
 
         <tr>
-            <td>Empart</td>
-            <td>:</td>
-            <td><p:selectBooleanCheckbox/></td>
-
             <ui:fragment id="pTiposUnidad" rendered="#{!mantenedorPersonal.esFonasa()}">
                 <td>Tipo moneda</td>
                 <td>:</td>
@@ -191,11 +219,11 @@
                 <td>:</td>
                 <td>
                     <p:outputPanel id="pValorTipoUnidad">
-                        <p:inputText rendered="#{constantes.unidadUf eq mantenedorPersonal.valorSalud.unidad.id}"
+                        <p:inputText rendered="#{constantes.unidadPesos ne mantenedorPersonal.valorSalud.unidad.id}"
                                      value="#{mantenedorPersonal.valorSalud.valor}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
                         </p:inputText>
-                        <p:inputText rendered="#{constantes.unidadUf ne mantenedorPersonal.valorSalud.unidad.id}"
+                        <p:inputText rendered="#{constantes.unidadPesos eq mantenedorPersonal.valorSalud.unidad.id}"
                                      value="#{mantenedorPersonal.valorSalud.valor}">
                             <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </p:inputText>

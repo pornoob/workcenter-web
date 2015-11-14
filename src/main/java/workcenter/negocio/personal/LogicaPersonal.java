@@ -109,6 +109,11 @@ public class LogicaPersonal {
     }
 
     @Transactional(readOnly = true)
+    public ValorPrevisionPersonal obtenerValorPrevisionAfpActual(ContratoPersonal cp) {
+        return personalDao.obtenerValorPrevisionAfpActual(cp);
+    }
+
+    @Transactional(readOnly = true)
     public List<SancionRetiradaPersonal> obtenerSancionesRetiradas(Personal p) {
         return personalDao.obtenerSancionesRetiradas(p);
     }
