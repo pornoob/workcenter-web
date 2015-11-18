@@ -15,7 +15,7 @@
                             <p:confirm header="Confirmación"
                                        message="¿Desea cancelar la deuda 100% en caja?" icon="ui-icon-alert"/>
                         </p:menuitem>
-                        <p:menuitem value="Pago Parcial" oncomplete="PF('wvpagoParcial').show()" update="frmDetallePrestamos"/>
+                        <p:menuitem value="Pago Parcial" oncomplete="PF('wvpagoParcial').show()" update="frmDetallePrestamos:pdlPagoParcial"/>
                         <p:menuitem value="Pago Otro Medio" oncomplete="PF('wvpagoOtro').show()" update="frmDetallePrestamos"/>
                     </p:contextMenu>
                     <p:dataTable id="idPrestamosNoCancelados"
@@ -45,12 +45,12 @@
             <p:dialog id="pdlPagoParcial" widgetVar="wvpagoParcial" modal="true" header="Pago Parcial" closable="false">
             <h:panelGrid columns="2" cellpadding="10">
                 <p:outputLabel value="Monto Parcial"/>
-                <p:inputText placeholder="$000000" value="#{mantenedorCaja.dineroDevolucion}"/>
+                <p:inputText placeholder="$000000" value="#{mantenedorCaja.cancelado.devolucion}"/>
                 <p:outputLabel value="Detalle Pago: "/>
-                <p:inputTextarea value="#{mantenedorCaja.detalleDevolucionPrestamo}"/>
+                <p:inputTextarea value="#{mantenedorCaja.cancelado.detalle}"/>
                 <p:commandButton value="guardar" icon="fa fa-save"
-                                 actionListener="#{mantenedorCaja.pagarPrestamosTemporales(2)}"
-                                 oncomplete="PF('wvpagoParcial').hide()" update="frmDevolucionPrestamos"/>
+                                 action="#{mantenedorCaja.pagarPrestamosTemporales(2)}"
+                                 oncomplete="PF('wvpagoParcial').hide()" update="frmDevolucionPrestamos frmDetallePrestamos" />
                 <p:commandButton value="Regresar" action="#{mantenedorCaja.limpiarVariablesPestamos}"
                                  oncomplete="PF('wvpagoParcial').hide()"/>
             </h:panelGrid>
@@ -58,7 +58,7 @@
             <p:dialog id="pdlOtroMedio" widgetVar="wvpagoOtro" modal="true" header="Pago Otro medio" closable="false">
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:outputLabel value="Detalle Otro Medio Pago: "/>
-                    <p:inputTextarea value="#{mantenedorCaja.detalleDevolucionPrestamo}"/>
+                    <p:inputTextarea value="#{mantenedorCaja.cancelado.detalle}"/>
                     <p:commandButton value="guardar" icon="fa fa-save"
                                      action="#{mantenedorCaja.pagarPrestamosTemporales(3)}"
                                      oncomplete="PF('wvpagoOtro').hide()"/>

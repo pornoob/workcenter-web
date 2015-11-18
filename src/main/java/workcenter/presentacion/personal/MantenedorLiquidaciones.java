@@ -228,6 +228,12 @@ public class MantenedorLiquidaciones implements Serializable {
 		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
 	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
+        //se settean las siguintes  variable para que pueda funcionar el libro de remuneraciones
+        liquidacion.setHoraEspera(0);
+        liquidacion.setSemanaCorrida(0);
+        liquidacion.setTotalViajes(0);
+        liquidacion.setViatico(0);
+        liquidacion.setDifCaja(0);
     }
 
     public Integer getAsignacionFamiliarMonto() {

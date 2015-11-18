@@ -48,8 +48,10 @@
                             pattern="yyyy-MM-dd"
                             required="true"
                             requiredMessage="Fecha Requerida"
-                            value="#{mantenedorCaja.dinero.fechaactivo}"
-                            />
+                            value="#{mantenedorCaja.fechaCuotaInicial}"
+                            >
+                    <p:ajax event="dateSelect" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
+                </p:calendar>
                 </h:panelGrid>
             </p:panel>
         </h:form>
@@ -57,7 +59,7 @@
             <h:panelGrid columns="2" cellpadding="5">
                 <p:dataTable id="dtCalendario" value="#{mantenedorCaja.dinero.lstDescuentos}" var="d">
                     <p:column headerText="FECHA">
-                        <h:outputText value="#{d.fecha}" />
+                        <h:outputText value="#{d.fecha}"/>
                     </p:column>
                     <p:column headerText="MONTO">
                         <h:outputText value="#{d.monto}" />

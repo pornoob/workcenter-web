@@ -21,6 +21,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
 
@@ -53,10 +54,10 @@ public class MantenedorCaja implements Serializable {
     private List<Personal> lstPersonal;
     private List<Concepto> lstConceptos;
     private List<Concepto> lstConpcetosFiltrada;
-    private String detalleDevolucionPrestamo;
-    private Integer dineroDevolucion;
+    private PrestamoCancelado cancelado;
     private Dinero dinero;
     private Concepto concepto;
+    private Date fechaCuotaInicial;
     @Autowired LogicaCaja logicaCaja;
     @Autowired LogicaPersonal logicaPersonal;
     @Autowired LogicaConceptos logicaConceptos;
@@ -236,6 +237,8 @@ public class MantenedorCaja implements Serializable {
     public String irPrestamoCuotas(int tipoConcepto){
         asignarConcepto(tipoConcepto);
         inicializarDinero();
+        fechaCuotaInicial = new Date();
+        fechaCuotaInicial.setMonth(fechaCuotaInicial.getMonth()+1);
         dinero.setFechaactivo(new Date());
         return "flowPrestamoCuotas";
     }
@@ -245,19 +248,42 @@ public class MantenedorCaja implements Serializable {
        logicaCaja.guardarEntradas(dinero);
     }
 
-    public void calcularCuotas(){
-        if(numeroCuotas == null || dinero.getMonto() ==null || dinero.getMonto() == 0) return;
+    public void calcularCuotas() throws ParseException{
+
+        if(numeroCuotas == null || dinero.getMonto() ==null || dinero.getMonto() == 0 || fechaCuotaInicial == null)
+            return;
         lstDescuento = new ArrayList<Descuento>();
-        //Settear la fecha segundo el mes primera cuota en adelante
         Integer montoCuotas = dinero.getMonto() / numeroCuotas;
+        Date fechaTmp = fechaCuotaInicial;
         for (int i=1; i<=numeroCuotas; i++){
             Descuento descuentoTmp = new Descuento();
+            if (i == 1 ){
+                descuentoTmp.setFecha(fechaTmp);
+            }else{
+                descuentoTmp.setFecha(calcularFechaCuotas(fechaTmp));
+            }
             descuentoTmp.setMonto(montoCuotas);
             descuentoTmp.setNombre("Prestamo Cuotas");
             descuentoTmp.setPersona(dinero.getReceptor().getRut());
             lstDescuento.add(descuentoTmp);
+            fechaTmp = descuentoTmp.getFecha();
         }
         dinero.setLstDescuentos(lstDescuento);
+    }
+
+    public Date calcularFechaCuotas(Date fechaTmp) throws ParseException{
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        String fechaActual = sdf.format(fechaTmp);
+        Integer anio = Integer.parseInt(fechaActual.split("-")[0]);
+        Integer mes = Integer.parseInt(fechaActual.split("-")[1]);
+        mes = mes + 1;
+        if (mes > 12){
+            anio = anio + 1;
+            mes = 01;
+        }
+        System.err.println(sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]));
+        return sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]);
     }
 
     public String irPrestamosTemporales(int tipoConcepto){
@@ -268,11 +294,10 @@ public class MantenedorCaja implements Serializable {
     }
 
     public void pagarPrestamosTemporales(int tipo){
-
-        PrestamoCancelado cancelado = new PrestamoCancelado();
+        System.err.println(cancelado.getDetalle());
+        System.err.println(cancelado.getDevolucion());
         switch (tipo){
             case 1:
-                System.err.println("PUM CASE 1");
                 Dinero pagoTotal = new Dinero();
                 Concepto conceptoPagoTotal = new Concepto();
                 conceptoPagoTotal.setId(constantes.getDEVOLUCION_TEMPORAL());
@@ -285,56 +310,60 @@ public class MantenedorCaja implements Serializable {
                 pagoTotal.setComentario(cancelado.getDetalle());
                 cancelado.setDevolucion(pagoTotal.getMonto());
                 cancelado.setPrestamo(dinero.getId());
-                logicaCaja.guardarEntradas(pagoTotal);
-                logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
+                //logicaCaja.guardarEntradas(pagoTotal);
+                //logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
                 break;
             case 2:
-                System.err.println("PUM CASE 2");
                 Dinero pagoParcial = new Dinero();
                 Concepto conceptoPagoParcial = new Concepto();
                 conceptoPagoParcial.setId(constantes.getDEVOLUCION_TEMPORAL());
                 pagoParcial.setConcepto(conceptoPagoParcial);
                 pagoParcial.setFechaactivo(new Date());
                 pagoParcial.setFechareal(pagoParcial.getFechaactivo());
-                pagoParcial.setMonto(dineroDevolucion);
+                pagoParcial.setMonto(cancelado.getDevolucion());
                 pagoParcial.setReceptor(dinero.getReceptor());
-                cancelado.setDetalle(detalleDevolucionPrestamo);
+                cancelado.setDetalle(cancelado.getDetalle());
                 pagoParcial.setComentario(cancelado.getDetalle());
                 cancelado.setDevolucion(pagoParcial.getMonto());
                 cancelado.setPrestamo(dinero.getId());
 
-                System.err.println(dineroDevolucion);
-                System.err.println(dinero.getMonto());
-
-
+                Boolean recomendacion = false;
 
                 if (pagoParcial.getMonto() > dinero.getMonto()){
-                    FacesUtil.mostrarMensajeError("Error Al guardar", "Devolución de Monto es mayor a la deuda");
-                    System.err.println("no guarda 1 ");
-                }else if (pagoParcial.getMonto() == dinero.getMonto()){
+                FacesUtil.mostrarMensajeError("Error Al guardar", "Devolución de Monto es mayor que la deuda");
+                limpiarVariablesPestamos();
+                recomendacion = true;
+                }
+
+                if (pagoParcial.getMonto().intValue() ==  dinero.getMonto().intValue()){
                     FacesUtil.mostrarMensajeError("Recomendación", "Seleccione pago 100% en caja");
-                    System.err.println("no guarda 2 ");
-                }else {
-                    System.err.println("GUARDAR");
+                    limpiarVariablesPestamos();
+                    recomendacion = true;
+                }
+
+                if (!recomendacion){
+                System.err.println("GUARDAR");
                     //logicaCaja.guardarEntradas(pagoParcial);
                     //logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
+                    limpiarVariablesPestamos();
                 }
                 break;
 
             case 3:
-                cancelado.setDetalle(detalleDevolucionPrestamo);
+                System.err.println(dinero.getComentario());
                 cancelado.setDevolucion(dinero.getMonto());
                 cancelado.setPrestamo(dinero.getId());
+                dinero.setComentario(cancelado.getDetalle());
+                //logicaCaja.guardarEntradas(dinero);
+                //logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
+                System.err.println(dinero.getComentario());
                 break;
         }
         lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
     }
 
     public void limpiarVariablesPestamos(){
-        System.err.println("ENTRO A LIMPAR VARIABLES");
-        detalleDevolucionPrestamo = new String("");
-        dineroDevolucion = new Integer(0);
-
+         cancelado = new PrestamoCancelado();
     }
 
     public void mostrarPdf() throws IOException {
@@ -535,19 +564,19 @@ public class MantenedorCaja implements Serializable {
         this.numeroCuotas = numeroCuotas;
     }
 
-    public Integer getDineroDevolucion() {
-        return dineroDevolucion;
+    public PrestamoCancelado getCancelado() {
+        return cancelado;
     }
 
-    public void setDineroDevolucion(Integer dineroDevolucion) {
-        dineroDevolucion = dineroDevolucion;
+    public void setCancelado(PrestamoCancelado cancelado) {
+        this.cancelado = cancelado;
     }
 
-    public String getDetalleDevolucionPrestamo() {
-        return detalleDevolucionPrestamo;
+    public Date getFechaCuotaInicial() {
+        return fechaCuotaInicial;
     }
 
-    public void setDetalleDevolucionPrestamo(String detalleDevolucionPrestamo) {
-        this.detalleDevolucionPrestamo = detalleDevolucionPrestamo;
+    public void setFechaCuotaInicial(Date fechaCuotaInicial) {
+        this.fechaCuotaInicial = fechaCuotaInicial;
     }
 }
