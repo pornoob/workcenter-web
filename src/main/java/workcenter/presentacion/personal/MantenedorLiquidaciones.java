@@ -120,29 +120,32 @@ public class MantenedorLiquidaciones implements Serializable {
         bonos.setSource(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()));
         bonos.setTarget(liquidacion.getIdPersonal().getBonosDescuentos());
         for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
-            if (bDP.getIdBonodescuento().getImponible()) {
-                bonoImponibles.add(bDP);
-                if ( bDP.getMonto() != null){
-                	totalImponible = totalImponible + bDP.getMonto().intValue();
-                }else{
-                	totalImponible = totalImponible + 0;
+
+            if (filtrarporfecha(bDP.getFechadesde(),bDP.getFechahasta())) {
+                if (bDP.getIdBonodescuento().getImponible()) {
+                    bonoImponibles.add(bDP);
+                    if (bDP.getMonto() != null) {
+                        totalImponible = totalImponible + bDP.getMonto().intValue();
+                    } else {
+                        totalImponible = totalImponible + 0;
+                    }
+
+                } else if (!bDP.getIdBonodescuento().getImponible() &&
+                        bDP.getIdBonodescuento().getIdTipoBonodescuento().getDescripcion().equals(new String("Bono"))) {
+                    bonoNoImponibles.add(bDP);
+                    if (bDP.getMonto() != null) {
+                        totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
+                    } else {
+                        totalNoImponible = totalNoImponible + 0;
+                    }
+                } else {
+                    descuentos.add(bDP);
+                    if (bDP.getMonto() != null) {
+                        totalDescuentos = totalDescuentos + bDP.getMonto().intValue();
+                    } else {
+                        totalDescuentos = totalDescuentos + 0;
+                    }
                 }
-                
-            } else if ( !bDP.getIdBonodescuento().getImponible() &&
-            		bDP.getIdBonodescuento().getIdTipoBonodescuento().getDescripcion().equals(new String("Bono")) ) {
-                bonoNoImponibles.add(bDP);
-                if ( bDP.getMonto() != null){
-                	totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
-                }else{
-                	totalNoImponible = totalNoImponible + 0;
-                }   
-            }else {
-            	descuentos.add(bDP);
-            	if ( bDP.getMonto() != null){
-            		totalDescuentos = totalDescuentos + bDP.getMonto().intValue();
-                }else{
-                	totalDescuentos = totalDescuentos + 0;
-                }             	
             }
         }
         // sueldo base y gratificacion
@@ -235,6 +238,24 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setViatico(0);
         liquidacion.setDifCaja(0);
     }
+
+    public Boolean filtrarporfecha(Date desde,Date hasta){
+
+        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
+        if (desde == null && hasta==null){
+            return true;
+        }else if
+             ((Integer.parseInt(mes) == Integer.parseInt(sdf.format(desde).split("-")[0]) &&
+                    anio == Integer.parseInt(sdf.format(desde).split("-")[1]))&&
+                    (Integer.parseInt(mes) == Integer.parseInt(sdf.format(hasta).split("-")[0]) &&
+                            anio == Integer.parseInt(sdf.format(hasta).split("-")[1]))){
+            return true;
+
+            }else return false;
+
+
+    }
+
 
     public Integer getAsignacionFamiliarMonto() {
 		return asignacionFamiliarMonto;
