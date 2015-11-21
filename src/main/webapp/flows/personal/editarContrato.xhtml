@@ -235,7 +235,7 @@
 </p:panel>
 <p:outputPanel class="actionPanel">
     <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
-                     action="#{mantenedorPersonal.irContratosPersonal()}"/>
+                     action="#{mantenedorPersonal.irContratosPersonal()}" ajax="false" immediate="true"/>
     <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                      value="Guardar" action="#{mantenedorPersonal.guardarContrato()}"/>
 </p:outputPanel>

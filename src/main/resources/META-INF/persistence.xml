@@ -5,6 +5,7 @@
     <persistence-unit name="primary" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
         <properties>
+            <!-- c3p0 configuration-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
             <property name="hibernate.max_fetch_depth" value="0"/>
             <property name="hibernate.connection.charSet" value="UTF-8"/>

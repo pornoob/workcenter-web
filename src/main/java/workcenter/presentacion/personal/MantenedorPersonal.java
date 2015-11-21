@@ -35,7 +35,8 @@ import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
  */
 @Component
 @Scope("flow")
-public class MantenedorPersonal implements Serializable {
+public class
+        MantenedorPersonal implements Serializable {
 
     private LazyDataModel<Personal> listaPersonalLazy;
     private List<Personal> listaPersonal;

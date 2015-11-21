@@ -77,7 +77,7 @@
                         <p:commandLink rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
                                        title="Administrar contratos"
                                        action="#{mantenedorPersonal.irContratosPersonal(personal)}"
-                                       styleClass="ui-icon ui-icon-document"/>
+                                       styleClass="ui-icon ui-icon-document" ajax="false"/>
                         <p:commandLink rendered="#{sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                        title="Bloquear" action="#{mantenedorPersonal.irBloqueoPersonal(personal)}"
                                        styleClass="ui-icon ui-icon-locked"/>

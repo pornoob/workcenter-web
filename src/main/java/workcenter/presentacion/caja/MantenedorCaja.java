@@ -284,6 +284,11 @@ public class MantenedorCaja implements Serializable {
         }
         System.err.println(sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]));
         return sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]);
+        //AGREGAR MESES, DAY Y AÑOS
+        //Calendar d = Calendar.getInstance();
+        //d.setTime(fechaTmp);
+        //d.add(Calendar.MONTH,1);
+
     }
 
     public String irPrestamosTemporales(int tipoConcepto){

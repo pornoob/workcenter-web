@@ -137,6 +137,7 @@ public class MantenedorLiquidaciones implements Serializable {
                         totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
                     } else {
                         totalNoImponible = totalNoImponible + 0;
+
                     }
                 } else {
                     descuentos.add(bDP);
@@ -240,20 +241,20 @@ public class MantenedorLiquidaciones implements Serializable {
     }
 
     public Boolean filtrarporfecha(Date desde,Date hasta){
+        Boolean cumpleDesde;
+        Boolean cumpleHasta;
 
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
-        if (desde == null && hasta==null){
-            return true;
-        }else if
-             ((Integer.parseInt(mes) == Integer.parseInt(sdf.format(desde).split("-")[0]) &&
-                    anio == Integer.parseInt(sdf.format(desde).split("-")[1]))&&
-                    (Integer.parseInt(mes) == Integer.parseInt(sdf.format(hasta).split("-")[0]) &&
-                            anio == Integer.parseInt(sdf.format(hasta).split("-")[1]))){
-            return true;
+        try {
+            Date fecha = sdf.parse(mes + "-" + String.valueOf(anio));
 
-            }else return false;
+            cumpleDesde = desde != null ? fecha.after(desde) || fecha.equals(desde) : Boolean.TRUE;
+            cumpleHasta = hasta != null ? fecha.before(hasta) || fecha.equals(hasta) : Boolean.TRUE;
 
-
+            return Boolean.TRUE.equals(cumpleDesde) && Boolean.TRUE.equals(cumpleHasta);
+        } catch (ParseException e) {
+            return false;
+        }
     }
 
 
