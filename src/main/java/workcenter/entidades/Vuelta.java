@@ -9,19 +9,7 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -53,21 +41,20 @@ public class Vuelta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "ordendecarga")
     private Integer ordenDeCarga;
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 7)
-    @Column(name = "tracto")
-    private String tracto;
-    @Basic(optional = false)
+    @ManyToOne
+    @JoinColumn(name = "tracto", referencedColumnName = "patente")
+    private Equipo tracto;
     @NotNull
-    @Column(name = "conductor")
-    private int conductor;
+    @ManyToOne
+    @JoinColumn(name = "conductor", referencedColumnName = "rut")
+    private Personal conductor;
     @Basic(optional = false)
     @NotNull
     @Column(name = "ingresadopor")
@@ -89,12 +76,14 @@ public class Vuelta implements Serializable {
     @Column(name = "dineroentregado")
     private Integer dineroEntregado;
     @Size(max = 7)
-    @Column(name = "batea")
-    private String batea;
+    @ManyToOne
+    @JoinColumn(name = "batea", referencedColumnName = "patente")
+    private Equipo batea;
     @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER)
     private List<Producto> productosList;
 
     public Vuelta() {
+        this.tracto = new Equipo();
     }
 
     public Integer getOrdenDeCarga() {
@@ -113,19 +102,19 @@ public class Vuelta implements Serializable {
         this.fecha = fecha;
     }
 
-    public String getTracto() {
+    public Equipo getTracto() {
         return tracto;
     }
 
-    public void setTracto(String tracto) {
+    public void setTracto(Equipo tracto) {
         this.tracto = tracto;
     }
 
-    public int getConductor() {
+    public Personal getConductor() {
         return conductor;
     }
 
-    public void setConductor(int conductor) {
+    public void setConductor(Personal conductor) {
         this.conductor = conductor;
     }
 
@@ -201,11 +190,11 @@ public class Vuelta implements Serializable {
         this.dineroEntregado = dineroEntregado;
     }
 
-    public String getBatea() {
+    public Equipo getBatea() {
         return batea;
     }
 
-    public void setBatea(String batea) {
+    public void setBatea(Equipo batea) {
         this.batea = batea;
     }
 

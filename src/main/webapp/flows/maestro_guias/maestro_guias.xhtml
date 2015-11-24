@@ -1,0 +1,146 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:c="http://java.sun.com/jsp/jstl/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Ingreso de Guías</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"  />
+        <h:form id="frmMaestroguias">
+            <table>
+                <tr>
+                    <td>
+                        <p:outputLabel value="N° DE ORDEN"/>
+                    </td>
+                    <td>
+                        <p:inputText value="#{mantenedorMaestroGuias.ordenConsulta}">
+                            <p:ajax event="change" listener="#{mantenedorMaestroGuias.consultarOrdenDeCarga}" update="frmMaestroguias"/>
+                         </p:inputText>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td><p:outputLabel value="CONDUCTORES"/></td>
+                    <td><h3><p:outputLabel value="#{mantenedorMaestroGuias.ordenDeCarga.conductor.nombreCompleto}"/></h3></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <p:outputLabel value="FECHA:"/>
+                    </td>
+                    <td>
+                        <p:calendar value="#{mantenedorMaestroGuias.ordenDeCarga.fecha}" pattern="yyyy-MM-dd"></p:calendar>
+                    </td>
+                    <td></td>
+                    <td></td>
+                    <td><p:outputLabel value="PRESTADOR DE SERVICIO:"/></td>
+                    <td><h3><p:outputLabel value="#{mantenedorMaestroGuias.ordenDeCarga.tracto.duenio.nombre}"/></h3></td>
+                </tr>
+
+                <tr>
+                    <td>
+                        <p:outputLabel value="TRACTO:"/>
+                    </td>
+                    <td>
+                        <p:selectOneMenu value="#{mantenedorMaestroGuias.ordenDeCarga.tracto}" converter="entityConverter">
+                            <f:selectItem itemLabel="Seleccione" itemValue="null" />
+                            <f:selectItems value="#{mantenedorMaestroGuias.lstEquipos}" var="tractos"
+                                           itemLabel="#{tractos.patente}" itemValue="#{tractos}"/>
+                            <p:ajax event="change" update="frmMaestroguias"/>
+                        </p:selectOneMenu>
+                    </td>
+                    <td>
+                        <p:outputLabel value="BATEA:"/>
+                    </td>
+                    <td>
+                        <p:selectOneMenu value="#{mantenedorMaestroGuias.ordenDeCarga.batea}" converter="entityConverter">
+                            <f:selectItem itemLabel="Seleccione" itemValue="null" />
+                            <f:selectItems value="#{mantenedorMaestroGuias.lstBateas}" var="bateas"
+                                           itemLabel="#{bateas.patente}" itemValue="#{bateas}"/>
+                            <p:ajax event="change" update="frmMaestroguias"/>
+                        </p:selectOneMenu>
+                    </td>
+                    <td><p:outputLabel value="KM INICIAL:"/></td>
+                    <td><p:outputLabel value="#{mantenedorMaestroGuias.ordenDeCarga.kmInicial}"/></td>
+                </tr>
+            </table>
+            <p:panel id="pGastos" header="Gastos" style="margin-bottom:20px">
+                <h:panelGrid columns="4" cellpadding="10">
+                    <p:outputLabel value="PEAJES: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.peaje}"/>
+                    <p:outputLabel value="KM FINAL: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.kmFinal}"/>
+
+                    <p:outputLabel value="VIÁTICOS: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.viatico}"/>
+                    <p:outputLabel value="TOTAL GASTO COMBUSTIBLE: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.totalCombustible}"/>
+
+                    <p:outputLabel value="OTROS GASTOS: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.otrosGastos}"/>
+                    <p:outputLabel value="TOTAL LITROS: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.totalLitros}"/>
+
+                    <p:outputLabel value="DINERO ENTREGADO: "/>
+                    <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.dineroEntregado}"/>
+                </h:panelGrid>
+                <h:panelGrid columns="2" cellpadding="3">
+                    <p:outputLabel value="KM RECORRIDOS: "/>
+                    <p:outputLabel value="0"/>
+
+
+                    <p:outputLabel value="RENDIMIENTO: "/>
+                    <p:outputLabel value="0 "/>
+
+
+                    <p:outputLabel value="TOTAL GASTO: "/>
+                    <p:outputLabel value="0 "/>
+                </h:panelGrid>
+                <f:facet name="actions">
+                    <h:commandLink
+                            styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default fa fa-plus-square"
+                            title="Rendición de Petrolio"></h:commandLink>
+                </f:facet>
+            </p:panel>
+            <p:panel id="pProducto" header="Producto" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="3">
+
+                    <p:dataTable id="dtProductos"
+                                 value="#{mantenedorMaestroGuias.ordenDeCarga.productosList}"
+                                 emptyMessage="No hay productos Asociados a la Orden"
+                                 sortMode="true"
+                                 var="p">
+                        <p:column>
+                            <p:outputLabel value="#{p.numeroguia}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{p.tramo.tipoProducto.etiqueta}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{p.fechacarga}"/>
+                        </p:column>
+                        <p:column>
+                            <p:outputLabel value="#{p.fechadescarga}"/>
+                        </p:column>
+                    </p:dataTable>
+                </h:panelGrid>
+                <f:facet name="actions">
+                    <h:commandLink
+                            styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default fa fa-plus-square"
+                            title="Nuevo Producto"></h:commandLink>
+                </f:facet>
+            </p:panel>
+            <p:panel id="pAccion" header="Acción" style="margin-bottom:20px">
+                <h:panelGrid columns="5" cellpadding="10">
+                    <p:commandButton value="Guardar OC"/>
+                    <p:commandButton value="Imprimir IC con Colilla"/>
+                    <p:commandButton value="Imprimir IC"/>
+                    <p:commandButton value="Imprimir Dinero Viaje"/>
+                    <p:commandButton value="Consultar"/>
+                </h:panelGrid>
+            </p:panel>
+
+        </h:form>
+    </ui:define>
+</ui:composition>

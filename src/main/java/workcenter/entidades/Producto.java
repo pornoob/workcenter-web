@@ -65,7 +65,7 @@ public class Producto implements Serializable {
     @Column(name = "tonentrega")
     private Double tonentrega;
     @JoinColumn(name = "tramo", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private TramoContrato tramo;
 
     public Producto() {
