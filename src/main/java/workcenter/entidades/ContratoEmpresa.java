@@ -9,6 +9,7 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
@@ -52,10 +53,8 @@ public class ContratoEmpresa implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
     @NotNull
     @Size(min = 1, max = 45)
     @Column(name = "numerocontrato")
@@ -63,11 +62,9 @@ public class ContratoEmpresa implements Serializable {
     @Size(max = 70)
     @Column(name = "nombrecontrato")
     private String nombrecontrato;
-    @Basic(optional = false)
     @JoinColumn(name = "empresa", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.EAGER)
     private Empresa empresa;
-    @Basic(optional = false)
     @NotNull
     @Column(name = "fechainicio")
     @Temporal(TemporalType.DATE)
@@ -79,7 +76,6 @@ public class ContratoEmpresa implements Serializable {
     @Size(max = 2147483647)
     @Column(name = "detalle")
     private String detalle;
-    @Basic(optional = false)
     @NotNull
     @Column(name = "escliente")
     private boolean escliente;
@@ -87,8 +83,8 @@ public class ContratoEmpresa implements Serializable {
     private Boolean indefinido;
     @Column(name = "ordendecompra")
     private Integer ordendecompra;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato")
-    private Collection<TramoContrato> tramosporcontratoCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato",fetch = FetchType.LAZY)
+    private List<TramoContrato> tramosporcontratos;
 
     public ContratoEmpresa() {
     }
@@ -176,12 +172,12 @@ public class ContratoEmpresa implements Serializable {
         this.ordendecompra = ordendecompra;
     }
 
-    public Collection<TramoContrato> getTramosporcontratoCollection() {
-        return tramosporcontratoCollection;
+    public List<TramoContrato> getTramosporcontratos() {
+        return tramosporcontratos;
     }
 
-    public void setTramosporcontratoCollection(Collection<TramoContrato> tramosporcontratoCollection) {
-        this.tramosporcontratoCollection = tramosporcontratoCollection;
+    public void setTramosporcontratos(List<TramoContrato> tramosporcontratos) {
+        this.tramosporcontratos = tramosporcontratos;
     }
 
     @Override

@@ -22,7 +22,16 @@
                     <td></td>
                     <td></td>
                     <td><p:outputLabel value="CONDUCTORES"/></td>
-                    <td><h3><p:outputLabel value="#{mantenedorMaestroGuias.ordenDeCarga.conductor.nombreCompleto}"/></h3></td>
+                    <td>
+                        <p:selectOneMenu value="#{mantenedorMaestroGuias.ordenDeCarga.conductor}" converter="entityConverter">
+                            <f:selectItems value="#{mantenedorMaestroGuias.lstConductores}" var="conductores"
+                                           itemLabel="#{conductores.nombreCompleto}" itemValue="#{conductores}"/>
+                        </p:selectOneMenu>
+                        <h:graphicImage rendered="#{!mantenedorMaestroGuias.estaBloqueado()}"
+                                        value="/img/icons/luz_verde.png"/>
+                        <h:graphicImage rendered="#{mantenedorMaestroGuias.estaBloqueado()}"
+                                        value="/img/icons/luz_roja.png"/>
+                    </td>
                 </tr>
 
                 <tr>
@@ -49,6 +58,11 @@
                                            itemLabel="#{tractos.patente}" itemValue="#{tractos}"/>
                             <p:ajax event="change" update="frmMaestroguias"/>
                         </p:selectOneMenu>
+                        <h:graphicImage rendered="#{!mantenedorMaestroGuias.estaBloqueadoTracto()}"
+                                        value="/img/icons/luz_verde.png"/>
+                        <h:graphicImage rendered="#{mantenedorMaestroGuias.estaBloqueadoTracto()}"
+                                        value="/img/icons/luz_roja.png"/>
+
                     </td>
                     <td>
                         <p:outputLabel value="BATEA:"/>
@@ -85,22 +99,26 @@
                     <p:outputLabel value="DINERO ENTREGADO: "/>
                     <p:inputText value="#{mantenedorMaestroGuias.ordenDeCarga.dineroEntregado}"/>
                 </h:panelGrid>
-                <h:panelGrid columns="2" cellpadding="3">
-                    <p:outputLabel value="KM RECORRIDOS: "/>
+                <h:panelGrid columns="1" cellpadding="5">
+                    <p:outputLabel value="KM RECORRIDOS: ">
                     <p:outputLabel value="0"/>
+                    </p:outputLabel>
 
-
-                    <p:outputLabel value="RENDIMIENTO: "/>
+                    <p:outputLabel value="RENDIMIENTO: ">
                     <p:outputLabel value="0 "/>
+                    </p:outputLabel>
 
-
-                    <p:outputLabel value="TOTAL GASTO: "/>
+                    <p:outputLabel value="TOTAL GASTO: ">
                     <p:outputLabel value="0 "/>
+                    </p:outputLabel>
                 </h:panelGrid>
                 <f:facet name="actions">
-                    <h:commandLink
-                            styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default fa fa-plus-square"
-                            title="Rendición de Petrolio"></h:commandLink>
+                    <p:commandButton oncomplete="PF('wPetrolio').show()"
+                                     styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                                     icon=" fa fa-plus-square"
+                                     title="Rendición de Petroleo"
+                                     actionListener="#{mantenedorMaestroGuias.irGuiasDePretrolio}"
+                                     update="frmPetrolio"/>
                 </f:facet>
             </p:panel>
             <p:panel id="pProducto" header="Producto" style="margin-bottom:20px">
@@ -126,9 +144,10 @@
                     </p:dataTable>
                 </h:panelGrid>
                 <f:facet name="actions">
-                    <h:commandLink
-                            styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default fa fa-plus-square"
-                            title="Nuevo Producto"></h:commandLink>
+                    <p:commandButton oncomplete="PF('wProducto').show()"
+                                     styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                                     icon=" fa fa-plus-square"
+                                     title="Nuevo Producto" actionListener="#{mantenedorMaestroGuias.irGuardarProducto}"></p:commandButton>
                 </f:facet>
             </p:panel>
             <p:panel id="pAccion" header="Acción" style="margin-bottom:20px">
@@ -140,6 +159,140 @@
                     <p:commandButton value="Consultar"/>
                 </h:panelGrid>
             </p:panel>
+        </h:form>
+        <h:form id="frmProducto">
+            <p:dialog id="dProducto"
+                      widgetVar="wProducto"
+                      width="800" height="400"
+                      modal="true"
+                      header="Producto Transportado">
+                <p:panel>
+                    <h:panelGrid columns="1" cellpadding="4">
+                        <p:outputLabel value="N° GUIA:">
+                            <p:inputText value="#{mantenedorMaestroGuias.producto.numeroguia}"/>
+                        </p:outputLabel>
+                        <p:outputLabel value="CLIENTE:">
+                            <p:selectOneMenu value="#{mantenedorMaestroGuias.empresaSeleccionada}" converter="entityConverter">
+                                <f:selectItems value="#{mantenedorMaestroGuias.lstEmpresas}" var="emp"
+                                               itemLabel="#{emp.empresa.nombre}" itemValue="#{emp}"/>
+                                <p:ajax event="change" listener="#{mantenedorMaestroGuias.buscarTramoContrato()}" update="frmProducto:cbProducto itDestino itOrigen"/>
+                            </p:selectOneMenu>
+                        </p:outputLabel>
+                        <p:outputLabel value="PRODUCTO:">
+                            <p:selectOneMenu id="cbProducto" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado}" converter="entityConverter">
+                                <f:selectItems value="#{mantenedorMaestroGuias.lstTramoContrato}" var="pro"
+                                               itemLabel="#{pro.tipoProducto.etiqueta}___
+                                                Origen:#{pro.origen.nombre}/Destino:#{pro.destino.nombre}" itemValue="#{pro}"/>
+                                <p:ajax event="change" update="pOrigenDestino"/>
+                            </p:selectOneMenu>
+                        </p:outputLabel>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="CARGA">
+                    <h:panelGrid columns="2" cellpadding="4">
+                        <p:outputLabel value="Fecha">
+                            <p:calendar id="cCarga"
+                                        value="#{mantenedorMaestroGuias.producto.fechacarga}"
+                                        pattern="MM/dd/yyyy HH:mm:ss"
+                                        locale="es"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel header="DESCARGA">
+                    <h:panelGrid columns="2" cellpadding="4">
+                        <p:outputLabel value="Fecha">
+                            <p:calendar id="cDescarga"
+                                        value="#{mantenedorMaestroGuias.producto.fechadescarga}"
+                                        pattern="yyyy-MM-dd HH:mm:ss"
+                                        locale="es"/>
+                        </p:outputLabel>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel id="pOrigenDestino" header="ORIGEN/DESTINO:">
+                    <h:panelGrid columns="2" cellpadding="4">
+                        <p:outputLabel value="ORIGEN:">
+                            <p:outputLabel id="itOrigen" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado.origen.nombre}"/>
+                        </p:outputLabel>
+                        <p:outputLabel value="DESTINO:">
+                            <p:outputLabel id="itDestino" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado.destino.nombre}"/>
+                        </p:outputLabel>
+                        <p:inputText value="#{mantenedorMaestroGuias.producto.tonsalida}"/>
+                        <p:inputText value="#{mantenedorMaestroGuias.producto.tonsalida}"/>
+                    </h:panelGrid>
+                </p:panel>
+                <p:panel>
+                    <h:panelGrid columns="1" cellpadding="4">
+                        <p:commandButton value="GUARDAR"
+                                         action="#{mantenedorMaestroGuias.guardarProducto}"
+                                         update="frmMaestroguias"
+                                         oncomplete="PF('wProducto').hide()" ajax="false"/>
+                    </h:panelGrid>
+                </p:panel>
+            </p:dialog>
+        </h:form>
+        <h:form id="frmPetrolio">
+            <p:dialog id="dPetrolio"
+                      widgetVar="wPetrolio"
+                      width="800" height="400"
+                      modal="true"
+                      header="Petroleo Orden #{mantenedorMaestroGuias.ordenDeCarga.ordenDeCarga}">
+                <p:panel>
+                    <h:panelGrid columns="1" cellpadding="4">
+                        <p:panel id="pPetrolioGuardar" header="Ingreso Petroleo" style="margin-bottom:20px">
+                            <h:panelGrid columns="2" cellpadding="3">
+                                <p:outputLabel value="N° GUÍA DE PETROLEO"/>
+                                <p:inputText value="#{mantenedorMaestroGuias.guiaPetroleo.numeroguia}"/>
+
+                                <p:outputLabel value="FECHA:"/>
+                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.fecha}"/>
+
+                                <p:outputLabel value="CANTIDAD DE LITROS:"/>
+                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.litros}"/>
+
+                                <p:outputLabel value="PRECIO POR LITRO:"/>
+                                <p:inputText/>
+
+                                <p:outputLabel value="ESTACION DE SERVICIO:"/>
+                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.estaciondeservicio}"/>
+                            </h:panelGrid>
+                            <f:facet name="actions">
+                                <p:commandButton styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                                                 icon=" fa fa-plus-square"
+                                                 title="Agregar Guía Petroleo"></p:commandButton>
+                            </f:facet>
+                        </p:panel>
+                        <p:panel id="pPetrolio" header="Lista de Guías de Petroleo" style="margin-bottom:20px">
+                            <h:panelGrid columns="2" cellpadding="3">
+                                <p:dataTable id="dtPetrolio"
+                                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
+                                             emptyMessage="No hay guias de petrolio asociadas a la orden"
+                                             sortMode="true"
+                                             var="petroleo"
+                                             selectionMode="single"
+                                             selection="#{mantenedorMaestroGuias.guiaPetroleo}" rowKey="#{petroleo}">
+                                    <p:ajax event="rowSelect" listener="#{mantenedorMaestroGuias.onRowSelect}"  />
+                                    <p:ajax event="rowUnselect" listener="#{mantenedorMaestroGuias.onRowUnselect}" />
+                                    <p:column headerText="Guía">
+                                        <p:outputLabel value="#{petroleo.numeroguia}"/>
+                                    </p:column>
+                                    <p:column headerText="Fecha">
+                                        <p:outputLabel value="#{petroleo.fecha}"/>
+                                    </p:column>
+                                    <p:column headerText="Litros">
+                                        <p:outputLabel value="#{petroleo.litros}"/>
+                                    </p:column>
+                                    <p:column headerText="Precio Litro">
+                                        <p:outputLabel value="#{petroleo.preciolitro}"/>
+                                    </p:column>
+                                    <p:column headerText="Total">
+                                        <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
+                                    </p:column>
+                                </p:dataTable>
+                            </h:panelGrid>
+                        </p:panel>
+                    </h:panelGrid>
+                </p:panel>
+            </p:dialog>
 
         </h:form>
     </ui:define>

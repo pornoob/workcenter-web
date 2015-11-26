@@ -79,7 +79,7 @@ public class Vuelta implements Serializable {
     @ManyToOne
     @JoinColumn(name = "batea", referencedColumnName = "patente")
     private Equipo batea;
-    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER,orphanRemoval = true)
     private List<Producto> productosList;
 
     public Vuelta() {

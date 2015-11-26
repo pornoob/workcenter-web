@@ -51,7 +51,7 @@ public class GuiaPetroleo implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "numeroguia")
-    private int numeroguia;
+    private Integer numeroguia;
     @Basic(optional = false)
     @NotNull
     @Column(name = "conductor")
@@ -96,11 +96,11 @@ public class GuiaPetroleo implements Serializable {
         this.id = id;
     }
 
-    public int getNumeroguia() {
+    public Integer getNumeroguia() {
         return numeroguia;
     }
 
-    public void setNumeroguia(int numeroguia) {
+    public void setNumeroguia(Integer numeroguia) {
         this.numeroguia = numeroguia;
     }
 

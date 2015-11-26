@@ -45,18 +45,18 @@ public class TramoContrato implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "contrato", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne
     private ContratoEmpresa contrato;
     @JoinColumn(name = "origen", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
     private OrigenDestino origen;
     @JoinColumn(name = "destino", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne
     private OrigenDestino destino;
     @JoinColumn(name = "tipoproducto", referencedColumnName = "id")
     @ManyToOne
     private TipoProducto tipoProducto;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tramo", fetch = FetchType.LAZY)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "tramo", fetch = FetchType.LAZY,orphanRemoval = true)
     private List<TarifaTramo> tarifasTramosList;
 
     public TramoContrato() {
