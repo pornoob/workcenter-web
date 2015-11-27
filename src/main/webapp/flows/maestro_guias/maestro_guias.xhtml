@@ -156,10 +156,13 @@
                     <p:commandButton value="Imprimir IC con Colilla"/>
                     <p:commandButton value="Imprimir IC"/>
                     <p:commandButton value="Imprimir Dinero Viaje"/>
-                    <p:commandButton value="Consultar"/>
+                    <p:commandButton value="Consultar" oncomplete="PF('wConsulta').show()" action="#{mantenedorMaestroGuias.irConsulta}" update="frmConsulta"/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
+
+
+<!--FROM PRODUCTO -->
         <h:form id="frmProducto">
             <p:dialog id="dProducto"
                       widgetVar="wProducto"
@@ -230,70 +233,149 @@
                 </p:panel>
             </p:dialog>
         </h:form>
-        <h:form id="frmPetrolio">
+
+
+<!--FORM PETROLEO-->
+
             <p:dialog id="dPetrolio"
                       widgetVar="wPetrolio"
-                      width="800" height="400"
+                      width="800" height="300"
                       modal="true"
-                      header="Petroleo Orden #{mantenedorMaestroGuias.ordenDeCarga.ordenDeCarga}">
-                <p:panel>
-                    <h:panelGrid columns="1" cellpadding="4">
-                        <p:panel id="pPetrolioGuardar" header="Ingreso Petroleo" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="3">
-                                <p:outputLabel value="N° GUÍA DE PETROLEO"/>
-                                <p:inputText value="#{mantenedorMaestroGuias.guiaPetroleo.numeroguia}"/>
+                      header="Petroleo Orden #{mantenedorMaestroGuias.ordenDeCarga.ordenDeCarga}"
+                      footer="IMPORTANTE para deseleccionar una fila aprete la tecla Ctrl+Click">
+                <h:form id="frmPetrolio">
+                <p:panel id="pPetrolioGuardar" header="Ingreso Petroleo" style="margin-bottom:20px">
+                    <h:panelGrid columns="2" cellpadding="3">
+                        <p:outputLabel value="N° GUÍA DE PETROLEO"/>
+                        <p:inputText value="#{mantenedorMaestroGuias.guiaPetroleo.numeroguia}"/>
 
-                                <p:outputLabel value="FECHA:"/>
-                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.fecha}"/>
+                        <p:outputLabel value="FECHA:"/>
+                        <p:calendar value="#{mantenedorMaestroGuias.guiaPetroleo.fecha}"
+                                    pattern="yyyy-MM-dd" locale="es" navigator="true"/>
 
-                                <p:outputLabel value="CANTIDAD DE LITROS:"/>
-                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.litros}"/>
+                        <p:outputLabel value="CANTIDAD DE LITROS:"/>
+                        <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.litros}"/>
 
-                                <p:outputLabel value="PRECIO POR LITRO:"/>
-                                <p:inputText/>
+                        <p:outputLabel value="PRECIO POR LITRO:"/>
+                        <p:inputText value="#{mantenedorMaestroGuias.guiaPetroleo.preciolitro}"/>
 
-                                <p:outputLabel value="ESTACION DE SERVICIO:"/>
-                                <p:inputText  value="#{mantenedorMaestroGuias.guiaPetroleo.estaciondeservicio}"/>
-                            </h:panelGrid>
-                            <f:facet name="actions">
-                                <p:commandButton styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
-                                                 icon=" fa fa-plus-square"
-                                                 title="Agregar Guía Petroleo"></p:commandButton>
-                            </f:facet>
-                        </p:panel>
-                        <p:panel id="pPetrolio" header="Lista de Guías de Petroleo" style="margin-bottom:20px">
-                            <h:panelGrid columns="2" cellpadding="3">
-                                <p:dataTable id="dtPetrolio"
-                                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
-                                             emptyMessage="No hay guias de petrolio asociadas a la orden"
-                                             sortMode="true"
-                                             var="petroleo"
-                                             selectionMode="single"
-                                             selection="#{mantenedorMaestroGuias.guiaPetroleo}" rowKey="#{petroleo}">
-                                    <p:ajax event="rowSelect" listener="#{mantenedorMaestroGuias.onRowSelect}"  />
-                                    <p:ajax event="rowUnselect" listener="#{mantenedorMaestroGuias.onRowUnselect}" />
-                                    <p:column headerText="Guía">
-                                        <p:outputLabel value="#{petroleo.numeroguia}"/>
-                                    </p:column>
-                                    <p:column headerText="Fecha">
-                                        <p:outputLabel value="#{petroleo.fecha}"/>
-                                    </p:column>
-                                    <p:column headerText="Litros">
-                                        <p:outputLabel value="#{petroleo.litros}"/>
-                                    </p:column>
-                                    <p:column headerText="Precio Litro">
-                                        <p:outputLabel value="#{petroleo.preciolitro}"/>
-                                    </p:column>
-                                    <p:column headerText="Total">
-                                        <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
-                                    </p:column>
-                                </p:dataTable>
-                            </h:panelGrid>
-                        </p:panel>
+                        <p:outputLabel value="ESTACION DE SERVICIO:"/>
+                        <p:selectOneMenu value="#{mantenedorMaestroGuias.guiaPetroleo.estaciondeservicio}" converter="entityConverter"
+                                         filterMatchMode="contains" filter="true">
+                            <f:selectItems value="#{mantenedorMaestroGuias.lstEstacionServicio}" var="servicio"
+                                           itemLabel="#{servicio.nombre}" itemValue="#{servicio}"/>
+                        </p:selectOneMenu>
                     </h:panelGrid>
+                    <f:facet name="actions">
+                        <p:commandButton styleClass="ui-panel-titlebar-icon ui-corner-all ui-state-default"
+                                         icon=" fa fa-plus-square"
+                                         title="Agregar Guía Petroleo"
+                                         action="#{mantenedorMaestroGuias.guardarGuiaDePetrolio()}">
+                            <p:ajax update="frmPetrolio" />
+                        </p:commandButton>
+                    </f:facet>
                 </p:panel>
+                <p:dataTable id="dtPetrolio"
+                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
+                             emptyMessage="No hay guias de petrolio asociadas a la orden"
+                             sortMode="true"
+                             var="petroleo"
+                             selectionMode="single"
+                             selection="#{mantenedorMaestroGuias.guiaPetroleo}" rowKey="#{petroleo}">
+                    <p:ajax event="rowSelect" listener="#{mantenedorMaestroGuias.onRowSelect}" update="frmPetrolio:pPetrolioGuardar"/>
+                    <p:ajax event="rowUnselect" listener="#{mantenedorMaestroGuias.onRowUnselect}" update="frmPetrolio:pPetrolioGuardar" />
+
+                    <p:column headerText="Guía">
+                        <p:outputLabel value="#{petroleo.numeroguia}"/>
+                    </p:column>
+                    <p:column headerText="Fecha">
+                        <p:outputLabel value="#{petroleo.fecha}"/>
+                    </p:column>
+                    <p:column headerText="Litros">
+                        <p:outputLabel value="#{petroleo.litros}"/>
+                    </p:column>
+                    <p:column headerText="Precio Litro">
+                        <p:outputLabel value="#{petroleo.preciolitro}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
+                    </p:column>
+                </p:dataTable>
+                </h:form>
             </p:dialog>
 
-        </h:form>
+
+        <!-- CONSULTA -->
+        <p:dialog id="dlgConsulta"
+                  widgetVar="wConsulta"
+                  width="800" height="300"
+                  modal="true"
+                  header="Consulta Orden De Carga">
+            <h:form id="frmConsulta">
+                <p:panel id="pnlFiltros" header="Filtros">
+                    <h:panelGrid columns="4" cellpadding="5">
+                        <p:outputLabel value="Fecha Desde: "/>
+                        <p:calendar navigator="true"
+                                    pattern="yyyy-MM-dd"
+                                    placeholder="Desde..."
+                                    locale="es"
+                                    value="#{mantenedorMaestroGuias.fechaDesde}"/>
+                        <p:outputLabel value="Hasta: "/>
+                        <p:calendar navigator="true"
+                                    pattern="yyyy-MM-dd"
+                                    placeholder="Hasta..."
+                                    locale="es"
+                                    value="#{mantenedorMaestroGuias.fechaHasta}" />
+                        <p:outputLabel value="Personal: "/>
+                        <p:selectOneMenu filterMatchMode="contains"
+                                         filter="true"
+                                         converter="entityConverter" value="#{mantenedorCaja.personal}">
+                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
+                                           itemLabel="#{p.nombreCompleto}"
+                                           itemValue="#{p}"/>
+                        </p:selectOneMenu>
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                        <p:commandButton value="Buscar"
+                                         icon="fa fa-search"
+                                         action="#{mantenedorCaja.filtrarDinerosConsulta()}"
+                                         />
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                        <p:outputLabel value=""/>
+                    </h:panelGrid>
+                </p:panel>
+                <p:dataTable id="dtConsulta"
+                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
+                             emptyMessage="No hay guias de petrolio asociadas a la orden"
+                             sortMode="true"
+                             var="petroleo"
+                             selectionMode="single"
+                             selection="#{mantenedorMaestroGuias.guiaPetroleo}" rowKey="#{petroleo}">
+                    <p:ajax event="rowSelect" listener="#{mantenedorMaestroGuias.onRowSelect}" update="frmPetrolio:pPetrolioGuardar"/>
+                    <p:ajax event="rowUnselect" listener="#{mantenedorMaestroGuias.onRowUnselect}" update="frmPetrolio:pPetrolioGuardar" />
+
+                    <p:column headerText="Guía">
+                        <p:outputLabel value="#{petroleo.numeroguia}"/>
+                    </p:column>
+                    <p:column headerText="Fecha">
+                        <p:outputLabel value="#{petroleo.fecha}"/>
+                    </p:column>
+                    <p:column headerText="Litros">
+                        <p:outputLabel value="#{petroleo.litros}"/>
+                    </p:column>
+                    <p:column headerText="Precio Litro">
+                        <p:outputLabel value="#{petroleo.preciolitro}"/>
+                    </p:column>
+                    <p:column headerText="Total">
+                        <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
+                    </p:column>
+                </p:dataTable>
+            </h:form>
+        </p:dialog>
+
     </ui:define>
 </ui:composition>

@@ -24,9 +24,9 @@
                     <p:outputLabel value="Personal: "/>
                     <p:selectOneMenu filterMatchMode="contains"
                                      filter="true"
-                                     converter="entityConverter" value="#{mantenedorCaja.personal}">
+                                     converter="entityConverter">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                        <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
+                        <f:selectItems value="#{mantenedorMaestroGuias.lstConductores}" var="p"
                                        itemLabel="#{p.nombreCompleto}"
                                        itemValue="#{p}"/>
                     </p:selectOneMenu>

@@ -8,17 +8,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -71,8 +61,9 @@ public class GuiaPetroleo implements Serializable {
     private Date fecha;
     @Column(name = "ordendecarga")
     private Integer ordendecarga;
-    @Column(name = "estaciondeservicio")
-    private Integer estaciondeservicio;
+    @ManyToOne
+    @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
+    private EstacionServicio estaciondeservicio;
 
     public GuiaPetroleo() {
     }
@@ -152,11 +143,11 @@ public class GuiaPetroleo implements Serializable {
         this.ordendecarga = ordendecarga;
     }
 
-    public Integer getEstaciondeservicio() {
+    public EstacionServicio getEstaciondeservicio() {
         return estaciondeservicio;
     }
 
-    public void setEstaciondeservicio(Integer estaciondeservicio) {
+    public void setEstaciondeservicio(EstacionServicio estaciondeservicio) {
         this.estaciondeservicio = estaciondeservicio;
     }
 

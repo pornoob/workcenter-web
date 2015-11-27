@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import workcenter.dao.GuiaDePetroleoDao;
+import workcenter.entidades.EstacionServicio;
 import workcenter.entidades.GuiaPetroleo;
 import workcenter.entidades.Vuelta;
 
@@ -22,5 +23,9 @@ public class LogicaGuiaDePetroleo {
 
     public List<GuiaPetroleo> obtenerPetrolioPorOrden(Vuelta ordenDeCarga){
         return guiaDePetroleoDao.obtenerPetrolioPorOrden(ordenDeCarga);
+    }
+
+    public List<EstacionServicio> obtenerEstacionesDeServicio(){
+        return guiaDePetroleoDao.obtenerEstacionesDeServicio();
     }
 }

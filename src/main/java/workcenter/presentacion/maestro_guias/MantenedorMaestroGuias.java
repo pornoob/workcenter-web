@@ -16,8 +16,12 @@ import workcenter.negocio.tramo_contrato.LogicaTramoContrato;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
+import javax.faces.event.ActionEvent;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -41,6 +45,9 @@ public class MantenedorMaestroGuias implements Serializable{
     private Producto producto;
     private GuiaPetroleo guiaPetroleo;
     private List<GuiaPetroleo> lstGuiaDePetrolio;
+    private List<EstacionServicio> lstEstacionServicio;
+    private Date fechaDesde;
+    private Date fechaHasta;
     @Autowired
     LogicaMaestroGuias logicaMaestroGuias;
     @Autowired
@@ -94,6 +101,8 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void irGuiasDePretrolio(){
         if (ordenDeCarga == null) return;
+        System.err.println("se obtiene lstEstacionServicio, guia de pretroleo se instancea");
+        lstEstacionServicio = logicaGuiaDePetroleo.obtenerEstacionesDeServicio();
         guiaPetroleo = new GuiaPetroleo();
         lstGuiaDePetrolio = logicaGuiaDePetroleo.obtenerPetrolioPorOrden(ordenDeCarga);
     }
@@ -103,21 +112,46 @@ public class MantenedorMaestroGuias implements Serializable{
     }
 
     public void onRowUnselect(UnselectEvent event) {
-        FacesMessage msg = new FacesMessage("GUIA PETROLIO DESELECCIONADA", ((GuiaPetroleo) event.getObject()).getOrdendecarga().toString());
-        FacesContext.getCurrentInstance().addMessage(null, msg);
+        System.err.println("rowUnselect");
+        guiaPetroleo = new GuiaPetroleo();
     }
 
     public Integer calcularTotalRendicion(GuiaPetroleo guiaPetroleo){
+        if (guiaPetroleo == null) return 0;
         return (int)(guiaPetroleo.getLitros() * guiaPetroleo.getPreciolitro());
     }
-    public void guardarGuiaDePetrolio(){
 
+    public void guardarGuiaDePetrolio(){
+        System.err.println(guiaPetroleo);
+        guiaPetroleo.setOrdendecarga(ordenDeCarga.getOrdenDeCarga());
+        lstGuiaDePetrolio.add(guiaPetroleo);
+        guiaPetroleo  = new GuiaPetroleo();
     }
 
     public void guardarProducto(){
         producto.setOrdencarga(ordenDeCarga);
         producto.setTramo(tramoContratoSeleccionado);
         ordenDeCarga.getProductosList().add(producto);
+    }
+
+    public void irConsulta(){
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
+        String fechaDesdeTmp = sdf.format(new Date());
+        String fechaHastaTmp = sdf.format(new Date());
+        try{
+            fechaDesdeTmp = fechaDesdeTmp.concat("-01");
+            int anio= Integer.parseInt(fechaDesdeTmp.split("-")[0]);
+            int mes=Integer.parseInt(fechaDesdeTmp.split("-")[1]);
+            Calendar calendario =Calendar.getInstance();
+            calendario.set(anio,mes-1,1);
+            int ultimoDiaMes=calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+            fechaHastaTmp = fechaHastaTmp.concat("-".concat(String.valueOf(ultimoDiaMes)));
+            SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
+            fechaDesde = sdfParse.parse(fechaDesdeTmp);
+            fechaHasta = sdfParse.parse(fechaHastaTmp);
+        }catch (Exception ex){
+            ex.printStackTrace();
+        }
     }
 
     public Integer getOrdenConsulta() {
@@ -230,5 +264,29 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void setLstGuiaDePetrolio(List<GuiaPetroleo> lstGuiaDePetrolio) {
         this.lstGuiaDePetrolio = lstGuiaDePetrolio;
+    }
+
+    public List<EstacionServicio> getLstEstacionServicio() {
+        return lstEstacionServicio;
+    }
+
+    public void setLstEstacionServicio(List<EstacionServicio> lstEstacionServicio) {
+        this.lstEstacionServicio = lstEstacionServicio;
+    }
+
+    public Date getFechaDesde() {
+        return fechaDesde;
+    }
+
+    public void setFechaDesde(Date fechaDesde) {
+        this.fechaDesde = fechaDesde;
+    }
+
+    public Date getFechaHasta() {
+        return fechaHasta;
+    }
+
+    public void setFechaHasta(Date fechaHasta) {
+        this.fechaHasta = fechaHasta;
     }
 }
