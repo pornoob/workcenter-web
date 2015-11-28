@@ -164,7 +164,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
 
-        if (cp.getSinTope() == Boolean.TRUE)
+        if (Boolean.TRUE.equals(cp.getSinTope()))
             gratificacion = liquidacion.getSueldoBase() * 0.25;
         else
             gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
@@ -306,7 +306,8 @@ public class MantenedorLiquidaciones implements Serializable {
 			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
 					&& lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())){
 				FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
-				logicaLiquidaciones.guardarDatosLiquidacion(lstRemuneracion);
+                liquidacion.setIdMaestro(lstRemuneracion.getIdMaestro());
+				logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
 				encotrado = true;
 				
 			}

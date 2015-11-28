@@ -36,13 +36,6 @@ public class LiquidacionDao {
         }
     }
 
-    @SuppressWarnings("unchecked")
-    public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp) {
-        Query q = em.createNamedQuery("ValorPrevisionPersonal.findByContrato");
-        q.setParameter("contrato", cp);
-        return q.getResultList();
-    }
-
     public Variable obtenerValorUtm(Integer mes, Integer anio) {
         Query q = em.createNamedQuery("Variable.findByLlaveMesAnio");
         q.setParameter("mes", mes);
@@ -78,8 +71,10 @@ public class LiquidacionDao {
     }
 
     public void guardarDatosLiquidacion(Remuneracion liquidacion) {	
-    	if (liquidacion.getIdMaestro() != null){    	
+    	if (liquidacion.getIdMaestro() != null){
+            System.err.println("Entro a actualizar");
 			em.merge(liquidacion);
+            System.err.println("ya actualizó");
     	}else{
             em.persist(liquidacion);
         }

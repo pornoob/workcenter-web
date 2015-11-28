@@ -1,5 +1,6 @@
 package workcenter.negocio.personal;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import workcenter.dao.LiquidacionDao;
+import workcenter.dao.PersonalDao;
 import workcenter.entidades.*;
 
 @Service
@@ -17,6 +19,9 @@ public class LogicaLiquidaciones {
 	
 	@Autowired
 	private LiquidacionDao liquidacionDao;
+
+    @Autowired
+    private PersonalDao personalDao;
 	
 	@Transactional(readOnly = true)
 	public ContratoPersonal obtenerDatosContrato(Personal p){
@@ -36,7 +41,13 @@ public class LogicaLiquidaciones {
 
     @Transactional(readOnly = true)
 	public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp){
-		return liquidacionDao.obtenerDatosPrevision(cp);
+		List<ValorPrevisionPersonal> lstPrevisionPersonal = new ArrayList<ValorPrevisionPersonal>();
+        ValorPrevisionPersonal salud = personalDao.obtenerValorPrevisionSaludActual(cp);
+        ValorPrevisionPersonal afp = personalDao.obtenerValorPrevisionAfpActual(cp);
+        lstPrevisionPersonal.add(salud);
+        lstPrevisionPersonal.add(afp);
+        return  lstPrevisionPersonal;
+
 	}
 
     @Transactional(readOnly = true)
