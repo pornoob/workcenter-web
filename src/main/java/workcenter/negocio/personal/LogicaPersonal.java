@@ -193,4 +193,8 @@ public class LogicaPersonal {
     public int obtenerConteoLazy(Map<String, Object> filters) {
         return personalDao.obtenerConteoLazy(filters);
     }
+
+    public List<ValorPrevisionPersonal> obtenerValoresPrevisionContrato(ContratoPersonal contrato) {
+        return personalDao.obtenerValoresPrevisionContrato(contrato);
+    }
 }

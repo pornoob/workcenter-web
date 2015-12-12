@@ -34,13 +34,13 @@ public class ValorPrevisionPersonal implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "contrato", referencedColumnName = "numero")
-    @ManyToOne(optional = false, fetch = FetchType.LAZY)
+    @ManyToOne(optional = false)
     private ContratoPersonal contrato;
     @JoinColumn(name = "prevision", referencedColumnName = "id")
     @ManyToOne(optional = false)
     private Prevision prevision;
     @JoinColumn(name = "unidad", referencedColumnName = "id")
-    @ManyToOne(optional = false, fetch = FetchType.EAGER)
+    @ManyToOne(optional = false)
     private TipoUnidad unidad;
     @Basic(optional = false)
     @NotNull
@@ -116,15 +116,12 @@ public class ValorPrevisionPersonal implements Serializable {
 
     @Override
     public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
         if (!(object instanceof ValorPrevisionPersonal)) {
             return false;
         }
         ValorPrevisionPersonal other = (ValorPrevisionPersonal) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+        if (this.getId() == null || other.getId() == null) return false;
+        else return this.getId().equals(other.getId());
     }
 
     @Override

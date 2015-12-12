@@ -20,6 +20,7 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 import workcenter.util.pojo.FilterOption;
 
+import javax.faces.event.AjaxBehaviorEvent;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -470,9 +471,22 @@ public class
         }
 
         PrevisionContrato afp = new PrevisionContrato();
+        ValorPrevisionPersonal valorAfp = new ValorPrevisionPersonal();
+
+        if (this.valorAfp.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
+            int valor = (int) this.valorAfp.getValor();
+            valorAfp.setValor(valor);
+        } else
+            valorAfp.setValor(this.valorAfp.getValor());
+
+        valorAfp.setUnidad(this.valorAfp.getUnidad());
+
         afp.setContrato(contratoSeleccionado);
         afp.setPrevision(afpSeleccionada);
         afp.setFechainicio(new Date());
+        valorAfp.setContrato(contratoSeleccionado);
+        valorAfp.setPrevision(afp.getPrevision());
+        valorAfp.setFechaVigencia(new Date());
 
         PrevisionContrato salud = new PrevisionContrato();
         ValorPrevisionPersonal valorSalud = new ValorPrevisionPersonal();
@@ -483,26 +497,32 @@ public class
             salud.setFechainicio(new Date());
         } else {
             Prevision fonasa = new Prevision();
-            fonasa.setId(constantes.getFonasa());
+            fonasa.setId(1);
 
             salud.setContrato(contratoSeleccionado);
             salud.setPrevision(fonasa);
             salud.setFechainicio(new Date());
+            TipoUnidad unidad = new TipoUnidad();
+            unidad.setId(constantes.getUnidadPorcentaje());
         }
 
-        valorSalud.setContrato(contratoSeleccionado);
-        valorSalud.setPrevision(salud.getPrevision());
-        valorSalud.setFechaVigencia(new Date());
-        valorSalud.setUnidad(valorSalud.getUnidad());
-
-        if (valorSalud.getUnidad().getId().intValue() != constantes.getUnidadPesos()) {
+        if (this.valorSalud.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
             int valor = (int) this.valorSalud.getValor();
             valorSalud.setValor(valor);
         } else
             valorSalud.setValor(this.valorSalud.getValor());
 
+        valorSalud.setUnidad(this.valorSalud.getUnidad());
+        valorSalud.setContrato(contratoSeleccionado);
+        valorSalud.setPrevision(salud.getPrevision());
+        valorSalud.setFechaVigencia(new Date());
+
         contratoSeleccionado.getPrevisiones().add(afp);
         contratoSeleccionado.getPrevisiones().add(salud);
+
+        contratoSeleccionado.setValoresPrevisiones(logicaPersonal.obtenerValoresPrevisionContrato(contratoSeleccionado));
+        contratoSeleccionado.getValoresPrevisiones().add(valorSalud);
+        contratoSeleccionado.getValoresPrevisiones().add(valorAfp);
 
         logicaPersonal.guardarContrato(contratoSeleccionado);
     }
@@ -511,7 +531,17 @@ public class
         return logicaPersonal.obtenerDocumentosActualizados(personalSeleccionado);
     }
 
-    public void cambiaTipoUnidad() {
+    public void cambiaTipoUnidadAfp(AjaxBehaviorEvent event) {
+        Integer tipoUnidad = Integer.valueOf(FacesUtil.obtenerHttpServletRequest().getParameter("frmPersonal:sTipoUnidadAfp"));
+        for (TipoUnidad tu : constantes.getTiposUnidad()) {
+            if (tu.getId().intValue() == tipoUnidad.intValue()) {
+                valorAfp.setUnidad(tu);
+                break;
+            }
+        }
+    }
+
+    public void cambiaTipoUnidad(AjaxBehaviorEvent event) {
         Integer tipoUnidad = Integer.valueOf(FacesUtil.obtenerHttpServletRequest().getParameter("frmPersonal:sTipoUnidad"));
         for (TipoUnidad tu : constantes.getTiposUnidad()) {
             if (tu.getId().intValue() == tipoUnidad.intValue()) {

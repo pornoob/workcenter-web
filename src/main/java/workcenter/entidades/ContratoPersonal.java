@@ -70,6 +70,10 @@ public class ContratoPersonal implements Serializable {
     private Integer bonopactado;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato", fetch = FetchType.LAZY)
     private List<PrevisionContrato> previsiones;
+
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato", fetch = FetchType.LAZY)
+    private List<ValorPrevisionPersonal> valoresPrevisiones;
+
     @Column(name = "sin_tope")
     private Boolean sinTope;
 
@@ -232,5 +236,13 @@ public class ContratoPersonal implements Serializable {
 
     public void setPrevisiones(List<PrevisionContrato> previsiones) {
         this.previsiones = previsiones;
+    }
+
+    public List<ValorPrevisionPersonal> getValoresPrevisiones() {
+        return valoresPrevisiones;
+    }
+
+    public void setValoresPrevisiones(List<ValorPrevisionPersonal> valoresPrevisiones) {
+        this.valoresPrevisiones = valoresPrevisiones;
     }
 }

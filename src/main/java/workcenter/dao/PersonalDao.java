@@ -126,12 +126,13 @@ public class PersonalDao {
 
     public ValorPrevisionPersonal obtenerValorPrevisionAfpActual(ContratoPersonal cp) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select vpp from ValorPrevisionPersonal vpp ");
-        sb.append("inner join vpp.prevision p ");
-        sb.append("inner join vpp.contrato c ");
-        sb.append("inner join c.previsiones pc ");
-        sb.append("where c = :contrato and pc.fechatermino is null and p.tipo = 'afp' ");
-        sb.append("order by vpp.fechaVigencia desc ");
+        sb.append("select vpp from ValorPrevisionPersonal vpp ")
+                .append("inner join fetch vpp.unidad u ")
+                .append("inner join fetch vpp.prevision p ")
+                .append("inner join fetch vpp.contrato c ")
+                .append("inner join fetch c.previsiones pc ")
+                .append("where c = :contrato and pc.fechatermino is null and p.tipo = 'afp' ")
+                .append("order by vpp.fechaVigencia desc ");
 
         try {
             Query q = em.createQuery(sb.toString(), ValorPrevisionPersonal.class);
@@ -311,5 +312,13 @@ public class PersonalDao {
         tq.setFirstResult(first);
 
         return tq.getResultList();
+    }
+
+    public List<ValorPrevisionPersonal> obtenerValoresPrevisionContrato(ContratoPersonal contrato) {
+        StringBuilder jql = new StringBuilder("select v from ValorPrevisionPersonal v ")
+                .append("where v.contrato = :contrato");
+        Query q = em.createQuery(jql.toString());
+        q.setParameter("contrato", contrato);
+        return q.getResultList();
     }
 }

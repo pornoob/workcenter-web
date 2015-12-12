@@ -33,10 +33,10 @@ public class PrevisionContrato implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "contrato", referencedColumnName = "numero")
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     private ContratoPersonal contrato;
     @JoinColumn(name = "prevision", referencedColumnName = "id")
-    @OneToOne(fetch = FetchType.EAGER)
+    @OneToOne
     private Prevision prevision;
     @Basic(optional = false)
     @NotNull

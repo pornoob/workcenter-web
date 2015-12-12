@@ -1,10 +1,24 @@
 package workcenter.presentacion.personal;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import org.primefaces.model.StreamedContent;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import workcenter.entidades.BonoDescuentoRemuneracion;
+import workcenter.entidades.Empresa;
+import workcenter.entidades.Personal;
+import workcenter.entidades.Remuneracion;
+import workcenter.negocio.LogicaEmpresas;
+import workcenter.negocio.personal.LogicaLibroRemuneraciones;
+import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
+import workcenter.util.components.SesionCliente;
+import workcenter.util.pojo.BonosTablaRemuneracion;
+import workcenter.util.pojo.Descargable;
+import workcenter.util.pojo.DescuentosTablaRemuneracion;
+
+import java.io.*;
 import java.math.BigInteger;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -13,22 +27,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-
-import org.primefaces.model.StreamedContent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.Remuneracion;
-import workcenter.entidades.Personal;
-import workcenter.negocio.LogicaEmpresas;
-import workcenter.negocio.personal.LogicaLibroRemuneraciones;
-import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.util.components.FacesUtil;
-import workcenter.util.pojo.*;
-import workcenter.util.components.Constantes;
-import workcenter.util.components.SesionCliente;
 
 /**
  * @author colivares
@@ -116,45 +114,50 @@ public class MantenedorRemuneraciones implements Serializable {
         int total = 0;
         if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getSueldoBase();
+            total += r.getSueldoBase() != null ? r.getSueldoBase() : 0;
         }
         return total;
     }
 
     public Integer getTotalGratificacion() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getGratificacion();
+            total += r.getGratificacion() != null ? r.getGratificacion() : 0;
         }
         return total;
     }
 
     public Integer getTotalHrsEspera() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getHoraEspera();
+            total += r.getHoraEspera() != null ? r.getHoraEspera() : 0;
         }
         return total;
     }
 
     public Integer getTotalSemanaCorrida() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getSemanaCorrida();
+            total += r.getSemanaCorrida() != null ? r.getSemanaCorrida() : 0;
         }
         return total;
     }
 
     public Integer getTotalHrsExtra() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getSemanaCorrida();
+            total += r.getSemanaCorrida() != null ? r.getSemanaCorrida() : 0;
         }
         return total;
     }
 
     public Integer obtenerTotalBono(String nombreBono) {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
             for (BonoDescuentoRemuneracion b : obtenerBonos(r)) {
                 if (b.getDescripcion().equals(nombreBono)) {
@@ -167,24 +170,27 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public Integer getSumaImponibles() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getTotalImponible();
+            total += r.getTotalImponible() != null ? r.getTotalImponible() : 0;
         }
         return total;
     }
 
     public Integer getTotalViaticos() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getViatico();
+            total += r.getViatico() != null ? r.getViatico() : 0;
         }
         return total;
     }
 
     public Integer getSumaHaberes() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getTotalHaberes();
+            total += r.getTotalHaberes() != null ? r.getTotalHaberes() : 0;
         }
         return total;
     }
@@ -192,46 +198,52 @@ public class MantenedorRemuneraciones implements Serializable {
     //Suma de las rentas afecta
     public Integer getSumaRentaAfecta() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getRentaAfecta();
+            total += r.getRentaAfecta() != null ? r.getRentaAfecta() : 0;
         }
         return total;
     }
 
     public Integer getTotalDctoAfp() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getDectoAFP();
+            total += r.getDectoAFP() != null ? r.getDectoAFP() : 0;
         }
         return total;
     }
 
     public Integer getTotalAporteTrabajador() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getAporteTrabajador();
+            total += r.getAporteTrabajador() != null ? r.getAporteTrabajador() : 0;
         }
         return total;
     }
 
     public Integer getTotalDctoPrevision() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getDctoPrevision();
+            total += r.getDctoPrevision() != null ? r.getDctoPrevision() : 0;
         }
         return total;
     }
 
     public Integer getTotalImpUnico() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getImpUnico();
+            total += r.getImpUnico() != null ? r.getImpUnico() : 0;
         }
         return total;
     }
 
     public Integer obtenerTotalDescuento(String nombreDescuento) {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
             for (BonoDescuentoRemuneracion d : obtenerDescuentos(r)) {
                 if (d.getDescripcion().equals(nombreDescuento)) {
@@ -244,40 +256,45 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public Integer getSumaTotalDescuentos() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getTotalDctos();
+            total += r.getTotalDctos() != null ? r.getTotalDctos() : 0;
         }
         return total;
     }
 
     public Integer getTotalAlcanceLiquido() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getAlcanceLiquido();
+            total += r.getAlcanceLiquido() != null ? r.getAlcanceLiquido() : 0;
         }
         return total;
     }
 
     public Integer getTotalAnticipoSueldo() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getAnticipoSueldo();
+            total += r.getAnticipoSueldo() != null ? r.getAnticipoSueldo() : 0;
         }
         return total;
     }
 
     public Integer getTotalDifCaja() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getDifCaja();
+            total += r.getDifCaja() != null ? r.getDifCaja() : 0;
         }
         return total;
     }
 
     public Integer getTotalLiqPagar() {
         int total = 0;
+        if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            total += r.getLiqPagar();
+            total += r.getLiqPagar() != null ? r.getLiqPagar() : 0;
         }
         return total;
     }

@@ -1,17 +1,18 @@
 package workcenter.util.converters;
 
+import javax.faces.component.UIComponent;
+import javax.faces.component.UISelectItems;
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.component.html.HtmlSelectOneRadio;
+import javax.faces.context.FacesContext;
+import javax.faces.convert.Converter;
+import javax.faces.model.SelectItem;
 import java.lang.annotation.Annotation;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
-import javax.faces.component.UIComponent;
-import javax.faces.component.UISelectItems;
-import javax.faces.component.html.HtmlSelectOneMenu;
-import javax.faces.context.FacesContext;
-import javax.faces.convert.Converter;
-import javax.faces.model.SelectItem;
 
 public class EntityConverter implements Converter {
 
@@ -21,7 +22,7 @@ public class EntityConverter implements Converter {
         }
 
         List<Object> objetosComponenteList = new ArrayList<Object>();
-        if (component instanceof HtmlSelectOneMenu) {
+        if (component instanceof HtmlSelectOneMenu || component instanceof HtmlSelectOneRadio) {
             for (UIComponent child : component.getChildren()) {
                 if (child instanceof UISelectItems) {
                     // found it, now get the real SelectItem list

@@ -68,6 +68,13 @@
                 </p:selectOneMenu>
             </td>
         </tr>
+        <tr>
+            <td>Contrato sin tope</td>
+            <td>:</td>
+            <td>
+                <p:selectBooleanCheckbox value="#{mantenedorPersonal.contratoSeleccionado.sinTope}"/>
+            </td>
+        </tr>
     </table>
 </p:panel>
 <p:panel header="2.- Valores fijos">
@@ -146,9 +153,10 @@
             <td>
                 <p:selectOneRadio id="sTipoUnidadAfp" value="#{mantenedorPersonal.valorAfp.unidad}"
                                   converter="entityConverter">
-                    <f:selectItems value="#{constantes.tiposUnidad}" var="tu" itemLabel="#{tu.etiqueta}"/>
-                    <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidadAfṕ()}" process="@this"
-                            update=":frmPersonal:pValorTipoUnidad"/>
+                    <f:selectItems value="#{constantes.tiposUnidad}" var="tu" itemLabel="#{tu.etiqueta}"
+                                   itemValue="#{tu}"/>
+                    <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidadAfp}"
+                            update=":frmPersonal:pValorTipoUnidadAfp" process="@this"/>
                 </p:selectOneRadio>
             </td>
         </tr>
@@ -185,7 +193,7 @@
                 <p:selectOneRadio id="sTipoSalud" value="#{mantenedorPersonal.tipoSalud}">
                     <f:selectItems value="#{mantenedorPersonal.opcionesSalud}" var="i" itemLabel="#{i.label}"
                                    itemValue="#{i.value}"/>
-                    <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoSalud()}" process="@this"
+                    <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoSalud}" process="@this"
                             update="@form"/>
                 </p:selectOneRadio>
             </td>
@@ -210,7 +218,7 @@
                     <p:selectOneRadio id="sTipoUnidad" value="#{mantenedorPersonal.valorSalud.unidad}"
                                       converter="entityConverter">
                         <f:selectItems value="#{constantes.tiposUnidad}" var="tu" itemLabel="#{tu.etiqueta}"/>
-                        <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidad()}" process="@this"
+                        <p:ajax event="change" listener="#{mantenedorPersonal.cambiaTipoUnidad}" process="@this"
                                 update=":frmPersonal:pValorTipoUnidad"/>
                     </p:selectOneRadio>
                 </td>
