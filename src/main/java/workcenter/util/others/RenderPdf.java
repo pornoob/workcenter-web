@@ -80,15 +80,10 @@ public class RenderPdf implements Serializable {
         Empresa e = logicaEmpresas.obtenerEmpresa(Integer.parseInt(liquidacion.getRutEmpleador().split("-")[0]));
         String rutEmpresa = formato.numeroAgrupado(e.getRut()) + "-" + e.getDigitoverificador();
         ContratoPersonal contrato = logicaPersonal.obtenerContratoActual(liquidacion.getIdPersonal());
-        Prevision salud = null;
-        Prevision afp = null;
-
-        for (PrevisionContrato p : contrato.getPrevisiones()) {
-            if ("salud".equalsIgnoreCase(p.getPrevision().getTipo()))
-                salud = p.getPrevision();
-            else
-                afp = p.getPrevision();
-        }
+        ValorPrevisionPersonal valorSalud = logicaPersonal.obtenerValorPrevisionSaludActual(contrato);
+        ValorPrevisionPersonal valorAfp = logicaPersonal.obtenerValorPrevisionAfpActual(contrato);
+        Prevision salud = valorSalud.getPrevision();
+        Prevision afp = valorAfp.getPrevision();
 
         // cambiamos el patron de fecha al que necesitamos en la liquidación
         sdf.applyPattern("dd/MM/yyyy");

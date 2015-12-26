@@ -91,7 +91,7 @@ public class MantenedorLiquidaciones implements Serializable {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
         String fechaActual = sdf.format(new Date());
         anio = Integer.parseInt(fechaActual.split("-")[1]);
-        mes = fechaActual.split("-")[0];        
+        mes = fechaActual.split("-")[0];
         listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();        
         bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();        
         liquidacion = new Remuneracion();

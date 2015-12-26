@@ -143,6 +143,16 @@ public class Personal implements Serializable {
         return sb.toString().trim();
     }
 
+    public String getApellidosNombres() {
+        String string =  getApellidos() + " " + getNombres();
+        StringBuilder sb = new StringBuilder();
+        for (String s : string.split(" ")) {
+            sb.append(StringUtils.capitalize(s));
+            sb.append(' ');
+        }
+        return sb.toString().trim();
+    }
+
     public Integer getRut() {
         return rut;
     }
