@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml"
-                xmlns:pe="http://primefaces.org/ui/extensions">
+        >
     <ui:define name="contenido">
 
         <h2>Ingresar Nueva Liquidación</h2>
@@ -27,7 +27,12 @@
 
                     <td><p:outputLabel value="Año"/></td>
                     <td>:</td>
-                    <td><p:inputText value="#{mantenedorLiquidaciones.anio}"/></td>
+                    <td>
+                        <p:inputText value="#{mantenedorLiquidaciones.anio}">
+                            <p:ajax event="keyup" delay="1000" listener="#{mantenedorLiquidaciones.cargarDatos}"
+                                    update="frmLiquidaciones"/>
+                        </p:inputText>
+                    </td>
                 </tr>
                 <tr>
                     <td><p:outputLabel value="Personal"/></td>

@@ -248,7 +248,7 @@ public class MantenedorLiquidaciones implements Serializable {
         try {
             Date fecha = sdf.parse(mes + "-" + String.valueOf(anio));
 
-            cumpleDesde = desde != null ? fecha.after(desde) || fecha.equals(desde) : Boolean.TRUE;
+            cumpleDesde = desde != null ? desde.after(fecha) || fecha.equals(desde) : Boolean.TRUE;
             cumpleHasta = hasta != null ? fecha.before(hasta) || fecha.equals(hasta) : Boolean.TRUE;
 
             return Boolean.TRUE.equals(cumpleDesde) && Boolean.TRUE.equals(cumpleHasta);
