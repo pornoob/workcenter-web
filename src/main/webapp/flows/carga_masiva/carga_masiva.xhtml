@@ -8,23 +8,27 @@
         <h2>Carga Masiva</h2>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="formCargaMasiva" enctype="multipart/form-data">
-         <p:panel>
+            <p:panel>
                 <h:panelGrid columns="4">
                     <h:outputLabel for="iFecha" value="Fecha :"/>
-                    <p:calendar locale="es" id="iFecha" value="#{importadorDatosCaja.fecha}" pattern="yyyy-MM-dd" navigator="true" >
+                    <p:calendar locale="es" id="iFecha" value="#{importadorDatosCaja.fecha}" pattern="yyyy-MM-dd"
+                                navigator="true">
                     </p:calendar>
                     <h:outputLabel for="iConcepto" value="Concepto :"/>
-                    <p:selectOneMenu value="#{importadorDatosCaja.conceptoSeleccionado}" filter="true" filterMatchMode="contains" converter="entityConverter" id="iConcepto">
-                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
-                            <f:selectItems value="#{mantenedorCargaMasiva.listaConceptos}" var="c" itemLabel="#{c.etiqueta}"
-                                           itemValue="#{c}"/>
-                            <p:ajax event="change"/>
-                        </p:selectOneMenu>
+                    <p:selectOneMenu value="#{importadorDatosCaja.conceptoSeleccionado}" filter="true"
+                                     filterMatchMode="contains" converter="entityConverter" id="iConcepto">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{importadorDatosCaja.listaConceptos}" var="c" itemLabel="#{c.etiqueta}"
+                                       itemValue="#{c}"/>
+                        <p:ajax event="change"/>
+                    </p:selectOneMenu>
                     <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>
                     <p:fileUpload value="#{importadorDatosCaja.archivo}" id="iArchivo" mode="simple"/>
                 </h:panelGrid>
                 <p:commandButton action="#{importadorDatosCaja.subir}" ajax="false" icon="ui-icon-arrowthickstop-1-n"
                                  value="Subir"/>
+                <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
+                                 value="Volver" immediate="true"/>
             </p:panel>
         </h:form>
     </ui:define>

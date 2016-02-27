@@ -1,11 +1,5 @@
 package workcenter.presentacion.cargamasiva;
 
-import java.io.IOException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-
-import javax.persistence.PersistenceException;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -13,12 +7,18 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
 import workcenter.entidades.Personal;
 import workcenter.negocio.cargamasiva.LogicaCargaMasiva;
 import workcenter.util.components.FacesUtil;
+
+import javax.annotation.PostConstruct;
+import javax.persistence.PersistenceException;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 @Component
 @Scope("view")
@@ -26,9 +26,15 @@ public class ImportadorDatosCaja {
     private transient UploadedFile archivo;
 	private Concepto conceptoSeleccionado;
 	private Date fecha;
+    private List<Concepto> listaConceptos;
 	
 	@Autowired
 	LogicaCargaMasiva logicaCargaMasiva;
+
+    @PostConstruct
+    public void init() {
+        listaConceptos = logicaCargaMasiva.obtenerConceptos();
+    }
 
     public void subir() {
         XSSFWorkbook wb = null;
@@ -108,4 +114,11 @@ public class ImportadorDatosCaja {
 		this.conceptoSeleccionado = conceptoSeleccionado;
 	}
 
+    public List<Concepto> getListaConceptos() {
+        return listaConceptos;
+    }
+
+    public void setListaConceptos(List<Concepto> listaConceptos) {
+        this.listaConceptos = listaConceptos;
+    }
 }

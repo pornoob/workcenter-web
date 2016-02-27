@@ -1,0 +1,39 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Carga Masiva</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="formCargaMasiva" enctype="multipart/form-data">
+            <p:panel>
+                <h:panelGrid columns="4">
+                    <h:outputLabel for="iFechaDesde" value="Fecha Desde :"/>
+                    <p:calendar locale="es" id="iFechaDesde" pattern="yyyy-MM-dd"
+                                navigator="true" value="#{importadorDatosBonoDescuento.fechaDesde}">
+                    </p:calendar>
+                    <h:outputLabel for="iFechaHasta" value="Fecha Desde :"/>
+                    <p:calendar locale="es" id="iFechaHasta" pattern="yyyy-MM-dd"
+                                navigator="true" value="#{importadorDatosBonoDescuento.fechaHasta}">
+                    </p:calendar>
+                    <h:outputLabel for="iBonoDescuento" value="Bono Descuento :"/>
+                    <p:selectOneMenu filter="true" value="#{importadorDatosBonoDescuento.bonoDescuentoSeleccionado}"
+                                     filterMatchMode="contains" id="iBonoDescuento" converter="entityConverter">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{importadorDatosBonoDescuento.bonoDescuentoList}" var="br"
+                                       itemLabel="#{br.descripcion}"/>
+                        <p:ajax event="change"/>
+                    </p:selectOneMenu>
+                    <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>
+                    <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosBonoDescuento.archivo}"/>
+                </h:panelGrid>
+                <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-n"
+                                 value="Subir"/>
+                <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
+                                 value="Volver" immediate="true"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

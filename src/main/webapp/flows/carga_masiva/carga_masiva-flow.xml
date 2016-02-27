@@ -2,10 +2,17 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-    <on-start>
-        <evaluate expression="mantenedorCargaMasiva.inicio()"/>
-    </on-start>
-    <view-state id="carga_masiva">
 
+    <view-state id="menu">
+        <transition on="caja" to="carga_masiva"/>
+        <transition on="bono-descuento" to="bono-descuento"/>
+    </view-state>
+
+    <view-state id="carga_masiva">
+        <transition on="salir" to="menu"/>
+    </view-state>
+
+    <view-state id="bono-descuento" view="bono_descuento.xhtml">
+        <transition on="salir" to="menu"/>
     </view-state>
 </flow>
