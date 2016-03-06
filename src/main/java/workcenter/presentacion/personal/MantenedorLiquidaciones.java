@@ -40,39 +40,39 @@ public class MantenedorLiquidaciones implements Serializable {
     private List<BonoDescuentoPersonal> bonoNoImponibles;
 
     private List<BonoDescuentoPersonal> bonoImponibles;
-    
+
     private List<BonoDescuentoPersonal> descuentos;
 
     private List<ValorPrevisionPersonal> valorPrevision;
-    
+
     private List<BonoDescuentoPersonal> bonoDescuentoPersonal;
-    
+
     private List<Remuneracion> listaRemuneraciones;
-    
+
     private DualListModel<BonoDescuentoPersonal> bonos;
-    
+
     private BonoDescuentoPersonal bonoEditar;
-    
+
     private Integer asignacionFamiliarMonto;
-    
+
     private int cantidadCargasFamiliares;
-    
+
     private Variable variable;
 
     private Integer ultimaCargaFamilia;
-    
+
     @Autowired
     private LogicaPersonal logicaPersonal;
 
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
-    
+
     @Autowired
     private LogicaCargasFamiliares logicaCargasFamiliares;
 
     @Autowired
     private Constantes constantes;
-    
+
     @Autowired
     private LogicaVariables logicaVariables;
 
@@ -80,48 +80,48 @@ public class MantenedorLiquidaciones implements Serializable {
     private RenderPdf renderPdf;
 
     private Remuneracion liquidacion;
-    
+
     private Integer anio;
-    
+
     private String mes;
 
     public void inicio() {
-    	
-    	variable = logicaVariables.obtenerSueldoMinimoActual();
+
+        variable = logicaVariables.obtenerSueldoMinimoActual();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
         String fechaActual = sdf.format(new Date());
         anio = Integer.parseInt(fechaActual.split("-")[1]);
         mes = fechaActual.split("-")[0];
-        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();        
-        bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();        
+        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
         liquidacion = new Remuneracion();
         liquidacion.setDiasTrabajados(constantes.getDiasTrabajados());
         bonos = new DualListModel<BonoDescuentoPersonal>();
     }
 
-    public void cargarDatos(){
-    	
-    	if (liquidacion.getIdPersonal() == null) return;
+    public void cargarDatos() {
+
+        if (liquidacion.getIdPersonal() == null) return;
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         descuentos = new ArrayList<BonoDescuentoPersonal>();
         valorPrevision = new ArrayList<ValorPrevisionPersonal>();
-        bonoEditar =  new BonoDescuentoPersonal();
+        bonoEditar = new BonoDescuentoPersonal();
         Integer totalNoImponible = 0;
         Integer totalImponible = 0;
         Integer totalDescuentos = 0;
         asignacionFamiliarMonto = 0;
         cantidadCargasFamiliares = 0;
-        
-		Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
+
+        Variable utm = logicaLiquidaciones.obtenerValorUtm(Integer.parseInt(mes), anio);
         Variable uf = logicaLiquidaciones.obtenerValorUf(Integer.parseInt(mes), anio);
-		
+
         liquidacion.setIdPersonal(logicaPersonal.obtenerConDatosLiquidacion(liquidacion.getIdPersonal()));
         bonos.setSource(logicaLiquidaciones.obtenerBonosFaltantes(liquidacion.getIdPersonal()));
         bonos.setTarget(liquidacion.getIdPersonal().getBonosDescuentos());
         for (BonoDescuentoPersonal bDP : liquidacion.getIdPersonal().getBonosDescuentos()) {
 
-            if (filtrarporfecha(bDP.getFechadesde(),bDP.getFechahasta())) {
+            if (filtrarporfecha(bDP.getFechadesde(), bDP.getFechahasta())) {
                 if (bDP.getIdBonodescuento().getImponible()) {
                     bonoImponibles.add(bDP);
                     if (bDP.getMonto() != null) {
@@ -153,7 +153,7 @@ public class MantenedorLiquidaciones implements Serializable {
         ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(liquidacion.getIdPersonal());
         valorPrevision = logicaLiquidaciones.obtenerDatosPrevision(cp);
         liquidacion.setEmpleador(cp.getEmpleador().getNombre());
-        liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString()+"-"+cp.getEmpleador().getDigitoverificador());
+        liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString() + "-" + cp.getEmpleador().getDigitoverificador());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
 
@@ -168,13 +168,13 @@ public class MantenedorLiquidaciones implements Serializable {
             gratificacion = liquidacion.getSueldoBase() * 0.25;
         else
             gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
-        				(liquidacion.getSueldoBase() / 4): (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
+                    (liquidacion.getSueldoBase() / 4) : (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
 
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
-       
-        
+
+
         //calculo afp y salud
         liquidacion.setDctoPrevision(0);
         liquidacion.setDectoAFP(0);
@@ -204,33 +204,33 @@ public class MantenedorLiquidaciones implements Serializable {
         // seguro cesantia
         Double seguroEmpresa = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
         Double seguroTrabajador = (liquidacion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
-        if (cp.getVencimiento() != null){
-        	 Double noIndefinido = seguroEmpresa+seguroTrabajador;
-             liquidacion.setAporteEmpresa(noIndefinido);
-         	 liquidacion.setAporteTrabajador(0.0);
-        }else{
-	       	 liquidacion.setAporteEmpresa(seguroEmpresa);
-	         liquidacion.setAporteTrabajador(seguroTrabajador);
+        if (cp.getVencimiento() != null) {
+            Double noIndefinido = seguroEmpresa + seguroTrabajador;
+            liquidacion.setAporteEmpresa(noIndefinido);
+            liquidacion.setAporteTrabajador(0.0);
+        } else {
+            liquidacion.setAporteEmpresa(seguroEmpresa);
+            liquidacion.setAporteTrabajador(seguroTrabajador);
         }
         liquidacion.setHorasExtras(0);
         SimpleDateFormat formatoDeFecha = new SimpleDateFormat("yyyy-MM-dd");
-		try {
-			liquidacion.setFechaLiquidacion(formatoDeFecha.parse((anio.toString()+"-"+mes.toString()+"-"+"01")));
-			} catch (ParseException ex) {
-			ex.printStackTrace();
-			}
-		liquidacion.setRentaAfecta(liquidacion.getRentaAfecta()- liquidacion.getAporteTrabajador().intValue());
-		
         try {
-			liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (Exception e) {
-			e.printStackTrace();
-		}
-		liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
-		liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes()-liquidacion.getTotalDctos());
-	    liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido()-liquidacion.getAnticipoSueldo());
+            liquidacion.setFechaLiquidacion(formatoDeFecha.parse((anio.toString() + "-" + mes.toString() + "-" + "01")));
+        } catch (ParseException ex) {
+            ex.printStackTrace();
+        }
+        liquidacion.setRentaAfecta(liquidacion.getRentaAfecta() - liquidacion.getAporteTrabajador().intValue());
+
+        try {
+            liquidacion.setImpUnico(calcularImpuestoUnico(liquidacion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
+        liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - liquidacion.getTotalDctos());
+        liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido() - liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
         //se settean las siguintes  variable para que pueda funcionar el libro de remuneraciones
         liquidacion.setHoraEspera(0);
@@ -240,7 +240,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setDifCaja(0);
     }
 
-    public Boolean filtrarporfecha(Date desde,Date hasta){
+    public Boolean filtrarporfecha(Date desde, Date hasta) {
         Boolean cumpleDesde;
         Boolean cumpleHasta;
 
@@ -259,24 +259,24 @@ public class MantenedorLiquidaciones implements Serializable {
 
 
     public Integer getAsignacionFamiliarMonto() {
-		return asignacionFamiliarMonto;
-	}
+        return asignacionFamiliarMonto;
+    }
 
-	public void setAsignacionFamiliarMonto(Integer asignacionFamiliarMonto) {
-		this.asignacionFamiliarMonto = asignacionFamiliarMonto;
-	}
+    public void setAsignacionFamiliarMonto(Integer asignacionFamiliarMonto) {
+        this.asignacionFamiliarMonto = asignacionFamiliarMonto;
+    }
 
-	public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
+    public Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
 
         try {
-            double rentaAfectaUtm = (double)rentaAfecta / (double)utm;
+            double rentaAfectaUtm = (double) rentaAfecta / (double) utm;
             List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
 
             for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
                 if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
                         (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
                     //return Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm);
-                    return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm)*Math.pow(10,0))/Math.pow(10,0);
+                    return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm) * Math.pow(10, 0)) / Math.pow(10, 0);
                 }
             }
         } catch (Exception e) {
@@ -284,75 +284,76 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         return -1.0;
     }
-    
-    public void agregarQuitarBonos(){
+
+    public void agregarQuitarBonos() {
         liquidacion.getIdPersonal().setBonosDescuentos(bonos.getTarget());
         logicaPersonal.guardar(liquidacion.getIdPersonal());
         cargarDatos();
     }
-    
-    public String guardarDatosLiquidacion(){
-    	
-    	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
-    	unirBonosRemuneracion();
-    	renderPdf.generarLiquidacion(liquidacion,asignacionFamiliarMonto);
-        
+
+    public String guardarDatosLiquidacion() {
+
+        liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
+        unirBonosRemuneracion();
+        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+
 //        if (true) return null;
-    	
-    	//liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
-    	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-    	Boolean encotrado = false;
-    	for ( Remuneracion lstRemuneracion : listaRemuneraciones) {
-			if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
-					&& lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())){
-				FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
+
+        //liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
+        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        Boolean encotrado = false;
+        for (Remuneracion lstRemuneracion : listaRemuneraciones) {
+            if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
+                    && lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())) {
+                FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
                 liquidacion.setIdMaestro(lstRemuneracion.getIdMaestro());
-				logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
-				encotrado = true;
-				
-			}
-		}
-    	if (!encotrado){
-    		logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
-        	listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-        	FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", "La liquidacion fué registrada");
-        	return "flowMenuLiquidaciones";
-    	}else {
-    		return "flowIngresar";
-    	}
-    }
-    
-    public String crearUrl(String ruta){
-    	ruta = ruta.substring(ruta.indexOf("/static"),ruta.length()).replace("//", "/");
-    	return ruta;
-    }
-    
-    public void visualizarPDF(Remuneracion verLiquidacion) throws IOException{
+                logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
+                encotrado = true;
 
-    	 if (verLiquidacion == null) return;
-    	 FacesContext facesContext = FacesContext.getCurrentInstance();
-    	    ExternalContext externalContext = facesContext.getExternalContext();
-    	    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
-
-    	    response.reset();
-    	    response.setContentType("application/pdf");
-             String mesSeleccionado = "";
-            for (Mes m:constantes.getMeses()){
-                if (m.getId().equals(mes)){
-                    System.out.println(m.getNombre());
-                    mesSeleccionado = m.getNombre();
-                }
             }
-            response.setHeader("Content-disposition", "filename="+"Liquidacion-"+
-                mesSeleccionado+"-"+anio+"-"+verLiquidacion.getIdPersonal().getRut()+".pdf");
-    	    //response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
+        }
+        if (!encotrado) {
+            logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
+            listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", "La liquidacion fué registrada");
+            return "flowMenuLiquidaciones";
+        } else {
+            return "flowIngresar";
+        }
+    }
 
-    	    OutputStream output = response.getOutputStream();
-    	    output.write(verLiquidacion.getArchivo());
-    	    output.close();
+    public String crearUrl(String ruta) {
+        ruta = ruta.substring(ruta.indexOf("/static"), ruta.length()).replace("//", "/");
+        return ruta;
+    }
 
-    	    facesContext.responseComplete();
-    	}
+    public void visualizarPDF(Remuneracion verLiquidacion) throws IOException {
+
+        if (verLiquidacion == null) return;
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+        response.reset();
+        response.setContentType("application/pdf");
+        String mesSeleccionado = "";
+        for (Mes m : constantes.getMeses()) {
+            if (m.getId().equals(mes)) {
+                System.out.println(m.getNombre());
+                mesSeleccionado = m.getNombre();
+                break;
+            }
+        }
+        response.setHeader("Content-disposition", "filename=" + "Liquidacion-" +
+                mesSeleccionado + "-" + anio + "-" + verLiquidacion.getIdPersonal().getRut() + ".pdf");
+        //response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
+
+        OutputStream output = response.getOutputStream();
+        output.write(verLiquidacion.getArchivo());
+        output.close();
+
+        facesContext.responseComplete();
+    }
 
     public void cargasFamiliares() {
         // asiganacion familiar
@@ -374,9 +375,9 @@ public class MantenedorLiquidaciones implements Serializable {
             }
         }
 
-        if (montoCarga  != 1 ){
+        if (montoCarga != 1) {
             asignacionFamiliarMonto = cantidadCargasFamiliares * montoCarga;
-        }else
+        } else
             asignacionFamiliarMonto = 0;
 
         if (ultimaCargaFamilia != null) {
@@ -389,101 +390,101 @@ public class MantenedorLiquidaciones implements Serializable {
 
         ultimaCargaFamilia = cantidadCargasFamiliares;
     }
-    
-    public void unirBonosRemuneracion(){
-      	for (BonoDescuentoPersonal bI : bonoImponibles ){
-    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
-    		bdr.setIdMaestroGuia(liquidacion);
-    		bdr.setBono(true);
-    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
-    		bdr.setImponible(true);
-    		bdr.setMonto(bI.getMonto());    		
-    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
-    	}
-    	
-    	for (BonoDescuentoPersonal bI : bonoNoImponibles ){
-    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
-    		bdr.setIdMaestroGuia(liquidacion);
-    		bdr.setBono(true);
-    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
-    		bdr.setImponible(false);
-    		bdr.setMonto(bI.getMonto());    		
-    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
-    	}
-    	
-    	for (BonoDescuentoPersonal bI : descuentos ){
-    		BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
-    		bdr.setIdMaestroGuia(liquidacion);
-    		bdr.setBono(false);
-    		bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
-    		bdr.setImponible(false);
-    		bdr.setMonto(bI.getMonto());    		
-    		liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
-    	}
-    	
-    	
-    }
-    
-    public void imprimirLiquidacion() throws IOException{
-    	if (liquidacion.getIdPersonal() == null) return;
-    	liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
-    	unirBonosRemuneracion();
-    	renderPdf.generarLiquidacion(liquidacion,asignacionFamiliarMonto);
-   	    FacesContext facesContext = FacesContext.getCurrentInstance();
-	    ExternalContext externalContext = facesContext.getExternalContext();
-	    HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
 
-	    response.reset();
-	    response.setContentType("application/pdf");
+    public void unirBonosRemuneracion() {
+        for (BonoDescuentoPersonal bI : bonoImponibles) {
+            BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+            bdr.setIdMaestroGuia(liquidacion);
+            bdr.setBono(true);
+            bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+            bdr.setImponible(true);
+            bdr.setMonto(bI.getMonto());
+            liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+        }
+
+        for (BonoDescuentoPersonal bI : bonoNoImponibles) {
+            BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+            bdr.setIdMaestroGuia(liquidacion);
+            bdr.setBono(true);
+            bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+            bdr.setImponible(false);
+            bdr.setMonto(bI.getMonto());
+            liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+        }
+
+        for (BonoDescuentoPersonal bI : descuentos) {
+            BonoDescuentoRemuneracion bdr = new BonoDescuentoRemuneracion();
+            bdr.setIdMaestroGuia(liquidacion);
+            bdr.setBono(false);
+            bdr.setDescripcion(bI.getIdBonodescuento().getDescripcion());
+            bdr.setImponible(false);
+            bdr.setMonto(bI.getMonto());
+            liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
+        }
+
+
+    }
+
+    public void imprimirLiquidacion() throws IOException {
+        if (liquidacion.getIdPersonal() == null) return;
+        liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
+        unirBonosRemuneracion();
+        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+
+        response.reset();
+        response.setContentType("application/pdf");
         String mesSeleccionado = "";
-        for (Mes m:constantes.getMeses()){
-            if (m.getId().equals(mes)){
+        for (Mes m : constantes.getMeses()) {
+            if (m.getId().equals(mes)) {
                 System.out.println(m.getNombre());
                 mesSeleccionado = m.getNombre();
             }
         }
-	    response.setHeader("Content-disposition", "filename="+"Liquidacion-"+
-                mesSeleccionado+"-"+anio+"-"+liquidacion.getIdPersonal().getRut()+".pdf");
+        response.setHeader("Content-disposition", "filename=" + "Liquidacion-" +
+                mesSeleccionado + "-" + anio + "-" + liquidacion.getIdPersonal().getRut() + ".pdf");
 
-	    OutputStream output = response.getOutputStream();
-	    output.write(liquidacion.getArchivo());
-	    output.close();
+        OutputStream output = response.getOutputStream();
+        output.write(liquidacion.getArchivo());
+        output.close();
 
-	    facesContext.responseComplete();
+        facesContext.responseComplete();
     }
-    
+
     public void editarMontoBono() {
-       if (bonoEditar == null) return;
-       for (int i = 0; i < bonoImponibles.size(); i++) {		
-				if (bonoImponibles.get(i).getId() == (bonoEditar.getId())){
-					bonoImponibles.get(i).setMonto(bonoEditar.getMonto());
-				}  
-       }
-       liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
-       logicaPersonal.guardar(liquidacion.getIdPersonal());
-       cargarDatos();
-    }
-    
-    public void editarBono(BonoDescuentoPersonal b){   	
-    	bonoEditar = b;
-    }
-    
-    public List<BonoDescuentoPersonal> unirBonosPersonal(){
-    	
-    	List<BonoDescuentoPersonal> unionBonos = new ArrayList<BonoDescuentoPersonal>();
-        for (BonoDescuentoPersonal bdp : bonoImponibles) {
- 			unionBonos.add(bdp);
- 		}
-        for (BonoDescuentoPersonal bdp : bonoNoImponibles) {
- 			unionBonos.add(bdp);
- 		}
-        
-        for (BonoDescuentoPersonal bdp : descuentos) {
-        	unionBonos.add(bdp);
+        if (bonoEditar == null) return;
+        for (int i = 0; i < bonoImponibles.size(); i++) {
+            if (bonoImponibles.get(i).getId() == (bonoEditar.getId())) {
+                bonoImponibles.get(i).setMonto(bonoEditar.getMonto());
+            }
         }
-    	return unionBonos;
+        liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
+        logicaPersonal.guardar(liquidacion.getIdPersonal());
+        cargarDatos();
     }
-    
+
+    public void editarBono(BonoDescuentoPersonal b) {
+        bonoEditar = b;
+    }
+
+    public List<BonoDescuentoPersonal> unirBonosPersonal() {
+
+        List<BonoDescuentoPersonal> unionBonos = new ArrayList<BonoDescuentoPersonal>();
+        for (BonoDescuentoPersonal bdp : bonoImponibles) {
+            unionBonos.add(bdp);
+        }
+        for (BonoDescuentoPersonal bdp : bonoNoImponibles) {
+            unionBonos.add(bdp);
+        }
+
+        for (BonoDescuentoPersonal bdp : descuentos) {
+            unionBonos.add(bdp);
+        }
+        return unionBonos;
+    }
+
     public String ingresarLiquidacionOtros() {
         personal = logicaPersonal.obtenerTodos();
         inicio();
@@ -551,61 +552,61 @@ public class MantenedorLiquidaciones implements Serializable {
         this.mes = mes;
     }
 
-	public List<BonoDescuentoPersonal> getBonoDescuentoPersonal() {
-		return bonoDescuentoPersonal;
-	}
+    public List<BonoDescuentoPersonal> getBonoDescuentoPersonal() {
+        return bonoDescuentoPersonal;
+    }
 
-	public void setBonoDescuentoPersonal(
-			List<BonoDescuentoPersonal> bonoDescuentoPersonal) {
-		this.bonoDescuentoPersonal = bonoDescuentoPersonal;
-	}
+    public void setBonoDescuentoPersonal(
+            List<BonoDescuentoPersonal> bonoDescuentoPersonal) {
+        this.bonoDescuentoPersonal = bonoDescuentoPersonal;
+    }
 
-	public List<Remuneracion> getListaRemuneraciones() {
-		return listaRemuneraciones;
-	}
+    public List<Remuneracion> getListaRemuneraciones() {
+        return listaRemuneraciones;
+    }
 
-	public void setListaRemuneraciones(List<Remuneracion> listaRemuneraciones) {
-		this.listaRemuneraciones = listaRemuneraciones;
-	}
+    public void setListaRemuneraciones(List<Remuneracion> listaRemuneraciones) {
+        this.listaRemuneraciones = listaRemuneraciones;
+    }
 
-	public DualListModel<BonoDescuentoPersonal> getBonos() {
-		return bonos;
-	}
+    public DualListModel<BonoDescuentoPersonal> getBonos() {
+        return bonos;
+    }
 
-	public void setBonos(DualListModel<BonoDescuentoPersonal> bonos) {
-		this.bonos = bonos;
-	}
+    public void setBonos(DualListModel<BonoDescuentoPersonal> bonos) {
+        this.bonos = bonos;
+    }
 
-	public BonoDescuentoPersonal getBonoEditar() {
-		return bonoEditar;
-	}
+    public BonoDescuentoPersonal getBonoEditar() {
+        return bonoEditar;
+    }
 
-	public void setBonoEditar(BonoDescuentoPersonal bonoEditar) {
-		this.bonoEditar = bonoEditar;
-	}
+    public void setBonoEditar(BonoDescuentoPersonal bonoEditar) {
+        this.bonoEditar = bonoEditar;
+    }
 
-	public int getCantidadCargasFamiliares() {
-		return cantidadCargasFamiliares;
-	}
+    public int getCantidadCargasFamiliares() {
+        return cantidadCargasFamiliares;
+    }
 
-	public void setCantidadCargasFamiliares(int cantidadCargasFamiliares) {
-		this.cantidadCargasFamiliares = cantidadCargasFamiliares;
-	}
+    public void setCantidadCargasFamiliares(int cantidadCargasFamiliares) {
+        this.cantidadCargasFamiliares = cantidadCargasFamiliares;
+    }
 
-	public Variable getVariable() {
-		return variable;
-	}
+    public Variable getVariable() {
+        return variable;
+    }
 
-	public void setVariable(Variable variable) {
-		this.variable = variable;
-	}
+    public void setVariable(Variable variable) {
+        this.variable = variable;
+    }
 
-	public List<BonoDescuentoPersonal> getDescuentos() {
-		return descuentos;
-	}
+    public List<BonoDescuentoPersonal> getDescuentos() {
+        return descuentos;
+    }
 
-	public void setDescuentos(List<BonoDescuentoPersonal> descuentos) {
-		this.descuentos = descuentos;
-	}
+    public void setDescuentos(List<BonoDescuentoPersonal> descuentos) {
+        this.descuentos = descuentos;
+    }
 
 }
