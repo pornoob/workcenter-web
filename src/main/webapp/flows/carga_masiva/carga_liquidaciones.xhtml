@@ -1,0 +1,23 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Carga Masiva</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="formCargaMasiva" enctype="multipart/form-data">
+            <p:panel>
+                <h:panelGrid columns="4">
+                    <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>
+                    <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosBonoDescuento.archivo}"/>
+                </h:panelGrid>
+                <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-n"
+                                 value="Subir"/>
+                <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
+                                 value="Volver" immediate="true"/>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

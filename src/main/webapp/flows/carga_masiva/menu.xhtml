@@ -10,6 +10,8 @@
                              action="caja"/>
             <p:commandButton value="Bonos/Descuentos" immediate="true"
                              action="bono-descuento"/>
+            <p:commandButton value="Liquidaciones (NO Reutilizable)" rendered="#{sesionCliente.usuario.rut == 16301880}" immediate="true"
+                             action="liquidaciones"/>
         </h:form>
     </ui:define>
 </ui:composition>
