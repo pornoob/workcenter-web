@@ -38,7 +38,7 @@ public class BonoDescuentoPersonal implements Serializable {
     @OneToOne
     @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
     private BonoDescuento idBonodescuento;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = { CascadeType.MERGE, CascadeType.PERSIST, CascadeType.REFRESH })
+    @ManyToOne
     @JoinColumn(name = "id_personal", referencedColumnName = "rut")
     private Personal idPersonal;
 

@@ -7,6 +7,7 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 import workcenter.entidades.BonoDescuento;
 import workcenter.entidades.BonoDescuentoPersonal;
 import workcenter.entidades.Personal;
@@ -40,6 +41,7 @@ public class ImportadorDatosBonoDescuento {
         bonoDescuentoList = logicaCargaMasiva.obtenerBonosDescuentos();
     }
 
+    @Transactional(readOnly = false)
     public void subir() {
         XSSFWorkbook wb = null;
         try {
@@ -57,8 +59,8 @@ public class ImportadorDatosBonoDescuento {
 
                 BonoDescuentoPersonal d = new BonoDescuentoPersonal();
                 try {
-                    rutParteNumerica = obtenerRut(row.getCell(1).getStringCellValue());
-                    Personal p  = new Personal();
+                    rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
+                    Personal p = new Personal();
                     p.setRut(rutParteNumerica);
 
                     d.setIdPersonal(p);
@@ -66,12 +68,12 @@ public class ImportadorDatosBonoDescuento {
                     d.setFechahasta(fechaHasta);
                     d.setIdBonodescuento(bonoDescuentoSeleccionado);
                     d.setMonto(
-                        new BigInteger(
-                            row.getCell(4).getStringCellValue().replaceAll("\\.", "")
-                        )
+                        BigInteger.valueOf((long) row.getCell(3).getNumericCellValue())
                     );
                     d.setFecha(new Date());
+                    logicaCargaMasiva.guardarBonoDescuento(d);
                 } catch (Exception e) {
+                    System.err.println("row " + numRow + " : " + row);
                     e.printStackTrace();
                 }
             }
@@ -87,7 +89,7 @@ public class ImportadorDatosBonoDescuento {
 
     }
 
-    public Integer obtenerRut(String rut){
+    public Integer obtenerRut(String rut) {
         String cadena = rut.replace(".", "").replace(",", "").trim();
         String[] arregloCadena = cadena.split("-");
         return Integer.parseInt(arregloCadena[0]);

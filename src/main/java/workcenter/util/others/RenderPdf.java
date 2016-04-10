@@ -6,7 +6,9 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
@@ -24,7 +26,7 @@ import java.text.SimpleDateFormat;
  * Created by claudio on 25-07-15.
  */
 @Component
-@Scope("request")
+@Scope("application")
 public class RenderPdf implements Serializable {
 
 	private static final long serialVersionUID = 1L;

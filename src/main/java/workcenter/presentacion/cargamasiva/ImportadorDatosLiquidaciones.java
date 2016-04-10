@@ -5,13 +5,6 @@
  */
 package workcenter.presentacion.cargamasiva;
 
-import java.io.IOException;
-import java.math.BigInteger;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import javax.annotation.PostConstruct;
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -19,48 +12,70 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.BonoDescuento;
-import workcenter.entidades.BonoDescuentoPersonal;
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.ContratoPersonal;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
+import workcenter.entidades.*;
+import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.cargamasiva.LogicaCargaMasiva;
 import workcenter.negocio.personal.LogicaLiquidaciones;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
+import workcenter.util.others.RenderPdf;
+
+import javax.annotation.PostConstruct;
+import java.io.IOException;
+import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
+import java.util.spi.CalendarDataProvider;
 
 /**
- *
  * @author claudio
  */
 @Component
 @Scope("view")
 public class ImportadorDatosLiquidaciones {
     private transient UploadedFile archivo;
-    private static final long INCENTIVO_TVP=72l;
-    private static final long RESPONSABILIDAD_TVP=68l;
-    private static final long ASISTENCIA_TVP=69l;
-    private static final long SEGURIDAD_TVP=70l;
-    private static final long INCENTIVO_SEGURIDAD=40l;
-    private static final long INCENTIVO_PRODUCTIVIDAD=54l;
-    private static final long SEGURO_METLIFE=59l;
+    private String rutEmpleador;
+    private static final long INCENTIVO_TVP = 72l;
+    private static final long RESPONSABILIDAD_TVP = 68l;
+    private static final long ASISTENCIA_TVP = 69l;
+    private static final long SEGURIDAD_TVP = 70l;
+    private static final long INCENTIVO_SEGURIDAD = 40l;
+    private static final long INCENTIVO_PRODUCTIVIDAD = 54l;
+    private static final long SEGURO_METLIFE = 59l;
+    private static final long ACUERDO_MARCO = 43l;
+    private static final long MOVILIZACION = 35l;
+    private static final long COLACION = 36l;
 
-    
+
     private BonoDescuento incentivoTVP;
     private BonoDescuento responsabilidadTVP;
     private BonoDescuento asistenciaTVP;
     private BonoDescuento seguridadTVP;
     private BonoDescuento incentivoSeguridad;
     private BonoDescuento incentivoProductividad;
-       
+    private BonoDescuento acuerdoMarco;
+    private BonoDescuento metlife;
+    private BonoDescuento movilizacion;
+    private BonoDescuento colacion;
+
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
     @Autowired
     private LogicaCargaMasiva logicaCargaMasiva;
     @Autowired
     private Constantes constantes;
-    
+    @Autowired
+    private RenderPdf renderPdf;
+    @Autowired
+    private LogicaPersonal logicaPersonal;
+    @Autowired
+    private LogicaEmpresas logicaEmpresas;
+
     @PostConstruct
     public void inicio() {
         for (BonoDescuento b : logicaCargaMasiva.obtenerBonosDescuentos()) {
@@ -77,10 +92,16 @@ public class ImportadorDatosLiquidaciones {
             else if (b.getId() == INCENTIVO_PRODUCTIVIDAD)
                 incentivoProductividad = b;
             else if (b.getId() == SEGURO_METLIFE)
-                incentivoProductividad = b;
+                metlife = b;
+            else if (b.getId() == ACUERDO_MARCO)
+                acuerdoMarco = b;
+            else if (b.getId() == MOVILIZACION)
+                movilizacion = b;
+            else if (b.getId() == COLACION)
+                colacion = b;
         }
     }
-    
+
     public void subir() {
         XSSFWorkbook wb = null;
         int numRow = 0;
@@ -89,79 +110,138 @@ public class ImportadorDatosLiquidaciones {
             wb = new XSSFWorkbook(archivo.getInputstream());
             XSSFSheet ws = wb.getSheetAt(0);
             XSSFRow row;
+            List<Remuneracion> remuneraciones = new ArrayList<>();
             while ((row = ws.getRow(numRow++)) != null) {
-                String fecha = row.getCell(numColum++).getStringCellValue();
-                if (!fecha.matches("[a-z]{3}-[0-9]{2}")) {
+                numColum = 0;
+                Date fecha2;
+                try {
+                    fecha2 = row.getCell(numColum++).getDateCellValue();
+                    if (fecha2 == null) continue;
+                } catch (Exception e) {
                     continue;
                 }
+
+                Calendar calendar = Calendar.getInstance();
+                calendar.setTime(fecha2);
+
+                Variable utm = logicaLiquidaciones.obtenerValorUtm(calendar.get(Calendar.MONTH) + 1, calendar.get(Calendar.YEAR));
+//                String fecha = row.getCell(numColum++).getStringCellValue();
+//                if (!fecha.matches("[a-z]{3}-[0-9]{2}")) {
+//                    continue;
+//                }
                 Remuneracion remuneracion = new Remuneracion();
+                Empresa e = logicaEmpresas.obtenerEmpresa(Integer.valueOf(rutEmpleador));
+                remuneracion.setRutEmpleador(rutEmpleador);
+                remuneracion.setEmpleador(e.getNombre());
                 remuneracion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
-                
-                remuneracion.setFechaLiquidacion(conversorFecha(fecha));
-                
-                Personal personal = new Personal(Integer.valueOf(row.getCell(numColum++).getStringCellValue().split("-")[0].replaceAll("\\.", "")));
+
+//                remuneracion.setFechaLiquidacion(conversorFecha(fecha));
+                remuneracion.setFechaLiquidacion(fecha2);
+
+                Personal personal = logicaPersonal.obtener(Integer.valueOf(row.getCell(numColum++).getStringCellValue().split("-")[0].replaceAll("\\.", "").replaceAll(",", "")));
                 remuneracion.setIdPersonal(personal);
                 ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(remuneracion.getIdPersonal());
-                
+
                 numColum += 2;
-                
-                remuneracion.setDiasTrabajados((int)row.getCell(numColum++).getNumericCellValue());
-                remuneracion.setSueldoBase((int)row.getCell(numColum++).getNumericCellValue());
-                remuneracion.setGratificacion((int)row.getCell(numColum++).getNumericCellValue());
-                
+
+                remuneracion.setDiasTrabajados((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setSueldoBase((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setGratificacion((int) row.getCell(numColum++).getNumericCellValue());
+
                 BonoDescuentoRemuneracion bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(incentivoTVP.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoTVP.getId());
-                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long)row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(incentivoTVP.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
+
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(asistenciaTVP.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(asistenciaTVP.getId());
-                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long)row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(asistenciaTVP.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
+
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(seguridadTVP.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(seguridadTVP.getId());
-                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long)row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(seguridadTVP.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
+
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(responsabilidadTVP.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(responsabilidadTVP.getId());
-                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long)row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(responsabilidadTVP.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
-                remuneracion.setSemanaCorrida((int)row.getCell(numColum++).getNumericCellValue());
-                
-                long is = (long)row.getCell(numColum++).getNumericCellValue();
-                is += (long)row.getCell(numColum++).getNumericCellValue();
-                
+
+                remuneracion.setSemanaCorrida((int) row.getCell(numColum++).getNumericCellValue());
+
+                long is = (long) row.getCell(numColum++).getNumericCellValue();
+                is += (long) row.getCell(numColum++).getNumericCellValue();
+
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(incentivoSeguridad.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoSeguridad.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf(is));
                 bonoDescuentoRemuneracion.setImponible(incentivoSeguridad.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
+
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(incentivoProductividad.getDescripcion());
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoProductividad.getId());
-                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf(is));
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(incentivoProductividad.getImponible());
                 remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
-                
-                remuneracion.setTotalImponible((int)row.getCell(numColum++).getNumericCellValue());
+
+                remuneracion.setTotalImponible((int) row.getCell(numColum++).getNumericCellValue());
+
+                bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(colacion.getDescripcion());
+                bonoDescuentoRemuneracion.setIdBonoDescuento(colacion.getId());
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setImponible(colacion.getImponible());
+                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+
+                bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(movilizacion.getDescripcion());
+                bonoDescuentoRemuneracion.setIdBonoDescuento(movilizacion.getId());
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setImponible(movilizacion.getImponible());
+                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+
+                int cargas = (int) row.getCell(numColum++).getNumericCellValue();
+                remuneracion.setViatico((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setTotalHaberes((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setDectoAFP((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setDctoPrevision((int) row.getCell(numColum++).getNumericCellValue());
+
                 numColum += 2;
-                remuneracion.setViatico((int)row.getCell(numColum++).getNumericCellValue());
-                remuneracion.setTotalHaberes((int)row.getCell(numColum++).getNumericCellValue());
-                remuneracion.setDectoAFP((int)row.getCell(numColum++).getNumericCellValue());
-                remuneracion.setDctoPrevision((int)row.getCell(numColum++).getNumericCellValue());
-                
+
                 remuneracion.setRentaAfecta(remuneracion.getTotalImponible() - (remuneracion.getDctoPrevision() + remuneracion.getDectoAFP()));
 
                 // seguro cesantia
                 Double seguroEmpresa = (remuneracion.getTotalImponible() * constantes.getAportePorcentajeEmpleador()) / 100;
-                Double seguroTrabajador = (remuneracion.getTotalImponible() * constantes.getAportePorcentajeTrabajador()) / 100;
+                Double seguroTrabajador = row.getCell(numColum++).getNumericCellValue();
+                numColum += 1;
+
                 if (cp.getVencimiento() != null) {
                     Double noIndefinido = seguroEmpresa + seguroTrabajador;
                     remuneracion.setAporteEmpresa(noIndefinido);
@@ -173,21 +253,54 @@ public class ImportadorDatosLiquidaciones {
                 remuneracion.setHorasExtras(0);
                 remuneracion.setRentaAfecta(remuneracion.getRentaAfecta() - remuneracion.getAporteTrabajador().intValue());
                 remuneracion.setEsGenerica(true);
+                remuneracion.setImpUnico(calcularImpuestoUnico(remuneracion.getRentaAfecta(), Integer.parseInt(utm.getValor())));
+
+                bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(false);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(acuerdoMarco.getDescripcion());
+                bonoDescuentoRemuneracion.setIdBonoDescuento(acuerdoMarco.getId());
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setImponible(acuerdoMarco.getImponible());
+                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+
+                bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(false);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(metlife.getDescripcion());
+                bonoDescuentoRemuneracion.setIdBonoDescuento(metlife.getId());
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setImponible(metlife.getImponible());
+                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+
+                remuneracion.setTotalDctos((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setAlcanceLiquido((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setAnticipoSueldo((int) row.getCell(numColum++).getNumericCellValue());
+                remuneracion.setLiqPagar((int) row.getCell(numColum++).getNumericCellValue());
+
+                remuneracion.setFechaIngreso(new Date());
+                renderPdf.generarLiquidacion(remuneracion, cargas);
+                remuneraciones.add(remuneracion);
+
             }
-        } catch (IOException | ParseException | NumberFormatException e) {
+            logicaLiquidaciones.guardarDatosLiquidacion(remuneraciones);
+        } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
-            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido (Linea: "+numRow+", Columna: "+numColum+") ");
+            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido (Linea: " + numRow + ", Columna: " + numColum + ") ");
+        } catch (Exception e) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido (Linea: " + numRow + ", Columna: " + numColum + ") ");
+            e.printStackTrace();
         }
     }
-    
+
     private Date conversorFecha(String fechaStr) throws ParseException {
         String mes = fechaStr.split("-")[0];
         String anio = fechaStr.split("-")[1];
-        
+
         SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-        
+
         StringBuilder fecha = new StringBuilder();
-        switch(mes.toLowerCase()) {
+        switch (mes.toLowerCase()) {
             case "ene":
                 fecha.append("01/01/");
                 break;
@@ -227,7 +340,42 @@ public class ImportadorDatosLiquidaciones {
         }
         Integer anioCompleto = 2000 + Integer.valueOf(anio);
         fecha.append(anioCompleto);
-        
+
         return sdf.parse(fecha.toString());
+    }
+
+    private Double calcularImpuestoUnico(int rentaAfecta, int utm) throws Exception {
+
+        try {
+            double rentaAfectaUtm = (double) rentaAfecta / (double) utm;
+            List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
+
+            for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
+                if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
+                        (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
+                    //return Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm);
+                    return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm) * Math.pow(10, 0)) / Math.pow(10, 0);
+                }
+            }
+        } catch (Exception e) {
+            throw e;
+        }
+        return -1.0;
+    }
+
+    public UploadedFile getArchivo() {
+        return archivo;
+    }
+
+    public void setArchivo(UploadedFile archivo) {
+        this.archivo = archivo;
+    }
+
+    public String getRutEmpleador() {
+        return rutEmpleador;
+    }
+
+    public void setRutEmpleador(String rutEmpleador) {
+        this.rutEmpleador = rutEmpleador;
     }
 }

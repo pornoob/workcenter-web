@@ -253,6 +253,9 @@ public class Remuneracion implements Serializable {
     @Basic
     @Column(name = "generica")
     private Boolean esGenerica;
+    @Column(name = "fecha_ingreso")
+    @Temporal(TemporalType.DATE)
+    private Date fechaIngreso;
 
     public Remuneracion() {
     }
@@ -803,6 +806,14 @@ public class Remuneracion implements Serializable {
 
     public void setEsGenerica(Boolean esGenerica) {
         this.esGenerica = esGenerica;
+    }
+
+    public Date getFechaIngreso() {
+        return fechaIngreso;
+    }
+
+    public void setFechaIngreso(Date fechaIngreso) {
+        this.fechaIngreso = fechaIngreso;
     }
 
     @Override

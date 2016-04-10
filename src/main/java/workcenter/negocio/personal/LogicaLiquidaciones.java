@@ -83,4 +83,11 @@ public class LogicaLiquidaciones {
     public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp){
     	liquidacionDao.eliminarBonosPersonal(bdp);
     }
+
+    @Transactional(readOnly = false)
+    public void guardarDatosLiquidacion(List<Remuneracion> remuneraciones) {
+        for (Remuneracion remuneracion : remuneraciones) {
+            liquidacionDao.guardarDatosLiquidacion(remuneracion);
+        }
+    }
 }

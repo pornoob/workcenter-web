@@ -2,6 +2,7 @@ package workcenter.dao.BonoDescuentoDao;
 
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.BonoDescuento;
+import workcenter.entidades.BonoDescuentoPersonal;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -17,5 +18,9 @@ public class BonoDescuentoDao {
 
     public List<BonoDescuento> obtenerTodos() {
         return em.createNamedQuery("BonoDescuento.findAll").getResultList();
+    }
+
+    public void guardarBonoDescuentoPersonal(BonoDescuentoPersonal bonoDescuentoPersonal) {
+        em.persist(bonoDescuentoPersonal);
     }
 }

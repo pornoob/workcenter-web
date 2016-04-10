@@ -9,6 +9,7 @@ import workcenter.dao.BonoDescuentoDao.BonoDescuentoDao;
 import workcenter.dao.ConceptoDao;
 import workcenter.dao.DineroDAO;
 import workcenter.entidades.BonoDescuento;
+import workcenter.entidades.BonoDescuentoPersonal;
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
 
@@ -35,6 +36,11 @@ public class LogicaCargaMasiva {
 	@Transactional(readOnly = false)
 	public void guardarDinero(Dinero d){
 		dineroDao.guardarDatosDineros(d);
+	}
+
+	@Transactional(readOnly = false)
+	public void guardarBonoDescuento(BonoDescuentoPersonal bonoDescuentoPersonal){
+		bonoDescuentoDao.guardarBonoDescuentoPersonal(bonoDescuentoPersonal);
 	}
 
 	public List<BonoDescuento> obtenerBonosDescuentos() {

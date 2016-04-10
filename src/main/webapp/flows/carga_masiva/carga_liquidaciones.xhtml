@@ -10,11 +10,13 @@
         <h:form id="formCargaMasiva" enctype="multipart/form-data">
             <p:panel>
                 <h:panelGrid columns="4">
+                    <h:outputLabel for="iRutEmpleador" value="Rut Empleador"/>
+                    <p:inputText id="iRutEmpleador" value="#{importadorDatosLiquidaciones.rutEmpleador}"/>
                     <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>
-                    <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosBonoDescuento.archivo}"/>
+                    <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosLiquidaciones.archivo}"/>
                 </h:panelGrid>
                 <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-n"
-                                 value="Subir"/>
+                                 value="Subir" action="#{importadorDatosLiquidaciones.subir}"/>
                 <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
                                  value="Volver" immediate="true"/>
             </p:panel>

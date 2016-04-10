@@ -30,7 +30,7 @@
                     <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosBonoDescuento.archivo}"/>
                 </h:panelGrid>
                 <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-n"
-                                 value="Subir"/>
+                                 value="Subir" action="#{importadorDatosBonoDescuento.subir}"/>
                 <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
                                  value="Volver" immediate="true"/>
             </p:panel>

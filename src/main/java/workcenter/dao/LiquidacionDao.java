@@ -70,14 +70,10 @@ public class LiquidacionDao {
         return em.createNamedQuery("ValorImpuestoUnico.findVigentes").getResultList();
     }
 
-    public void guardarDatosLiquidacion(Remuneracion liquidacion) {	
-    	if (liquidacion.getIdMaestro() != null){
-            System.err.println("Entro a actualizar");
-			em.merge(liquidacion);
-            System.err.println("ya actualizó");
-    	}else{
-            em.persist(liquidacion);
-        }
+    public void guardarDatosLiquidacion(Remuneracion liquidacion) {
+        System.err.println("Entro a actualizar");
+        em.merge(liquidacion);
+        System.err.println("ya actualizó");
     }
 
     public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
@@ -93,7 +89,7 @@ public class LiquidacionDao {
         q.setParameter("anio", anio);
         q.setParameter("receptor", idPers);
         /**se modifica el ciclo for ya que la persona puede tener mas de un anticipo en el mes registrado (caso especial),
-        //por ende se debera acumular el monto para luego retornarlo**/
+         //por ende se debera acumular el monto para luego retornarlo**/
         Integer monto = 0;
         for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
             if (listaDineros.getConcepto().getId() == c.getConceptoAnticipo()) {
@@ -124,12 +120,12 @@ public class LiquidacionDao {
         }
         return retorno;
     }
-    
-    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp){
-    	
-    	for (BonoDescuentoPersonal bonoDescuentoPersonal : bdp) {
-    		BonoDescuentoPersonal b = em.find(BonoDescuentoPersonal.class, bonoDescuentoPersonal.getId());
-    		em.remove(b);
-		}
+
+    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp) {
+
+        for (BonoDescuentoPersonal bonoDescuentoPersonal : bdp) {
+            BonoDescuentoPersonal b = em.find(BonoDescuentoPersonal.class, bonoDescuentoPersonal.getId());
+            em.remove(b);
+        }
     }
 }
