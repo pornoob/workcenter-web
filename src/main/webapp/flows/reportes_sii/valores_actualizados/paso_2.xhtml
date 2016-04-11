@@ -31,12 +31,14 @@
             <p:outputPanel id="contenedorConductores">
                 <p:panel id="pConductores" header="Conductores"
                          rendered="#{!mantenedorValoresActualizados.primeraCargaPaso2}">
-                    <h:commandLink>
-                        <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
-                        <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
-                    </h:commandLink>
                     <p:dataTable id="tValoresAct" value="#{mantenedorValoresActualizados.remuneraciones}" var="r"
                                  emptyMessage="No se han encontrado registros" filterEvent="enter" sortBy="#{r.fechaLiquidacion}">
+                        <f:facet name="header">
+                            <h:commandLink title="Exportar Tabla">
+                                <h:graphicImage value="/img/icons/excel.png"/>
+                                <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
+                            </h:commandLink>
+                        </f:facet>
                         <p:column headerText="Fecha" sortBy="#{r.fechaLiquidacion}">
                             <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
                         </p:column>
@@ -55,7 +57,7 @@
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponible}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImponible}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -65,7 +67,7 @@
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfecta}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaAfecta}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -73,7 +75,7 @@
                         <p:column headerText="Impuesto único">
                             <p:inputText value="#{r.impUnico}" style="width: 60px" required="false"/>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnico}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImpUnico}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -88,7 +90,7 @@
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponibleActualizado}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImponibleActualizado}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -99,7 +101,7 @@
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfectaActualizada}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaAfectaActualizada}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -110,7 +112,7 @@
                                 <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizado}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImpUnicoActualizado}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>

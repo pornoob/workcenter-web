@@ -20,6 +20,9 @@
         <h:outputScript library="primefaces" name="jquery/jquery-plugins.js" target="head"/>
         <h:outputScript library="js" name="webcenter.js" target="head"/>
         <h:outputScript library="js" name="funciones.js" target="head"/>
+        <h:outputScript library="bootstrap" name="js/bootstrap.min.js" target="head"/>
+        <h:outputStylesheet library="bootstrap" name="css/bootstrap.min.css"/>
+        
         <p:ajaxStatus onstart="PF('statusDialog').show()" oncomplete="PF('statusDialog').hide()"/>
         <p:idleMonitor id="sesionMonitor"  rendered="#{sesionCliente.estaAutentificado()}"
                        timeout="#{(session.maxInactiveInterval - 10) * 1000}" onidle="PF('sesionExpired').show()"/>

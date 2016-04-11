@@ -5,6 +5,7 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
+        
         <h2>Factor de actualización</h2>
         <p:growl autoUpdate="true" showDetail="true"/>
         <h:form id="frmValorActualizado">
@@ -37,94 +38,141 @@
             </p:panel>
             <p:outputPanel id="contenedorInforme">
                 <p:panel header="Informe" rendered="#{!mantenedorValoresActualizados.primeraCargaPaso3}">
-                    <h:commandLink>
-                        <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
-                        <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
-                    </h:commandLink>
-                    <p:dataTable value="#{mantenedorValoresActualizados.remuneracionesInforme}" var="r"
-                                 emptyMessage="No se han encontrado registros" filterEvent="enter" id="tValoresAct">
-                        <p:column headerText="Fecha">
-                            <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
-                        </p:column>
-                        <p:column headerText="Rut">
-                            <h:outputText value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
-                                          converter="rutConverter"/>
-                        </p:column>
-                        <p:column headerText="Nombre">
-                            <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
-                        </p:column>
+                    <p:outputPanel id="panelCertificado" styleClass="certificadoValorActualizado">
+                        <p:outputPanel styleClass="row">
+                            <p:outputPanel styleClass="col-lg-2 col-md-2 col-sm-2">
+                                <h:graphicImage value="#{resource['css/img/theme/logoSuperior.png']}"/>
+                            </p:outputPanel>
+                            <p:outputPanel styleClass="col-lg-8 col-md-8 col-sm-8 text-center">
+                                <h3>CERTIFICADO SOBRE SUELDOS, PENSIONES O JUBILACIONES Y OTRAS RENTAS SIMILARES</h3>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="row">
+                            <p style="font-size: 10pt">
+                                El Empleador, Habilitado o Pagador: <b>#{mantenedorValoresActualizados.empleador.nombre}</b>, 
+                                Certifica que el sr. (a): <b>#{mantenedorValoresActualizados.conductor.nombreCompleto}</b> 
+                                Rut: <b>#{formato.numeroAgrupado(mantenedorValoresActualizados.conductor.rut)}-#{mantenedorValoresActualizados.conductor.digitoverificador}</b> 
+                                en su calidad de empleado dependiente, jubilado, pensionado o mentepiado, según corresponda, durante el año <b>#{mantenedorValoresActualizados.anio}</b>
+                                se le han pagado las rentas que se indican y sobre las cuales se le practicaron las retenciones de impuestos que se señalan:
+                            </p>
+                        </p:outputPanel>
+                        <p:dataTable style="font-size: 8pt" value="#{mantenedorValoresActualizados.remuneracionesInforme}" var="r" tableStyleClass="tabla-factor-actualizado"
+                                     emptyMessage="No se han encontrado registros" filterEvent="enter" id="tValoresAct">
+                            <f:facet name="header">
+                                <h:commandLink>
+                                    <h:graphicImage title="Exportar Tabla" value="/img/icons/excel.png"/>
+                                    <p:dataExporter target="tValoresAct" type="xls" fileName="valores_actualizados"/>
+                                </h:commandLink>
+                                <h:commandLink>
+                                    <h:graphicImage title="Generar Certificado" style="width: 30px;" value="/img/icons/print.jpeg"/>
+                                    <p:printer target="frmValorActualizado:panelCertificado"/>
+                                </h:commandLink>
+                            </f:facet>
+                            <p:column headerText="Fecha">
+                                <h:outputText value="#{mantenedorValoresActualizados.formatoFecha(r.fechaLiquidacion)}"/>
+                                <f:facet name="footer">
+                                    <h:outputText value="Totales"/>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Rut">
+                                <h:outputText value="#{r.idPersonal.rut}-#{r.idPersonal.digitoverificador}"
+                                              converter="rutConverter"/>
+                            </p:column>
+                            <p:column headerText="Nombre">
+                                <h:outputText value="#{r.idPersonal.nombreCompleto}"/>
+                            </p:column>
 
-                        <p:column headerText="Total imponible">
-                            <h:outputText value="#{r.totalImponible}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponibleInforme}">
+                            <p:column headerText="Total imponible">
+                                <h:outputText value="#{r.totalImponible}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="Renta Afecta">
-                            <h:outputText value="#{r.rentaAfecta}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfectaInforme}">
+                                <f:facet name="footer">
+                                    <h:outputText value="#{mantenedorValoresActualizados.sumaTotalImponibleInforme}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Renta Afecta">
+                                <h:outputText value="#{r.rentaAfecta}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="Impuesto único">
-                            <h:outputText value="#{r.impUnico}" style="width: 60px">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnicoInforme}">
+                                <f:facet name="footer">
+                                    <h:outputText value="#{mantenedorValoresActualizados.sumaRentaAfectaInforme}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Impuesto único">
+                                <h:outputText value="#{r.impUnico}" style="width: 60px">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="Factor">
-                            <h:outputText value="#{mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)}"/>
-                        </p:column>
+                                <f:facet name="footer">
+                                    <h:outputText value="#{mantenedorValoresActualizados.sumaImpuestoUnicoInforme}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Factor">
+                                <h:outputText value="#{mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)}"/>
+                            </p:column>
 
-                        <p:column headerText="Total imponible actualizado">
-                            <h:outputText
+                            <p:column headerText="Total imponible actualizado">
+                                <h:outputText
                                     value="#{r.totalImponible * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.totalImponible}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
-                                <h:outputText
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                                <f:facet name="footer">
+                                    <h:outputText
                                         value="#{mantenedorValoresActualizados.sumaTotalImponibleActualizadoInforme}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                                </h:outputText>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="Renta Afecta actualizada">
-                            <h:outputText
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Renta Afecta actualizada">
+                                <h:outputText
                                     value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.rentaAfecta}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
-                                <h:outputText
+                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                                <f:facet name="footer">
+                                    <h:outputText
                                         value="#{mantenedorValoresActualizados.sumaRentaAfectaActualizadaInforme}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                                </h:outputText>
-                            </f:facet>
-                        </p:column>
-                        <p:column headerText="Impuesto único actualizado">
-                            <h:outputText
-                                    value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.impUnico}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
-                            </h:outputText>
-                            <f:facet name="footer">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                            <p:column headerText="Impuesto único actualizado">
                                 <h:outputText
-                                        value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizadoInforme}">
+                                    value="#{r.impUnico * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.impUnico}">
                                     <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
-                            </f:facet>
-                        </p:column>
-                    </p:dataTable>
+                                <f:facet name="footer">
+                                    <h:outputText
+                                        value="#{mantenedorValoresActualizados.sumaImpuestoUnicoActualizadoInforme}">
+                                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    </h:outputText>
+                                </f:facet>
+                            </p:column>
+                        </p:dataTable>
+                        
+                        <p:outputPanel styleClass="row">
+                            <br/>
+                            <p style="font-size: 10pt">
+                                Se extiende  el presente Certificado en cumplimiento de lo dispuesto en la Resolución Ex. Nº 6509 del 
+                                Servicio de Impuesto Internos, publicada en el Dario Oficial de fecha 20 de Diciembre de 1993.
+                            </p>
+                            
+                            <p class="text-center">
+                                <br/><br/>
+                                _______________________________________
+                            </p>
+                            
+                            <p class="text-center">
+                                Nombre, Nº Rut , Firma del Empleador,<br/>
+                                Habilitado o Pagador o del Representante<br/>
+                                Legal en su caso.
+                            </p>
+                        </p:outputPanel>
+                    </p:outputPanel>
 
                     <p:outputPanel styleClass="actionPanel">
                         <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
