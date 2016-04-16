@@ -23,12 +23,13 @@
         <hibernate-version>4.3.6.Final</hibernate-version>
         <hibernate-validator-version>5.0.3.Final</hibernate-validator-version>
         <spring-version>4.0.7.RELEASE</spring-version>
+        <spring-test-version>4.0.5.RELEASE</spring-test-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
         <spring-webflow>2.4.0.RELEASE</spring-webflow>
         <jsf-version>2.2</jsf-version>
         <javax-faces-version>2.2.5</javax-faces-version>
         <javax-el-version>3.0.0</javax-el-version>
-        <junit-version>3.8.1</junit-version>
+        <junit-version>4.11</junit-version>
         <aop-version>1.7.4</aop-version>
         <mysql-connector-version>5.1.29</mysql-connector-version>
         <http-client>3.1</http-client>
@@ -232,6 +233,18 @@
             <groupId>log4j</groupId>
             <artifactId>log4j</artifactId>
             <version>${log4j.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>${junit-version}</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-test</artifactId>
+            <version>${spring-test-version}</version>
+            <scope>test</scope>
         </dependency>
     </dependencies>
   

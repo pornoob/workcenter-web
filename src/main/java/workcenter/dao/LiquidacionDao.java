@@ -128,4 +128,8 @@ public class LiquidacionDao {
             em.remove(b);
         }
     }
+
+    public Remuneracion obtenerLiquidacion(Long id) {
+        return em.find(Remuneracion.class, id);
+    }
 }

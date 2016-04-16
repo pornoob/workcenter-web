@@ -1,17 +1,16 @@
 package workcenter.negocio.personal;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import workcenter.dao.LiquidacionDao;
 import workcenter.dao.PersonalDao;
 import workcenter.entidades.*;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
@@ -89,5 +88,9 @@ public class LogicaLiquidaciones {
         for (Remuneracion remuneracion : remuneraciones) {
             liquidacionDao.guardarDatosLiquidacion(remuneracion);
         }
+    }
+
+    public Remuneracion obtenerLiquidacion(Long id) {
+        return liquidacionDao.obtenerLiquidacion(id);
     }
 }

@@ -6,15 +6,12 @@ import com.itextpdf.text.pdf.PdfPTable;
 import com.itextpdf.text.pdf.PdfWriter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
-import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
-import workcenter.util.components.SesionCliente;
 
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
@@ -33,9 +30,6 @@ public class RenderPdf implements Serializable {
 
 	@Autowired
     private Constantes constantes;
-
-    @Autowired
-    private SesionCliente sesionCliente;
 
     @Autowired
     private Formato formato;
