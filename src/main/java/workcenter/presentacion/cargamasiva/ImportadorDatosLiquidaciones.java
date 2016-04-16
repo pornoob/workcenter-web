@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-import java.util.spi.CalendarDataProvider;
 
 /**
  * @author claudio
@@ -50,6 +49,7 @@ public class ImportadorDatosLiquidaciones {
     private static final long ACUERDO_MARCO = 43l;
     private static final long MOVILIZACION = 35l;
     private static final long COLACION = 36l;
+    private static final long AGUINALDO = 106l;
 
 
     private BonoDescuento incentivoTVP;
@@ -62,6 +62,7 @@ public class ImportadorDatosLiquidaciones {
     private BonoDescuento metlife;
     private BonoDescuento movilizacion;
     private BonoDescuento colacion;
+    private BonoDescuento aguinaldo;
 
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
@@ -99,6 +100,8 @@ public class ImportadorDatosLiquidaciones {
                 movilizacion = b;
             else if (b.getId() == COLACION)
                 colacion = b;
+            else if (b.getId() == AGUINALDO)
+                aguinaldo = b;
         }
     }
 
@@ -131,7 +134,7 @@ public class ImportadorDatosLiquidaciones {
 //                }
                 Remuneracion remuneracion = new Remuneracion();
                 Empresa e = logicaEmpresas.obtenerEmpresa(Integer.valueOf(rutEmpleador));
-                remuneracion.setRutEmpleador(rutEmpleador);
+                remuneracion.setRutEmpleador(rutEmpleador+"-"+e.getDigitoverificador());
                 remuneracion.setEmpleador(e.getNombre());
                 remuneracion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
 
@@ -155,7 +158,18 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoTVP.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(incentivoTVP.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                
+                bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
+                bonoDescuentoRemuneracion.setBono(true);
+                bonoDescuentoRemuneracion.setIdMaestroGuia(remuneracion);
+                bonoDescuentoRemuneracion.setDescripcion(aguinaldo.getDescripcion());
+                bonoDescuentoRemuneracion.setIdBonoDescuento(aguinaldo.getId());
+                bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
+                bonoDescuentoRemuneracion.setImponible(aguinaldo.getImponible());
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
                 bonoDescuentoRemuneracion.setBono(true);
@@ -164,7 +178,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(asistenciaTVP.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(asistenciaTVP.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
                 bonoDescuentoRemuneracion.setBono(true);
@@ -173,7 +188,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(seguridadTVP.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(seguridadTVP.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
                 bonoDescuentoRemuneracion.setBono(true);
@@ -182,7 +198,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(responsabilidadTVP.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(responsabilidadTVP.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 remuneracion.setSemanaCorrida((int) row.getCell(numColum++).getNumericCellValue());
 
@@ -196,7 +213,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoSeguridad.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf(is));
                 bonoDescuentoRemuneracion.setImponible(incentivoSeguridad.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
                 bonoDescuentoRemuneracion.setBono(true);
@@ -205,7 +223,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(incentivoProductividad.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(incentivoProductividad.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 remuneracion.setTotalImponible((int) row.getCell(numColum++).getNumericCellValue());
 
@@ -216,7 +235,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(colacion.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(colacion.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 bonoDescuentoRemuneracion = new BonoDescuentoRemuneracion();
                 bonoDescuentoRemuneracion.setBono(true);
@@ -225,7 +245,8 @@ public class ImportadorDatosLiquidaciones {
                 bonoDescuentoRemuneracion.setIdBonoDescuento(movilizacion.getId());
                 bonoDescuentoRemuneracion.setMonto(BigInteger.valueOf((long) row.getCell(numColum++).getNumericCellValue()));
                 bonoDescuentoRemuneracion.setImponible(movilizacion.getImponible());
-                remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
+                if (bonoDescuentoRemuneracion.getMonto().intValue() > 0)
+                    remuneracion.getRemuneracionBonoDescuentoList().add(bonoDescuentoRemuneracion);
 
                 int cargas = (int) row.getCell(numColum++).getNumericCellValue();
                 remuneracion.setViatico((int) row.getCell(numColum++).getNumericCellValue());
@@ -242,7 +263,7 @@ public class ImportadorDatosLiquidaciones {
                 Double seguroTrabajador = row.getCell(numColum++).getNumericCellValue();
                 numColum += 1;
 
-                if (cp.getVencimiento() != null) {
+                if (cp == null || cp.getVencimiento() != null) {
                     Double noIndefinido = seguroEmpresa + seguroTrabajador;
                     remuneracion.setAporteEmpresa(noIndefinido);
                     remuneracion.setAporteTrabajador(0.0);
