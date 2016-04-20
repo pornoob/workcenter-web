@@ -305,6 +305,7 @@ public class ImportadorDatosLiquidaciones {
 
             }
             logicaLiquidaciones.guardarDatosLiquidacion(remuneraciones);
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Archivo cargado sin problemas");
         } catch (IOException | NumberFormatException e) {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido (Linea: " + numRow + ", Columna: " + numColum + ") ");
