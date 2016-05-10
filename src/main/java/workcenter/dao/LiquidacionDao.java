@@ -11,6 +11,7 @@ import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
+import javax.persistence.NoResultException;
 
 @Repository
 public class LiquidacionDao {
@@ -82,14 +83,17 @@ public class LiquidacionDao {
 
     @SuppressWarnings("unchecked")
     public Integer obtenerAnticipoSueldo(Personal idPers, String mes,
-                                         Integer anio) {
+            Integer anio) {
 
         Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
         q.setParameter("mes", Integer.parseInt(mes));
         q.setParameter("anio", anio);
         q.setParameter("receptor", idPers);
-        /**se modifica el ciclo for ya que la persona puede tener mas de un anticipo en el mes registrado (caso especial),
-         //por ende se debera acumular el monto para luego retornarlo**/
+        /**
+         * se modifica el ciclo for ya que la persona puede tener mas de un
+         * anticipo en el mes registrado (caso especial), //por ende se debera
+         * acumular el monto para luego retornarlo*
+         */
         Integer monto = 0;
         for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
             if (listaDineros.getConcepto().getId() == c.getConceptoAnticipo()) {
@@ -131,5 +135,13 @@ public class LiquidacionDao {
 
     public Remuneracion obtenerLiquidacion(Long id) {
         return em.find(Remuneracion.class, id);
+    }
+
+    public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
+        try {
+            return (Remuneracion) em.createNamedQuery("Remuneracion.findPrevia").setParameter("liquidacion", liquidacion).setMaxResults(1).getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
     }
 }

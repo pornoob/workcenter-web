@@ -80,6 +80,8 @@ public class MantenedorLiquidaciones implements Serializable {
     private RenderPdf renderPdf;
 
     private Remuneracion liquidacion;
+    private Remuneracion ingresoPrevio;
+    private Boolean sobreescribir;
 
     private Integer anio;
 
@@ -290,36 +292,35 @@ public class MantenedorLiquidaciones implements Serializable {
         logicaPersonal.guardar(liquidacion.getIdPersonal());
         cargarDatos();
     }
+    
+    public void verificarIngresoPrevio() {
+        this.ingresoPrevio = logicaLiquidaciones.obtenerIngresoPrevio(liquidacion);
+        if (ingresoPrevio == null) {
+            sobreescribir = Boolean.FALSE;
+            guardarDatosLiquidacion();
+        }
+    }
 
     public String guardarDatosLiquidacion() {
 
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
         renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
-
-//        if (true) return null;
-
-        //liquidacion.getIdPersonal().setBonosDescuentos(unirBonosPersonal());
-        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-        Boolean encotrado = false;
-        for (Remuneracion lstRemuneracion : listaRemuneraciones) {
-            if (lstRemuneracion.getFechaLiquidacion().equals(liquidacion.getFechaLiquidacion())
-                    && lstRemuneracion.getIdPersonal().getRut().equals(liquidacion.getIdPersonal().getRut())) {
-                FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
-                liquidacion.setIdMaestro(lstRemuneracion.getIdMaestro());
-                logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
-                encotrado = true;
-
-            }
-        }
-        if (!encotrado) {
+        
+        String retorno = null;
+        if (Boolean.TRUE.equals(sobreescribir)) {
+            liquidacion.setIdMaestro(ingresoPrevio.getIdMaestro());
             logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
-            listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
-            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", "La liquidacion fué registrada");
-            return "flowMenuLiquidaciones";
+            FacesUtil.mostrarMensajeInformativo("Actualización Exitosa", "se ha modificado la liquidación");
+            retorno = "flowIngresar";
         } else {
-            return "flowIngresar";
+            logicaLiquidaciones.guardarDatosLiquidacion(liquidacion);
+            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", "La liquidacion fué registrada");
+            retorno = "flowMenuLiquidaciones";
         }
+        
+        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        return retorno;
     }
 
     public String crearUrl(String ruta) {
@@ -607,6 +608,22 @@ public class MantenedorLiquidaciones implements Serializable {
 
     public void setDescuentos(List<BonoDescuentoPersonal> descuentos) {
         this.descuentos = descuentos;
+    }
+
+    public Remuneracion getIngresoPrevio() {
+        return ingresoPrevio;
+    }
+
+    public void setIngresoPrevio(Remuneracion ingresoPrevio) {
+        this.ingresoPrevio = ingresoPrevio;
+    }
+
+    public Boolean getSobreescribir() {
+        return sobreescribir;
+    }
+
+    public void setSobreescribir(Boolean sobreescribir) {
+        this.sobreescribir = sobreescribir;
     }
 
 }

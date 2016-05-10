@@ -15,18 +15,18 @@ import java.util.List;
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LogicaLiquidaciones {
-	
-	@Autowired
-	private LiquidacionDao liquidacionDao;
+
+    @Autowired
+    private LiquidacionDao liquidacionDao;
 
     @Autowired
     private PersonalDao personalDao;
-	
-	@Transactional(readOnly = true)
-	public ContratoPersonal obtenerDatosContrato(Personal p){
-		
-		return liquidacionDao.obtenerDatosContrato(p);
-	}
+
+    @Transactional(readOnly = true)
+    public ContratoPersonal obtenerDatosContrato(Personal p) {
+
+        return liquidacionDao.obtenerDatosContrato(p);
+    }
 
     @Transactional(readOnly = true)
     public Variable obtenerValorUtm(Integer mes, Integer anio) {
@@ -39,48 +39,49 @@ public class LogicaLiquidaciones {
     }
 
     @Transactional(readOnly = true)
-	public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp){
-		List<ValorPrevisionPersonal> lstPrevisionPersonal = new ArrayList<ValorPrevisionPersonal>();
+    public List<ValorPrevisionPersonal> obtenerDatosPrevision(ContratoPersonal cp) {
+        List<ValorPrevisionPersonal> lstPrevisionPersonal = new ArrayList<ValorPrevisionPersonal>();
         ValorPrevisionPersonal salud = personalDao.obtenerValorPrevisionSaludActual(cp);
         ValorPrevisionPersonal afp = personalDao.obtenerValorPrevisionAfpActual(cp);
         lstPrevisionPersonal.add(salud);
         lstPrevisionPersonal.add(afp);
-        return  lstPrevisionPersonal;
+        return lstPrevisionPersonal;
 
-	}
+    }
 
     @Transactional(readOnly = true)
     public List<ValorImpuestoUnico> obtenerValoresVigentesImpUnico() {
         return liquidacionDao.obtenerValoresVigentesImpUnico();
     }
+
     @Transactional(readOnly = false)
-    public void guardarDatosLiquidacion(Remuneracion liquidacion){
-    	liquidacionDao.guardarDatosLiquidacion(liquidacion);
+    public void guardarDatosLiquidacion(Remuneracion liquidacion) {
+        liquidacionDao.guardarDatosLiquidacion(liquidacion);
     }
-    
+
     @Transactional(readOnly = true)
-	public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
-		return liquidacionDao.obtenerBonosDescuentos();
-	}
+    public List<BonoDescuentoPersonal> obtenerBonosDescuentos() {
+        return liquidacionDao.obtenerBonosDescuentos();
+    }
 
     @Transactional(readOnly = true)
     public Integer obtenerAnticipoSueldo(Personal idPers, String mes, Integer anio) {
         return liquidacionDao.obtenerAnticipoSueldo(idPers, mes, anio);
     }
-    
+
     @Transactional(readOnly = true)
-	public List<Remuneracion> obtenerListaRemuneraciones() {
-		return liquidacionDao.obtenerListaRemuneraciones();
-	}
-    
+    public List<Remuneracion> obtenerListaRemuneraciones() {
+        return liquidacionDao.obtenerListaRemuneraciones();
+    }
+
     @Transactional(readOnly = true)
-	public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
-		return liquidacionDao.obtenerBonosFaltantes(p);
-	}
-    
+    public List<BonoDescuentoPersonal> obtenerBonosFaltantes(Personal p) {
+        return liquidacionDao.obtenerBonosFaltantes(p);
+    }
+
     @Transactional(readOnly = false)
-    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp){
-    	liquidacionDao.eliminarBonosPersonal(bdp);
+    public void eliminarBonosPersonal(List<BonoDescuentoPersonal> bdp) {
+        liquidacionDao.eliminarBonosPersonal(bdp);
     }
 
     @Transactional(readOnly = false)
@@ -92,5 +93,9 @@ public class LogicaLiquidaciones {
 
     public Remuneracion obtenerLiquidacion(Long id) {
         return liquidacionDao.obtenerLiquidacion(id);
+    }
+
+    public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
+        return liquidacionDao.obtenerIngresoPrevio(liquidacion);
     }
 }

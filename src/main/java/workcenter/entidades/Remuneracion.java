@@ -3,7 +3,6 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-
 package workcenter.entidades;
 
 import java.io.Serializable;
@@ -102,8 +101,10 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Remuneracion.findByFechaLiquidacion", query = "SELECT m FROM Remuneracion m WHERE m.fechaLiquidacion = :fechaLiquidacion"),
     @NamedQuery(name = "Remuneracion.findByPorcentaje", query = "SELECT m FROM Remuneracion m WHERE m.porcentaje = :porcentaje"),
     @NamedQuery(name = "Remuneracion.findByNombreArchivo", query = "SELECT m FROM Remuneracion m WHERE m.nombreArchivo = :nombreArchivo"),
+    @NamedQuery(name = "Remuneracion.findPrevia", query = "SELECT m FROM Remuneracion m WHERE m = :liquidacion order by m.idMaestro DESC"),
     @NamedQuery(name = "Remuneracion.findByExtension", query = "SELECT m FROM Remuneracion m WHERE m.extension = :extension")})
 public class Remuneracion implements Serializable {
+
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -248,7 +249,7 @@ public class Remuneracion implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idMaestroGuia", fetch = FetchType.EAGER, orphanRemoval = true)
     private List<BonoDescuentoRemuneracion> remuneracionBonoDescuentoList;
     @JoinColumn(name = "idPersonal", referencedColumnName = "rut")
-    @ManyToOne(optional = false, cascade = { CascadeType.MERGE, CascadeType.REFRESH })
+    @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Personal idPersonal;
     @Basic
     @Column(name = "generica")
@@ -822,13 +823,16 @@ public class Remuneracion implements Serializable {
             return false;
         }
         Remuneracion other = (Remuneracion) object;
-        if (this.getIdMaestro() == null || other.getIdMaestro() == null) return false;
-        else return this.getIdMaestro().intValue() == other.getIdMaestro().intValue();
+        if (this.getIdMaestro() == null || other.getIdMaestro() == null) {
+            return false;
+        } else {
+            return this.getIdMaestro().intValue() == other.getIdMaestro().intValue() || (this.getFechaLiquidacion().equals(other.getFechaLiquidacion()) && this.getIdPersonal().equals(other.getIdPersonal()));
+        }
     }
 
     @Override
     public String toString() {
         return "workcenter.entities.Remuneracion[ idMaestro=" + idMaestro + " ]";
     }
-    
+
 }

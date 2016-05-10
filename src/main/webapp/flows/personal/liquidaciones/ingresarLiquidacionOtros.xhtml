@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml"
-        >
+                >
     <ui:define name="contenido">
 
         <h2>Ingresar Nueva Liquidación</h2>
@@ -61,13 +61,13 @@
                     <td><p:outputLabel value="Sueldo base"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}">
-                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><p:outputLabel value="AFP"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dectoAFP}">
-                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -75,14 +75,14 @@
                     <td><p:outputLabel value="Gratificación"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}">
-                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte trabajador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteTrabajador}">
-                           <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -94,18 +94,18 @@
                     <td><p:outputLabel value="Seguro de Cesantia(aporte empleador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteEmpresa}">
-                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
-                    </p:inputText>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                        </p:inputText>
                     </td>
                 </tr>
                 <tr>
                     <td>Días trabajados</td>
                     <td>:</td>
                     <td>
-                    <p:inputText value="#{mantenedorLiquidaciones.liquidacion.diasTrabajados}">
-                        <p:ajax event="blur" listener="#{mantenedorLiquidaciones.cargarDatos()}"
+                        <p:inputText value="#{mantenedorLiquidaciones.liquidacion.diasTrabajados}">
+                            <p:ajax event="blur" listener="#{mantenedorLiquidaciones.cargarDatos()}"
                                     update="frmLiquidaciones"/>
-                    </p:inputText>
+                        </p:inputText>
                     </td>
 
                     <td><p:outputLabel value="Renta afecta"/></td>
@@ -128,18 +128,18 @@
                     <td><h:outputLabel value="Asignacion Familiar " /></td>
                     <td>:</td>
                     <td>
-			         <p:outputPanel>
-			            <p:spinner value="#{mantenedorLiquidaciones.cantidadCargasFamiliares}" min="0">
-			                <p:ajax update="frmLiquidaciones" process="@this" listener="#{mantenedorLiquidaciones.cargasFamiliares()}"/>
-			            </p:spinner>
-			            <h:outputText value="#{mantenedorLiquidaciones.asignacionFamiliarMonto}" style="padding-left: 10px" />
-			        </p:outputPanel>
+                        <p:outputPanel>
+                            <p:spinner value="#{mantenedorLiquidaciones.cantidadCargasFamiliares}" min="0">
+                                <p:ajax update="frmLiquidaciones" process="@this" listener="#{mantenedorLiquidaciones.cargasFamiliares()}"/>
+                            </p:spinner>
+                            <h:outputText value="#{mantenedorLiquidaciones.asignacionFamiliarMonto}" style="padding-left: 10px" />
+                        </p:outputPanel>
                     </td>
-                    
+
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}">
-                        <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -154,23 +154,23 @@
                                      id="imponible">
                             <f:facet name="header">
                                 <div style="text-align: right">
-                                <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();" immediate="true" update="formAgregarQuitarBonos"/>
+                                    <p:commandButton value="Agregar" icon="fa fa-plus" onclick="PF('dlg1').show();" immediate="true" update="formAgregarQuitarBonos"/>
                                 </div>
                                 <div>Bonos Imponibles</div>
                             </f:facet>
                             <p:column headerText="Detalle">
-                            <h:outputText value="#{l.idBonodescuento.descripcion}"/>
+                                <h:outputText value="#{l.idBonodescuento.descripcion}"/>
                             </p:column>
                             <p:column headerText="Monto">
-                            <h:outputText value="#{l.monto}" />
+                                <h:outputText value="#{l.monto}" />
                             </p:column>
                             <p:column style="width:32px">
-                             <p:commandButton oncomplete="PF('dlgBonos').show();"
-                                              actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
-                                              update="formEditarBonos"
-                                              icon="fa fa-edit"
-                                              title="Editar Monto"
-                                              immediate="true"/>
+                                <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                                 actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                                 update="formEditarBonos"
+                                                 icon="fa fa-edit"
+                                                 title="Editar Monto"
+                                                 immediate="true"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -184,16 +184,16 @@
                                 <div>Descuentos</div>
                             </f:facet>
                             <p:column headerText="Detalle">
-                             <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
+                                <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
                             <p:column headerText="Monto">
-                            <h:outputText value="#{l.monto}" /></p:column>
+                                <h:outputText value="#{l.monto}" /></p:column>
                             <p:column style="width:32px">
-                            <p:commandButton oncomplete="PF('dlgBonos').show();"
-                                            actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
-                                            update="formEditarBonos"
-                                            icon="fa fa-edit"
-                                            title="Editar Monto"
-                                            immediate="true"/>
+                                <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                                 actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                                 update="formEditarBonos"
+                                                 icon="fa fa-edit"
+                                                 title="Editar Monto"
+                                                 immediate="true"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -207,22 +207,22 @@
                                      editable="true"
                                      id="noImponible">
                             <f:facet name="header">
-<!--                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/> -->
-<!--                                 </div> -->
+                                <!--                                 <div style="text-align: right"><p:commandButton value="Agregar" icon="fa fa-plus"/> -->
+                                <!--                                 </div> -->
                                 <div>Bonos No Imponibles</div>
                             </f:facet>
                             <p:column headerText="Detalle">
-                            <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
+                                <h:outputText value="#{l.idBonodescuento.descripcion}"/></p:column>
                             <p:column headerText="Monto">
-                            <h:outputText value="#{l.monto}" />
+                                <h:outputText value="#{l.monto}" />
                             </p:column>
                             <p:column style="width:32px">
-                             <p:commandButton oncomplete="PF('dlgBonos').show();"
-                                            actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
-                                            update="formEditarBonos"
-                                            icon="fa fa-edit"
-                                            title="Editar Monto"
-                                            immediate="true"/>
+                                <p:commandButton oncomplete="PF('dlgBonos').show();"
+                                                 actionListener="#{mantenedorLiquidaciones.editarBono(l)}"
+                                                 update="formEditarBonos"
+                                                 icon="fa fa-edit"
+                                                 title="Editar Monto"
+                                                 immediate="true"/>
                             </p:column>
                         </p:dataTable>
                     </td>
@@ -262,56 +262,58 @@
                 </tr>
                 <tr>
                     <td colspan="3" style="text-align: right" align="right">
-                         <p:commandLink title="Imprimir Liquidación" action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" ajax="false" target="_blank">
-                             <i class="fa fa-print  fa-2x"></i>
-                         </p:commandLink> 
+                        <p:commandLink title="Imprimir Liquidación" action="#{mantenedorLiquidaciones.imprimirLiquidacion()}" ajax="false" target="_blank">
+                            <i class="fa fa-print  fa-2x"></i>
+                        </p:commandLink> 
                     </td>
                     <td colspan="3" align="right">
-                     <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion}" update="frmLiquidaciones" disabled="false">
+                        <p:commandButton value="Guardar Liquidación" icon="fa fa-floppy-o" action="#{mantenedorLiquidaciones.verificarIngresoPrevio()}" update="dialogPrevioIngreso">
                             <p:confirm header="Comfirmación" message="¿Desea Usted Guardar la nueva liquidación?" icon="ui-icon-alert"/>
                         </p:commandButton>
                     </td>
                 </tr>
             </table>
-            <!--<div id="pdfWrapper" style="display: none;">-->
-                <!--<object type="application/pdf" data="/showcase/resources/demo/media/guide.pdf?pfdrid_c=true" height="300px" width="100%" internalinstanceid="6">-->
-                    <!--Your browser can't display pdf, <a href="/resources/demo/media/guide.pdf">click</a> to download pdf instead.-->
-                <!--</object>-->
-            <!--</div>-->
+            <p:outputPanel id="dialogPrevioIngreso">
+                <p:dialog header="Posible duplicidad detectada" visible="#{mantenedorLiquidaciones.ingresoPrevio != null}">
+                    Existe ya una liquidación ingresada para este rut y fecha, ¿Deseas sobreescribirla?
+                    <p:selectBooleanCheckbox label="Sobreescribir" value="#{mantenedorLiquidaciones.sobreescribir}"/>
+                    <p:commandButton value="Guardar" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion()}" update="frmLiquidaciones"/>
+                </p:dialog>
+            </p:outputPanel>
             <p:confirmDialog global="true" showEffect="fade">
-                 <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
-                  <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
-             </p:confirmDialog>            
+                <p:commandButton value="Si" type="button" styleClass="ui-confirmdialog-yes" icon="ui-icon-check" />
+                <p:commandButton value="No" type="button" styleClass="ui-confirmdialog-no" icon="ui-icon-close" />
+            </p:confirmDialog>            
         </h:form>
         <p:dialog id="idDlgDescuento" header="Descuentos Personal" widgetVar="dlg1" width="460" height="250" closable="false">        
             <h:form id="formAgregarQuitarBonos">
-            <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}"
-                        var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}"
-                        itemValue="#{bonos}"
-                        converter="pickListBdpConverter">
-               <p:ajax event="transfer"/>
-            </p:pickList>
-            <p:commandButton value="Aceptar"
-                             action="#{mantenedorLiquidaciones.agregarQuitarBonos()}"
-                             update="frmLiquidaciones"
-                             immediate="true"
-                             oncomplete="PF('dlg1').hide();">
-            </p:commandButton>
+                <p:pickList id="pickList" value="#{mantenedorLiquidaciones.bonos}"
+                            var="bonos" itemLabel="#{bonos.idBonodescuento.descripcion}"
+                            itemValue="#{bonos}"
+                            converter="pickListBdpConverter">
+                    <p:ajax event="transfer"/>
+                </p:pickList>
+                <p:commandButton value="Aceptar"
+                                 action="#{mantenedorLiquidaciones.agregarQuitarBonos()}"
+                                 update="frmLiquidaciones"
+                                 immediate="true"
+                                 oncomplete="PF('dlg1').hide();">
+                </p:commandButton>
             </h:form>
         </p:dialog>
         <p:dialog header="Editar Monto" widgetVar="dlgBonos" width="300" height="40">
             <h:form id="formEditarBonos">
-            <table>
-            <tr>
-                <td><h:outputText value="#{mantenedorLiquidaciones.bonoEditar.idBonodescuento.descripcion}"/></td>
-                <td><p:inputText value="#{mantenedorLiquidaciones.bonoEditar.monto}" /></td>
-                <td><p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.editarMontoBono()}"
-                                     update="frmLiquidaciones"
-                                     oncomplete="PF('dlgBonos').hide();"
-                                     />
-                </td>
-            </tr>
-            </table>
+                <table>
+                    <tr>
+                        <td><h:outputText value="#{mantenedorLiquidaciones.bonoEditar.idBonodescuento.descripcion}"/></td>
+                        <td><p:inputText value="#{mantenedorLiquidaciones.bonoEditar.monto}" /></td>
+                        <td><p:commandButton value="Aceptar" action="#{mantenedorLiquidaciones.editarMontoBono()}"
+                                             update="frmLiquidaciones"
+                                             oncomplete="PF('dlgBonos').hide();"
+                                             />
+                        </td>
+                    </tr>
+                </table>
             </h:form>
         </p:dialog>
     </ui:define>
