@@ -1,6 +1,5 @@
 package workcenter.entidades;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import javax.persistence.*;
 import java.io.Serializable;

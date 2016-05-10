@@ -293,12 +293,13 @@ public class MantenedorLiquidaciones implements Serializable {
         cargarDatos();
     }
     
-    public void verificarIngresoPrevio() {
+    public String verificarIngresoPrevio() {
         this.ingresoPrevio = logicaLiquidaciones.obtenerIngresoPrevio(liquidacion);
         if (ingresoPrevio == null) {
             sobreescribir = Boolean.FALSE;
-            guardarDatosLiquidacion();
+            return guardarDatosLiquidacion();
         }
+        return null;
     }
 
     public String guardarDatosLiquidacion() {
