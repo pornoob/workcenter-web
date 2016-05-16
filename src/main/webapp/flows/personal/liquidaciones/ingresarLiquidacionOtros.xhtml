@@ -274,10 +274,14 @@
                 </tr>
             </table>
             <p:outputPanel id="dialogPrevioIngreso">
-                <p:dialog header="Posible duplicidad detectada" visible="#{mantenedorLiquidaciones.ingresoPrevio != null}">
+                <p:dialog widgetVar="dialogDuplicidad" header="Posible duplicidad detectada" visible="#{mantenedorLiquidaciones.ingresoPrevio != null}">
                     Existe ya una liquidación ingresada para este rut y fecha, ¿Deseas sobreescribirla?
-                    <p:selectBooleanCheckbox label="Sobreescribir" value="#{mantenedorLiquidaciones.sobreescribir}"/>
-                    <p:commandButton value="Guardar" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion()}" update="frmLiquidaciones"/>
+                    <br/>
+                    <p:selectBooleanCheckbox value="#{mantenedorLiquidaciones.sobreescribir}"/> Sobreescribir
+                    <br/>
+                    <p:outputPanel style="text-align: center">
+                        <p:commandButton value="Guardar" action="#{mantenedorLiquidaciones.guardarDatosLiquidacion()}" update="frmLiquidaciones" oncomplete="PF('dialogDuplicidad').hide()"/>
+                    </p:outputPanel>
                 </p:dialog>
             </p:outputPanel>
             <p:confirmDialog global="true" showEffect="fade">

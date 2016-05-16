@@ -95,6 +95,7 @@ public class LogicaLiquidaciones {
         return liquidacionDao.obtenerLiquidacion(id);
     }
 
+    @Transactional(readOnly = true)
     public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
         return liquidacionDao.obtenerIngresoPrevio(liquidacion);
     }

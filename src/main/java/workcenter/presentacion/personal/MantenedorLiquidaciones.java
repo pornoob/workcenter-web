@@ -99,11 +99,15 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion = new Remuneracion();
         liquidacion.setDiasTrabajados(constantes.getDiasTrabajados());
         bonos = new DualListModel<BonoDescuentoPersonal>();
+        ingresoPrevio = null;
+        sobreescribir = Boolean.FALSE;
     }
 
     public void cargarDatos() {
 
-        if (liquidacion.getIdPersonal() == null) return;
+        if (liquidacion.getIdPersonal() == null) {
+            return;
+        }
         bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
         bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
         descuentos = new ArrayList<BonoDescuentoPersonal>();
@@ -132,8 +136,8 @@ public class MantenedorLiquidaciones implements Serializable {
                         totalImponible = totalImponible + 0;
                     }
 
-                } else if (!bDP.getIdBonodescuento().getImponible() &&
-                        bDP.getIdBonodescuento().getIdTipoBonodescuento().getDescripcion().equals(new String("Bono"))) {
+                } else if (!bDP.getIdBonodescuento().getImponible()
+                        && bDP.getIdBonodescuento().getIdTipoBonodescuento().getDescripcion().equals(new String("Bono"))) {
                     bonoNoImponibles.add(bDP);
                     if (bDP.getMonto() != null) {
                         totalNoImponible = totalNoImponible + bDP.getMonto().intValue();
@@ -166,16 +170,16 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
 
-        if (Boolean.TRUE.equals(cp.getSinTope()))
+        if (Boolean.TRUE.equals(cp.getSinTope())) {
             gratificacion = liquidacion.getSueldoBase() * 0.25;
-        else
-            gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12)) ?
-                    (liquidacion.getSueldoBase() / 4) : (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
+        } else {
+            gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12))
+                    ? (liquidacion.getSueldoBase() / 4) : (int) ((4.75 * Integer.parseInt(variable.getValor())) / 12));
+        }
 
         liquidacion.setGratificacion(gratificacion.intValue());
         liquidacion.setTotalImponible(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible);
         liquidacion.setTotalHaberes(liquidacion.getSueldoBase() + liquidacion.getGratificacion() + totalImponible + totalNoImponible);
-
 
         //calculo afp y salud
         liquidacion.setDctoPrevision(0);
@@ -190,14 +194,12 @@ public class MantenedorLiquidaciones implements Serializable {
                 } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
                     liquidacion.setDctoPrevision((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
                 }
-            } else {
-                if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
-                    liquidacion.setDectoAFP((int) vPP.getValor());
-                } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
-                    liquidacion.setDectoAFP((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
-                } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
-                    liquidacion.setDectoAFP((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
-                }
+            } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
+                liquidacion.setDectoAFP((int) vPP.getValor());
+            } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
+                liquidacion.setDectoAFP((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
+            } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
+                liquidacion.setDectoAFP((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
             }
         }
 
@@ -259,7 +261,6 @@ public class MantenedorLiquidaciones implements Serializable {
         }
     }
 
-
     public Integer getAsignacionFamiliarMonto() {
         return asignacionFamiliarMonto;
     }
@@ -275,8 +276,8 @@ public class MantenedorLiquidaciones implements Serializable {
             List<ValorImpuestoUnico> valorImpuestoUnicos = logicaLiquidaciones.obtenerValoresVigentesImpUnico();
 
             for (ValorImpuestoUnico viu : valorImpuestoUnicos) {
-                if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue()) &&
-                        (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
+                if ((viu.getCotaMin() == null || rentaAfectaUtm > viu.getCotaMin().floatValue())
+                        && (viu.getCotaMax() == null || rentaAfectaUtm <= viu.getCotaMax().floatValue())) {
                     //return Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm);
                     return Math.round(Double.valueOf((rentaAfectaUtm * viu.getFactor().doubleValue() - viu.getSubstraendo().doubleValue()) * utm) * Math.pow(10, 0)) / Math.pow(10, 0);
                 }
@@ -292,7 +293,7 @@ public class MantenedorLiquidaciones implements Serializable {
         logicaPersonal.guardar(liquidacion.getIdPersonal());
         cargarDatos();
     }
-    
+
     public String verificarIngresoPrevio() {
         this.ingresoPrevio = logicaLiquidaciones.obtenerIngresoPrevio(liquidacion);
         if (ingresoPrevio == null) {
@@ -307,7 +308,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
         renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
-        
+
         String retorno = null;
         if (Boolean.TRUE.equals(sobreescribir)) {
             liquidacion.setIdMaestro(ingresoPrevio.getIdMaestro());
@@ -319,8 +320,10 @@ public class MantenedorLiquidaciones implements Serializable {
             FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", "La liquidacion fué registrada");
             retorno = "flowMenuLiquidaciones";
         }
-        
+
         listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        ingresoPrevio = null;
+        sobreescribir = false;
         return retorno;
     }
 
@@ -331,7 +334,9 @@ public class MantenedorLiquidaciones implements Serializable {
 
     public void visualizarPDF(Remuneracion verLiquidacion) throws IOException {
 
-        if (verLiquidacion == null) return;
+        if (verLiquidacion == null) {
+            return;
+        }
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
@@ -346,8 +351,8 @@ public class MantenedorLiquidaciones implements Serializable {
                 break;
             }
         }
-        response.setHeader("Content-disposition", "filename=" + "Liquidacion-" +
-                mesSeleccionado + "-" + anio + "-" + verLiquidacion.getIdPersonal().getRut() + ".pdf");
+        response.setHeader("Content-disposition", "filename=" + "Liquidacion-"
+                + mesSeleccionado + "-" + anio + "-" + verLiquidacion.getIdPersonal().getRut() + ".pdf");
         //response.setHeader("Content-disposition", "filename="+verLiquidacion.getIdPersonal().getRut()+".pdf");
 
         OutputStream output = response.getOutputStream();
@@ -379,8 +384,9 @@ public class MantenedorLiquidaciones implements Serializable {
 
         if (montoCarga != 1) {
             asignacionFamiliarMonto = cantidadCargasFamiliares * montoCarga;
-        } else
+        } else {
             asignacionFamiliarMonto = 0;
+        }
 
         if (ultimaCargaFamilia != null) {
             liquidacion.setTotalHaberes(liquidacion.getTotalHaberes() - ultimaCargaFamilia * montoCarga);
@@ -424,11 +430,12 @@ public class MantenedorLiquidaciones implements Serializable {
             liquidacion.getRemuneracionBonoDescuentoList().add(bdr);
         }
 
-
     }
 
     public void imprimirLiquidacion() throws IOException {
-        if (liquidacion.getIdPersonal() == null) return;
+        if (liquidacion.getIdPersonal() == null) {
+            return;
+        }
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
         renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
@@ -445,8 +452,8 @@ public class MantenedorLiquidaciones implements Serializable {
                 mesSeleccionado = m.getNombre();
             }
         }
-        response.setHeader("Content-disposition", "filename=" + "Liquidacion-" +
-                mesSeleccionado + "-" + anio + "-" + liquidacion.getIdPersonal().getRut() + ".pdf");
+        response.setHeader("Content-disposition", "filename=" + "Liquidacion-"
+                + mesSeleccionado + "-" + anio + "-" + liquidacion.getIdPersonal().getRut() + ".pdf");
 
         OutputStream output = response.getOutputStream();
         output.write(liquidacion.getArchivo());
@@ -456,7 +463,9 @@ public class MantenedorLiquidaciones implements Serializable {
     }
 
     public void editarMontoBono() {
-        if (bonoEditar == null) return;
+        if (bonoEditar == null) {
+            return;
+        }
         for (int i = 0; i < bonoImponibles.size(); i++) {
             if (bonoImponibles.get(i).getId() == (bonoEditar.getId())) {
                 bonoImponibles.get(i).setMonto(bonoEditar.getMonto());

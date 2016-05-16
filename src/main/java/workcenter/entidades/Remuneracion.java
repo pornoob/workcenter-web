@@ -826,7 +826,7 @@ public class Remuneracion implements Serializable {
         if (this.getIdMaestro() == null || other.getIdMaestro() == null) {
             return false;
         } else {
-            return this.getIdMaestro().intValue() == other.getIdMaestro().intValue() || (this.getFechaLiquidacion().equals(other.getFechaLiquidacion()) && this.getIdPersonal().equals(other.getIdPersonal()));
+            return this.getIdMaestro().intValue() == other.getIdMaestro().intValue();
         }
     }
 

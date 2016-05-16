@@ -139,7 +139,14 @@ public class LiquidacionDao {
 
     public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
         try {
-            return (Remuneracion) em.createNamedQuery("Remuneracion.findPrevia").setParameter("liquidacion", liquidacion).setMaxResults(1).getSingleResult();
+            StringBuilder jql = new StringBuilder();
+            jql.append("SELECT m FROM Remuneracion m WHERE m.fechaLiquidacion = :fecha and m.idPersonal = :personal ORDER BY m.idMaestro DESC");
+            Query q = em.createQuery(jql.toString());
+            
+            q.setParameter("fecha", liquidacion.getFechaLiquidacion());
+            q.setParameter("personal", liquidacion.getIdPersonal());
+            
+            return (Remuneracion) q.setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
         }
