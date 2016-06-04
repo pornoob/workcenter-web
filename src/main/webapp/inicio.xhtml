@@ -12,83 +12,70 @@
             <p:panel header="Módulos Mantenedores">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"
-                                   action="#{facesUtil.redirigir('/m/personal')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   action="#{facesUtil.redirigir('/m/personal')}" class="menuWorkcenter">
                         <i class="fa fa-user fa-5x"></i>
                         <h:outputLabel value="Mantenedor de Personal"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"
-                                   action="#{facesUtil.redirigir('/m/equipos')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
-                         <i class="fa fa-truck fa-5x"></i>
+                                   action="#{facesUtil.redirigir('/m/equipos')}" class="menuWorkcenter">
+                        <i class="fa fa-truck fa-5x"></i>
                         <h:outputLabel value="Mantenedor de Equipos"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"
-                                   action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter">
                         <i class="fa fa-wrench fa-5x"></i>
                         <h:outputLabel value="Módulo de Mantenciones"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
-                                   class="menuWorkcenter" onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter">
                         <h:graphicImage value="/img/icons/64/m_empresas.png"/>
                         <h:outputLabel value="Mantenedor de Empresas"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/usuarios')}"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   
+                            >
                         <i class="fa fa-users fa-5x"></i>
                         <h:outputLabel value="Mantenedor de Usuarios"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/registros')}"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   
+                            >
                         <i class="fa fa-pencil-square-o fa-5x"></i>
                         <h:outputLabel value="Administrador de Registros"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"
                                    action="#{facesUtil.redirigir('/m/personal/liquidaciones')}"
-                                   class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter" style="display: block">
                         <i class="fa fa-usd fa-5x"></i>
                         <h:outputLabel value="Liquidaciones" style="margin-top: 10px"/>
                     </h:commandLink>
 
                     <h:commandLink
-                                   rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
-                                   class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                            rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
+                            class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
+                            
+                            >
                         <i class="fa fa-book fa-5x"></i>
                         <h:outputLabel value="Libro de Remuneraciones"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"
                                    action="#{facesUtil.redirigir('/m/carga_masiva')}"
-                                   class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter" style="display: block">
                         <i class="fa fa-upload fa-5x"></i>
                         <h:outputLabel value="Carga Masiva" style="margin-top: 10px"/>
                     </h:commandLink>
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MAESTRO_DE_GUIAS')}"
                                    action="#{facesUtil.redirigir('/m/maestro_guias')}"
-                                   class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter" style="display: block">
                         <i class="fa fa-file-text fa-5x"></i>
                         <h:outputLabel value="Maestro de Guias" style="margin-top: 10px"/>
                     </h:commandLink>
@@ -98,34 +85,26 @@
             <p:panel header="Módulos Gestión">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
-                                   action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter">
                         <i class="fa fa-exclamation-triangle fa-5x"></i>
                         <h:outputLabel value="PIIR"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
-                                   action="#{facesUtil.redirigir('/m/alarmas_gps')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   action="#{facesUtil.redirigir('/m/alarmas_gps')}" class="menuWorkcenter">
                         <h:graphicImage value="/img/icons/64/m_alarmas_gps.png"/>
                         <h:outputLabel value="Alarmas GPS"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INFORME_ACTIVIDADES')}"
-                                   action="#{facesUtil.redirigir('/m/informe_actividades')}" class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   action="#{facesUtil.redirigir('/m/informe_actividades')}" class="menuWorkcenter">
                         <i class="fa fa-bar-chart fa-5x"></i>
                         <h:outputLabel value="Informe de Actividades"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_PROGRAMA_ACTIVIDADES')}"
                                    action="#{facesUtil.redirigir('/m/programa_actividades')}"
-                                   class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter">
                         <i class="fa fa-calendar fa-5x"></i>
                         <h:outputLabel value="Programa de Actividades"/>
                     </h:commandLink>
@@ -133,35 +112,29 @@
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                                    action="#{facesUtil.redirigir('/m/reportes_sii')}"
-                                   class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter">
                         <h:graphicImage value="/img/icons/64/m_reportes_sii.png"/>
                         <h:outputLabel value="Reportes para SII"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
                                    action="#{facesUtil.redirigir('/m/consulta_doc')}"
-                                   class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter">
                         <i class="fa fa-search fa-5x"></i>
                         <h:outputLabel value="Consulta Documentos Personal"/>
                     </h:commandLink>
-                    
+
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"
                                    action="#{facesUtil.redirigir('/m/ficha_viajes')}"
-                                   class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter" style="display: block">
                         <i class="fa fa-clipboard fa-5x"></i>
                         <h:outputLabel value="Control de Despachos" style="margin-top: 10px"/>
                     </h:commandLink>
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
                                    action="#{facesUtil.redirigir('/m/hoja_servicio')}"
                                    class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)"
+                                   
+
                                    title="Hoja de Servicio">
                         <i class="fa fa-gear fa-5x"></i>
                         <h:outputLabel value="Hoja de Servicio" style="margin-top: 10px"/>
@@ -169,17 +142,15 @@
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('CAJA')}"
                                    action="#{facesUtil.redirigir('/m/caja')}"
                                    class="menuWorkcenter" style="display: block"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)"
+                                   
+
                                    title="Modulo Caja">
                         <i class="fa fa-bank fa-5x"></i>
                         <h:outputLabel value="Caja" style="margin-top: 10px"/>
                     </h:commandLink>
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"
                                    action="#{facesUtil.redirigir('/m/consulta_doc_equipo')}"
-                                   class="menuWorkcenter"
-                                   onmouseover="WebCenter.Menu.mouseover(this)"
-                                   onmouseout="WebCenter.Menu.mouseout(this)">
+                                   class="menuWorkcenter">
                         <i class="fa fa-search fa-5x"></i>
                         <h:outputLabel value="Consulta Documentos Equipo"/>
                     </h:commandLink>

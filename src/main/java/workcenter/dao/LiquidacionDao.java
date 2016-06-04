@@ -6,12 +6,12 @@ import workcenter.entidades.*;
 import workcenter.util.components.Constantes;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
-import javax.persistence.NoResultException;
 
 @Repository
 public class LiquidacionDao {
@@ -81,9 +81,28 @@ public class LiquidacionDao {
         return em.createNamedQuery("BonoDescuentoPersonal.findAll").getResultList();
     }
 
-    @SuppressWarnings("unchecked")
     public Integer obtenerAnticipoSueldo(Personal idPers, String mes,
             Integer anio) {
+
+        Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
+        q.setParameter("mes", Integer.parseInt(mes));
+        q.setParameter("anio", anio);
+        q.setParameter("receptor", idPers);
+        /**
+         * se modifica el ciclo for ya que la persona puede tener mas de un
+         * anticipo en el mes registrado (caso especial), //por ende se debera
+         * acumular el monto para luego retornarlo*
+         */
+        Integer monto = 0;
+        for (Dinero listaDineros : (List<Dinero>) q.getResultList()) {
+            if (listaDineros.getConcepto().getId() == c.getConceptoAnticipo()) {
+                monto = monto + listaDineros.getMonto();
+            }
+        }
+        return monto;
+    }
+
+    public Integer obtenerAnticipoViatico(Personal idPers, String mes, Integer anio) {
 
         Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
         q.setParameter("mes", Integer.parseInt(mes));

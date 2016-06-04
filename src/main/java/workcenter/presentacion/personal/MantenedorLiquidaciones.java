@@ -232,6 +232,7 @@ public class MantenedorLiquidaciones implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        liquidacion.setAnticipoViatico(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - liquidacion.getTotalDctos());
         liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido() - liquidacion.getAnticipoSueldo());

@@ -4,6 +4,158 @@
              xsi:schemaLocation="http://java.sun.com/xml/ns/persistence http://java.sun.com/xml/ns/persistence/persistence_2_0.xsd">
     <persistence-unit name="test" transaction-type="RESOURCE_LOCAL">
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
+        <class>workcenter.entidades.Actividad</class>
+        <class>workcenter.entidades.Remuneracion</class>
+        <class>workcenter.entidades.Equipo</class>
+        <class>workcenter.entidades.BonoDescuento</class>
+        <class>workcenter.entidades.RegistroFormulario</class>
+        <class>workcenter.entidades.ServicioRuta</class>
+        <class>workcenter.entidades.Usuario</class>
+        <class>workcenter.entidades.PrevisionContrato</class>
+        <class>workcenter.entidades.MarTipoActividad</class>
+        <class>workcenter.entidades.ContratoPersonal</class>
+        <class>workcenter.entidades.CondicionPago</class>
+        <class>workcenter.entidades.BonoDescuentoPersonal</class>
+        <class>workcenter.entidades.SubtipoEquipo</class>
+        <class>workcenter.entidades.MirApoyo</class>
+        <class>workcenter.entidades.ClasificacionProducto</class>
+        <class>workcenter.entidades.MirTrazabilidadIncidencia</class>
+        <class>workcenter.entidades.TipoDocTipoEquipo</class>
+        <class>workcenter.entidades.ValorImpuestoUnico</class>
+        <class>workcenter.entidades.ProductoFactura</class>
+        <class>workcenter.entidades.MueUsuarioExterno</class>
+        <class>workcenter.entidades.TipoEquipo</class>
+        <class>workcenter.entidades.TipoBonoDescuento</class>
+        <class>workcenter.entidades.PrestamoCancelado_</class>
+        <class>workcenter.entidades.MirPrioridad</class>
+        <class>workcenter.entidades.MpaPlanPrograma_</class>
+        <class>workcenter.entidades.TipoDocPersonal</class>
+        <class>workcenter.entidades.SancionRetiradaEquipo</class>
+        <class>workcenter.entidades.SancionRetiradaPersonal</class>
+        <class>workcenter.entidades.DetalleCotizacion</class>
+        <class>workcenter.entidades.Tarea</class>
+        <class>workcenter.entidades.Vuelta</class>
+        <class>workcenter.entidades.MiaInspeccionAvanzada</class>
+        <class>workcenter.entidades.MpaEjecucionPlan</class>
+        <class>workcenter.entidades.Log</class>
+        <class>workcenter.entidades.TipoProducto</class>
+        <class>workcenter.entidades.TipoDocumentoEquipo</class>
+        <class>workcenter.entidades.Cargo</class>
+        <class>workcenter.entidades.GuiaPetroleo</class>
+        <class>workcenter.entidades.MpaPlanContrato</class>
+        <class>workcenter.entidades.Factura</class>
+        <class>workcenter.entidades.Cliente</class>
+        <class>workcenter.entidades.MarParticipantesAct</class>
+        <class>workcenter.entidades.TramoContrato</class>
+        <class>workcenter.entidades.Reembolso</class>
+        <class>workcenter.entidades.RendimientoCopec</class>
+        <class>workcenter.entidades.DocGestionAlarmaGps</class>
+        <class>workcenter.entidades.Proyecto</class>
+        <class>workcenter.entidades.ExtraImponible</class>
+        <class>workcenter.entidades.Personal_</class>
+        <class>workcenter.entidades.MpaActividad</class>
+        <class>workcenter.entidades.OrigenDestino</class>
+        <class>workcenter.entidades.ContratoEmpresa</class>
+        <class>workcenter.entidades.ReporteDecarga</class>
+        <class>workcenter.entidades.DocumentoPauta</class>
+        <class>workcenter.entidades.MpaPlanPrograma</class>
+        <class>workcenter.entidades.MfsPregunta</class>
+        <class>workcenter.entidades.HistorialDocumentoEquipo</class>
+        <class>workcenter.entidades.EquipoSancionado</class>
+        <class>workcenter.entidades.CampoRemuneracion</class>
+        <class>workcenter.entidades.Contacto</class>
+        <class>workcenter.entidades.ValoresCargasFamiliares</class>
+        <class>workcenter.entidades.Formulario</class>
+        <class>workcenter.entidades.Dinero</class>
+        <class>workcenter.entidades.DocumentoAdjunto</class>
+        <class>workcenter.entidades.PrestamoCancelado</class>
+        <class>workcenter.entidades.MirSeveridad</class>
+        <class>workcenter.entidades.MirTransicionEstado</class>
+        <class>workcenter.entidades.MfsEncuesta</class>
+        <class>workcenter.entidades.Existencia</class>
+        <class>workcenter.entidades.ContactoContrato</class>
+        <class>workcenter.entidades.CampoLibretaConductor</class>
+        <class>workcenter.entidades.ModeloEquipo</class>
+        <class>workcenter.entidades.ActividadDiaria</class>
+        <class>workcenter.entidades.MirEstadoIncidencia</class>
+        <class>workcenter.entidades.Concepto</class>
+        <class>workcenter.entidades.MpaPrograma</class>
+        <class>workcenter.entidades.GuiaPetroleoFactura</class>
+        <class>workcenter.entidades.Concepto_</class>
+        <class>workcenter.entidades.ContactoEmpresa</class>
+        <class>workcenter.entidades.Producto</class>
+        <class>workcenter.entidades.DetalleActividad</class>
+        <class>workcenter.entidades.Variable</class>
+        <class>workcenter.entidades.DocumentoPersonal</class>
+        <class>workcenter.entidades.MarActividad</class>
+        <class>workcenter.entidades.Empresa</class>
+        <class>workcenter.entidades.AlarmaGps</class>
+        <class>workcenter.entidades.Permiso</class>
+        <class>workcenter.entidades.HistorialDocumentosPersonal</class>
+        <class>workcenter.entidades.MiaRespuesta</class>
+        <class>workcenter.entidades.LibroRemuneracionConductor</class>
+        <class>workcenter.entidades.Prevision</class>
+        <class>workcenter.entidades.MfsRespuesta</class>
+        <class>workcenter.entidades.LibretaConductor</class>
+        <class>workcenter.entidades.ModeloPauta</class>
+        <class>workcenter.entidades.Personal</class>
+        <class>workcenter.entidades.CargasFamiliares</class>
+        <class>workcenter.entidades.ClasificacionFactura</class>
+        <class>workcenter.entidades.ValorPrevisionPersonal</class>
+        <class>workcenter.entidades.MmeMantencionSemiremolque</class>
+        <class>workcenter.entidades.HoraLibrePersonal</class>
+        <class>workcenter.entidades.FactorActualizacionSII</class>
+        <class>workcenter.entidades.AsociacionDocumento</class>
+        <class>workcenter.entidades.BonoDescuentoRemuneracion</class>
+        <class>workcenter.entidades.MarcaEquipo</class>
+        <class>workcenter.entidades.ViajesTortola</class>
+        <class>workcenter.entidades.TipoTarifa</class>
+        <class>workcenter.entidades.MpaContrato</class>
+        <class>workcenter.entidades.Descuento</class>
+        <class>workcenter.entidades.PautaMantenimiento</class>
+        <class>workcenter.entidades.ValueRegistroFormulario</class>
+        <class>workcenter.entidades.MirIncidencia</class>
+        <class>workcenter.entidades.UsuarioServicioRuta</class>
+        <class>workcenter.entidades.TipoDocCargo</class>
+        <class>workcenter.entidades.TipoActividadDiaria</class>
+        <class>workcenter.entidades.SeguroEquipo</class>
+        <class>workcenter.entidades.Bodega</class>
+        <class>workcenter.entidades.MfsTipoPregunta</class>
+        <class>workcenter.entidades.NivelExposicion</class>
+        <class>workcenter.entidades.Sancionado</class>
+        <class>workcenter.entidades.MpaPlanContratoPK</class>
+        <class>workcenter.entidades.MmeTipoMantencion</class>
+        <class>workcenter.entidades.Consumo</class>
+        <class>workcenter.entidades.TarifaTramo</class>
+        <class>workcenter.entidades.FacturaAsociada</class>
+        <class>workcenter.entidades.TipoUnidad</class>
+        <class>workcenter.entidades.GestionAlerta</class>
+        <class>workcenter.entidades.MarRegistro</class>
+        <class>workcenter.entidades.ParticipanteActividad</class>
+        <class>workcenter.entidades.DetalleFactura</class>
+        <class>workcenter.entidades.Cotizacion</class>
+        <class>workcenter.entidades.MantencionEquipo</class>
+        <class>workcenter.entidades.ActividadDiaria_</class>
+        <class>workcenter.entidades.GestionAlarmaGps</class>
+        <class>workcenter.entidades.ClasificacionDocumento</class>
+        <class>workcenter.entidades.Documento</class>
+        <class>workcenter.entidades.MiaPregunta</class>
+        <class>workcenter.entidades.FotoEquipo</class>
+        <class>workcenter.entidades.RelacionClasificacionDocumento</class>
+        <class>workcenter.entidades.Ticket</class>
+        <class>workcenter.entidades.Adjunto</class>
+        <class>workcenter.entidades.MmeMantencionTracto</class>
+        <class>workcenter.entidades.EstacionServicio</class>
+        <class>workcenter.entidades.DocumentoEquipo</class>
+        <class>workcenter.entidades.MuePermisoUsuario</class>
+        <class>workcenter.entidades.MpaValorPlanPrograma</class>
+        <class>workcenter.entidades.Dinero_</class>
+        <class>workcenter.entidades.Mensaje</class>
+        <class>workcenter.entidades.MfsTest</class>
+        <class>workcenter.entidades.InputFormulario</class>
+        <class>workcenter.entidades.Servicio</class>
+        <class>workcenter.entidades.Version</class>
+        <class>workcenter.entidades.PagoFactura</class>
         <properties>
             <!-- c3p0 configuration-->
             <property name="hibernate.dialect" value="org.hibernate.dialect.MySQLDialect"/>
@@ -11,9 +163,9 @@
             <property name="hibernate.connection.charSet" value="UTF-8"/>
             <property name="hibernate.show_sql" value="false"/>
             <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
-            <property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/TransportesVentanas"/>
+            <!--<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/TransportesVentanas"/>-->
             <!--<property name="hibernate.connection.url" value="jdbc:mysql://186.103.133.53:3306/desarrollo"/>-->
-            <!--<property name="hibernate.connection.url" value="jdbc:mysql://186.103.133.53:3306/TransportesVentanas?zeroDateTimeBehavior=convertToNull"/>-->
+            <property name="hibernate.connection.url" value="jdbc:mysql://186.103.133.53:3306/TransportesVentanas?zeroDateTimeBehavior=convertToNull"/>
             <!--<property name="hibernate.connection.url" value="jdbc:mysql://192.168.0.106:3306/desarrollo?zeroDateTimeBehavior=convertToNull"/>-->
             <property name="hibernate.connection.username" value="workcenter"/>
             <property name="hibernate.connection.password" value="w0rc3nt3r."/>

@@ -9,12 +9,12 @@
 		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd
                   http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx.xsd">
     
-    <context:component-scan base-package="workcenter"  />
+    <context:component-scan base-package="workcenter"/>
 
     <tx:annotation-driven/>
 
     <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalEntityManagerFactoryBean" >
-        <property name="persistenceUnitName" value="primary"/>
+        <property name="persistenceUnitName" value="test"/>
     </bean>
 
     <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager" >

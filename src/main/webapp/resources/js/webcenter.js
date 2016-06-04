@@ -10,18 +10,6 @@ var WebCenter = {
         }
     },
     Menu: {
-        mouseover: function (menu) {
-            var img = menu.childNodes[0];
-            var src = img.getAttribute('src');
-            src = src.substring(0, src.lastIndexOf('.')) + '_hover' + src.substring(src.lastIndexOf('.'));
-            img.setAttribute('src', src);
-        },
-        mouseout: function (menu) {
-            var img = menu.childNodes[0];
-            var src = img.getAttribute('src');
-            src = src.substring(0, src.lastIndexOf('_')) + src.substring(src.lastIndexOf('.'));
-            img.setAttribute('src', src);
-        },
         mouseclick: function (url) {
             location.href = url;
         }

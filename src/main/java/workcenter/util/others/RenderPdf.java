@@ -14,7 +14,6 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.Formato;
 
 import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletRequest;
 import java.io.*;
 import java.net.URL;
 import java.text.SimpleDateFormat;
@@ -45,9 +44,9 @@ public class RenderPdf implements Serializable {
         
         //obtenemos url + contexto de la aplicación
         FacesContext context = FacesContext.getCurrentInstance();
-        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
-        String requestURL = request.getRequestURL().toString();
-        String url = requestURL.split("/m")[0];
+//        HttpServletRequest request = (HttpServletRequest)context.getExternalContext().getRequest();
+//        String requestURL = request.getRequestURL().toString();
+//        String url = requestURL.split("/m")[0];
         
         String fecha = sdf.format(liquidacion.getFechaLiquidacion());
         String path = constantes.getPathArchivos() + "/tmp/" +liquidacion.getIdPersonal().getRut()+"/liquidaciones/"+fecha;
@@ -93,8 +92,9 @@ public class RenderPdf implements Serializable {
             
             //agregamos logo en el pdf
             try {
-            	
-                Image logo = Image.getInstance(new URL(url+"/resources/css/img/theme/logoSuperior.png"));
+
+//                Image logo = Image.getInstance(new URL(url+"/resources/css/img/theme/logoSuperior.png"));
+                Image logo = Image.getInstance(new URL("http://186.103.133.53:8080/workcenter/resources/css/img/theme/logoSuperior.png"));
                 logo.setAbsolutePosition(450f, 740f);
                 logo.scaleAbsolute(75f, 75f);
                 pdf.add(logo);

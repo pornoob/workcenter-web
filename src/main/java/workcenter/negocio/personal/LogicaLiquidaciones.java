@@ -70,6 +70,11 @@ public class LogicaLiquidaciones {
     }
 
     @Transactional(readOnly = true)
+    public Integer obtenerAnticipoViatico(Personal idPers, String mes, Integer anio) {
+        return liquidacionDao.obtenerAnticipoViatico(idPers, mes, anio);
+    }
+
+    @Transactional(readOnly = true)
     public List<Remuneracion> obtenerListaRemuneraciones() {
         return liquidacionDao.obtenerListaRemuneraciones();
     }
