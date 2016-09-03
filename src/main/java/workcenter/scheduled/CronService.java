@@ -1,20 +1,5 @@
 package workcenter.scheduled;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javax.mail.BodyPart;
-import javax.mail.Folder;
-import javax.mail.Message;
-import javax.mail.Multipart;
-import javax.mail.Session;
-import javax.mail.Store;
-import javax.mail.internet.MimeBodyPart;
-
 import org.apache.poi.xssf.usermodel.XSSFRow;
 import org.apache.poi.xssf.usermodel.XSSFSheet;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
@@ -31,6 +16,16 @@ import workcenter.negocio.incidencias.LogicaIncidencias;
 import workcenter.presentacion.includes.AlarmasUploader;
 import workcenter.util.components.Constantes;
 import workcenter.util.services.MailSender;
+
+import javax.mail.*;
+import javax.mail.internet.MimeBodyPart;
+import java.io.IOException;
+import java.io.InputStream;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * @author colivares
@@ -59,7 +54,7 @@ public class CronService {
     }
 
     // cada 1 hra notificar o cerrar estados incidencias
-    @Scheduled(cron = "0 0 */1 * * *")
+//    @Scheduled(cron = "0 0 */1 * * *")
     public void cerrarIncidencias() {
         List<MirIncidencia> incidencias = logicaIncidencias.obtenerIncidenciasPorEstado(constantes.getPiirEstadoInicial());
         long actual = new Date().getTime();
@@ -121,7 +116,7 @@ public class CronService {
     }
 
     // todos los días a las 7 de la mañana descargar correo SAMTECH
-    @Scheduled(cron = "0 0 7 * * *")
+//    @Scheduled(cron = "0 0 7 * * *")
     public void descargarFicheroAlarmaGPS() {
         Properties props = new Properties();
         props.setProperty("mail.store.protocol", constantes.getMarProtocoloCorreo());
