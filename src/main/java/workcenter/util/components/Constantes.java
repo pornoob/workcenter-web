@@ -43,6 +43,7 @@ public class Constantes implements Serializable {
     private int cargoMecanico = 4;
     private List<String> estadosCiviles;
     private int fonasa = 0;
+    private int fonasaId = 1;
     private int isapre = 1;
     private int unidadPesos = 1;
     private int unidadUf = 2;
@@ -637,5 +638,13 @@ public class Constantes implements Serializable {
 
     public int getPAGO_OTRO_MEDIO() {
         return PAGO_OTRO_MEDIO;
+    }
+
+    public int getFonasaId() {
+        return fonasaId;
+    }
+
+    public void setFonasaId(int fonasaId) {
+        this.fonasaId = fonasaId;
     }
 }
