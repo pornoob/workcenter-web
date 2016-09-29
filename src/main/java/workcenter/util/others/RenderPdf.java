@@ -94,7 +94,7 @@ public class RenderPdf implements Serializable {
             try {
 
 //                Image logo = Image.getInstance(new URL(url+"/resources/css/img/theme/logoSuperior.png"));
-                Image logo = Image.getInstance(new URL("http://186.103.133.53:8080/workcenter/resources/css/img/theme/logoSuperior.png"));
+                Image logo = Image.getInstance(new URL("http://192.168.0.106:8080/workcenter/resources/css/img/theme/logoSuperior.png"));
                 logo.setAbsolutePosition(450f, 740f);
                 logo.scaleAbsolute(75f, 75f);
                 pdf.add(logo);

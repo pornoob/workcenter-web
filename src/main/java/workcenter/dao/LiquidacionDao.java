@@ -103,6 +103,7 @@ public class LiquidacionDao {
     }
 
     public Integer obtenerAnticipoViatico(Personal idPers, String mes, Integer anio) {
+        if (true) return 0;
 
         Query q = em.createNamedQuery("Dinero.findByConceptoFecha");
         q.setParameter("mes", Integer.parseInt(mes));
