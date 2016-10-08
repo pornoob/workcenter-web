@@ -10,6 +10,7 @@
 <h3>#{mantenedorPersonal.personalSeleccionado.nombreCompleto}</h3>
 
 <h:form id="frmPersonal">
+<p:messages autoUpdate="true" showDetail="true"/>
 <p:panel header="1.- Contrato de trabajo N° #{mantenedorPersonal.contratoSeleccionado.numero}">
     <table>
         <tr>
@@ -245,7 +246,7 @@
     <p:commandButton icon="ui-icon-arrowreturnthick-1-w" value="Volver"
                      action="#{mantenedorPersonal.irContratosPersonal()}" ajax="false" immediate="true"/>
     <p:commandButton icon="ui-icon-disk" rendered="#{sesionCliente.esEditor(constantes.moduloPersonal)}"
-                     value="Guardar" action="#{mantenedorPersonal.guardarContrato()}"/>
+                     value="Guardar" action="#{mantenedorPersonal.guardarContrato()}" update="@form"/>
 </p:outputPanel>
 </h:form>
 </ui:define>

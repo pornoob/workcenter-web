@@ -525,6 +525,7 @@ public class
         contratoSeleccionado.getValoresPrevisiones().add(valorAfp);
 
         logicaPersonal.guardarContrato(contratoSeleccionado);
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Contrato guardado exitosamente");
     }
 
     public List<DocumentoPersonal> obtenerDocumentosActualizados() {
