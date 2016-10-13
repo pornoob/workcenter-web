@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
 <ui:define name="contenido">
 <h2>Edición de contrato</h2>
@@ -27,7 +28,7 @@
             <td>:</td>
             <td>
                 <p:inputText value="#{mantenedorPersonal.contratoSeleccionado.sueldoBase}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
 
@@ -35,7 +36,7 @@
             <td>:</td>
             <td>
                 <p:inputText value="#{mantenedorPersonal.contratoSeleccionado.porcentaje}">
-                    <f:convertNumber type="percent" currencySymbol="%" maxFractionDigits="2"/>
+                    <tvp:convertNumber type="percent" currencySymbol="%" maxFractionDigits="2"/>
                 </p:inputText>
             </td>
         </tr>
@@ -86,7 +87,7 @@
             <td>
                 <p:inputText disabled="#{mantenedorPersonal.hrsEspera == null}"
                              value="#{mantenedorPersonal.hrsEspera}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
 
@@ -95,7 +96,7 @@
             <td>
                 <p:inputText disabled="#{mantenedorPersonal.hrsEspera == null}"
                              value="#{mantenedorPersonal.semanaCorrida}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
 
@@ -103,7 +104,7 @@
             <td>:</td>
             <td>
                 <p:inputText readonly="true" value="#{mantenedorPersonal.gratificacionCalculada}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
         </tr>
@@ -116,7 +117,7 @@
             <td>:</td>
             <td>
                 <p:inputText value="#{mantenedorPersonal.contratoSeleccionado.colacion}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
 
@@ -124,7 +125,7 @@
             <td>:</td>
             <td>
                 <p:inputText value="#{mantenedorPersonal.contratoSeleccionado.locomocion}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
 
@@ -132,7 +133,7 @@
             <td>:</td>
             <td>
                 <p:inputText value="#{mantenedorPersonal.contratoSeleccionado.bonopactado}">
-                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                 </p:inputText>
             </td>
         </tr>
@@ -173,11 +174,11 @@
                 <p:outputPanel id="pValorTipoUnidadAfp">
                     <p:inputText rendered="#{constantes.unidadPesos ne mantenedorPersonal.valorAfp.unidad.id}"
                                  value="#{mantenedorPersonal.valorAfp.valor}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
+                        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
                     </p:inputText>
                     <p:inputText rendered="#{constantes.unidadPesos eq mantenedorPersonal.valorAfp.unidad.id}"
                                  value="#{mantenedorPersonal.valorAfp.valor}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                     </p:inputText>
                 </p:outputPanel>
             </td>
@@ -230,11 +231,11 @@
                     <p:outputPanel id="pValorTipoUnidad">
                         <p:inputText rendered="#{constantes.unidadPesos ne mantenedorPersonal.valorSalud.unidad.id}"
                                      value="#{mantenedorPersonal.valorSalud.valor}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
+                            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="3"/>
                         </p:inputText>
                         <p:inputText rendered="#{constantes.unidadPesos eq mantenedorPersonal.valorSalud.unidad.id}"
                                      value="#{mantenedorPersonal.valorSalud.valor}">
-                            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                         </p:inputText>
                     </p:outputPanel>
                 </td>

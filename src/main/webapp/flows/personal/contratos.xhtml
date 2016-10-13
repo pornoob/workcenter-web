@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Contratos</h2>
@@ -29,7 +30,7 @@
 
                 <p:column headerText="Sueldo base">
                     <h:outputText value="#{contrato.sueldoBase}">
-                        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                     </h:outputText>
                 </p:column>
 

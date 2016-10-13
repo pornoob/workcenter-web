@@ -4,6 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml"
+                xmlns:tvp="http://transportesventanas.cl"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 <ui:define name="contenido">
 <h2>Libro de Remuneraciones</h2>
@@ -152,33 +153,33 @@
 <p:column>
     <f:facet name="header">Sueldo base</f:facet>
     <h:outputText value="#{r.sueldoBase}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalBase}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Gratificación</f:facet>
     <h:outputText value="#{r.gratificacion}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalGratificacion}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Hrs. de espera</f:facet>
     <h:outputText value="#{r.horaEspera}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalHrsEspera}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -189,22 +190,22 @@
 <p:column>
     <f:facet name="header">Semana corrida - valor</f:facet>
     <h:outputText value="#{r.semanaCorrida}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalSemanaCorrida}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Total viajes/Hrs. extra</f:facet>
     <h:outputText value="#{r.totalViajes+r.horasExtras}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalHrsExtra}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -212,11 +213,11 @@
     <p:column>
         <f:facet name="header"><h:outputText value="#{b.descripcion}"/></f:facet>
         <h:outputText value="#{b.monto}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
         <f:facet name="footer">
             <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalBono(b.descripcion)}">
-                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
             </h:outputText>
         </f:facet>
     </p:column>
@@ -224,22 +225,22 @@
 <p:column>
     <f:facet name="header">Total remuneraciones imponible</f:facet>
     <h:outputText value="#{r.totalImponible}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.sumaImponibles}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Viáticos</f:facet>
     <h:outputText value="#{r.viatico}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalViaticos}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -250,11 +251,11 @@
 <p:column>
     <f:facet name="header">Total haberes</f:facet>
     <h:outputText value="#{r.totalHaberes}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.sumaHaberes}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -269,11 +270,11 @@
 <p:column>
     <f:facet name="header">Cotización</f:facet>
     <h:outputText value="#{r.dectoAFP}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalDctoAfp}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -284,11 +285,11 @@
 <p:column>
     <f:facet name="header">Seg. Cesantía</f:facet>
     <h:outputText value="#{r.aporteTrabajador}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalAporteTrabajador}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -299,22 +300,22 @@
 <p:column>
     <f:facet name="header">Descuento al trabajador</f:facet>
     <h:outputText value="#{r.dctoPrevision}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalDctoPrevision}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Impuesto de renta</f:facet>
     <h:outputText value="#{r.impUnico}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="2"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalImpUnico}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -322,11 +323,11 @@
     <p:column>
         <f:facet name="header"><h:outputText value="#{d.descripcion}"/></f:facet>
         <h:outputText value="#{d.monto}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
         <f:facet name="footer">
             <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalDescuento(d.descripcion)}">
-                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
             </h:outputText>
         </f:facet>
     </p:column>
@@ -334,11 +335,11 @@
 <p:column>
     <f:facet name="header">Total descuentos</f:facet>
     <h:outputText value="#{r.totalDctos}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.sumaTotalDescuentos}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
@@ -348,11 +349,11 @@
 <p:column>
     <f:facet name="header">Renta Afecta</f:facet>
     <h:outputText value="#{r.rentaAfecta}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.sumaRentaAfecta}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>    
@@ -362,44 +363,44 @@
 <p:column>
     <f:facet name="header">Alcance líquido</f:facet>
     <h:outputText value="#{r.alcanceLiquido}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalAlcanceLiquido}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Anticipos</f:facet>
     <h:outputText value="#{r.anticipoSueldo}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalAnticipoSueldo}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Dif. caja</f:facet>
     <h:outputText value="#{r.difCaja}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalDifCaja}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Saldo líquido</f:facet>
     <h:outputText value="#{r.liqPagar}">
-        <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">
         <h:outputText value="#{mantenedorRemuneraciones.totalLiqPagar}">
-            <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
     </f:facet>
 </p:column>

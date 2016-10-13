@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml"
                 >
     <ui:define name="contenido">
@@ -53,7 +54,7 @@
                     <td><p:outputLabel value="Salud"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dctoPrevision}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -61,13 +62,13 @@
                     <td><p:outputLabel value="Sueldo base"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.sueldoBase}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><p:outputLabel value="AFP"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.dectoAFP}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -75,14 +76,14 @@
                     <td><p:outputLabel value="Gratificación"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.gratificacion}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
 
                     <td><p:outputLabel value="Seguro de Cesantia(aporte trabajador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteTrabajador}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -94,7 +95,7 @@
                     <td><p:outputLabel value="Seguro de Cesantia(aporte empleador)"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.aporteEmpresa}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -111,7 +112,7 @@
                     <td><p:outputLabel value="Renta afecta"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.rentaAfecta}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -139,7 +140,7 @@
                     <td><p:outputLabel value="Anticipo"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.anticipoSueldo}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -234,14 +235,14 @@
                     <td><p:outputLabel value="Total imponible"/></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalImponible}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><p:outputLabel value="Total descuentos  "/></td>
                     <td>:</td>
                     <td>
                         <p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalDctos}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>
@@ -250,13 +251,13 @@
                     <td><b><p:outputLabel value="Total haberes"/></b></td>
                     <td>:</td>
                     <td><p:inputText value="#{mantenedorLiquidaciones.liquidacion.totalHaberes}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                     <td><b>Líquido a Pagar</b></td>
                     <td>:</td>
                     <td><p:inputText id="idAlcanceLiquido" value="#{mantenedorLiquidaciones.liquidacion.liqPagar}">
-                            <f:convertNumber type="currency" currencySymbol="" pattern="$" maxFractionDigits="0"/>
+                            <tvp:convertNumber type="currency" currencySymbol="$" maxFractionDigits="0"/>
                         </p:inputText>
                     </td>
                 </tr>

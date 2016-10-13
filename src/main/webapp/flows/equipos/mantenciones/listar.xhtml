@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
@@ -83,7 +84,7 @@
                         <p:column>
                             <p:commandLink ajax="false">
                                 <h:outputText value="#{mt.kilometraje}">
-                                    <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                    <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                                 </h:outputText>
                                 <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(mt)}"/>
                             </p:commandLink>
@@ -97,7 +98,7 @@
                         <p:column>
                             <p:commandLink ajax="false">
                                 <h:outputText value="#{mantenedorMantenciones.obtenerKmUltimaPanne(mt.tracto)}">
-                                    <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                    <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                                 </h:outputText>
                                 <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargablePanne(mt.tracto)}"/>
                             </p:commandLink>
@@ -105,13 +106,13 @@
 
                         <p:column>
                             <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunGuias(mt.tracto)}">
-                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
 
                         <p:column>
                             <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunProveedor(mt.tracto)}">
-                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
 
@@ -120,12 +121,12 @@
                                 <f:convertDateTime pattern="dd-MM-yyyy"/>
                             </h:outputText><br/>(
                             <h:outputText value="#{mantenedorMantenciones.obtenerKmSiguienteMantencion(mt)}">
-                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText> Kms. )
                         </p:column>
                         <p:column>
                             <h:outputText value="#{mantenedorMantenciones.obtenerKmsFaltante(mt)}">
-                                <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                                <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
                         <p:column>

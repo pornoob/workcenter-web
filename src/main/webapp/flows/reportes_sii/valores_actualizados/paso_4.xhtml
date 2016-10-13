@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Factor de actualización</h2>
@@ -47,31 +48,31 @@
 
                         <p:column headerText="Total imponible">
                             <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].imponible}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImponible}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Renta Afecta">
                             <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].rentaAfecta}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaAfecta}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Impuesto único">
                             <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].impuestoUnico}" style="width: 60px">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText value="#{mantenedorValoresActualizados.sumatoriaImpUnico}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
@@ -79,36 +80,36 @@
                         <p:column headerText="Total imponible actualizado">
                             <h:outputText
                                     value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].imponibleActualizado}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText
                                     value="#{mantenedorValoresActualizados.sumatoriaImponibleActualizado}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Renta Afecta actualizada">
                             <h:outputText
                                     value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].rentaAfectaActualizada}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText
                                     value="#{mantenedorValoresActualizados.sumatoriaRentaAfectaActualizada}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>
                         <p:column headerText="Impuesto único actualizado">
                             <h:outputText
                                     value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].impuestoUnicoActualizado}">
-                                <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText
                                     value="#{mantenedorValoresActualizados.sumatoriaImpUnicoActualizado}">
-                                    <f:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
                         </p:column>a

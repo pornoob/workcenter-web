@@ -3,6 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
@@ -29,7 +30,7 @@
                 <p:column headerText="Kilometraje">
                     <p:commandLink ajax="false">
                         <h:outputText value="#{m.kilometraje}">
-                            <f:convertNumber currencySymbol="" groupingUsed="true"/>
+                            <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                         </h:outputText>
                         <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(m)}"/>
                     </p:commandLink>
