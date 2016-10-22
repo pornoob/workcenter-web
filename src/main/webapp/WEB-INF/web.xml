@@ -23,6 +23,11 @@
         <param-name>javax.faces.DEFAULT_SUFFIX</param-name>
         <param-value>.xhtml</param-value>
     </context-param>
+
+    <context-param>
+        <param-name>facelets.LIBRARIES</param-name>
+        <param-value>/WEB-INF/tvp.taglib.xml</param-value>
+    </context-param>
     <!-- Enforce UTF-8 Character Encoding -->
     <filter>
         <filter-name>charEncodingFilter</filter-name>

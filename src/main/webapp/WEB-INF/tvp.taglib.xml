@@ -7,7 +7,7 @@
     <tag>
         <tag-name>convertNumber</tag-name>
         <converter>
-            <converter-id>NumberConverter</converter-id>
+            <converter-id>numberConverter</converter-id>
         </converter>
         <attribute>
             <name>currencySymbol</name>

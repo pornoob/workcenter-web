@@ -1,8 +1,7 @@
 package workcenter.util.converters;
 
-import java.math.BigDecimal;
-import java.math.BigInteger;
-import java.math.RoundingMode;
+import org.springframework.util.StringUtils;
+
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
@@ -10,8 +9,9 @@ import javax.faces.convert.Converter;
 import javax.faces.convert.ConverterException;
 import javax.faces.convert.FacesConverter;
 import javax.servlet.jsp.tagext.TagSupport;
-
-import org.springframework.util.StringUtils;
+import java.math.BigDecimal;
+import java.math.BigInteger;
+import java.math.RoundingMode;
 
 /**
  * Esta clase nos permitirá definir un estandar de números en el sistema. El
@@ -19,7 +19,7 @@ import org.springframework.util.StringUtils;
  *
  * @author Claudio Olivares
  */
-@FacesConverter
+@FacesConverter(value = "numberConverter")
 public class NumberConverter extends TagSupport implements Converter {
 
     private String currencySymbol;
@@ -64,6 +64,8 @@ public class NumberConverter extends TagSupport implements Converter {
             return retorno;
         } else if (Double.class.equals(clazz)) {
             return Double.valueOf(retorno.doubleValue());
+        } else if (Float.class.equals(clazz)) {
+            return Float.valueOf(retorno.floatValue());
         } else if (Integer.class.equals(clazz)) {
             return Integer.valueOf(retorno.setScale(0, RoundingMode.HALF_DOWN).intValue());
         } else if (BigInteger.class.equals(clazz)) {
@@ -101,6 +103,9 @@ public class NumberConverter extends TagSupport implements Converter {
             if (Double.isNaN(retorno)) {
                 retorno = (double) 0;
             }
+            return bigDecimalToString(BigDecimal.valueOf(retorno));
+        } else if (value instanceof Float) {
+            Float retorno = (Float) value;
             return bigDecimalToString(BigDecimal.valueOf(retorno));
         } else if (value instanceof Integer) {
             Integer retorno = (Integer) value;
