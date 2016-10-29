@@ -10,7 +10,11 @@ import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.math.BigInteger;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 @Repository
@@ -169,6 +173,28 @@ public class LiquidacionDao {
             return (Remuneracion) q.setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
+        }
+    }
+
+    public List<Remuneracion> obtRemuDesdeMesAnterior() {
+        StringBuilder jql = new StringBuilder();
+        jql.append("SELECT r FROM Remuneracion r WHERE r.fechaLiquidacion >= :fecha ")
+                .append("AND r.esGenerica = :generica");
+        Query q = em.createQuery(jql.toString(), Remuneracion.class);
+        q.setParameter("generica", c.getGenericaAdministrativo());
+
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-01");
+        String mesActual = sdf.format(new Date());
+        sdf.applyPattern("yyyy-MM-dd");
+        Calendar c = Calendar.getInstance();
+        try {
+            c.setTime(sdf.parse(mesActual));
+            c.add(Calendar.MONTH, -1);
+            q.setParameter("fecha", c.getTime());
+
+            return q.getResultList();
+        } catch (ParseException e) {
+            return new ArrayList<>();
         }
     }
 }

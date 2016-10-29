@@ -94,11 +94,11 @@ public class MantenedorLiquidaciones implements Serializable {
         String fechaActual = sdf.format(new Date());
         anio = Integer.parseInt(fechaActual.split("-")[1]);
         mes = fechaActual.split("-")[0];
-        listaRemuneraciones = logicaLiquidaciones.obtenerListaRemuneraciones();
+        listaRemuneraciones = logicaLiquidaciones.obtRemuDesdeMesAnterior();
         bonoDescuentoPersonal = logicaLiquidaciones.obtenerBonosDescuentos();
         liquidacion = new Remuneracion();
         liquidacion.setDiasTrabajados(constantes.getDiasTrabajados());
-        bonos = new DualListModel<BonoDescuentoPersonal>();
+        bonos = new DualListModel<>();
         ingresoPrevio = null;
         sobreescribir = Boolean.FALSE;
     }

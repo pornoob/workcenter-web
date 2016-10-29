@@ -104,4 +104,8 @@ public class LogicaLiquidaciones {
     public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
         return liquidacionDao.obtenerIngresoPrevio(liquidacion);
     }
+
+    public List<Remuneracion> obtRemuDesdeMesAnterior() {
+        return liquidacionDao.obtRemuDesdeMesAnterior();
+    }
 }

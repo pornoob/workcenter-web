@@ -42,6 +42,9 @@ public class NumberConverter extends TagSupport implements Converter {
         }
         strNumber = strNumber.replaceAll("\\.", "");
         strNumber = strNumber.replaceAll(",", ".");
+        if (currencySymbol != null && !currencySymbol.isEmpty()) {
+            strNumber = strNumber.replace(currencySymbol, "");
+        }
         BigDecimal retorno = null;
         try {
             retorno = new BigDecimal(strNumber);
