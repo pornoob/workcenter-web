@@ -13,7 +13,7 @@ public class BonosTablaRemuneracion implements Serializable {
     private List<String> tipos;
 
     public BonosTablaRemuneracion(List<Remuneracion> remuneraciones) {
-        tipos = new ArrayList<String>();
+        tipos = new ArrayList<>();
         for (Remuneracion r : remuneraciones) {
             for (BonoDescuentoRemuneracion b : r.getRemuneracionBonoDescuentoList()) {
                 if (Boolean.TRUE.equals(b.getImponible()) && Boolean.TRUE.equals(b.getBono()) && !tipos.contains(b.getDescripcion())) {
