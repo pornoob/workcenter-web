@@ -232,12 +232,13 @@ public class MantenedorLiquidaciones implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+        totalDescuentos += (int)Math.floor(liquidacion.getImpUnico());
         liquidacion.setAnticipoViatico(logicaLiquidaciones.obtenerAnticipoViatico(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - liquidacion.getTotalDctos());
         liquidacion.setLiqPagar(liquidacion.getAlcanceLiquido() - liquidacion.getAnticipoSueldo());
         liquidacion.setEsGenerica(true);
-        //se settean las siguintes  variable para que pueda funcionar el libro de remuneraciones
+        //se settean las siguientes  variable para que pueda funcionar el libro de remuneraciones
         liquidacion.setHoraEspera(0);
         liquidacion.setSemanaCorrida(0);
         liquidacion.setTotalViajes(0);

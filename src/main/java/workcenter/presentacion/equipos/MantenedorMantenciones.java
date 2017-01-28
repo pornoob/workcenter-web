@@ -14,9 +14,9 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.components.FacesUtil;
 
 import java.io.File;
 import java.io.Serializable;
@@ -251,7 +251,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public StreamedContent obtenerDescargable(MmeMantencionTracto m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
-        Descargable d = new Descargable(new File(constantes.getPathArchivos() + docs.get(docs.size() - 1).getId()));
+        Documento doc = docs.get(docs.size()-1);
+        Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
+        d.setNombre(doc.getNombreOriginal());
         return d.getStreamedContent();
     }
 
@@ -262,7 +264,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public StreamedContent obtenerDescargableSemiremolque(MmeMantencionSemiremolque m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
-        Descargable d = new Descargable(new File(constantes.getPathArchivos() + docs.get(docs.size() - 1).getId()));
+        Documento doc = docs.get(docs.size()-1);
+        Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
+        d.setNombre(doc.getNombreOriginal());
         return d.getStreamedContent();
     }
 

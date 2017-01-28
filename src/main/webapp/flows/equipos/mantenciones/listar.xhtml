@@ -150,8 +150,10 @@
                                  value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"
                                  rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                                  paginatorTemplate="#{constantes.paginadorTemplate}"
+                                 filterEvent="enter"
                                  rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
-                        <p:column headerText="Patente">
+                        <p:column headerText="Patente" filterBy="#{ms.semiRemolque.patente}"
+                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
                             <p:commandLink value="#{ms.semiRemolque.patente}" ajax="false"
                                            action="#{mantenedorMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
                         </p:column>

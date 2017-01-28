@@ -48,9 +48,12 @@
                     #{m.id}
                 </p:column>
                 <p:column headerText="Fecha">
-                    <h:outputText value="#{m.fecha}">
-                        <f:convertDateTime pattern="dd-MM-yyyy"/>
-                    </h:outputText>
+                    <p:commandLink ajax="false">
+                        <h:outputText value="#{ms.fecha}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableSemiremolque(m)}"/>
+                    </p:commandLink>
                 </p:column>
                 <p:column headerText="Mecánico Encargado">
                     #{m.mecanicoResponsable.nombreCompleto}
