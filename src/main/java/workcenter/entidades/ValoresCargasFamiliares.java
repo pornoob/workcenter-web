@@ -8,7 +8,7 @@ import java.util.Date;
 
 @Entity
 @Table(name="valores_cargas_familiares")
-@NamedQuery(name="ValoresCargasFamiliare.findAll", query="SELECT v FROM ValoresCargasFamiliares v")
+@NamedQuery(name="ValoresCargasFamiliare.findAll", query="SELECT v FROM ValoresCargasFamiliares v ORDER BY v.fechaVigencia DESC, v.desde ASC")
 public class ValoresCargasFamiliares implements Serializable {
 	private static final long serialVersionUID = 1L;
 
