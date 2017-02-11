@@ -3,11 +3,13 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="
         http://www.springframework.org/schema/webflow
-        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-
-    <on-start>
-        <evaluate expression="mantenedorPersonal.inicio()" />
-    </on-start>
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+     start-state="menu">
+    
+    <view-state id="menu">
+        <transition on="flowListarPersonal" to="personal"/>
+        <transition on="flowFiniquitos" to="finiquitos"/>
+    </view-state>
     
     <view-state id="personal">
         <transition on="flowMostrarFicha" to="verFicha"/>
@@ -48,6 +50,9 @@
     <view-state id="editarContrato">
         <transition on="flowVerContratos" to="contratos"/>
     </view-state>
+    
+    <subflow-state id="finiquitos" subflow="personal/finiquitos">        
+    </subflow-state>
 
     <subflow-state id="documentos" subflow="personal/documentos_personal">
         <input name="equipo" value="mantenedorEquipos.equipo" type="workcenter.entidades.Equipo"/>

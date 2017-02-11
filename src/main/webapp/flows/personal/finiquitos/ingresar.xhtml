@@ -1,0 +1,74 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml"
+                xmlns:tvp="http://transportesventanas.cl">
+    <ui:define name="contenido">
+        <h:form>
+            <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+            <p:panel header="Ingresar Finiquito" id="pFiniquito">
+                <p:panelGrid styleClass="no-border-grid">
+                    <p:row>
+                        <p:column><p:outputLabel value="Fecha Finiquito"/></p:column>
+                        <p:column><p:outputLabel value=":"/></p:column>
+                        <p:column>
+                            <p:calendar pattern="dd-MM-yyyy" locale="es" 
+                                        navigator="true"
+                                        value="#{ingresoFiniquitoView.fecha}"/>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column><p:outputLabel value="Monto Finiquito"/></p:column>
+                        <p:column><p:outputLabel value=":"/></p:column>
+                        <p:column>
+                            <p:inputText value="#{ingresoFiniquitoView.monto}">
+                                <tvp:convertNumber groupingUsed="true"/>
+                            </p:inputText>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column><p:outputLabel value="Empleador"/></p:column>
+                        <p:column><p:outputLabel value=":"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu filter="true" 
+                                             filterMatchMode="contains"
+                                             converter="entityConverter"
+                                             value="#{ingresoFiniquitoView.empleador}">
+                                <f:selectItem noSelectionOption="true" 
+                                              itemLabel="-- Seleccione --"/>
+                                <f:selectItems value="#{ingresoFiniquitoView.empleadores}" var="e" itemLabel="#{e.nombre}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+
+                    <p:row>
+                        <p:column><p:outputLabel value="Trabajador"/></p:column>
+                        <p:column><p:outputLabel value=":"/></p:column>
+                        <p:column>
+                            <p:selectOneMenu filter="true" 
+                                             filterMatchMode="contains"
+                                             converter="entityConverter"
+                                             value="#{ingresoFiniquitoView.trabajador}">
+                                <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
+                                <f:selectItems value="#{ingresoFiniquitoView.trabajadores}" var="e" itemLabel="#{e.nombreCompleto}"/>
+                            </p:selectOneMenu>
+                        </p:column>
+                    </p:row>
+                    
+                    <p:row>
+                        <p:column colspan="3">
+                            <p:commandButton value="Ingresar" update="pFiniquito" action="#{ingresoFiniquitoView.guardar()}">
+                                <p:resetInput target="pFiniquito"/>
+                            </p:commandButton>
+                        </p:column>
+                    </p:row>
+                </p:panelGrid>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
+
