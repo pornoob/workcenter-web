@@ -321,10 +321,6 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     padding-bottom: 5px;
 }
 
-.ui-icon.fa {
-    margin-top: -4px !important;
-}
-
 .ui-datatable .ui-column-filter {
     display: block;
     margin: auto;
@@ -361,8 +357,11 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     }
 }
 
-/*Estilos para compatibilizar bootstrap*/
-.row {
-    margin-left: 0px !important;
-    margin-right: 0px !important;
+/*** Estilos para grillas sin bordes ***/
+table.ui-panelgrid.no-border-grid {
+    border:0;
+}
+
+table.ui-panelgrid.no-border-grid td, table.no-border-grid tr {
+    border:0;
 }

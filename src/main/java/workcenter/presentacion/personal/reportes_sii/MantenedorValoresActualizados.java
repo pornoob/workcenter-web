@@ -1,23 +1,24 @@
 package workcenter.presentacion.personal.reportes_sii;
 
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.Empresa;
 import workcenter.entidades.FactorActualizacionSII;
+import workcenter.entidades.Finiquito;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
 import workcenter.negocio.LogicaEmpresas;
+import workcenter.negocio.personal.LogicaFiniquito;
 import workcenter.negocio.personal.LogicaLibroRemuneraciones;
 import workcenter.negocio.registros.reportes_sii.LogicaReportesSII;
-
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import workcenter.util.dto.ValorActualizadoDTO;
 
 /**
- * Created by claudio on 15-02-15.
+ * Created by Claudio Olivares on 15-02-15.
  */
 @Component
 @Scope("flow")
@@ -30,6 +31,9 @@ public class MantenedorValoresActualizados implements Serializable {
 
     @Autowired
     private LogicaEmpresas logicaEmpresas;
+    
+    @Autowired
+    private LogicaFiniquito logicaFiniquito;
 
     private List<FactorActualizacionSII> valores;
     private Map<String, String> valoresMap;
@@ -42,6 +46,7 @@ public class MantenedorValoresActualizados implements Serializable {
     private Map<Personal, ValorActualizadoDTO> valoresActualizadoMap;
     private Integer sumatoriaImponible;
     private Integer sumatoriaRentaAfecta;
+    private Integer sumatoriaNoRentaAfecta;
     private Integer sumatoriaImpUnico;
     private Integer sumatoriaImponibleActualizado;
     private Integer sumatoriaRentaAfectaActualizada;
@@ -130,6 +135,7 @@ public class MantenedorValoresActualizados implements Serializable {
                 valoresActualizadoMap.put(trabajador, new ValorActualizadoDTO());
                 conductores.add(trabajador);
             }
+            
             ValorActualizadoDTO puntero = valoresActualizadoMap.get(trabajador);
             puntero.setImponible(puntero.getImponible() + r.getTotalImponible());
             puntero.setRentaAfecta(puntero.getRentaAfecta() + r.getRentaAfecta());
@@ -140,6 +146,12 @@ public class MantenedorValoresActualizados implements Serializable {
             puntero.setImpuestoUnicoActualizado(puntero.getImpuestoUnicoActualizado() + (int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico()));
             
             calendar.setTime(r.getFechaLiquidacion());
+            List<Finiquito> finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(trabajador, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
+            puntero.setRentaNoAfecta(0);
+            for (Finiquito finiquito : finiquitos) {
+                puntero.setRentaNoAfecta(puntero.getRentaNoAfecta() + finiquito.getMonto());
+            }
+            
             puntero.getMesesTrabajados().add(calendar.get(Calendar.MONTH)+1);
         }
         return "flowGenerarReporte";
@@ -388,5 +400,13 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public void setSumatoriaImpUnicoActualizado(Integer sumatoriaImpUnicoActualizado) {
         this.sumatoriaImpUnicoActualizado = sumatoriaImpUnicoActualizado;
+    }
+
+    public Integer getSumatoriaNoRentaAfecta() {
+        return sumatoriaNoRentaAfecta;
+    }
+
+    public void setSumatoriaNoRentaAfecta(Integer sumatoriaNoRentaAfecta) {
+        this.sumatoriaNoRentaAfecta = sumatoriaNoRentaAfecta;
     }
 }

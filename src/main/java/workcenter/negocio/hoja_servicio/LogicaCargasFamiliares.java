@@ -14,25 +14,25 @@ import workcenter.entidades.ValoresCargasFamiliares;
 @Service
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LogicaCargasFamiliares {
-	
-	@Autowired
+
+    @Autowired
     CargasFamiliaresDao cargasFamiliaresDao;
-	
-	@Transactional(readOnly = true)
+
+    @Transactional(readOnly = true)
     public List<ValoresCargasFamiliares> obtenerValoresCargasFamiliares() {
         return cargasFamiliaresDao.obtenerValoresCargasFamiliares();
     }
-	
-	@Transactional(readOnly = false)
-	public void guardarValoresCargasFamiliares(
-			ValoresCargasFamiliares oBjValoresCargasFamiliares) {
-	
-		cargasFamiliaresDao.guardarValoresCargasFamiliares(oBjValoresCargasFamiliares);
-	}
-	
-	@Transactional(readOnly = false)
-	public void eliminarValorCargaFamiliar(ValoresCargasFamiliares vCF) {
-		cargasFamiliaresDao.eliminarValorCargaFamiliar(vCF);		
-	}
+
+    @Transactional(readOnly = false)
+    public void guardarValoresCargasFamiliares(
+            ValoresCargasFamiliares oBjValoresCargasFamiliares) {
+
+        cargasFamiliaresDao.guardarValoresCargasFamiliares(oBjValoresCargasFamiliares);
+    }
+
+    @Transactional(readOnly = false)
+    public void eliminarValorCargaFamiliar(ValoresCargasFamiliares vCF) {
+        cargasFamiliaresDao.eliminarValorCargaFamiliar(vCF);
+    }
 
 }

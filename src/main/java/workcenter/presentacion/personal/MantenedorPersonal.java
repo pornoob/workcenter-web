@@ -36,8 +36,7 @@ import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
  */
 @Component
 @Scope("flow")
-public class
-        MantenedorPersonal implements Serializable {
+public class MantenedorPersonal implements Serializable {
 
     private LazyDataModel<Personal> listaPersonalLazy;
     private List<Personal> listaPersonal;
@@ -73,9 +72,7 @@ public class
         EDITAR,
         ACTUALIZAR,
         INGRESAR
-    }
-
-    ;
+    };
 
     private TipoOperacion operacion;
 
@@ -106,13 +103,13 @@ public class
     @Autowired
     private LogicaServicio logicaServicio;
 
-    public String inicio() {
-        opcionesFiltroEstado = new ArrayList<FilterOption>();
+    public String inicioListado() {
+        opcionesFiltroEstado = new ArrayList<>();
         opcionesFiltroEstado.add(new FilterOption(0, "-- Todos --"));
         opcionesFiltroEstado.add(new FilterOption(1, "Habilitados"));
         opcionesFiltroEstado.add(new FilterOption(2, "Bloqueados"));
 
-        opcionesSalud = new ArrayList<FilterOption>();
+        opcionesSalud = new ArrayList<>();
         opcionesSalud.add(new FilterOption(constantes.getFonasa(), "FONASA"));
         opcionesSalud.add(new FilterOption(constantes.getIsapre(), "ISAPRE"));
 
@@ -164,14 +161,20 @@ public class
     }
 
     public boolean filtroEmpleador(Object valor, Object filtro, Locale idioma) {
-        if (valor == null) return false;
+        if (valor == null) {
+            return false;
+        }
         Empresa e = logicaPersonal.obtenerEmpleador((Personal) valor);
-        if (e == null) return false;
+        if (e == null) {
+            return false;
+        }
         return e.getNombre().toLowerCase().contains(filtro.toString().toLowerCase());
     }
 
     public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
-        if (valor == null) return false;
+        if (valor == null) {
+            return false;
+        }
         Personal p = (Personal) valor;
         Integer opcion = Integer.parseInt(filtro.toString());
         if (opcion.intValue() == 2 && p.getSancion() == null) {
@@ -182,75 +185,80 @@ public class
             return true;
         }
     }
-    
+
     //agregar Servicio
-    public void agregarServicio(){
-    	if (personalSeleccionado.getUsuario() == null){
-    		Usuario u = new Usuario();
-    		u.setRut(personalSeleccionado.getRut());
-    		u.setPassword("0");
-    		personalSeleccionado.setUsuario(u);
-    	}
-    	if (!personalSeleccionado.getServicios().contains(servicioSeleccionado)){
-    		personalSeleccionado.getServicios().add(servicioSeleccionado);
-    	}    	
-    	logicaPersonal.guardar(personalSeleccionado);
+    public void agregarServicio() {
+        if (personalSeleccionado.getUsuario() == null) {
+            Usuario u = new Usuario();
+            u.setRut(personalSeleccionado.getRut());
+            u.setPassword("0");
+            personalSeleccionado.setUsuario(u);
+        }
+        if (!personalSeleccionado.getServicios().contains(servicioSeleccionado)) {
+            personalSeleccionado.getServicios().add(servicioSeleccionado);
+        }
+        logicaPersonal.guardar(personalSeleccionado);
     }
-    public void eliminarServicio(Servicio s){
-    	personalSeleccionado.getServicios().remove(s);
-    	logicaPersonal.guardar(personalSeleccionado);
+
+    public void eliminarServicio(Servicio s) {
+        personalSeleccionado.getServicios().remove(s);
+        logicaPersonal.guardar(personalSeleccionado);
     }
-    
-    public void agregarCargaFamiliar(){
-    	if (!personalSeleccionado.getLstCargasFamiliares().contains(cargaFamiliares)){
-    		cargaFamiliares.setRutPersonal(personalSeleccionado);
-    		personalSeleccionado.getLstCargasFamiliares().add(cargaFamiliares);
-    	}
-    	personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
-    	logicaPersonal.guardar(personalSeleccionado);
-    	cargaFamiliares = new CargasFamiliares();
-    	
+
+    public void agregarCargaFamiliar() {
+        if (!personalSeleccionado.getLstCargasFamiliares().contains(cargaFamiliares)) {
+            cargaFamiliares.setRutPersonal(personalSeleccionado);
+            personalSeleccionado.getLstCargasFamiliares().add(cargaFamiliares);
+        }
+        personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
+        logicaPersonal.guardar(personalSeleccionado);
+        cargaFamiliares = new CargasFamiliares();
+
     }
-    
-    public void eliminarCargarFamiliar(CargasFamiliares c){
-    	personalSeleccionado.getLstCargasFamiliares().remove(c);
-    	personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
-    	logicaPersonal.guardar(personalSeleccionado);
+
+    public void eliminarCargarFamiliar(CargasFamiliares c) {
+        personalSeleccionado.getLstCargasFamiliares().remove(c);
+        personalSeleccionado.setLstCargasFamiliares(personalSeleccionado.getLstCargasFamiliares());
+        logicaPersonal.guardar(personalSeleccionado);
     }
-    
-    public void editarCargarFamiliar(CargasFamiliares c){
-    	cargaFamiliares = c;
+
+    public void editarCargarFamiliar(CargasFamiliares c) {
+        cargaFamiliares = c;
     }
-    
-    public void ModificarDatosCargaFamiliar(){
-    	List<CargasFamiliares> tmpLista = personalSeleccionado.getLstCargasFamiliares();
-    	for (int i = 0; i < tmpLista.size(); i++) {
-			if (tmpLista.get(i).getRutCarga() == cargaFamiliares.getRutCarga()){
-				tmpLista.get(i).setNombres(cargaFamiliares.getNombres());
-				tmpLista.get(i).setApellidos(cargaFamiliares.getApellidos());
-				tmpLista.get(i).setNacimiento(cargaFamiliares.getNacimiento());
-			}			
-		}
-    	personalSeleccionado.setLstCargasFamiliares(tmpLista);
-    	logicaPersonal.guardar(personalSeleccionado);
-    	cargaFamiliares = new CargasFamiliares();
+
+    public void ModificarDatosCargaFamiliar() {
+        List<CargasFamiliares> tmpLista = personalSeleccionado.getLstCargasFamiliares();
+        for (int i = 0; i < tmpLista.size(); i++) {
+            if (tmpLista.get(i).getRutCarga() == cargaFamiliares.getRutCarga()) {
+                tmpLista.get(i).setNombres(cargaFamiliares.getNombres());
+                tmpLista.get(i).setApellidos(cargaFamiliares.getApellidos());
+                tmpLista.get(i).setNacimiento(cargaFamiliares.getNacimiento());
+            }
+        }
+        personalSeleccionado.setLstCargasFamiliares(tmpLista);
+        logicaPersonal.guardar(personalSeleccionado);
+        cargaFamiliares = new CargasFamiliares();
     }
 
     // se agrega filtro faena
-
     public boolean filtroFaena(Object valor, Object filtro, Locale idioma) {
 
-          if (valor == null) return false;
-          if (filtro == null) return true;
-          Personal p = (Personal) valor;
-          for (Servicio lista : p.getServicios()) {
-        	  if (lista.getId() != Integer.parseInt(filtro.toString())){
-        		  return false;
-        	  }else return true;
-          }
-          return false;
+        if (valor == null) {
+            return false;
+        }
+        if (filtro == null) {
+            return true;
+        }
+        Personal p = (Personal) valor;
+        for (Servicio lista : p.getServicios()) {
+            if (lista.getId() != Integer.parseInt(filtro.toString())) {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        return false;
     }
-
 
     public String irCambiarFoto() {
         return "flowCambiarFoto";
@@ -363,7 +371,6 @@ public class
             d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
             logicaDocumentos.guardarDocumento(d);
 
-
             HistorialDocumentosPersonal respaldo = new HistorialDocumentosPersonal();
             respaldo.setNumero(existente.getNumero());
             respaldo.setPersonal(personalSeleccionado.getRut());
@@ -420,10 +427,11 @@ public class
 
         isapres = logicaPrevisiones.obtenerIsapres();
         afps = logicaPrevisiones.obtenerAfps();
-        if (cp.getNumero() != null)
+        if (cp.getNumero() != null) {
             cp.setPrevisiones(logicaPrevisiones.obtenerPrevisionesContrato(cp));
-        else
+        } else {
             cp.setPrevisiones(new ArrayList<PrevisionContrato>());
+        }
         for (PrevisionContrato pc : cp.getPrevisiones()) {
             if (pc.getPrevision().getTipo().equals("salud")) {
                 isapreSeleccionada = pc.getPrevision();
@@ -476,8 +484,9 @@ public class
         if (this.valorAfp.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
             int valor = (int) this.valorAfp.getValor();
             valorAfp.setValor(valor);
-        } else
+        } else {
             valorAfp.setValor(this.valorAfp.getValor());
+        }
 
         valorAfp.setUnidad(this.valorAfp.getUnidad());
 
@@ -509,8 +518,9 @@ public class
         if (this.valorSalud.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
             int valor = (int) this.valorSalud.getValor();
             valorSalud.setValor(valor);
-        } else
+        } else {
             valorSalud.setValor(this.valorSalud.getValor());
+        }
 
         valorSalud.setUnidad(this.valorSalud.getUnidad());
         valorSalud.setContrato(contratoSeleccionado);
@@ -785,21 +795,21 @@ public class
         this.listaServicios = listaServicios;
     }
 
-	public Servicio getServicioSeleccionado() {
-		return servicioSeleccionado;
-	}
+    public Servicio getServicioSeleccionado() {
+        return servicioSeleccionado;
+    }
 
-	public void setServicioSeleccionado(Servicio servicioSeleccionado) {
-		this.servicioSeleccionado = servicioSeleccionado;
-	}
+    public void setServicioSeleccionado(Servicio servicioSeleccionado) {
+        this.servicioSeleccionado = servicioSeleccionado;
+    }
 
-	public CargasFamiliares getCargaFamiliares() {
-		return cargaFamiliares;
-	}
+    public CargasFamiliares getCargaFamiliares() {
+        return cargaFamiliares;
+    }
 
-	public void setCargaFamiliares(CargasFamiliares cargaFamiliares) {
-		this.cargaFamiliares = cargaFamiliares;
-	}
+    public void setCargaFamiliares(CargasFamiliares cargaFamiliares) {
+        this.cargaFamiliares = cargaFamiliares;
+    }
 
     public LazyDataModel<Personal> getListaPersonalLazy() {
         return listaPersonalLazy;
