@@ -58,7 +58,7 @@
 <p:outputPanel id="resultados" styleClass="sinBordes">
 <p:outputPanel rendered="#{mantenedorRemuneraciones.criterio ne null}">
 <h:commandLink>
-    <h:graphicImage style="float: left" value="/img/icons/excel.png"/>
+    <h:graphicImage value="/img/icons/excel.png"/>
     <p:dataExporter target="tRemuneraciones" type="xls" fileName="libroRemuneraciones"/>
 </h:commandLink>
 <p:dataTable value="#{mantenedorRemuneraciones.remuneraciones}" rowKey="#{r.idMaestro}" selectionMode="single"
@@ -246,7 +246,12 @@
 </p:column>
 <p:column>
     <f:facet name="header">Otros</f:facet>
-    <h:outputText value=""/>
+    <h:outputText value="#{r.otrosBeneficiosNoImp}"/>
+    <f:facet name="footer">
+        <h:outputText value="#{mantenedorRemuneraciones.totalOtrosBeneficiosNoImp}">
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        </h:outputText>
+    </f:facet>
 </p:column>
 <p:column>
     <f:facet name="header">Total haberes</f:facet>

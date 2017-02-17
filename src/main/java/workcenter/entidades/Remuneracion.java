@@ -126,6 +126,8 @@ public class Remuneracion implements Serializable {
     private Integer totalImponible;
     @Column(name = "viatico")
     private Integer viatico;
+    @Column(name = "otros_benef_noimp")
+    private Integer otrosBeneficiosNoImp;
     @Column(name = "rentaAfecta")
     private Integer rentaAfecta;
     @Column(name = "imposiciones")
@@ -815,6 +817,14 @@ public class Remuneracion implements Serializable {
 
     public void setFechaIngreso(Date fechaIngreso) {
         this.fechaIngreso = fechaIngreso;
+    }
+
+    public Integer getOtrosBeneficiosNoImp() {
+        return otrosBeneficiosNoImp;
+    }
+
+    public void setOtrosBeneficiosNoImp(Integer otrosBeneficiosNoImp) {
+        this.otrosBeneficiosNoImp = otrosBeneficiosNoImp;
     }
 
     @Override

@@ -185,7 +185,16 @@ public class MantenedorRemuneraciones implements Serializable {
         }
         return total;
     }
-
+    
+    public Integer getTotalOtrosBeneficiosNoImp() {
+        int total = 0;
+        if (remuneraciones == null) return total;
+        for (Remuneracion r : remuneraciones) {
+            total += r.getOtrosBeneficiosNoImp()!= null ? r.getOtrosBeneficiosNoImp() : 0;
+        }
+        return total;
+    }
+    
     public Integer getSumaHaberes() {
         int total = 0;
         if (remuneraciones == null) return total;
