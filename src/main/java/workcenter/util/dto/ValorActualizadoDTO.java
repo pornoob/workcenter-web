@@ -16,6 +16,7 @@ import java.util.List;
 public class ValorActualizadoDTO implements Serializable {
     private Integer imponible;
     private Integer rentaAfecta;
+    private Integer rentaNoAfecta;
     private Integer impuestoUnico;
     private Integer imponibleActualizado;
     private Integer rentaAfectaActualizada;
@@ -25,6 +26,7 @@ public class ValorActualizadoDTO implements Serializable {
     public ValorActualizadoDTO() {
         imponible = 0;
         rentaAfecta = 0;
+        rentaNoAfecta = 0;
         impuestoUnico = 0;
         imponibleActualizado = 0;
         rentaAfectaActualizada = 0;
@@ -86,5 +88,13 @@ public class ValorActualizadoDTO implements Serializable {
 
     public void setMesesTrabajados(List<Integer> mesesTrabajados) {
         this.mesesTrabajados = mesesTrabajados;
+    }
+
+    public Integer getRentaNoAfecta() {
+        return rentaNoAfecta;
+    }
+
+    public void setRentaNoAfecta(Integer rentaNoAfecta) {
+        this.rentaNoAfecta = rentaNoAfecta;
     }
 }

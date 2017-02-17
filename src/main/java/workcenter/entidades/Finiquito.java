@@ -34,6 +34,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Finiquito.findAll", query = "SELECT f FROM Finiquito f")
     , @NamedQuery(name = "Finiquito.findById", query = "SELECT f FROM Finiquito f WHERE f.id = :id")
+    , @NamedQuery(name = "Finiquito.findByPersonMonthYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND YEAR(f.fechaFiniquito) = :year AND MONTH(f.fechaFiniquito) = :month")
+    , @NamedQuery(name = "Finiquito.findByPersonAndYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND YEAR(f.fechaFiniquito) = :year")
 })
 public class Finiquito implements Serializable {
 

@@ -66,6 +66,16 @@
                                 </h:outputText>
                             </f:facet>
                         </p:column>
+                        <p:column headerText="Renta No Afecta">
+                            <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].rentaNoAfecta}">
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaNoAfecta}">
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
                         <p:column headerText="Impuesto único">
                             <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].impuestoUnico}" style="width: 60px">
                                 <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
