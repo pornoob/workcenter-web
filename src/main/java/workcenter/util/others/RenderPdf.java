@@ -429,7 +429,7 @@ public class RenderPdf implements Serializable {
     	((Integer.parseInt(anio)%100 != 0) && (Integer.parseInt(anio)%  4 == 0))   )
     	return "29/"+mes+"/"+anio;  // Año Bisiesto
     	else
-    	return "28"+mes+"/"+anio;
+    	return "28/"+mes+"/"+anio;
     	}
 		return "00/00/0000";
     }
