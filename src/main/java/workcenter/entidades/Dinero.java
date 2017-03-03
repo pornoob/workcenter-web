@@ -13,6 +13,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -61,8 +62,10 @@ public class Dinero implements Serializable {
     @JoinColumn(name = "receptor", referencedColumnName = "rut")
     @ManyToOne
     private Personal receptor;
-    @Column(name = "ordendecarga")
-    private Integer ordendecarga;
+    
+    @OneToOne
+    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    private Vuelta ordendecarga;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "motivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Descuento> lstDescuentos;
 
@@ -136,11 +139,11 @@ public class Dinero implements Serializable {
         this.receptor = receptor;
     }
 
-    public Integer getOrdendecarga() {
+    public Vuelta getOrdendecarga() {
         return ordendecarga;
     }
 
-    public void setOrdendecarga(Integer ordendecarga) {
+    public void setOrdendecarga(Vuelta ordendecarga) {
         this.ordendecarga = ordendecarga;
     }
 
@@ -160,13 +163,18 @@ public class Dinero implements Serializable {
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Dinero)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Dinero other = (Dinero) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Dinero other = (Dinero) obj;
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

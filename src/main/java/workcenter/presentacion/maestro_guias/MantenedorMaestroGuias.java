@@ -6,7 +6,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
-import workcenter.negocio.caja.LogicaCaja;
 import workcenter.negocio.contrato_empresa.LogicaContratoEmpresa;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.guia_petroleo.LogicaGuiaDePetroleo;
@@ -14,9 +13,6 @@ import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.tramo_contrato.LogicaTramoContrato;
 
-import javax.faces.application.FacesMessage;
-import javax.faces.context.FacesContext;
-import javax.faces.event.ActionEvent;
 import java.io.Serializable;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -123,7 +119,7 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void guardarGuiaDePetrolio(){
         System.err.println(guiaPetroleo);
-        guiaPetroleo.setOrdendecarga(ordenDeCarga.getOrdenDeCarga());
+        guiaPetroleo.setOrdendecarga(ordenDeCarga.getId());
         lstGuiaDePetrolio.add(guiaPetroleo);
         guiaPetroleo  = new GuiaPetroleo();
     }

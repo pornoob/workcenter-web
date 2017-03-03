@@ -23,7 +23,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "Vuelta.findAll", query = "SELECT v FROM Vuelta v"),
-    @NamedQuery(name = "Vuelta.findByOrdenDeCarga", query = "SELECT v FROM Vuelta v WHERE v.ordenDeCarga = :ordenDeCarga"),
+    @NamedQuery(name = "Vuelta.findByOrdenDeCarga", query = "SELECT v FROM Vuelta v WHERE v.id = :ordenDeCarga"),
     @NamedQuery(name = "Vuelta.findByFecha", query = "SELECT v FROM Vuelta v WHERE v.fecha = :fecha"),
     @NamedQuery(name = "Vuelta.findByTracto", query = "SELECT v FROM Vuelta v WHERE v.tracto = :tracto"),
     @NamedQuery(name = "Vuelta.findByConductor", query = "SELECT v FROM Vuelta v WHERE v.conductor = :conductor"),
@@ -42,7 +42,7 @@ public class Vuelta implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "ordendecarga")
-    private Integer ordenDeCarga;
+    private Integer id;
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -86,12 +86,12 @@ public class Vuelta implements Serializable {
         this.tracto = new Equipo();
     }
 
-    public Integer getOrdenDeCarga() {
-        return ordenDeCarga;
+    public Integer getId() {
+        return id;
     }
 
-    public void setOrdenDeCarga(Integer ordenDeCarga) {
-        this.ordenDeCarga = ordenDeCarga;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Date getFecha() {
@@ -209,7 +209,7 @@ public class Vuelta implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (ordenDeCarga != null ? ordenDeCarga.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -220,7 +220,7 @@ public class Vuelta implements Serializable {
             return false;
         }
         Vuelta other = (Vuelta) object;
-        if ((this.ordenDeCarga == null && other.ordenDeCarga != null) || (this.ordenDeCarga != null && !this.ordenDeCarga.equals(other.ordenDeCarga))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -228,7 +228,7 @@ public class Vuelta implements Serializable {
 
     @Override
     public String toString() {
-        return "workcenter.entities.Vuelta[ ordendecarga=" + ordenDeCarga + " ]";
+        return "workcenter.entities.Vuelta[ ordendecarga=" + id + " ]";
     }
     
 }
