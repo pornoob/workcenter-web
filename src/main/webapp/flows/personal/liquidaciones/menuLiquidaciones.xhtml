@@ -9,8 +9,10 @@
 
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmLiquidaciones">
-            <p:commandButton icon="fa fa-truck" value="Conductores"/>
-            <p:commandButton icon="fa fa-users" value="Otros" action="flowLiquidacionesOtros"/>
+            <p:commandButton icon="fa fa-truck" value="Conductores"
+                             rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES') and sesionCliente.esEditor('LIQUIDACIONES_CONDUCTORES')}"/>
+            <p:commandButton icon="fa fa-users" value="Otros" action="flowLiquidacionesOtros"
+                             rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_OFICINA') and sesionCliente.esEditor('LIQUIDACIONES_OFICINA')}"/>
         </h:form>
     </ui:define>
 </ui:composition>

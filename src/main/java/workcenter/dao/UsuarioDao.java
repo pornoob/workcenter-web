@@ -63,11 +63,13 @@ public class UsuarioDao {
     }
 
     public Permiso obtenerPermiso(Integer rut, String permiso, Integer acceso) {
+        permiso = permiso.replaceAll("_", " ");
+        
         StringBuilder sb = new StringBuilder();
         sb.append("select per.* from permisos per ");
         sb.append("inner join proyectos pro on (pro.tipo='app' and per.proyecto=pro.id) ");
         sb.append("where per.usuario = :rut ");
-        sb.append("and pro.titulo = :permiso ");
+        sb.append("and UPPER(pro.titulo) = :permiso ");
         sb.append("and per.nivel = :acceso ");
         Query q = em.createNativeQuery(sb.toString(), Permiso.class);
         q.setParameter("rut", rut);

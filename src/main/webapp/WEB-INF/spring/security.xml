@@ -29,7 +29,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/m/informe_actividades" access="hasRole('MODULO_INFORME_ACTIVIDADES')"/>
         <security:intercept-url pattern="/m/programa_actividades" access="hasRole('MODULO_PROGRAMA_ACTIVIDADES')"/>
         <security:intercept-url pattern="/m/incidencias" access="hasRole('MODULO_INCIDENCIAS')"/>
-        <security:intercept-url pattern="/m/personal/liquidaciones" access="hasRole('LIQUIDACIONES_CONDUCTORES')"/>
+        <security:intercept-url pattern="/m/personal/liquidaciones" access="hasAnyRole('LIQUIDACIONES_OFICINA')"/>
 
         <security:intercept-url pattern="/m/registros" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
         <security:intercept-url pattern="/m/registros/R112" access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>

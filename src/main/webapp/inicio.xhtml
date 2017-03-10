@@ -51,7 +51,7 @@
                         <h:outputLabel value="Administrador de Registros"/>
                     </h:commandLink>
 
-                    <h:commandLink rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_OFICINA') and sesionCliente.esEditor('LIQUIDACIONES_OFICINA')}"
                                    action="#{facesUtil.redirigir('/m/personal/liquidaciones')}"
                                    class="menuWorkcenter" style="display: block">
                         <i class="fa fa-usd fa-5x"></i>
