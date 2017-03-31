@@ -38,6 +38,7 @@ public class FiniquitoDao {
         Query q = em.createNamedQuery("Finiquito.findByPersonMonthYear", Finiquito.class);
         q.setParameter("person", p);
         q.setParameter("year", anio);
+        q.setParameter("month", mes);
         
         return q.getResultList();
     }
