@@ -73,6 +73,16 @@
                                 </h:outputText>
                             </f:facet>
                         </p:column>
+                        <p:column headerText="Renta No Afecta">
+                            <h:outputText value="#{r.rentaAfecta}">
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaNoAfecta}">
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
                         <p:column headerText="Impuesto único">
                             <p:inputText value="#{r.impUnico}" style="width: 60px" required="false"/>
                             <f:facet name="footer">
@@ -103,6 +113,17 @@
                             </h:outputText>
                             <f:facet name="footer">
                                 <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaAfectaActualizada}">
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
+                        <p:column headerText="Renta No Afecta actualizada">
+                            <h:outputText
+                                    value="#{r.rentaAfecta * mantenedorValoresActualizados.obtenerFactor(r.fechaLiquidacion)/100 + r.rentaAfecta}">
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaNoAfectaActualizada}">
                                     <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>

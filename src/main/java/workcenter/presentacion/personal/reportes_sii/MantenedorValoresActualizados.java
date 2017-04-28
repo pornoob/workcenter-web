@@ -43,13 +43,16 @@ public class MantenedorValoresActualizados implements Serializable {
     private Personal conductor;
     private String anio;
     private List<Remuneracion> remuneraciones;
+    private List<Finiquito> finiquitos;
     private Map<Personal, ValorActualizadoDTO> valoresActualizadoMap;
+    private List<ValorActualizadoDTO> valoresDesagregados;
     private Integer sumatoriaImponible;
     private Integer sumatoriaRentaAfecta;
-    private Integer sumatoriaNoRentaAfecta;
+    private Integer sumatoriaRentaNoAfecta;
     private Integer sumatoriaImpUnico;
     private Integer sumatoriaImponibleActualizado;
     private Integer sumatoriaRentaAfectaActualizada;
+    private Integer sumatoriaRentaNoAfectaActualizada;
     private Integer sumatoriaImpUnicoActualizado;
 
     // Variables que solo afectan el render
@@ -59,7 +62,7 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public void inicio() {
         valores = logicaReportesSII.obtenerFactoresActualizacionSII();
-        valoresMap = new HashMap<String, String>();
+        valoresMap = new HashMap<>();
         for (FactorActualizacionSII f : valores) {
             String idMes = String.valueOf(f.getIdMes());
             if (f.getIdMes() < 10) idMes = "0" + idMes;
@@ -71,7 +74,7 @@ public class MantenedorValoresActualizados implements Serializable {
 
     public String actualizarValoresConductores() {
         if (valores == null || valores.isEmpty()) {
-            valores = new ArrayList<FactorActualizacionSII>();
+            valores = new ArrayList<>();
             for (Map.Entry<String, String> e : valoresMap.entrySet()) {
                 FactorActualizacionSII f = new FactorActualizacionSII();
                 f.setIdMes(Integer.parseInt(e.getKey()));
@@ -94,11 +97,15 @@ public class MantenedorValoresActualizados implements Serializable {
     public void cargarDatosConductores() {
         primeraCargaPaso2 = Boolean.FALSE;
         primeraCargaPaso3 = Boolean.TRUE;
+        valoresDesagregados = new ArrayList<>();
+        
         remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleador, null, Integer.parseInt(anio));
+        finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(empleador, Integer.parseInt(anio));
         
         
         sumatoriaImponible = 0;
         sumatoriaRentaAfecta = 0;
+        sumatoriaRentaNoAfecta = 0;
         sumatoriaImpUnico = 0;
         sumatoriaImponibleActualizado = 0;
         sumatoriaRentaAfectaActualizada = 0;
@@ -108,9 +115,22 @@ public class MantenedorValoresActualizados implements Serializable {
             sumatoriaRentaAfecta += r.getRentaAfecta();
             sumatoriaImpUnico += r.getImpUnico().intValue();
 
-            sumatoriaImpUnicoActualizado += (int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
+            sumatoriaImponibleActualizado += (int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
             sumatoriaRentaAfectaActualizada += (int)(r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta());
             sumatoriaImpUnicoActualizado += (int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico());
+            
+            ValorActualizadoDTO valor = new ValorActualizadoDTO();
+            valor.setImponible(r.getTotalImponible());
+            valor.setRentaAfecta(r.getRentaAfecta());
+            valor.setImpuestoUnico(r.getImpUnico().intValue());
+            
+            valor.setImponibleActualizado((int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible()));
+            valor.setRentaAfectaActualizada((int)(r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta()));
+            valor.setImpuestoUnicoActualizado((int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico()));
+        }
+        for (Finiquito finiquito : finiquitos) {
+            sumatoriaRentaNoAfecta += finiquito.getMonto();
+            sumatoriaRentaNoAfectaActualizada += (int)(finiquito.getMonto() * obtenerFactor(finiquito.getFechaFiniquito()) / 100 + finiquito.getMonto());
         }
     }
 
@@ -402,11 +422,35 @@ public class MantenedorValoresActualizados implements Serializable {
         this.sumatoriaImpUnicoActualizado = sumatoriaImpUnicoActualizado;
     }
 
-    public Integer getSumatoriaNoRentaAfecta() {
-        return sumatoriaNoRentaAfecta;
+    public Integer getSumatoriaRentaNoAfecta() {
+        return sumatoriaRentaNoAfecta;
     }
 
-    public void setSumatoriaNoRentaAfecta(Integer sumatoriaNoRentaAfecta) {
-        this.sumatoriaNoRentaAfecta = sumatoriaNoRentaAfecta;
+    public void setSumatoriaRentaNoAfecta(Integer sumatoriaRentaNoAfecta) {
+        this.sumatoriaRentaNoAfecta = sumatoriaRentaNoAfecta;
+    }
+
+    public List<Finiquito> getFiniquitos() {
+        return finiquitos;
+    }
+
+    public void setFiniquitos(List<Finiquito> finiquitos) {
+        this.finiquitos = finiquitos;
+    }
+
+    public Integer getSumatoriaRentaNoAfectaActualizada() {
+        return sumatoriaRentaNoAfectaActualizada;
+    }
+
+    public void setSumatoriaRentaNoAfectaActualizada(Integer sumatoriaRentaNoAfectaActualizada) {
+        this.sumatoriaRentaNoAfectaActualizada = sumatoriaRentaNoAfectaActualizada;
+    }
+
+    public List<ValorActualizadoDTO> getValoresDesagregados() {
+        return valoresDesagregados;
+    }
+
+    public void setValoresDesagregados(List<ValorActualizadoDTO> valoresDesagregados) {
+        this.valoresDesagregados = valoresDesagregados;
     }
 }

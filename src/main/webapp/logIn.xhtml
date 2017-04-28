@@ -11,9 +11,7 @@
             <h:panelGrid columns="3">
                 <h:outputLabel for="transVentanasUser" value="Rut"/>:
                 <h:panelGroup>
-                    <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"
-                                 onkeyup="WebCenter.Input.formatearRut(this)"
-                                 onblur="WebCenter.Input.formatearRut(this)"/> (Formato: 12345678-0)
+                    <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"/> (Formato: 12345678-0)
                 </h:panelGroup>
                 <h:outputLabel for="transVentanasPass" value="Contraseña"/>:
                 <h:inputSecret id="transVentanasPass" value="#{autentificacionBean.pass}"/>
@@ -26,7 +24,8 @@
         </h:form>
         <script type="text/javascript">
             $(document).ready(function() {
-                WebCenter.Input.formatearRut($("#transVentanasUser"));
+                $("#transVentanasUser").keyup(WebCenter.Input.formatearRut);
+                $("#transVentanasUser").blur(WebCenter.Input.formatearRut);
             });
         </script>
     </ui:define>

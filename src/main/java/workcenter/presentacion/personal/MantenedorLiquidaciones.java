@@ -1,5 +1,16 @@
 package workcenter.presentacion.personal;
 
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.Serializable;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
 import org.primefaces.model.DualListModel;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -13,18 +24,6 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.Mes;
 import workcenter.util.others.RenderPdf;
-
-import javax.faces.context.ExternalContext;
-import javax.faces.context.FacesContext;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.Serializable;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 
 /**
  * Created by claudio on 16-05-15.
@@ -108,9 +107,9 @@ public class MantenedorLiquidaciones implements Serializable {
         if (liquidacion.getIdPersonal() == null) {
             return;
         }
-        bonoImponibles = new ArrayList<BonoDescuentoPersonal>();
-        bonoNoImponibles = new ArrayList<BonoDescuentoPersonal>();
-        descuentos = new ArrayList<BonoDescuentoPersonal>();
+        bonoImponibles = new ArrayList<>();
+        bonoNoImponibles = new ArrayList<>();
+        descuentos = new ArrayList<>();
         valorPrevision = new ArrayList<ValorPrevisionPersonal>();
         bonoEditar = new BonoDescuentoPersonal();
         Integer totalNoImponible = 0;

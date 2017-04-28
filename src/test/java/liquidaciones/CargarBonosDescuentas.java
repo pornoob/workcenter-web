@@ -6,6 +6,7 @@
 package liquidaciones;
 
 import core.InitialContext;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,6 +24,7 @@ public class CargarBonosDescuentas extends InitialContext {
     LogicaTest logicaTest;
     
     @Test
+    @Ignore
     public void cargar() {
         logicaTest.cargar();
     }

@@ -1,11 +1,26 @@
 var WebCenter = {
+    Key: {
+        LEFT_ARROW: 37,
+        RIGHT_ARROR: 39,
+        BACKSPACE: 8,
+        DELETE: 46,
+        SHIFT: 16,
+        HOME: 36
+    },
     Input: {
-        formatearRut: function(obj) {
-            var valor = $(obj).val();
+        formatearRut: function(event) {
+            var key = event.keyCode || event.which;
+            if (key === WebCenter.Key.LEFT_ARROW || key === WebCenter.Key.RIGHT_ARROR ||
+                    key === WebCenter.Key.BACKSPACE || key === WebCenter.Key.DELETE ||
+                    key === WebCenter.Key.HOME) {
+                return;
+            }
+            
+            var valor = $(this).val();
             if (valor.length > 1) {
                 valor = valor.replace(/[^0-9]/g, "");
                 valor = valor.substr(0, valor.length - 1) + "-" + valor[valor.length - 1];
-                $(obj).val(valor);
+                $(this).val(valor);
             }
         }
     },

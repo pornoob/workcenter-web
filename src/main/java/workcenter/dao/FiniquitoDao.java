@@ -5,6 +5,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Empresa;
 import workcenter.entidades.Finiquito;
 import workcenter.entidades.Personal;
 
@@ -37,6 +38,14 @@ public class FiniquitoDao {
     public List<Finiquito> obtenerFiniquitosTrabajador(Personal p, Integer anio, Integer mes) {
         Query q = em.createNamedQuery("Finiquito.findByPersonMonthYear", Finiquito.class);
         q.setParameter("person", p);
+        q.setParameter("year", anio);
+        
+        return q.getResultList();
+    }
+
+    public List<Finiquito> obtenerFiniquitosTrabajador(Empresa empleador, Integer anio) {
+        Query q = em.createNamedQuery("Finiquito.findByFactoryAndYear", Finiquito.class);
+        q.setParameter("factory", empleador);
         q.setParameter("year", anio);
         
         return q.getResultList();

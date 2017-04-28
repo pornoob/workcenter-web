@@ -1,5 +1,8 @@
 package workcenter.presentacion.equipos;
 
+import java.io.File;
+import java.io.Serializable;
+import java.util.*;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +20,6 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-
-import java.io.File;
-import java.io.Serializable;
-import java.util.*;
 
 /**
  * Created by claudio on 08-09-14.
@@ -57,10 +56,12 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private List<Equipo> bateas;
     private List<MmeMantencionTracto> mantencionesTractos;
     private List<MmeMantencionSemiremolque> mantencionesSemiremolque;
+    private List<MmeMantencionMaquina> mantencionesMaquina;
     private List<MmeTipoMantencion> tiposMantencion;
     private List<Personal> mecanicos;
     private MmeMantencionTracto mantencionTracto;
     private MmeMantencionSemiremolque mantencionSemiremolque;
+    private MmeMantencionMaquina mantencionMaquina;
     private Map<String, List<Documento>> comprobantesMantencion;
 
     // caché
@@ -73,7 +74,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones();
         mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
         tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
-        ciclos = (tiposMantencion.get(1).getCotaKilometraje().intValue() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
+        ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
     }
 
     public String irListar() {
@@ -85,6 +86,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionTracto = new MmeMantencionTracto();
         mantencionSemiremolque = new MmeMantencionSemiremolque();
+        mantencionMaquina = new MmeMantencionMaquina();
         return "flowEditar";
     }
 
@@ -340,6 +342,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public void setEquipo(Equipo equipo) {
         this.equipo = equipo;
+    }
+
+    public List<MmeMantencionMaquina> getMantencionesMaquina() {
+        return mantencionesMaquina;
+    }
+
+    public void setMantencionesMaquina(List<MmeMantencionMaquina> mantencionesMaquina) {
+        this.mantencionesMaquina = mantencionesMaquina;
     }
 
     @Override

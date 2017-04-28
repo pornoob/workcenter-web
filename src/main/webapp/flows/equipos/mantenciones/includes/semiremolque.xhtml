@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
+
+    <p:tab title="Semiremolques">
+        <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                         action="#{mantenedorMantenciones.irEditar()}"
+                         icon="ui-icon-plus"/>
+        <p:dataTable emptyMessage="No se han registrado mantenciones"
+                     value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"
+                     rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
+                     paginatorTemplate="#{constantes.paginadorTemplate}"
+                     filterEvent="enter"
+                     rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+            <p:column headerText="Patente" filterBy="#{ms.semiRemolque.patente}"
+                      filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                <p:commandLink value="#{ms.semiRemolque.patente}" ajax="false"
+                               action="#{mantenedorMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
+            </p:column>
+            <p:column headerText="Fecha">
+                <p:commandLink ajax="false">
+                    <h:outputText value="#{ms.fecha}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                    <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableSemiremolque(ms)}"/>
+                </p:commandLink>
+            </p:column>
+            <p:column headerText="Próx. Mantención">
+                <h:outputText
+                    value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencionSemiremolque(ms)}">
+                    <f:convertDateTime pattern="dd-MM-yyyy"/>
+                </h:outputText>
+            </p:column>
+            <p:column headerText="" width="20">
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojoSemiremolque(ms)}"
+                    value="/img/icons/luz_roja.png"/>
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarilloSemiremolque(ms)}"
+                    value="/img/icons/luz_amarilla.png"/>
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerdeSemiremolque(ms)}"
+                    value="/img/icons/luz_verde.png"/>
+            </p:column>
+        </p:dataTable>
+    </p:tab>
+</ui:composition>

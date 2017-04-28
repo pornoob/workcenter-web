@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl">
+    
+    <p:tab title="Maquinas">
+        <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                         action="#{mantenedorMantenciones.irEditar()}"
+                         icon="ui-icon-plus"/>
+        <p:dataTable emptyMessage="No se han registrado mantenciones"
+                     value="#{mantenedorMantenciones.mantencionesMaquina}" var="mq"
+                     rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
+                     paginatorTemplate="#{constantes.paginadorTemplate}"
+                     filterEvent="enter"
+                     rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+            <p:column headerText="Fecha">
+                <h:outputText value="#{mq.fecha}">
+                    <f:convertDateTime pattern="dd-MM-yyyy hh:mm"/>
+                </h:outputText>
+            </p:column>
+            
+            <p:column headerText="Kilometraje Anotado">
+                <h:outputText value="#{mq.kmAnotado}"/>
+            </p:column>
+            
+            <p:column headerText="Diferencia Kilometraje">
+                <h:outputText value="#{mq.kmDiff}"/>
+            </p:column>
+            
+            <p:column headerText="Kilometraje Próxima Mantención">
+                <h:outputText value="#{mq.kmProxMantencion}"/>
+            </p:column>
+            
+            <p:column>
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojo(mq)}"
+                    value="/img/icons/luz_roja.png"/>
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarillo(mq)}"
+                    value="/img/icons/luz_amarilla.png"/>
+                <h:graphicImage
+                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerde(mq)}"
+                    value="/img/icons/luz_verde.png"/>
+            </p:column>
+        </p:dataTable>
+    </p:tab>
+</ui:composition>
