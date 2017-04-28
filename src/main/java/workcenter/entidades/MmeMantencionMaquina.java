@@ -23,14 +23,14 @@ public class MmeMantencionMaquina implements Serializable {
     @JoinColumn(name = "id_tarea", referencedColumnName = "id")
     private MmeTareaMaquina tareaMantencion;
     
-    @Column(name = "kilometraje_anotado")
-    private Integer kmAnotado;
+    @Column(name = "horas_anotadas")
+    private Integer hrasAnotadas;
     
-    @Column(name = "kilometraje_prox_mantencion")
-    private Integer kmProxMantencion;
+    @Column(name = "horas_prox_mantencion")
+    private Integer hrasProxMantencion;
     
-    @Column(name = "kilometraje_diferencia")
-    private Integer kmDiff;
+    @Column(name = "horas_diferencia")
+    private Integer hrasDiff;
     
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
@@ -52,20 +52,20 @@ public class MmeMantencionMaquina implements Serializable {
         this.tareaMantencion = tareaMantencion;
     }
 
-    public Integer getKmAnotado() {
-        return kmAnotado;
+    public Integer getHrasAnotadas() {
+        return hrasAnotadas;
     }
 
-    public void setKmAnotado(Integer kmAnotado) {
-        this.kmAnotado = kmAnotado;
+    public void setHrasAnotadas(Integer kmAnotado) {
+        this.hrasAnotadas = kmAnotado;
     }
 
-    public Integer getKmDiff() {
-        return kmDiff;
+    public Integer getHrasDiff() {
+        return hrasDiff;
     }
 
-    public void setKmDiff(Integer kmDiff) {
-        this.kmDiff = kmDiff;
+    public void setHrasDiff(Integer kmDiff) {
+        this.hrasDiff = kmDiff;
     }
 
     public Date getFecha() {
@@ -76,12 +76,12 @@ public class MmeMantencionMaquina implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getKmProxMantencion() {
-        return kmProxMantencion;
+    public Integer getHrasProxMantencion() {
+        return hrasProxMantencion;
     }
 
-    public void setKmProxMantencion(Integer kmProxMantencion) {
-        this.kmProxMantencion = kmProxMantencion;
+    public void setHrasProxMantencion(Integer kmProxMantencion) {
+        this.hrasProxMantencion = kmProxMantencion;
     }
 
     @Override

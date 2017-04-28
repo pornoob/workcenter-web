@@ -21,19 +21,20 @@
                 </h:outputText>
             </p:column>
             
-            <p:column headerText="Kilometraje Anotado">
-                <h:outputText value="#{mq.kmAnotado}"/>
+            <p:column headerText="Hras. Anotadas">
+                <h:outputText value="#{mq.hrasAnotadas}"/>
             </p:column>
             
-            <p:column headerText="Diferencia Kilometraje">
-                <h:outputText value="#{mq.kmDiff}"/>
+            <p:column headerText="Diferencia Hras.">
+                <h:outputText value="#{mq.hrasDiff}"/>
             </p:column>
             
-            <p:column headerText="Kilometraje Próxima Mantención">
-                <h:outputText value="#{mq.kmProxMantencion}"/>
+            <p:column headerText="Hras. Próxima Mantención">
+                <h:outputText value="#{mq.hrasProxMantencion}"/>
             </p:column>
             
             <p:column>
+                <ui:remove>
                 <h:graphicImage
                     rendered="#{mantenedorMantenciones.dibujarSemaforoRojo(mq)}"
                     value="/img/icons/luz_roja.png"/>
@@ -43,6 +44,7 @@
                 <h:graphicImage
                     rendered="#{mantenedorMantenciones.dibujarSemaforoVerde(mq)}"
                     value="/img/icons/luz_verde.png"/>
+                </ui:remove>
             </p:column>
         </p:dataTable>
     </p:tab>
