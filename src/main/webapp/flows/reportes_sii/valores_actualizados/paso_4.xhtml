@@ -71,7 +71,7 @@
                                 <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaNoAfecta}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaNoRentaAfecta}">
                                     <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
@@ -122,7 +122,17 @@
                                     <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>
-                        </p:column>a
+                        </p:column>
+                        <p:column headerText="Renta No Afecta Actualizada">
+                            <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].rentaNoAfectaActualizada}">
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                            <f:facet name="footer">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaNoRentaAfectaActualizada}">
+                                    <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                                </h:outputText>
+                            </f:facet>
+                        </p:column>
                         <p:column headerText="Meses Trabajados">
                             <h:outputText value="#{mantenedorValoresActualizados.formateaMesesTrabajados(mantenedorValoresActualizados.valoresActualizadoMap[c].mesesTrabajados)}"/>
                         </p:column>

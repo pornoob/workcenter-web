@@ -6,6 +6,7 @@ import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import workcenter.entidades.BonoDescuentoRemuneracion;
 import workcenter.entidades.Empresa;
 import workcenter.entidades.FactorActualizacionSII;
 import workcenter.entidades.Finiquito;
@@ -52,7 +53,7 @@ public class MantenedorValoresActualizados implements Serializable {
     private Integer sumatoriaImpUnico;
     private Integer sumatoriaImponibleActualizado;
     private Integer sumatoriaRentaAfectaActualizada;
-    private Integer sumatoriaRentaNoAfectaActualizada;
+    private Integer sumatoriaNoRentaAfectaActualizada;
     private Integer sumatoriaImpUnicoActualizado;
 
     // Variables que solo afectan el render
@@ -110,27 +111,28 @@ public class MantenedorValoresActualizados implements Serializable {
         sumatoriaImponibleActualizado = 0;
         sumatoriaRentaAfectaActualizada = 0;
         sumatoriaImpUnicoActualizado = 0;
+        sumatoriaNoRentaAfectaActualizada = 0;
+        Calendar c = Calendar.getInstance();
         for (Remuneracion r : remuneraciones) {
             sumatoriaImponible += r.getTotalImponible();
             sumatoriaRentaAfecta += r.getRentaAfecta();
             sumatoriaImpUnico += r.getImpUnico().intValue();
+            c.setTime(r.getFechaLiquidacion());
+            int rentaExentaMes = 0;
+            for (Finiquito finiquito : logicaFiniquito.obtenerFiniquitosTrabajador(r.getIdPersonal(), c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1)) {
+                rentaExentaMes += finiquito.getMonto();
+            }
+            
+            for (BonoDescuentoRemuneracion bonoDescuentoRemuneracion : r.getRemuneracionBonoDescuentoList()) {
+                if (!Boolean.TRUE.equals(bonoDescuentoRemuneracion.getImponible())) {
+                    rentaExentaMes += bonoDescuentoRemuneracion.getMonto().intValue();
+                }
+            }
 
             sumatoriaImponibleActualizado += (int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible());
             sumatoriaRentaAfectaActualizada += (int)(r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta());
             sumatoriaImpUnicoActualizado += (int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico());
-            
-            ValorActualizadoDTO valor = new ValorActualizadoDTO();
-            valor.setImponible(r.getTotalImponible());
-            valor.setRentaAfecta(r.getRentaAfecta());
-            valor.setImpuestoUnico(r.getImpUnico().intValue());
-            
-            valor.setImponibleActualizado((int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible()));
-            valor.setRentaAfectaActualizada((int)(r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta()));
-            valor.setImpuestoUnicoActualizado((int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico()));
-        }
-        for (Finiquito finiquito : finiquitos) {
-            sumatoriaRentaNoAfecta += finiquito.getMonto();
-            sumatoriaRentaNoAfectaActualizada += (int)(finiquito.getMonto() * obtenerFactor(finiquito.getFechaFiniquito()) / 100 + finiquito.getMonto());
+            sumatoriaNoRentaAfectaActualizada += (int)(rentaExentaMes * obtenerFactor(r.getFechaLiquidacion()) / 100 + rentaExentaMes);
         }
     }
 
@@ -146,7 +148,7 @@ public class MantenedorValoresActualizados implements Serializable {
     }
 
     public String prepararInforme() {
-        conductores = new ArrayList<Personal>();
+        conductores = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
         
         for (Remuneracion r : remuneraciones) {
@@ -166,11 +168,19 @@ public class MantenedorValoresActualizados implements Serializable {
             puntero.setImpuestoUnicoActualizado(puntero.getImpuestoUnicoActualizado() + (int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico()));
             
             calendar.setTime(r.getFechaLiquidacion());
+            int rentaNoAfecta = 0;
             List<Finiquito> finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(trabajador, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
-            puntero.setRentaNoAfecta(0);
             for (Finiquito finiquito : finiquitos) {
                 puntero.setRentaNoAfecta(puntero.getRentaNoAfecta() + finiquito.getMonto());
+                rentaNoAfecta += finiquito.getMonto();
             }
+            for (BonoDescuentoRemuneracion bonoDescuentoRemuneracion : r.getRemuneracionBonoDescuentoList()) {
+                if (!Boolean.TRUE.equals(bonoDescuentoRemuneracion.getImponible())) {
+                    puntero.setRentaNoAfecta(puntero.getRentaNoAfecta() + bonoDescuentoRemuneracion.getMonto().intValue());
+                    rentaNoAfecta += bonoDescuentoRemuneracion.getMonto().intValue();
+                }
+            }
+            puntero.setRentaNoAfectaActualizada(puntero.getRentaNoAfectaActualizada()+ (int)(rentaNoAfecta * obtenerFactor(r.getFechaLiquidacion()) / 100 + rentaNoAfecta));
             
             puntero.getMesesTrabajados().add(calendar.get(Calendar.MONTH)+1);
         }
@@ -208,7 +218,7 @@ public class MantenedorValoresActualizados implements Serializable {
 
     // Zona ficticia para generar las remuneraciones asociados al empleador y al conductor seleccionado
     public List<Remuneracion> getRemuneracionesInforme() {
-        List<Remuneracion> retorno = new ArrayList<Remuneracion>();
+        List<Remuneracion> retorno = new ArrayList<>();
         if (conductor == null || empleador == null) return retorno;
         for (Remuneracion r : remuneraciones) {
             if (!r.getEmpleador().equals(empleador.getNombre()) || !r.getIdPersonal().equals(conductor)) continue;
@@ -438,19 +448,19 @@ public class MantenedorValoresActualizados implements Serializable {
         this.finiquitos = finiquitos;
     }
 
-    public Integer getSumatoriaRentaNoAfectaActualizada() {
-        return sumatoriaRentaNoAfectaActualizada;
-    }
-
-    public void setSumatoriaRentaNoAfectaActualizada(Integer sumatoriaRentaNoAfectaActualizada) {
-        this.sumatoriaRentaNoAfectaActualizada = sumatoriaRentaNoAfectaActualizada;
-    }
-
     public List<ValorActualizadoDTO> getValoresDesagregados() {
         return valoresDesagregados;
     }
 
     public void setValoresDesagregados(List<ValorActualizadoDTO> valoresDesagregados) {
         this.valoresDesagregados = valoresDesagregados;
+    }
+
+    public Integer getSumatoriaNoRentaAfectaActualizada() {
+        return sumatoriaNoRentaAfectaActualizada;
+    }
+
+    public void setSumatoriaNoRentaAfectaActualizada(Integer sumatoriaNoRentaAfectaActualizada) {
+        this.sumatoriaNoRentaAfectaActualizada = sumatoriaNoRentaAfectaActualizada;
     }
 }

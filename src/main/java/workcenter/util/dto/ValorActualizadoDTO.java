@@ -20,6 +20,7 @@ public class ValorActualizadoDTO implements Serializable {
     private Integer impuestoUnico;
     private Integer imponibleActualizado;
     private Integer rentaAfectaActualizada;
+    private Integer rentaNoAfectaActualizada;
     private Integer impuestoUnicoActualizado;
     private List<Integer> mesesTrabajados;
 
@@ -30,6 +31,7 @@ public class ValorActualizadoDTO implements Serializable {
         impuestoUnico = 0;
         imponibleActualizado = 0;
         rentaAfectaActualizada = 0;
+        rentaNoAfectaActualizada = 0;
         impuestoUnicoActualizado = 0;
         mesesTrabajados = new ArrayList<>();
     }
@@ -96,5 +98,13 @@ public class ValorActualizadoDTO implements Serializable {
 
     public void setRentaNoAfecta(Integer rentaNoAfecta) {
         this.rentaNoAfecta = rentaNoAfecta;
+    }
+
+    public Integer getRentaNoAfectaActualizada() {
+        return rentaNoAfectaActualizada;
+    }
+
+    public void setRentaNoAfectaActualizada(Integer rentaNoAfectaActualizada) {
+        this.rentaNoAfectaActualizada = rentaNoAfectaActualizada;
     }
 }

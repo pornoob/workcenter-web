@@ -18,7 +18,7 @@ public class GuiaDePetroleoDao {
     EntityManager em;
 
     public List<GuiaPetroleo> obtenerPetrolioPorOrden(Vuelta ordenDeCarga) {
-        return em.createNamedQuery("GuiaPetroleo.findByOrdendecarga").setParameter("ordendecarga", ordenDeCarga.getOrdenDeCarga()).getResultList();
+        return em.createNamedQuery("GuiaPetroleo.findByOrdendecarga").setParameter("ordendecarga", ordenDeCarga.getId()).getResultList();
     }
 
     public List<EstacionServicio> obtenerEstacionesDeServicio(){

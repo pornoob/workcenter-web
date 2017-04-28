@@ -33,7 +33,7 @@
                         requiredMessage="Fecha Requerida"
                         value="#{mantenedorCaja.dinero.fechaactivo}" />
             <p:outputLabel value="Orden Carga:(*) " rendered="#{mantenedorCaja.concepto.id eq 4}"/>
-            <p:inputText value="#{mantenedorCaja.dinero.ordendecarga}"
+            <p:inputText value="#{mantenedorCaja.dinero.ordendecarga.id}"
                          rendered="#{mantenedorCaja.concepto.id eq 4}"
                          required="true"
                          requiredMessage="Orden Carga Requerida"/>

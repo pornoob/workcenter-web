@@ -20,25 +20,30 @@ import java.util.List;
 @Table(name = "personal")
 @XmlRootElement
 @NamedQueries({
-        @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos"),
+    @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos")
+    ,
         @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT p FROM Personal p "
-                + "LEFT JOIN FETCH p.usuario"),
-        @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut"),
+            + "LEFT JOIN FETCH p.usuario")
+    ,
+        @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut")
+    ,
         @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT p FROM Personal p "
-                + "LEFT JOIN FETCH p.usuario "
-                + "WHERE p.rut = :rut"),
+            + "LEFT JOIN FETCH p.usuario "
+            + "WHERE p.rut = :rut")
+    ,
         @NamedQuery(
-                name = "Personal.findByRutWithLiquidacion",
-                query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
-        ),
+            name = "Personal.findByRutWithLiquidacion",
+            query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+    )
+    ,
         @NamedQuery(
-                name = "Personal.findContratoActual",
-                query = "SELECT cp FROM Personal p " +
-                        "INNER JOIN p.contratospersonalCollection cp " +
-                        "INNER JOIN FETCH cp.previsiones " +
-                        "WHERE p = :personal " +
-                        "ORDER BY cp.fecha DESC, cp.numero DESC"
-        )
+            name = "Personal.findContratoActual",
+            query = "SELECT cp FROM Personal p "
+            + "INNER JOIN p.contratospersonalCollection cp "
+            + "INNER JOIN FETCH cp.previsiones "
+            + "WHERE p = :personal "
+            + "ORDER BY cp.fecha DESC, cp.numero DESC"
+    )
 })
 public class Personal implements Serializable {
 
@@ -54,7 +59,7 @@ public class Personal implements Serializable {
     private List<SancionRetiradaPersonal> sancionesRetiradas;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "personal", fetch = FetchType.LAZY)
     private List<DocumentoPersonal> documentos;
-    
+
     private static final long serialVersionUID = 1L;
     @Id
     @NotNull
@@ -107,17 +112,17 @@ public class Personal implements Serializable {
     @JoinTable(
             name = "usuario_servicio_ruta",
             inverseJoinColumns = {
-                    @JoinColumn(name = "id_servicio")
+                @JoinColumn(name = "id_servicio")
             },
             joinColumns = {
-                    @JoinColumn(name = "rut")
+                @JoinColumn(name = "rut")
             }
     )
     private List<Servicio> servicios;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonoDescuentoPersonal> bonosDescuentos;
-    
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "rutPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CargasFamiliares> lstCargasFamiliares;
 
@@ -144,7 +149,7 @@ public class Personal implements Serializable {
     }
 
     public String getApellidosNombres() {
-        String string =  getApellidos() + " " + getNombres();
+        String string = getApellidos() + " " + getNombres();
         StringBuilder sb = new StringBuilder();
         for (String s : string.split(" ")) {
             sb.append(StringUtils.capitalize(s));
@@ -279,7 +284,9 @@ public class Personal implements Serializable {
             return false;
         }
         Personal other = (Personal) object;
-        if (this.getRut() == null || other.getRut() == null) return false;
+        if (this.getRut() == null || other.getRut() == null) {
+            return false;
+        }
         return this.getRut().intValue() == other.getRut().intValue();
     }
 
@@ -371,12 +378,12 @@ public class Personal implements Serializable {
         this.bonosDescuentos = bonosDescuentos;
     }
 
-	public List<CargasFamiliares> getLstCargasFamiliares() {
-		return lstCargasFamiliares;
-	}
+    public List<CargasFamiliares> getLstCargasFamiliares() {
+        return lstCargasFamiliares;
+    }
 
-	public void setLstCargasFamiliares(List<CargasFamiliares> lstCargasFamiliares) {
-		this.lstCargasFamiliares = lstCargasFamiliares;
-	}
+    public void setLstCargasFamiliares(List<CargasFamiliares> lstCargasFamiliares) {
+        this.lstCargasFamiliares = lstCargasFamiliares;
+    }
 
 }

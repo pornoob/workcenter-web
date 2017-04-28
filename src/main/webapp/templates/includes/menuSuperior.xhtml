@@ -31,7 +31,7 @@
             <p:tooltip for="mCargaMasiva" value="Carga Masiva"
                        rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
             <p:tooltip for="mLiquiciones" value="Liquidaciones"
-                       rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
+                       rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_OFICINA') and sesionCliente.esEditor('LIQUIDACIONES_OFICINA')}"/>
             <p:tooltip for="mCaja" value="Modulo Caja"
                        rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
             <p:tooltip for="mConsultaDocEquipo" value="Consulta Documentos Equipos"
@@ -53,7 +53,7 @@
                         rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
             <p:menuitem id="mLiquiciones" styleClass="fa fa-usd fa-1x" style="color: black; font-size: 1.26em" url="/m/personal/liquidaciones"
                         ajax="false"
-                        rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_CONDUCTORES')}"/>
+                        rendered="#{sesionCliente.tienePermiso('LIQUIDACIONES_OFICINA')}"/>
             <p:menuitem id="mRemuneraciones" styleClass="fa fa-book fa-1x" style="color: black; font-size: 1.26em" url="/m/remuneraciones"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"/>

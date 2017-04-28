@@ -1,6 +1,5 @@
 package workcenter.presentacion.caja;
 
-import com.itextpdf.text.log.SysoLogger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -8,13 +7,11 @@ import workcenter.entidades.*;
 import workcenter.negocio.caja.LogicaCaja;
 import workcenter.negocio.concepto.LogicaConceptos;
 import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.negocio.prestamo_cancelado.LogicaPrestamoCancelado;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.TipoDinero;
 import workcenter.util.others.RenderPdfCaja;
 
-import javax.crypto.spec.DESedeKeySpec;
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletResponse;
@@ -24,6 +21,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
 
 /**
  * Created by renholders on 09-10-2015.
@@ -58,102 +56,119 @@ public class MantenedorCaja implements Serializable {
     private Dinero dinero;
     private Concepto concepto;
     private Date fechaCuotaInicial;
-    @Autowired LogicaCaja logicaCaja;
-    @Autowired LogicaPersonal logicaPersonal;
-    @Autowired LogicaConceptos logicaConceptos;
-    @Autowired Constantes constantes;
-    @Autowired RenderPdfCaja renderPdfCaja;
+    
     @Autowired
-    LogicaPrestamoCancelado logicaPrestamoCancelado;
+    private LogicaCaja logicaCaja;
+    @Autowired
+    private LogicaMaestroGuias logicaMaestroGuias;
+    @Autowired
+    private LogicaPersonal logicaPersonal;
+    @Autowired
+    private LogicaConceptos logicaConceptos;
+    @Autowired
+    private Constantes constantes;
+    @Autowired
+    private RenderPdfCaja renderPdfCaja;
 
-    public void inicio(){
+    public void inicio() {
         inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
         lstPersonal = logicaPersonal.obtenerTodos();
         lstConceptos = logicaConceptos.obtenerConceptos();
     }
 
-    public void inicializarDinero(){
+    public void inicializarDinero() {
         dinero = new Dinero();
+        dinero.setOrdendecarga(new Vuelta());
     }
-    
+
     public void guardarDatosCaja() throws IOException {
-    	if (dinero.getReceptor() == null) return;
+        if (dinero.getReceptor() == null) {
+            return;
+        }
         dinero.setConcepto(concepto);
         dinero.setFechareal(dinero.getFechaactivo());
-        if (dinero.getConcepto().getId() ==constantes.getASIGNACION_CAJA() ){
+        if (dinero.getConcepto().getId() == constantes.getASIGNACION_CAJA()) {
             Descuento d = new Descuento();
             d.setMonto(dinero.getMonto());
             d.setFecha(dinero.getFechaactivo());
             d.setMotivo(dinero);
             d.setNombre(dinero.getConcepto().getEtiqueta());
             d.setPersona(dinero.getReceptor().getRut());
-            List<Descuento> lstDesc = new ArrayList<Descuento>();
+            List<Descuento> lstDesc = new ArrayList<>();
             lstDesc.add(d);
             dinero.setLstDescuentos(lstDesc);
         }
-        if (logicaCaja.guardarEntradas(dinero)){
+        if (dinero.getOrdendecarga().getId() != null) {
+            Vuelta v = logicaMaestroGuias.obtenerOrdendeCarga(dinero.getOrdendecarga().getId());
+            if (!dinero.getReceptor().equals(v.getConductor())) {
+                FacesUtil.mostrarMensajeError("Error", "El número de guía pertenece a: "+v.getConductor().getNombreCompleto());
+                return;
+            }
+            dinero.setOrdendecarga(v);
+        }
+        if (logicaCaja.guardarEntradas(dinero)) {
             FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", dinero.getId().toString()
-                                                                    +" "+dinero.getConcepto().getEtiqueta()
-                                                                    +" "+dinero.getReceptor().getNombreCompleto()
-                                                                    +" "+dinero.getMonto());
+                    + " " + dinero.getConcepto().getEtiqueta()
+                    + " " + dinero.getReceptor().getNombreCompleto()
+                    + " " + dinero.getMonto());
             //imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
-        }else{
+        } else {
             FacesUtil.mostrarMensajeError("Ingreso Fallido",
-                    "Se ha producido un error al ingresar: "+dinero.getId()
-                            +" "+dinero.getConcepto().getEtiqueta()
-                            +""+dinero.getReceptor().getNombreCompleto()
-                            +" "+dinero.getMonto());
+                    "Se ha producido un error al ingresar: " + dinero.getId()
+                    + " " + dinero.getConcepto().getEtiqueta()
+                    + "" + dinero.getReceptor().getNombreCompleto()
+                    + " " + dinero.getMonto());
         }
         inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
     }
 
-    public void asignarConcepto(int t){
-        for (Concepto cpt : lstConceptos){
-            if (cpt.getId().intValue() == t){
+    public void asignarConcepto(int t) {
+        for (Concepto cpt : lstConceptos) {
+            if (cpt.getId().intValue() == t) {
                 concepto = cpt;
                 break;
             }
         }
     }
 
-    public String irIngresoCaja(int tipoConcepto){
+    public String irIngresoCaja(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         inicializarDinero();
         return "flowIngresaCaja";
     }
 
-    public String irRendirAsignacion(int tipoConcepto){
+    public String irRendirAsignacion(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         saldo = 0;
         devolucion = 0;
         gastos = 0;
         motivos = constantes.getLstMotivos();
         lstDinerosRendicion = new ArrayList<Dinero>();
-        for (Dinero d : lstDineros){
-            if (d.getConcepto().getId() == constantes.getASIGNACION_CAJA() && d.getLstDescuentos().size() > 0 ){
+        for (Dinero d : lstDineros) {
+            if (d.getConcepto().getId() == constantes.getASIGNACION_CAJA() && d.getLstDescuentos().size() > 0) {
                 lstDinerosRendicion.add(d);
             }
         }
         return "flowRendirAsignacion";
     }
 
-    public void calculoRendicion(){
-        saldo = dinero.getMonto()-gastos-devolucion;
+    public void calculoRendicion() {
+        saldo = dinero.getMonto() - gastos - devolucion;
         dinero.getLstDescuentos().get(0).setMonto(saldo);
     }
 
-    public void guardarRendicion(){
+    public void guardarRendicion() {
 
-        dinero.setComentario(dinero.getComentario()+" "+detalleRendicion);
-        if(saldo > 0){
+        dinero.setComentario(dinero.getComentario() + " " + detalleRendicion);
+        if (saldo > 0) {
             logicaCaja.guardarEntradas(dinero);
         } else {
             dinero.getLstDescuentos().remove(dinero.getLstDescuentos().get(0));
             logicaCaja.guardarEntradas(dinero);
         }
-        if(devolucion > 0){
+        if (devolucion > 0) {
             Dinero dev = new Dinero();
             Concepto c = new Concepto();
             c.setId(constantes.getRENDICION_ASIGNACION());
@@ -168,49 +183,49 @@ public class MantenedorCaja implements Serializable {
         irRendirAsignacion(constantes.getASIGNACION_CAJA());
     }
 
-    public String irConsultaCaja(){
+    public String irConsultaCaja() {
         saldo = 0;
         // Obtener Mes actual
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String fechaDesdeTmp = sdf.format(new Date());
         String fechaHastaTmp = sdf.format(new Date());
-        try{
+        try {
             fechaDesdeTmp = fechaDesdeTmp.concat("-01");
-            int anio= Integer.parseInt(fechaDesdeTmp.split("-")[0]);
-            int mes=Integer.parseInt(fechaDesdeTmp.split("-")[1]);
-            Calendar calendario =Calendar.getInstance();
-            calendario.set(anio,mes-1,1);
-            int ultimoDiaMes=calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int anio = Integer.parseInt(fechaDesdeTmp.split("-")[0]);
+            int mes = Integer.parseInt(fechaDesdeTmp.split("-")[1]);
+            Calendar calendario = Calendar.getInstance();
+            calendario.set(anio, mes - 1, 1);
+            int ultimoDiaMes = calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
             fechaHastaTmp = fechaHastaTmp.concat("-".concat(String.valueOf(ultimoDiaMes)));
             SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
             fechaDesde = sdfParse.parse(fechaDesdeTmp);
             fechaHasta = sdfParse.parse(fechaHastaTmp);
-        }catch (Exception ex){
+        } catch (Exception ex) {
             ex.printStackTrace();
         }
         filtrarDinerosConsulta();
         return "flowConsultaCaja";
     }
 
-    public void filtrarDinerosConsulta(){
+    public void filtrarDinerosConsulta() {
         saldo = 0;
         montoEntrada = 0;
-        montoSalida  = 0;
-        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosFiltros(personal,concepto,fechaDesde,fechaHasta);
+        montoSalida = 0;
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosFiltros(personal, concepto, fechaDesde, fechaHasta);
     }
 
-    public Integer saldoConsulta(Dinero dinero){
-            if (dinero.getConcepto().getSalida()){
-                saldo = saldo - dinero.getMonto();
-                montoSalida = montoSalida + dinero.getMonto();
-            }else{
-                saldo = saldo + dinero.getMonto();
-                montoEntrada = montoEntrada + dinero.getMonto();
-            }
+    public Integer saldoConsulta(Dinero dinero) {
+        if (dinero.getConcepto().getSalida()) {
+            saldo = saldo - dinero.getMonto();
+            montoSalida = montoSalida + dinero.getMonto();
+        } else {
+            saldo = saldo + dinero.getMonto();
+            montoEntrada = montoEntrada + dinero.getMonto();
+        }
         return saldo;
     }
 
-    public String irAsignacionCaja(int tipoConcepto){
+    public String irAsignacionCaja(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         lstTipoDinero = constantes.getLstTipoDineros();
         dinero.setFechareal(new Date());
@@ -218,15 +233,15 @@ public class MantenedorCaja implements Serializable {
         return "flowAsignacionCaja";
     }
 
-    public String irSueldoCaja(){
+    public String irSueldoCaja() {
         inicializarDinero();
         lstConpcetosFiltrada = new ArrayList<Concepto>();
-        for (Concepto c : lstConceptos){
-            if (c.getId() == constantes.getANTICIPO() ||
-                    c.getId() == constantes.getAGUINALDO_ANTICIPADO() ||
-                    c.getId() == constantes.getSUELDO() ||
-                    c.getId() == constantes.getFINIQUITO()||
-                    c.getId() == constantes.getBONO_ANTICIPADO()){
+        for (Concepto c : lstConceptos) {
+            if (c.getId() == constantes.getANTICIPO()
+                    || c.getId() == constantes.getAGUINALDO_ANTICIPADO()
+                    || c.getId() == constantes.getSUELDO()
+                    || c.getId() == constantes.getFINIQUITO()
+                    || c.getId() == constantes.getBONO_ANTICIPADO()) {
                 lstConpcetosFiltrada.add(c);
             }
         }
@@ -234,32 +249,33 @@ public class MantenedorCaja implements Serializable {
         return "flowSueldoCaja";
     }
 
-    public String irPrestamoCuotas(int tipoConcepto){
+    public String irPrestamoCuotas(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         inicializarDinero();
         fechaCuotaInicial = new Date();
-        fechaCuotaInicial.setMonth(fechaCuotaInicial.getMonth()+1);
+        fechaCuotaInicial.setMonth(fechaCuotaInicial.getMonth() + 1);
         dinero.setFechaactivo(new Date());
         return "flowPrestamoCuotas";
     }
 
-    public void guardarPrestamoCuotas(){
+    public void guardarPrestamoCuotas() {
 
-       logicaCaja.guardarEntradas(dinero);
+        logicaCaja.guardarEntradas(dinero);
     }
 
-    public void calcularCuotas() throws ParseException{
+    public void calcularCuotas() throws ParseException {
 
-        if(numeroCuotas == null || dinero.getMonto() ==null || dinero.getMonto() == 0 || fechaCuotaInicial == null)
+        if (numeroCuotas == null || dinero.getMonto() == null || dinero.getMonto() == 0 || fechaCuotaInicial == null) {
             return;
+        }
         lstDescuento = new ArrayList<Descuento>();
         Integer montoCuotas = dinero.getMonto() / numeroCuotas;
         Date fechaTmp = fechaCuotaInicial;
-        for (int i=1; i<=numeroCuotas; i++){
+        for (int i = 1; i <= numeroCuotas; i++) {
             Descuento descuentoTmp = new Descuento();
-            if (i == 1 ){
+            if (i == 1) {
                 descuentoTmp.setFecha(fechaTmp);
-            }else{
+            } else {
                 descuentoTmp.setFecha(calcularFechaCuotas(fechaTmp));
             }
             descuentoTmp.setMonto(montoCuotas);
@@ -271,19 +287,19 @@ public class MantenedorCaja implements Serializable {
         dinero.setLstDescuentos(lstDescuento);
     }
 
-    public Date calcularFechaCuotas(Date fechaTmp) throws ParseException{
+    public Date calcularFechaCuotas(Date fechaTmp) throws ParseException {
 
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
         String fechaActual = sdf.format(fechaTmp);
         Integer anio = Integer.parseInt(fechaActual.split("-")[0]);
         Integer mes = Integer.parseInt(fechaActual.split("-")[1]);
         mes = mes + 1;
-        if (mes > 12){
+        if (mes > 12) {
             anio = anio + 1;
             mes = 01;
         }
-        System.err.println(sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]));
-        return sdf.parse(anio+"-"+mes+"-"+fechaActual.split("-")[2]);
+        System.err.println(sdf.parse(anio + "-" + mes + "-" + fechaActual.split("-")[2]));
+        return sdf.parse(anio + "-" + mes + "-" + fechaActual.split("-")[2]);
         //AGREGAR MESES, DAY Y AÑOS
         //Calendar d = Calendar.getInstance();
         //d.setTime(fechaTmp);
@@ -291,17 +307,17 @@ public class MantenedorCaja implements Serializable {
 
     }
 
-    public String irPrestamosTemporales(int tipoConcepto){
+    public String irPrestamosTemporales(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         limpiarVariablesPestamos();
         lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
         return "flowDevolucionPrestamos";
     }
 
-    public void pagarPrestamosTemporales(int tipo){
+    public void pagarPrestamosTemporales(int tipo) {
         System.err.println(cancelado.getDetalle());
         System.err.println(cancelado.getDevolucion());
-        switch (tipo){
+        switch (tipo) {
             case 1:
                 Dinero pagoTotal = new Dinero();
                 Concepto conceptoPagoTotal = new Concepto();
@@ -334,20 +350,20 @@ public class MantenedorCaja implements Serializable {
 
                 Boolean recomendacion = false;
 
-                if (pagoParcial.getMonto() > dinero.getMonto()){
-                FacesUtil.mostrarMensajeError("Error Al guardar", "Devolución de Monto es mayor que la deuda");
-                limpiarVariablesPestamos();
-                recomendacion = true;
+                if (pagoParcial.getMonto() > dinero.getMonto()) {
+                    FacesUtil.mostrarMensajeError("Error Al guardar", "Devolución de Monto es mayor que la deuda");
+                    limpiarVariablesPestamos();
+                    recomendacion = true;
                 }
 
-                if (pagoParcial.getMonto().intValue() ==  dinero.getMonto().intValue()){
+                if (pagoParcial.getMonto().intValue() == dinero.getMonto().intValue()) {
                     FacesUtil.mostrarMensajeError("Recomendación", "Seleccione pago 100% en caja");
                     limpiarVariablesPestamos();
                     recomendacion = true;
                 }
 
-                if (!recomendacion){
-                System.err.println("GUARDAR");
+                if (!recomendacion) {
+                    System.err.println("GUARDAR");
                     //logicaCaja.guardarEntradas(pagoParcial);
                     //logicaPrestamoCancelado.guardarPrestamoCancelado(cancelado);
                     limpiarVariablesPestamos();
@@ -367,8 +383,8 @@ public class MantenedorCaja implements Serializable {
         lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
     }
 
-    public void limpiarVariablesPestamos(){
-         cancelado = new PrestamoCancelado();
+    public void limpiarVariablesPestamos() {
+        cancelado = new PrestamoCancelado();
     }
 
     public void mostrarPdf() throws IOException {
@@ -383,7 +399,7 @@ public class MantenedorCaja implements Serializable {
 
         response.reset();
         response.setContentType("application/pdf");
-        response.setHeader("Content-disposition", "filename="+"Impresión.pdf");
+        response.setHeader("Content-disposition", "filename=" + "Impresión.pdf");
 
         OutputStream output = response.getOutputStream();
         output.write(pdf);
@@ -391,7 +407,6 @@ public class MantenedorCaja implements Serializable {
 
         facesContext.responseComplete();
     }
-
 
     public List<Dinero> getLstDineros() {
         return lstDineros;
