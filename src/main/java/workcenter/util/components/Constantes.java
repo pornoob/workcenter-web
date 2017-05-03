@@ -69,7 +69,7 @@ public class Constantes implements Serializable {
     // Zona equipos
     private static final int equipoTipoTracto = 1;
     private static final int equipoTipoBatea = 2;
-    private static final int equipoTipoMaquina = 3;
+    private static final int equipoTipoMaquina = 4;
     private static final int alarmaProximaMantencion = 2000;
 
     // Zona registros
