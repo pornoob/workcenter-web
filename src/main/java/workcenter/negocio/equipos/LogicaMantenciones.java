@@ -1,5 +1,6 @@
 package workcenter.negocio.equipos;
 
+import java.util.List;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -8,11 +9,11 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MmeMantencionesDao;
 import workcenter.entidades.Equipo;
+import workcenter.entidades.MmeMantencionMaquina;
 import workcenter.entidades.MmeMantencionSemiremolque;
 import workcenter.entidades.MmeMantencionTracto;
+import workcenter.entidades.MmeTareaMaquina;
 import workcenter.entidades.MmeTipoMantencion;
-
-import java.util.List;
 
 /**
  * Created by claudio on 08-09-14.
@@ -66,5 +67,17 @@ public class LogicaMantenciones {
     @Transactional(readOnly = true)
     public List<MmeMantencionSemiremolque> obtenerMantencionesSemiremolques(Equipo e) {
         return mmeMantencionesDao.obtenerMantencionesSemiremolques(e);
+    }
+
+    public List<MmeTareaMaquina> obtenerTiposMantencionMaquina() {
+        return mmeMantencionesDao.obtenerTiposMantencionMaquina();
+    }
+
+    public void guardar(MmeMantencionMaquina mantencionMaquina) {
+        mmeMantencionesDao.guardar(mantencionMaquina);
+    }
+
+    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina() {
+        return mmeMantencionesDao.obtenerUltimasMantencionesMaquina();
     }
 }

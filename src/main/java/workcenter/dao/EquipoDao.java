@@ -1,18 +1,15 @@
 package workcenter.dao;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Repository;
-
-import workcenter.entidades.*;
-import workcenter.util.components.Constantes;
-
+import java.util.Date;
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
 import javax.persistence.Query;
-
-import java.util.Date;
-import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.*;
+import workcenter.util.components.Constantes;
 
 /**
  * Created by colivares on 19-08-14.
@@ -32,6 +29,11 @@ public class EquipoDao {
     public List<Equipo> obtenerTractos() {
         return em.createNamedQuery("Equipo.findByTipo")
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto())).getResultList();
+    }
+    
+    public List<Equipo> obtenerMaquinas() {
+        return em.createNamedQuery("Equipo.findByTipo")
+                .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina())).getResultList();
     }
 
     public List<Equipo> obtenerBateas() {

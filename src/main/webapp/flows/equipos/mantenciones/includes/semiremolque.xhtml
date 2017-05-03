@@ -6,7 +6,7 @@
 
     <p:tab title="Semiremolques">
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
-                         action="#{mantenedorMantenciones.irEditar()}"
+                         action="#{mantenedorMantenciones.irEditarSemiRemolque()}"
                          icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
                      value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"

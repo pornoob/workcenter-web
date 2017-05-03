@@ -1,0 +1,51 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+
+        <h2>Agregar Mantención</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <ui:include src="/components/cargadorArchivos.xhtml">
+            <ui:param name="padre" value="#{mantenedorMantenciones}"/>
+        </ui:include>
+        <h:form id="formMantenciones">
+            <h:panelGrid columns="3">
+                <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
+                <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.tareaMantencion}" id="iTipo"
+                                 converter="entityConverter" required="false">
+                    <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
+                    <f:selectItems value="#{mantenedorMantenciones.tiposMantencionMaquina}" var="t" itemLabel="#{t.nombre}"/>
+                </p:selectOneMenu>
+                <h:outputLabel for="iMaquina" value="Máquina"/>:
+                <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.maquina}" id="iMaquina"
+                                 converter="entityConverter" filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                    <f:selectItems value="#{mantenedorMantenciones.maquinas}" var="t" itemLabel="#{t.patente}"/>
+                </p:selectOneMenu>
+
+                <h:outputLabel for="iMecanico" value="Mecánico Encargado"/>:
+                <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.mecanicoResponsable}" id="iMecanico"
+                                 converter="entityConverter" filter="true" filterMatchMode="contains">
+                    <f:selectItems value="#{mantenedorMantenciones.mecanicos}" var="m" itemLabel="#{m.nombreCompleto}"/>
+                </p:selectOneMenu>
+                <h:outputLabel for="iFecha" value="Fecha"/>:
+                <p:calendar value="#{mantenedorMantenciones.mantencionMaquina.fecha}" id="iFecha" pattern="dd-MM-yyyy"
+                        requiredMessage="Debes especificar la fecha de la mantención"/>
+                
+                <h:outputLabel for="iHorasActuales" value="Total Hras Funcionando"/>:
+                <p:inputText value="#{mantenedorMantenciones.mantencionMaquina.hrasAnotadas}" id="iHorasActuales"/>
+            </h:panelGrid>
+
+            <p:outputPanel styleClass="actionPanel">
+                <p:commandButton value="Volver" action="#{mantenedorMantenciones.irListar()}"
+                                 icon="ui-icon-arrowreturnthick-1-s" ajax="false" immediate="true"/>
+                <p:commandButton value="Guardar" action="#{mantenedorMantenciones.guardarMantMaquina()}" icon="ui-icon-disk"
+                                 ajax="false"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

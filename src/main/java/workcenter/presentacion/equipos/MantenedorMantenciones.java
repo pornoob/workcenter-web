@@ -52,12 +52,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private LogicaProveedorPetroleo logicaProveedorPetroleo;
 
     private List<Equipo> tractos;
-    private Equipo equipo;
     private List<Equipo> bateas;
+    private List<Equipo> maquinas;
+    private Equipo equipo;
     private List<MmeMantencionTracto> mantencionesTractos;
     private List<MmeMantencionSemiremolque> mantencionesSemiremolque;
     private List<MmeMantencionMaquina> mantencionesMaquina;
     private List<MmeTipoMantencion> tiposMantencion;
+    private List<MmeTareaMaquina> tiposMantencionMaquina;
     private List<Personal> mecanicos;
     private MmeMantencionTracto mantencionTracto;
     private MmeMantencionSemiremolque mantencionSemiremolque;
@@ -69,10 +71,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private int ciclos;
 
     public void inicio() {
-        tractos = logicaEquipos.obtenerTractos();
-        bateas = logicaEquipos.obtenerBateas();
         mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones();
         mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
+        mantencionesMaquina = logicaMantenciones.obtenerUltimasMantencionesMaquina();
         tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
         ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
     }
@@ -81,13 +82,27 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         inicio();
         return "flowListar";
     }
-
-    public String irEditar() {
+    
+    public String irEditarSemiRemolque() {
+        bateas = logicaEquipos.obtenerBateas();
+        mecanicos = logicaPersonal.obtenerMecanicos();
+        mantencionSemiremolque = new MmeMantencionSemiremolque();
+        return "flowEditarSemiRemolque";
+    }
+    
+    public String irEditarTracto() {
+        tractos = logicaEquipos.obtenerTractos();
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionTracto = new MmeMantencionTracto();
-        mantencionSemiremolque = new MmeMantencionSemiremolque();
+        return "flowEditarTracto";
+    }
+    
+    public String irEditarMaquinaria() {
+        maquinas = logicaEquipos.obtenerMaquinas();
+        mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionMaquina = new MmeMantencionMaquina();
-        return "flowEditar";
+        tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
+        return "flowEditarMaquinaria";
     }
 
     public String irHistorial(Equipo e) {
@@ -103,15 +118,15 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public boolean dibujarSemaforoRojo(Integer valor) {
-        return valor.intValue() <= 0;
+        return valor <= 0;
     }
 
     public boolean dibujarSemaforoAmarillo(Integer valor) {
-        return valor.intValue() > 0 && valor.intValue() <= constantes.getAlarmaProximaMantencion();
+        return valor > 0 && valor <= constantes.getAlarmaProximaMantencion();
     }
 
     public boolean dibujarSemaforoVerde(Integer valor) {
-        return valor.intValue() > constantes.getAlarmaProximaMantencion();
+        return valor > constantes.getAlarmaProximaMantencion();
     }
 
     public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
@@ -129,7 +144,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public boolean dibujarSemaforoRojoSemiremolque(MmeMantencionSemiremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
-        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente().intValue());
+        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
 
         return new Date().after(fechaMantencion.getTime());
     }
@@ -137,7 +152,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public boolean dibujarSemaforoAmarilloSemiremolque(MmeMantencionSemiremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
-        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente().intValue());
+        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
 
         if (new Date().before(fechaMantencion.getTime())) {
             fechaMantencion.add(Calendar.DAY_OF_MONTH, -5);
@@ -149,7 +164,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public boolean dibujarSemaforoVerdeSemiremolque(MmeMantencionSemiremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
-        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente().intValue());
+        fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
 
         if (new Date().before(fechaMantencion.getTime())) {
             fechaMantencion.add(Calendar.DAY_OF_MONTH, -5);
@@ -168,7 +183,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public Integer obtenerKmSegunGuias(Equipo e) {
-        Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
         try {
             return obtenerKmSegunVueltaGuia(e);
         } catch (Exception ex) {
@@ -192,7 +206,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public Integer obtenerKmSiguienteMantencion(MmeMantencionTracto mt) {
-        return mt.getKilometraje().intValue() + (mt.getCiclo() == 0 || mt.getCiclo() < ciclos ? tiposMantencion.get(0).getCotaKilometraje() : tiposMantencion.get(1).getCotaKilometraje());
+        return mt.getKilometraje() + (mt.getCiclo() == 0 || mt.getCiclo() < ciclos ? tiposMantencion.get(0).getCotaKilometraje() : tiposMantencion.get(1).getCotaKilometraje());
     }
 
     public Date obtenerFechaSiguienteMantencion(MmeMantencionTracto mt) {
@@ -214,10 +228,27 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         Integer kmCopec = obtenerKmSegunProveedor(e);
         Integer kmGuia = obtenerKmSegunVueltaGuia(e);
         int kms = 0;
-        if (kmCopec != null && kmGuia != null) kms = kmCopec.intValue() > kmGuia.intValue() ? kmCopec.intValue() : kmGuia.intValue();
-        else if (kmCopec == null && kmGuia != null) kms = kmGuia.intValue();
-        else if (kmCopec != null && kmGuia == null) kms = kmCopec.intValue();
-        return obtenerKmSiguienteMantencion(mt).intValue() - kms;
+        if (kmCopec != null && kmGuia != null) kms = kmCopec > kmGuia ? kmCopec : kmGuia;
+        else if (kmCopec == null && kmGuia != null) kms = kmGuia;
+        else if (kmCopec != null && kmGuia == null) kms = kmCopec;
+        return obtenerKmSiguienteMantencion(mt) - kms;
+    }
+    
+    public void guardarMantMaquina() {
+        if (comprobantesMantencion == null || comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion") == null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "Debes adjuntar al menos un respaldo de la mantención");
+            return;
+        }
+        if (mantencionMaquina.getMaquina() == null) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "Debes indicar a que máquina se le realizó la mantención");
+            return;
+        }
+        for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
+            if (mantencionMaquina.getMaquina()!= null) logicaDocumentos.asociarDocumento(d, mantencionMaquina);
+        }
+        
+        logicaMantenciones.guardar(mantencionMaquina);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la mantención");
     }
 
     public void guardar() {
@@ -352,6 +383,30 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.mantencionesMaquina = mantencionesMaquina;
     }
 
+    public MmeMantencionMaquina getMantencionMaquina() {
+        return mantencionMaquina;
+    }
+
+    public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
+        this.mantencionMaquina = mantencionMaquina;
+    }
+
+    public List<MmeTareaMaquina> getTiposMantencionMaquina() {
+        return tiposMantencionMaquina;
+    }
+
+    public void setTiposMantencionMaquina(List<MmeTareaMaquina> tiposMantencionMaquina) {
+        this.tiposMantencionMaquina = tiposMantencionMaquina;
+    }
+
+    public List<Equipo> getMaquinas() {
+        return maquinas;
+    }
+
+    public void setMaquinas(List<Equipo> maquinas) {
+        this.maquinas = maquinas;
+    }
+
     @Override
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
@@ -365,9 +420,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public void enlazarLocal(Documento d) {
-        if (comprobantesMantencion == null) comprobantesMantencion = new HashMap<String, List<Documento>>();
+        if (comprobantesMantencion == null) comprobantesMantencion = new HashMap<>();
         if (comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion") == null) {
-            List<Documento> docs = new ArrayList<Documento>();
+            List<Documento> docs = new ArrayList<>();
             docs.add(d);
             comprobantesMantencion.put(sesionCliente.getUsuario().getRut() + "|mantencion", docs);
         } else {

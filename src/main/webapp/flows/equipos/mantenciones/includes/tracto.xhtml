@@ -6,7 +6,7 @@
                 xmlns:tvp="http://transportesventanas.cl">
     <p:tab title="Tractos">
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
-                         action="#{mantenedorMantenciones.irEditar()}" icon="ui-icon-plus"/>
+                         action="#{mantenedorMantenciones.irEditarTracto()}" icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones" widgetVar="tTractos"
                      value="#{mantenedorMantenciones.mantencionesTractos}" var="mt"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"

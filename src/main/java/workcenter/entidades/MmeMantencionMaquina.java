@@ -4,9 +4,13 @@ import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
@@ -14,6 +18,11 @@ import javax.persistence.TemporalType;
  *
  * @author Claudio Olivares
  */
+@Entity
+@Table(name = "mme_mantenciones_maquinaria")
+@NamedQueries({
+    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC")
+})
 public class MmeMantencionMaquina implements Serializable {
     @Id
     @Column(name = "id")
@@ -26,15 +35,20 @@ public class MmeMantencionMaquina implements Serializable {
     @Column(name = "horas_anotadas")
     private Integer hrasAnotadas;
     
-    @Column(name = "horas_prox_mantencion")
-    private Integer hrasProxMantencion;
-    
     @Column(name = "horas_diferencia")
     private Integer hrasDiff;
     
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
     private Date fecha;
+    
+    @ManyToOne
+    @JoinColumn(name = "equipo_id")
+    private Equipo maquina;
+    
+    @ManyToOne
+    @JoinColumn(name = "mecanico_id")
+    private Personal mecanicoResponsable;
 
     public Integer getId() {
         return id;
@@ -76,12 +90,20 @@ public class MmeMantencionMaquina implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getHrasProxMantencion() {
-        return hrasProxMantencion;
+    public Equipo getMaquina() {
+        return maquina;
     }
 
-    public void setHrasProxMantencion(Integer kmProxMantencion) {
-        this.hrasProxMantencion = kmProxMantencion;
+    public void setMaquina(Equipo maquina) {
+        this.maquina = maquina;
+    }
+
+    public Personal getMecanicoResponsable() {
+        return mecanicoResponsable;
+    }
+
+    public void setMecanicoResponsable(Personal mecanicoResponsable) {
+        this.mecanicoResponsable = mecanicoResponsable;
     }
 
     @Override

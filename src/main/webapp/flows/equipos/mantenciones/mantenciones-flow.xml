@@ -8,8 +8,14 @@
     </on-start>
 
     <view-state id="listar">
-        <transition on="flowEditar" to="editar"/>
+        <transition on="flowEditarTracto" to="editar"/>
+        <transition on="flowEditarSemiRemolque" to="editar"/>
+        <transition on="flowEditarMaquinaria" to="editarMaquinaria"/>
         <transition on="flowHistorial" to="historial"/>
+    </view-state>    
+    
+    <view-state id="editarMaquinaria">
+        <transition on="flowListar" to="listar"/>
     </view-state>
 
     <view-state id="editar">

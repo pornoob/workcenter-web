@@ -3,12 +3,21 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.Table;
 
 /**
  *
  * @author Claudio Olivares
  */
+@Entity
+@Table(name = "mme_mantenciones_tareas_maquinaria")
+@NamedQueries({
+    @NamedQuery(name = "MmeTareaMaquina.findAll", query = "SELECT t FROM MmeTareaMaquina t")
+})
 public class MmeTareaMaquina implements Serializable {
     @Id
     @Column(name = "id")

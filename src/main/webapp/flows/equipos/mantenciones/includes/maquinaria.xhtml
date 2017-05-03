@@ -5,9 +5,9 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:tvp="http://transportesventanas.cl">
     
-    <p:tab title="Maquinas">
+    <p:tab title="Máquinas">
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
-                         action="#{mantenedorMantenciones.irEditar()}"
+                         action="#{mantenedorMantenciones.irEditarMaquinaria()}"
                          icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
                      value="#{mantenedorMantenciones.mantencionesMaquina}" var="mq"
@@ -27,10 +27,6 @@
             
             <p:column headerText="Diferencia Hras.">
                 <h:outputText value="#{mq.hrasDiff}"/>
-            </p:column>
-            
-            <p:column headerText="Hras. Próxima Mantención">
-                <h:outputText value="#{mq.hrasProxMantencion}"/>
             </p:column>
             
             <p:column>

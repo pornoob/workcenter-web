@@ -1,16 +1,24 @@
 package workcenter.entidades;
 
-        import javax.persistence.metamodel.SingularAttribute;
-        import javax.persistence.metamodel.StaticMetamodel;
-        import java.util.Date;
+import java.util.Date;
+import javax.annotation.Generated;
+import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.SingularAttribute;
+import javax.persistence.metamodel.StaticMetamodel;
 
-/**
- * Created by renholders on 24-10-2015.
- */
+@Generated(value = "org.hibernate.jpamodelgen.JPAMetaModelEntityProcessor")
 @StaticMetamodel(Dinero.class)
-public class Dinero_ {
-    public static volatile SingularAttribute<Dinero,Integer> id;
-    public static volatile SingularAttribute<Dinero,Personal> receptor;
-    public static volatile SingularAttribute<Dinero,Concepto> concepto;
-    public static volatile SingularAttribute<Dinero,Date> fechaactivo;
+public abstract class Dinero_ {
+
+	public static volatile SingularAttribute<Dinero, Integer> monto;
+	public static volatile SingularAttribute<Dinero, Date> fechareal;
+	public static volatile SingularAttribute<Dinero, Personal> receptor;
+	public static volatile SingularAttribute<Dinero, Concepto> concepto;
+	public static volatile SingularAttribute<Dinero, Date> fechaactivo;
+	public static volatile ListAttribute<Dinero, Descuento> lstDescuentos;
+	public static volatile SingularAttribute<Dinero, Vuelta> ordendecarga;
+	public static volatile SingularAttribute<Dinero, Integer> id;
+	public static volatile SingularAttribute<Dinero, String> comentario;
+
 }
+

@@ -1,15 +1,16 @@
 package workcenter.dao;
 
-import org.springframework.stereotype.Repository;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeMantencionSemiremolque;
-import workcenter.entidades.MmeMantencionTracto;
-import workcenter.entidades.MmeTipoMantencion;
-
+import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.Equipo;
+import workcenter.entidades.MmeMantencionMaquina;
+import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionTracto;
+import workcenter.entidades.MmeTareaMaquina;
+import workcenter.entidades.MmeTipoMantencion;
 
 /**
  * Created by claudio on 09-09-14.
@@ -89,5 +90,18 @@ public class MmeMantencionesDao {
 
     public List<MmeMantencionSemiremolque> obtenerMantencionesSemiremolques(Equipo e) {
         return em.createNamedQuery("MmeMantencionSemiremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
+    }
+
+    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina() {
+        return em.createNamedQuery("MmeMantencionMaquina.findAll", MmeMantencionMaquina.class).getResultList();
+    }
+
+    public List<MmeTareaMaquina> obtenerTiposMantencionMaquina() {
+        return em.createNamedQuery("MmeTareaMaquina.findAll", MmeTareaMaquina.class).getResultList();
+    }
+
+    public void guardar(MmeMantencionMaquina m) {
+        if (m.getId() == null) em.persist(m);
+        else em.merge(m);
     }
 }
