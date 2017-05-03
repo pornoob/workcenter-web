@@ -14,12 +14,6 @@
         </ui:include>
         <h:form id="formMantenciones">
             <h:panelGrid columns="3">
-                <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
-                <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.tareaMantencion}" id="iTipo"
-                                 converter="entityConverter" required="false">
-                    <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
-                    <f:selectItems value="#{mantenedorMantenciones.tiposMantencionMaquina}" var="t" itemLabel="#{t.nombre}"/>
-                </p:selectOneMenu>
                 <h:outputLabel for="iMaquina" value="Máquina"/>:
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.maquina}" id="iMaquina"
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
@@ -39,6 +33,31 @@
                 <h:outputLabel for="iHorasActuales" value="Total Hras Funcionando"/>:
                 <p:inputText value="#{mantenedorMantenciones.mantencionMaquina.hrasAnotadas}" id="iHorasActuales"/>
             </h:panelGrid>
+            
+            <p:dataTable value="#{mantenedorMantenciones.tiposMantencionMaquina}" var="tarea"
+                         rowKey="#{tarea.id}">
+                <p:column selectionMode="multiple"/>
+                
+                <p:column headerText="Nombre de la actividad">
+                    <h:outputText value="#{tarea.nombre}"/>
+                </p:column>
+                
+                <p:column headerText="Cada X Hras">
+                    <h:outputText value="#{tarea.cantHoras}"/>
+                </p:column>
+                
+                <p:column headerText="Última Hra. Componente">
+                    <h:outputText value="&lt;hras&gt;"/>
+                </p:column>
+                
+                <p:column headerText="Hras. Restantes">
+                    <h:outputText value="&lt;hras&gt;"/>
+                </p:column>
+                
+                <p:column>
+                    <h:graphicImage value="/img/icons/luz_roja.png"/>
+                </p:column>
+            </p:dataTable>
 
             <p:outputPanel styleClass="actionPanel">
                 <p:commandButton value="Volver" action="#{mantenedorMantenciones.irListar()}"
