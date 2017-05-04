@@ -19,6 +19,8 @@
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
                     <f:selectItems value="#{mantenedorMantenciones.maquinas}" var="t" itemLabel="#{t.patente}"/>
+                    
+                    <p:ajax event="change" listener="#{mantenedorMantenciones.obtenerUltimaMantencionMaquina}"/>
                 </p:selectOneMenu>
 
                 <h:outputLabel for="iMecanico" value="Mecánico Encargado"/>:
@@ -35,7 +37,7 @@
             </h:panelGrid>
             
             <p:dataTable value="#{mantenedorMantenciones.tiposMantencionMaquina}" var="tarea"
-                         rowKey="#{tarea.id}">
+                         rowKey="#{tarea.id}" selection="#{mantenedorMantenciones.tiposMantencionMaquinaSeleccionadas}">
                 <p:column selectionMode="multiple"/>
                 
                 <p:column headerText="Nombre de la actividad">
@@ -47,15 +49,11 @@
                 </p:column>
                 
                 <p:column headerText="Última Hra. Componente">
-                    <h:outputText value="&lt;hras&gt;"/>
+                    <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas}"/>
                 </p:column>
                 
                 <p:column headerText="Hras. Restantes">
-                    <h:outputText value="&lt;hras&gt;"/>
-                </p:column>
-                
-                <p:column>
-                    <h:graphicImage value="/img/icons/luz_roja.png"/>
+                    <h:outputText value="#{tarea.cantHoras - (mantenedorMantenciones.mantencionMaquina.hrasAnotadas - mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas)}"/>
                 </p:column>
             </p:dataTable>
 

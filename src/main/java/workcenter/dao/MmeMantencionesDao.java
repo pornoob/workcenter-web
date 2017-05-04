@@ -4,6 +4,7 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.Equipo;
 import workcenter.entidades.MmeMantencionMaquina;
@@ -17,6 +18,7 @@ import workcenter.entidades.MmeTipoMantencion;
  */
 @Repository
 public class MmeMantencionesDao {
+
     @PersistenceContext
     EntityManager em;
 
@@ -25,13 +27,19 @@ public class MmeMantencionesDao {
     }
 
     public void guardar(MmeMantencionSemiremolque m) {
-        if (m.getId() == null) em.persist(m);
-        else em.merge(m);
+        if (m.getId() == null) {
+            em.persist(m);
+        } else {
+            em.merge(m);
+        }
     }
 
     public void guardar(MmeMantencionTracto m) {
-        if (m.getId() == null) em.persist(m);
-        else em.merge(m);
+        if (m.getId() == null) {
+            em.persist(m);
+        } else {
+            em.merge(m);
+        }
     }
 
     public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
@@ -101,7 +109,23 @@ public class MmeMantencionesDao {
     }
 
     public void guardar(MmeMantencionMaquina m) {
-        if (m.getId() == null) em.persist(m);
-        else em.merge(m);
+        if (m.getId() == null) {
+            em.persist(m);
+        } else {
+            em.merge(m);
+        }
+    }
+
+    public MmeMantencionMaquina obtenerUltimaMantencionMaquina(Equipo maquina) {
+        Query q = em.createNamedQuery("MmeMantencionMaquina.findLastByMaquina", MmeMantencionMaquina.class);
+        q.setParameter("maquina", maquina);
+        q.setMaxResults(1);
+
+        try {
+            return (MmeMantencionMaquina) q.getSingleResult();
+        } catch (NoResultException exception) {
+            return null;
+        }
+
     }
 }

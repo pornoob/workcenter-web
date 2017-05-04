@@ -80,4 +80,8 @@ public class LogicaMantenciones {
     public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina() {
         return mmeMantencionesDao.obtenerUltimasMantencionesMaquina();
     }
+
+    public MmeMantencionMaquina obtenerUltimaMantencionMaquina(Equipo maquina) {
+        return mmeMantencionesDao.obtenerUltimaMantencionMaquina(maquina);
+    }
 }

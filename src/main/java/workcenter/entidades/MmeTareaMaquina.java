@@ -19,6 +19,9 @@ import javax.persistence.Table;
     @NamedQuery(name = "MmeTareaMaquina.findAll", query = "SELECT t FROM MmeTareaMaquina t")
 })
 public class MmeTareaMaquina implements Serializable {
+
+    private static final long serialVersionUID = -2362490414765102501L;
+    
     @Id
     @Column(name = "id")
     private Integer id;

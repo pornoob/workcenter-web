@@ -2,7 +2,9 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
@@ -10,6 +12,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -21,16 +24,15 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "mme_mantenciones_maquinaria")
 @NamedQueries({
-    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC")
+    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC")
 })
 public class MmeMantencionMaquina implements Serializable {
+
+    private static final long serialVersionUID = -7971947037702767059L;
     @Id
     @Column(name = "id")
     private Integer id;
-    
-    @ManyToOne
-    @JoinColumn(name = "id_tarea", referencedColumnName = "id")
-    private MmeTareaMaquina tareaMantencion;
     
     @Column(name = "horas_anotadas")
     private Integer hrasAnotadas;
@@ -49,6 +51,9 @@ public class MmeMantencionMaquina implements Serializable {
     @ManyToOne
     @JoinColumn(name = "mecanico_id")
     private Personal mecanicoResponsable;
+    
+    @OneToMany(mappedBy = "mantencionMaquina", cascade = CascadeType.ALL)
+    private List<MmeCheckMaquina> checkeoRealizado;
 
     public Integer getId() {
         return id;
@@ -56,14 +61,6 @@ public class MmeMantencionMaquina implements Serializable {
 
     public void setId(Integer id) {
         this.id = id;
-    }
-
-    public MmeTareaMaquina getTareaMantencion() {
-        return tareaMantencion;
-    }
-
-    public void setTareaMantencion(MmeTareaMaquina tareaMantencion) {
-        this.tareaMantencion = tareaMantencion;
     }
 
     public Integer getHrasAnotadas() {
@@ -104,6 +101,14 @@ public class MmeMantencionMaquina implements Serializable {
 
     public void setMecanicoResponsable(Personal mecanicoResponsable) {
         this.mecanicoResponsable = mecanicoResponsable;
+    }
+
+    public List<MmeCheckMaquina> getCheckeoRealizado() {
+        return checkeoRealizado;
+    }
+
+    public void setCheckeoRealizado(List<MmeCheckMaquina> checkeoRealizado) {
+        this.checkeoRealizado = checkeoRealizado;
     }
 
     @Override

@@ -3,6 +3,8 @@ package workcenter.presentacion.equipos;
 import java.io.File;
 import java.io.Serializable;
 import java.util.*;
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +29,7 @@ import workcenter.util.pojo.Descargable;
 @Component
 @Scope("flow")
 public class MantenedorMantenciones implements Serializable, WorkcenterFileListener {
+
     @Autowired
     private LogicaEquipos logicaEquipos;
 
@@ -60,10 +63,12 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private List<MmeMantencionMaquina> mantencionesMaquina;
     private List<MmeTipoMantencion> tiposMantencion;
     private List<MmeTareaMaquina> tiposMantencionMaquina;
+    private List<MmeTareaMaquina> tiposMantencionMaquinaSeleccionadas;
     private List<Personal> mecanicos;
     private MmeMantencionTracto mantencionTracto;
     private MmeMantencionSemiremolque mantencionSemiremolque;
     private MmeMantencionMaquina mantencionMaquina;
+    private MmeMantencionMaquina ultimaMantencionMaquina;
     private Map<String, List<Documento>> comprobantesMantencion;
 
     // caché
@@ -82,27 +87,37 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         inicio();
         return "flowListar";
     }
-    
+
     public String irEditarSemiRemolque() {
         bateas = logicaEquipos.obtenerBateas();
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionSemiremolque = new MmeMantencionSemiremolque();
         return "flowEditarSemiRemolque";
     }
-    
+
     public String irEditarTracto() {
         tractos = logicaEquipos.obtenerTractos();
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionTracto = new MmeMantencionTracto();
         return "flowEditarTracto";
     }
-    
+
     public String irEditarMaquinaria() {
         maquinas = logicaEquipos.obtenerMaquinas();
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionMaquina = new MmeMantencionMaquina();
         tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
+        tiposMantencionMaquinaSeleccionadas = new ArrayList<>();
         return "flowEditarMaquinaria";
+    }
+
+    public void obtenerUltimaMantencionMaquina(AjaxBehaviorEvent event) {
+        Equipo maquina = (Equipo) ((HtmlSelectOneMenu) event.getSource()).getValue();
+        ultimaMantencionMaquina = logicaMantenciones.obtenerUltimaMantencionMaquina(maquina);
+        if (ultimaMantencionMaquina == null) {
+            ultimaMantencionMaquina = new MmeMantencionMaquina();
+            ultimaMantencionMaquina.setHrasAnotadas(0);
+        }
     }
 
     public String irHistorial(Equipo e) {
@@ -130,7 +145,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
-        if (filtro == null) return true;
+        if (filtro == null) {
+            return true;
+        }
         if (filtro.equals("proximas")) {
             return dibujarSemaforoAmarillo(obtenerKmsFaltante((MmeMantencionTracto) valor));
         } else if (filtro.equals("lejanas")) {
@@ -197,10 +214,10 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     private Integer obtenerKmSegunVueltaGuia(Equipo e) {
         Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
-        if(ultimaVuelta != null){
+        if (ultimaVuelta != null) {
             return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
-                : ultimaVuelta.getKmFinal();
-        }else{
+                    : ultimaVuelta.getKmFinal();
+        } else {
             return 0;
         }
     }
@@ -228,12 +245,16 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         Integer kmCopec = obtenerKmSegunProveedor(e);
         Integer kmGuia = obtenerKmSegunVueltaGuia(e);
         int kms = 0;
-        if (kmCopec != null && kmGuia != null) kms = kmCopec > kmGuia ? kmCopec : kmGuia;
-        else if (kmCopec == null && kmGuia != null) kms = kmGuia;
-        else if (kmCopec != null && kmGuia == null) kms = kmCopec;
+        if (kmCopec != null && kmGuia != null) {
+            kms = kmCopec > kmGuia ? kmCopec : kmGuia;
+        } else if (kmCopec == null && kmGuia != null) {
+            kms = kmGuia;
+        } else if (kmCopec != null && kmGuia == null) {
+            kms = kmCopec;
+        }
         return obtenerKmSiguienteMantencion(mt) - kms;
     }
-    
+
     public void guardarMantMaquina() {
         if (comprobantesMantencion == null || comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion") == null) {
             FacesUtil.mostrarMensajeError("Operación fallida", "Debes adjuntar al menos un respaldo de la mantención");
@@ -244,9 +265,30 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             return;
         }
         for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
-            if (mantencionMaquina.getMaquina()!= null) logicaDocumentos.asociarDocumento(d, mantencionMaquina);
+            if (mantencionMaquina.getMaquina() != null) {
+                logicaDocumentos.asociarDocumento(d, mantencionMaquina);
+            }
         }
-        
+
+        mantencionMaquina.setCheckeoRealizado(new ArrayList<MmeCheckMaquina>());
+        for (MmeTareaMaquina tipoMantencion : tiposMantencionMaquinaSeleccionadas) {
+            MmeCheckMaquina checkMaquina = new MmeCheckMaquina();
+            checkMaquina.setHrasAnotadas(mantencionMaquina.getHrasAnotadas());
+            checkMaquina.setMantencionMaquina(mantencionMaquina);
+            checkMaquina.setTareaMaquina(tipoMantencion);
+            mantencionMaquina.getCheckeoRealizado().add(checkMaquina);
+        }
+
+        for (MmeTareaMaquina tipoMantencion : tiposMantencionMaquina) {
+            if (!tiposMantencionMaquinaSeleccionadas.contains(tipoMantencion)) {
+                MmeCheckMaquina checkMaquina = new MmeCheckMaquina();
+                checkMaquina.setHrasAnotadas(ultimaMantencionMaquina.getHrasAnotadas());
+                checkMaquina.setMantencionMaquina(mantencionMaquina);
+                checkMaquina.setTareaMaquina(tipoMantencion);
+                mantencionMaquina.getCheckeoRealizado().add(checkMaquina);
+            }
+        }
+
         logicaMantenciones.guardar(mantencionMaquina);
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la mantención");
     }
@@ -274,8 +316,12 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             logicaMantenciones.guardar(mantencionSemiremolque);
         }
         for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
-            if (mantencionTracto.getTracto() != null) logicaDocumentos.asociarDocumento(d, mantencionTracto);
-            if (mantencionSemiremolque.getSemiRemolque() != null) logicaDocumentos.asociarDocumento(d, mantencionSemiremolque);
+            if (mantencionTracto.getTracto() != null) {
+                logicaDocumentos.asociarDocumento(d, mantencionTracto);
+            }
+            if (mantencionSemiremolque.getSemiRemolque() != null) {
+                logicaDocumentos.asociarDocumento(d, mantencionSemiremolque);
+            }
         }
 
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la mantención");
@@ -284,7 +330,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public StreamedContent obtenerDescargable(MmeMantencionTracto m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
-        Documento doc = docs.get(docs.size()-1);
+        Documento doc = docs.get(docs.size() - 1);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
         d.setNombre(doc.getNombreOriginal());
         return d.getStreamedContent();
@@ -297,7 +343,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public StreamedContent obtenerDescargableSemiremolque(MmeMantencionSemiremolque m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
-        Documento doc = docs.get(docs.size()-1);
+        Documento doc = docs.get(docs.size() - 1);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
         d.setNombre(doc.getNombreOriginal());
         return d.getStreamedContent();
@@ -407,6 +453,22 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.maquinas = maquinas;
     }
 
+    public List<MmeTareaMaquina> getTiposMantencionMaquinaSeleccionadas() {
+        return tiposMantencionMaquinaSeleccionadas;
+    }
+
+    public void setTiposMantencionMaquinaSeleccionadas(List<MmeTareaMaquina> tiposMantencionMaquinaSeleccionadas) {
+        this.tiposMantencionMaquinaSeleccionadas = tiposMantencionMaquinaSeleccionadas;
+    }
+
+    public MmeMantencionMaquina getUltimaMantencionMaquina() {
+        return ultimaMantencionMaquina;
+    }
+
+    public void setUltimaMantencionMaquina(MmeMantencionMaquina ultimaMantencionMaquina) {
+        this.ultimaMantencionMaquina = ultimaMantencionMaquina;
+    }
+
     @Override
     public void subir(FileUploadEvent fue) {
         Documento d = ficheroUploader.subir(fue);
@@ -420,7 +482,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public void enlazarLocal(Documento d) {
-        if (comprobantesMantencion == null) comprobantesMantencion = new HashMap<>();
+        if (comprobantesMantencion == null) {
+            comprobantesMantencion = new HashMap<>();
+        }
         if (comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion") == null) {
             List<Documento> docs = new ArrayList<>();
             docs.add(d);
