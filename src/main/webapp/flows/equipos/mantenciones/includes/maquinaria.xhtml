@@ -4,7 +4,7 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:tvp="http://transportesventanas.cl">
-    
+
     <p:tab title="Máquinas">
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarMaquinaria()}"
@@ -20,27 +20,26 @@
                     <f:convertDateTime pattern="dd-MM-yyyy hh:mm"/>
                 </h:outputText>
             </p:column>
-            
-            <p:column headerText="Máquina">
-                <h:outputText value="#{mq.maquina.patente}"/>
+
+            <p:column headerText="Máquina"
+                      filterBy="#{mq.maquina.patente}"
+                      filterFunction="#{dataTableFilter.filtroInsensitivo}">
+                <p:commandLink ajax="false" action="#{mantenedorMantenciones.irEditarMaquinaria(mq)}"
+                               value="#{mq.maquina.patente}"/>
+
+                <f:facet name="filter">
+                    <p:inputText styleClass="inputFilter" style="width: 50px"/>
+                </f:facet>
             </p:column>
-            
+
             <p:column headerText="Hras. Anotadas">
-                <h:outputText value="#{mq.hrasAnotadas}"/>
-            </p:column>            
-            
-            <p:column>
-                <ui:remove>
-                <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojo(mq)}"
-                    value="/img/icons/luz_roja.png"/>
-                <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarillo(mq)}"
-                    value="/img/icons/luz_amarilla.png"/>
-                <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerde(mq)}"
-                    value="/img/icons/luz_verde.png"/>
-                </ui:remove>
+                
+                <p:commandLink ajax="false">
+                    <h:outputText value="#{mq.hrasAnotadas}">
+                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
+                    </h:outputText>
+                    <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(mq)}"/>
+                </p:commandLink>
             </p:column>
         </p:dataTable>
     </p:tab>

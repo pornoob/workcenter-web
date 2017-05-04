@@ -24,7 +24,7 @@
                     <h:outputText value="#{ms.fecha}">
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
-                    <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableSemiremolque(ms)}"/>
+                    <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(ms)}"/>
                 </p:commandLink>
             </p:column>
             <p:column headerText="Próx. Mantención">

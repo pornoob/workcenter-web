@@ -101,6 +101,15 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         mantencionTracto = new MmeMantencionTracto();
         return "flowEditarTracto";
     }
+    
+    public String irEditarMaquinaria(MmeMantencionMaquina mantencionMaquina) {
+        maquinas = logicaEquipos.obtenerMaquinas();
+        mecanicos = logicaPersonal.obtenerMecanicos();
+        mantencionMaquina = mantencionMaquina;
+        tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
+        tiposMantencionMaquinaSeleccionadas = new ArrayList<>();
+        return "flowEditarMaquinaria";
+    }
 
     public String irEditarMaquinaria() {
         maquinas = logicaEquipos.obtenerMaquinas();
@@ -328,7 +337,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         comprobantesMantencion = null;
     }
 
-    public StreamedContent obtenerDescargable(MmeMantencionTracto m) {
+    public StreamedContent obtenerDescargable(Object m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
         Documento doc = docs.get(docs.size() - 1);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
@@ -339,14 +348,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public StreamedContent obtenerDescargablePanne(Equipo e) {
         panne = logicaMantenciones.obtenerUltimaPanne(e);
         return obtenerDescargable(panne);
-    }
-
-    public StreamedContent obtenerDescargableSemiremolque(MmeMantencionSemiremolque m) {
-        List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
-        Documento doc = docs.get(docs.size() - 1);
-        Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
-        d.setNombre(doc.getNombreOriginal());
-        return d.getStreamedContent();
     }
 
     public List<Equipo> getTractos() {
