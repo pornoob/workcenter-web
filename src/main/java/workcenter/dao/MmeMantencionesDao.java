@@ -42,7 +42,7 @@ public class MmeMantencionesDao {
         }
     }
 
-    public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
+    public List<MmeMantencionTracto> obtenerUltimasMantenciones(Integer mes, Integer anio) {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.id_tipo, m.fecha as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
         sql.append("from mme_mantenciones_tractos m ");
@@ -50,8 +50,12 @@ public class MmeMantencionesDao {
         sql.append("select max(fecha) as fecha,equipo from mme_mantenciones_tractos group by 2");
         sql.append(") u on m.fecha = u.fecha and m.equipo = u.equipo ");
         sql.append("where m.id_tipo is not null ");
+        sql.append("and YEAR(m.fecha) = :anio and MONTH(m.fecha) = :mes ");
         sql.append("order by u.fecha desc");
-        return em.createNativeQuery(sql.toString(), MmeMantencionTracto.class).getResultList();
+        return em.createNativeQuery(sql.toString(), MmeMantencionTracto.class)
+                .setParameter("mes", mes)
+                .setParameter("anio", anio)
+                .getResultList();
     }
 
     public MmeMantencionTracto obtenerUltimaPanne(Equipo e) {
@@ -85,11 +89,16 @@ public class MmeMantencionesDao {
         }
     }
 
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
+    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques(Integer mes, Integer anio) {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable ");
-        sql.append("from mme_mantenciones_semiremolque m group by m.equipo order by fecha desc ");
-        return em.createNativeQuery(sql.toString(), MmeMantencionSemiremolque.class).getResultList();
+        sql.append("from mme_mantenciones_semiremolque m ");
+        sql.append("WHERE YEAR(m.fecha) = :anio and MONTH(m.fecha) = :mes ");
+        sql.append("group by m.equipo order by fecha desc ");
+        return em.createNativeQuery(sql.toString(), MmeMantencionSemiremolque.class)
+                .setParameter("mes", mes)
+                .setParameter("anio", anio)
+                .getResultList();
     }
 
     public List<MmeMantencionTracto> obtenerMantenciones(Equipo e) {
@@ -100,20 +109,19 @@ public class MmeMantencionesDao {
         return em.createNamedQuery("MmeMantencionSemiremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
     }
 
-    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina() {
-        return em.createNamedQuery("MmeMantencionMaquina.findAll", MmeMantencionMaquina.class).getResultList();
+    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
+        return em.createNamedQuery("MmeMantencionMaquina.findByMesAndAnio", MmeMantencionMaquina.class)
+                .setParameter("mes", mes)
+                .setParameter("anio", anio)
+                .getResultList();
     }
 
     public List<MmeTareaMaquina> obtenerTiposMantencionMaquina() {
         return em.createNamedQuery("MmeTareaMaquina.findAll", MmeTareaMaquina.class).getResultList();
     }
 
-    public void guardar(MmeMantencionMaquina m) {
-        if (m.getId() == null) {
-            em.persist(m);
-        } else {
-            em.merge(m);
-        }
+    public MmeMantencionMaquina guardar(MmeMantencionMaquina m) {
+        return em.merge(m);
     }
 
     public MmeMantencionMaquina obtenerUltimaMantencionMaquina(Equipo maquina) {
@@ -127,5 +135,11 @@ public class MmeMantencionesDao {
             return null;
         }
 
+    }
+
+    public List<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo maquina) {
+        Query q = em.createNamedQuery("MmeMantencionMaquina.findLastByMaquina", MmeMantencionMaquina.class);
+        q.setParameter("maquina", maquina);
+        return q.getResultList();
     }
 }

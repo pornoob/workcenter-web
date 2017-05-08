@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.webflow.execution.RequestContextHolder;
 
 /**
  * @author colivares
@@ -31,6 +32,14 @@ public class FacesUtil {
     
     public static HttpServletResponse obtenerHttpServletResponse() {
         return (HttpServletResponse)FacesContext.getCurrentInstance().getExternalContext().getResponse();
+    }
+    
+    public static Object obtenerVariableFlow(String variable) {
+        return RequestContextHolder.getRequestContext().getFlowScope().get(variable);
+    }
+    
+    public static void setearVariableFlow(String variable, Object value) {
+        RequestContextHolder.getRequestContext().getFlowScope().put(variable, value);
     }
     
     public static String obtenerParametroSesion(String param) {

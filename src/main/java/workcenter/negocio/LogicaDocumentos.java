@@ -18,7 +18,6 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.DocumentoDao;
 import workcenter.entidades.AsociacionDocumento;
 import workcenter.entidades.Documento;
-import workcenter.entidades.MpaPlanPrograma;
 
 /**
  * @author colivares

@@ -24,7 +24,19 @@
                 <p:commandButton action="#{importadorDatosCopec.subir}" ajax="false" icon="ui-icon-arrowthickstop-1-n"
                                  value="Subir"/>
             </p:panel>
+            <p:fieldset legend="Filtros">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Mes"/>:
+                <p:inputText value="#{flowScope.mes}"/>
+                <p:outputLabel value="Año"/>:
+                <p:inputText value="#{flowScope.anio}"/>
+                <p:commandButton value="Actualizar Filtros" update=":formMantenciones"
+                                 action="#{tabsMantenciones.actualizarFiltros()}"/>
+            </h:panelGrid>
+        </p:fieldset>
             <p:tabView>
+                <p:ajax event="tabChange" listener="#{tabsMantenciones.onTabChange}" update=":formMantenciones"/>
+                
                 <ui:include src="/flows/equipos/mantenciones/includes/tracto.xhtml"/>
                 <ui:include src="/flows/equipos/mantenciones/includes/semiremolque.xhtml"/>
                 <ui:include src="/flows/equipos/mantenciones/includes/maquinaria.xhtml"/>

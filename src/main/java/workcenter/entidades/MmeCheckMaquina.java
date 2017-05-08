@@ -8,11 +8,11 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Objects;
 import javax.persistence.Column;
+import javax.persistence.EmbeddedId;
 import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import javax.persistence.MapsId;
 import javax.persistence.NamedQueries;
 import javax.persistence.Table;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,34 +26,54 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
 })
-@IdClass(MmeCheckMaquinaPK.class)
 public class MmeCheckMaquina implements Serializable {
     
     private static final long serialVersionUID = 5252750644329354248L;
     
-    @Id
-    private Integer mantencionMaquinaId;
-    
-    @Id
-    private Integer tareaMaquinaId;
+    @EmbeddedId
+    private MmeCheckMaquinaPK id;
     
     @ManyToOne
-    @JoinColumn(name = "maquina_id", insertable = false, updatable = false)
+    @MapsId("mantencionMaquinaId")
+    @JoinColumn(name = "mantencion_id", referencedColumnName = "id")
     private MmeMantencionMaquina mantencionMaquina;
     
     @ManyToOne
-    @JoinColumn(name = "tarea_id", insertable = false, updatable = false)
+    @MapsId("tareaMaquinaId")
+    @JoinColumn(name = "tarea_id", referencedColumnName = "id")
     private MmeTareaMaquina tareaMaquina;
     
     @Column(name = "hras_anotadas")
     private Integer hrasAnotadas;
 
-    public Integer getTareaMaquinaId() {
-        return tareaMaquinaId;
+    public MmeCheckMaquina() {
+        this.id = new MmeCheckMaquinaPK();
     }
 
-    public void setTareaMaquinaId(Integer tareaMaquinaId) {
-        this.tareaMaquinaId = tareaMaquinaId;
+    public MmeCheckMaquinaPK getId() {
+        return id;
+    }
+
+    public void setId(MmeCheckMaquinaPK id) {
+        this.id = id;
+    }
+
+    public MmeMantencionMaquina getMantencionMaquina() {
+        return mantencionMaquina;
+    }
+
+    public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
+        this.mantencionMaquina = mantencionMaquina;
+        this.id.setMantencionMaquinaId(mantencionMaquina.getId());
+    }
+
+    public MmeTareaMaquina getTareaMaquina() {
+        return tareaMaquina;
+    }
+
+    public void setTareaMaquina(MmeTareaMaquina tareaMaquina) {
+        this.tareaMaquina = tareaMaquina;
+        this.id.setTareaMaquinaId(tareaMaquina.getId());
     }
 
     public Integer getHrasAnotadas() {
@@ -64,37 +84,10 @@ public class MmeCheckMaquina implements Serializable {
         this.hrasAnotadas = hrasAnotadas;
     }
 
-    public Integer getMantencionMaquinaId() {
-        return mantencionMaquinaId;
-    }
-
-    public void setMantencionMaquinaId(Integer mantencionMaquinaId) {
-        this.mantencionMaquinaId = mantencionMaquinaId;
-    }
-
-    public MmeMantencionMaquina getMantencionMaquina() {
-        return mantencionMaquina;
-    }
-
-    public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
-        this.mantencionMaquinaId = mantencionMaquina.getId();
-        this.mantencionMaquina = mantencionMaquina;
-    }
-
-    public MmeTareaMaquina getTareaMaquina() {
-        return tareaMaquina;
-    }
-
-    public void setTareaMaquina(MmeTareaMaquina tareaMaquina) {
-        this.tareaMaquinaId = tareaMaquina.getId();
-        this.tareaMaquina = tareaMaquina;
-    }
-
     @Override
     public int hashCode() {
         int hash = 5;
-        hash = 29 * hash + Objects.hashCode(this.mantencionMaquinaId);
-        hash = 29 * hash + Objects.hashCode(this.tareaMaquinaId);
+        hash = 47 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
@@ -110,10 +103,7 @@ public class MmeCheckMaquina implements Serializable {
             return false;
         }
         final MmeCheckMaquina other = (MmeCheckMaquina) obj;
-        if (!Objects.equals(this.mantencionMaquinaId, other.mantencionMaquinaId)) {
-            return false;
-        }
-        if (!Objects.equals(this.tareaMaquinaId, other.tareaMaquinaId)) {
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;

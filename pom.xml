@@ -25,8 +25,9 @@
         <spring-version>4.0.7.RELEASE</spring-version>
         <spring-test-version>4.0.5.RELEASE</spring-test-version>
         <spring-security-version>3.2.5.RELEASE</spring-security-version>
-        <spring-webflow>2.4.0.RELEASE</spring-webflow>
+        <spring-webflow>2.4.4.RELEASE</spring-webflow>
         <jsf-version>2.2</jsf-version>
+        <cdi.api>1.2</cdi.api>
         <javax-faces-version>2.2.5</javax-faces-version>
         <javax-el-version>3.0.0</javax-el-version>
         <junit-version>4.11</junit-version>
@@ -176,6 +177,12 @@
             <artifactId>javax.faces-api</artifactId>
             <version>${jsf-version}</version>
             <scope>provided</scope>
+        </dependency>
+        
+        <dependency>
+            <groupId>javax.enterprise</groupId>
+            <artifactId>cdi-api</artifactId>
+            <version>${cdi.api}</version>
         </dependency>
         
         <dependency>

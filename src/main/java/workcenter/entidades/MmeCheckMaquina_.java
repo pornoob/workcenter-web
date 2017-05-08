@@ -10,8 +10,7 @@ public abstract class MmeCheckMaquina_ {
 
 	public static volatile SingularAttribute<MmeCheckMaquina, MmeTareaMaquina> tareaMaquina;
 	public static volatile SingularAttribute<MmeCheckMaquina, MmeMantencionMaquina> mantencionMaquina;
-	public static volatile SingularAttribute<MmeCheckMaquina, Integer> tareaMaquinaId;
-	public static volatile SingularAttribute<MmeCheckMaquina, Integer> mantencionMaquinaId;
+	public static volatile SingularAttribute<MmeCheckMaquina, MmeCheckMaquinaPK> id;
 	public static volatile SingularAttribute<MmeCheckMaquina, Integer> hrasAnotadas;
 
 }

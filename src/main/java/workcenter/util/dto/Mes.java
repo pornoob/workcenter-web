@@ -9,9 +9,14 @@ import java.util.List;
  */
 public class Mes implements Serializable, Comparator {
 
+    private static final long serialVersionUID = -8629631164798640543L;
+
     private String id;
     private String nombre;
     private List<Semana> semanas;
+    
+    public Mes() {
+    }
 
     public Mes(String id, String nombre) {
         this.id = id;

@@ -10,7 +10,7 @@
 
         <h:form rendered="#{sesionCliente.estaAutentificado()}" id="frmWorkcenter">
             <p:panel header="Módulos Mantenedores">
-                <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
+                <h:panelGrid style="margin-left: auto; margin-right: auto" columns="8">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"
                                    action="#{facesUtil.redirigir('/m/personal')}" class="menuWorkcenter">
                         <i class="fa fa-user fa-5x"></i>
@@ -83,7 +83,7 @@
             </p:panel>
 
             <p:panel header="Módulos Gestión">
-                <h:panelGrid style="margin-left: auto; margin-right: auto" columns="6">
+                <h:panelGrid style="margin-left: auto; margin-right: auto" columns="8">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
                                    action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter">
                         <i class="fa fa-exclamation-triangle fa-5x"></i>

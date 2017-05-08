@@ -9,7 +9,7 @@
                          action="#{mantenedorMantenciones.irEditarSemiRemolque()}"
                          icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
-                     value="#{mantenedorMantenciones.mantencionesSemiremolque}" var="ms"
+                     value="#{tabsMantenciones.mantencionesSemiremolque}" var="ms"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      filterEvent="enter"
@@ -17,7 +17,7 @@
             <p:column headerText="Patente" filterBy="#{ms.semiRemolque.patente}"
                       filterFunction="#{dataTableFilter.filtroInsensitivo}">
                 <p:commandLink value="#{ms.semiRemolque.patente}" ajax="false"
-                               action="#{mantenedorMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
+                               action="#{tabsMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
             </p:column>
             <p:column headerText="Fecha">
                 <p:commandLink ajax="false">

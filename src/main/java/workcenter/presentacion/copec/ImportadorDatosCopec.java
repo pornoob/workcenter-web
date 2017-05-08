@@ -13,6 +13,7 @@ import workcenter.util.components.FacesUtil;
 
 import javax.persistence.PersistenceException;
 import java.io.IOException;
+import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -22,7 +23,9 @@ import java.util.Date;
  */
 @Component
 @Scope("view")
-public class ImportadorDatosCopec {
+public class ImportadorDatosCopec implements Serializable {
+
+    private static final long serialVersionUID = -3398739977797889059L;
     private transient UploadedFile archivo;
     private Date ultimaActualizacion;
 

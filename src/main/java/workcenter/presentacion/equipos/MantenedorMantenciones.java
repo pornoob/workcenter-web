@@ -24,11 +24,13 @@ import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
 
 /**
- * Created by claudio on 08-09-14.
+ * Created by Claudio Olivares on 08-09-14.
  */
 @Component
 @Scope("flow")
 public class MantenedorMantenciones implements Serializable, WorkcenterFileListener {
+
+    private static final long serialVersionUID = 3894956458108018846L;
 
     @Autowired
     private LogicaEquipos logicaEquipos;
@@ -56,11 +58,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     private List<Equipo> tractos;
     private List<Equipo> bateas;
-    private List<Equipo> maquinas;
-    private Equipo equipo;
-    private List<MmeMantencionTracto> mantencionesTractos;
-    private List<MmeMantencionSemiremolque> mantencionesSemiremolque;
-    private List<MmeMantencionMaquina> mantencionesMaquina;
+    
     private List<MmeTipoMantencion> tiposMantencion;
     private List<MmeTareaMaquina> tiposMantencionMaquina;
     private List<MmeTareaMaquina> tiposMantencionMaquinaSeleccionadas;
@@ -76,9 +74,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private int ciclos;
 
     public void inicio() {
-        mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones();
-        mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
-        mantencionesMaquina = logicaMantenciones.obtenerUltimasMantencionesMaquina();
+        Date fecha = new Date();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(fecha);
+        calendar.set(Calendar.DAY_OF_MONTH, 1);
+        
+        FacesUtil.setearVariableFlow("mes", calendar.get(Calendar.MONTH) + 1);
+        FacesUtil.setearVariableFlow("anio", calendar.get(Calendar.YEAR));
+        
         tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
         ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
     }
@@ -103,16 +106,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
     
     public String irEditarMaquinaria(MmeMantencionMaquina mantencionMaquina) {
-        maquinas = logicaEquipos.obtenerMaquinas();
         mecanicos = logicaPersonal.obtenerMecanicos();
-        mantencionMaquina = mantencionMaquina;
+        this.mantencionMaquina = mantencionMaquina;
         tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
         tiposMantencionMaquinaSeleccionadas = new ArrayList<>();
         return "flowEditarMaquinaria";
     }
 
     public String irEditarMaquinaria() {
-        maquinas = logicaEquipos.obtenerMaquinas();
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionMaquina = new MmeMantencionMaquina();
         tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
@@ -127,18 +128,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             ultimaMantencionMaquina = new MmeMantencionMaquina();
             ultimaMantencionMaquina.setHrasAnotadas(0);
         }
-    }
-
-    public String irHistorial(Equipo e) {
-        equipo = e;
-        mantencionesTractos = logicaMantenciones.obtenerMantenciones(e);
-        return "flowHistorial";
-    }
-
-    public String irHistorialSemiremolque(Equipo e) {
-        equipo = e;
-        mantencionesSemiremolque = logicaMantenciones.obtenerMantencionesSemiremolques(e);
-        return "flowHistorial";
     }
 
     public boolean dibujarSemaforoRojo(Integer valor) {
@@ -273,11 +262,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             FacesUtil.mostrarMensajeError("Operación fallida", "Debes indicar a que máquina se le realizó la mantención");
             return;
         }
-        for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
-            if (mantencionMaquina.getMaquina() != null) {
-                logicaDocumentos.asociarDocumento(d, mantencionMaquina);
-            }
-        }
 
         mantencionMaquina.setCheckeoRealizado(new ArrayList<MmeCheckMaquina>());
         for (MmeTareaMaquina tipoMantencion : tiposMantencionMaquinaSeleccionadas) {
@@ -298,8 +282,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             }
         }
 
-        logicaMantenciones.guardar(mantencionMaquina);
+        mantencionMaquina = logicaMantenciones.guardar(mantencionMaquina);
+        for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
+            if (mantencionMaquina.getMaquina() != null) {
+                logicaDocumentos.asociarDocumento(d, mantencionMaquina);
+            }
+        }
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Se ha guardado la mantención");
+        mantencionMaquina = new MmeMantencionMaquina();
     }
 
     public void guardar() {
@@ -366,22 +356,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.bateas = bateas;
     }
 
-    public List<MmeMantencionTracto> getMantencionesTractos() {
-        return mantencionesTractos;
-    }
-
-    public void setMantencionesTractos(List<MmeMantencionTracto> mantencionesTractos) {
-        this.mantencionesTractos = mantencionesTractos;
-    }
-
-    public List<MmeMantencionSemiremolque> getMantencionesSemiremolque() {
-        return mantencionesSemiremolque;
-    }
-
-    public void setMantencionesSemiremolque(List<MmeMantencionSemiremolque> mantencionesSemiremolque) {
-        this.mantencionesSemiremolque = mantencionesSemiremolque;
-    }
-
     public MmeMantencionTracto getMantencionTracto() {
         return mantencionTracto;
     }
@@ -414,22 +388,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.mecanicos = mecanicos;
     }
 
-    public Equipo getEquipo() {
-        return equipo;
-    }
-
-    public void setEquipo(Equipo equipo) {
-        this.equipo = equipo;
-    }
-
-    public List<MmeMantencionMaquina> getMantencionesMaquina() {
-        return mantencionesMaquina;
-    }
-
-    public void setMantencionesMaquina(List<MmeMantencionMaquina> mantencionesMaquina) {
-        this.mantencionesMaquina = mantencionesMaquina;
-    }
-
     public MmeMantencionMaquina getMantencionMaquina() {
         return mantencionMaquina;
     }
@@ -445,15 +403,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public void setTiposMantencionMaquina(List<MmeTareaMaquina> tiposMantencionMaquina) {
         this.tiposMantencionMaquina = tiposMantencionMaquina;
     }
-
-    public List<Equipo> getMaquinas() {
-        return maquinas;
-    }
-
-    public void setMaquinas(List<Equipo> maquinas) {
-        this.maquinas = maquinas;
-    }
-
+    
     public List<MmeTareaMaquina> getTiposMantencionMaquinaSeleccionadas() {
         return tiposMantencionMaquinaSeleccionadas;
     }

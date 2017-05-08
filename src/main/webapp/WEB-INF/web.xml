@@ -47,6 +47,24 @@
     </filter-mapping>
     <!--Cargamos Spring Security-->
     <filter>
+        <filter-name>userSessionFilter</filter-name>
+        <filter-class>workcenter.security.SessionFilter</filter-class>
+        <init-param>
+            <param-name>loginPage</param-name>
+            <param-value>/logIn.jsf</param-value>
+        </init-param>
+        
+        <init-param>
+            <param-name>excludeUrls</param-name>
+            <param-value/>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>userSessionFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter>
 
         <filter-name>springSecurityFilterChain</filter-name>
         <filter-class>

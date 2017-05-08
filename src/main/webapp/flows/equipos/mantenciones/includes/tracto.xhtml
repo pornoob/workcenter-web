@@ -4,11 +4,11 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:tvp="http://transportesventanas.cl">
-    <p:tab title="Tractos">
+    <p:tab title="Tractos">        
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarTracto()}" icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones" widgetVar="tTractos"
-                     value="#{mantenedorMantenciones.mantencionesTractos}" var="mt"
+                     value="#{tabsMantenciones.mantencionesTractos}" var="mt"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
@@ -51,7 +51,7 @@
             </p:columnGroup>
             <p:column>
                 <p:commandLink value="#{mt.tracto.patente}" ajax="false"
-                               action="#{mantenedorMantenciones.irHistorial(mt.tracto)}"/>
+                               action="#{tabsMantenciones.irHistorial(mt.tracto)}"/>
             </p:column>
 
             <p:column>

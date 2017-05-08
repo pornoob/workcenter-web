@@ -7,6 +7,8 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -25,12 +27,14 @@ import javax.persistence.TemporalType;
 @Table(name = "mme_mantenciones_maquinaria")
 @NamedQueries({
     @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC")
+    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "MmeMantencionMaquina.findByMesAndAnio", query = "SELECT m FROM MmeMantencionMaquina m WHERE YEAR(m.fecha) = :anio AND MONTH(m.fecha) = :mes ORDER BY m.fecha DESC")
 })
 public class MmeMantencionMaquina implements Serializable {
 
     private static final long serialVersionUID = -7971947037702767059L;
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     

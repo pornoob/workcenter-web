@@ -3,43 +3,56 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:tvp="http://transportesventanas.cl">
+                xmlns:tvp="http://transportesventanas.cl"
+                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <p:tab title="Máquinas">
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarMaquinaria()}"
                          icon="ui-icon-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
-                     value="#{mantenedorMantenciones.mantencionesMaquina}" var="mq"
+                     value="#{mantencionesMaquinaView.maquinas}" var="maquina"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      filterEvent="enter"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
-            <p:column headerText="Fecha">
-                <h:outputText value="#{mq.fecha}">
-                    <f:convertDateTime pattern="dd-MM-yyyy hh:mm"/>
-                </h:outputText>
+            <p:column headerText="Patente" width="60">
+                <p:commandLink action="#{tabsMantenciones.irHistorialMaquina(maquina)}" value="#{maquina.patente}"/>
             </p:column>
-
-            <p:column headerText="Máquina"
-                      filterBy="#{mq.maquina.patente}"
-                      filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                <p:commandLink ajax="false" action="#{mantenedorMantenciones.irEditarMaquinaria(mq)}"
-                               value="#{mq.maquina.patente}"/>
-
-                <f:facet name="filter">
-                    <p:inputText styleClass="inputFilter" style="width: 50px"/>
-                </f:facet>
+            <p:column headerText="Modelo" width="60">
+                <h:outputText value="#{maquina.modelo.nombre}"/>
             </p:column>
-
-            <p:column headerText="Hras. Anotadas">
-                
-                <p:commandLink ajax="false">
-                    <h:outputText value="#{mq.hrasAnotadas}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText>
-                    <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(mq)}"/>
-                </p:commandLink>
+            <p:column headerText="Calendario">
+                <p:panelGrid>
+                    <p:row>
+                        <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
+                            <p:repeat value="#{semana.dias}" var="dia">
+                                <ui:fragment rendered="#{dia.fecha ne null}">
+                                    <p:column style="width: 16px">
+                                        <p:outputLabel value="#{dia.fecha}">
+                                            <f:convertDateTime pattern="dd"/>
+                                        </p:outputLabel>
+                                    </p:column>
+                                </ui:fragment>
+                            </p:repeat>
+                        </p:repeat>
+                    </p:row>
+                    <p:row>
+                        <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
+                            <p:repeat value="#{semana.dias}" var="dia">
+                                <ui:fragment rendered="#{dia.fecha ne null}">
+                                    <p:column style="text-align: center; height: 17px">
+                                        <p:commandLink ajax="false" action="#{mantenedorMantenciones.obtenerDescargable(tabsMantenciones.obtenerMantencion(maquina, dia.fecha))}">
+                                            <h:graphicImage
+                                                rendered="#{tabsMantenciones.dibujarSemaforoMaquina(maquina, dia.fecha)}"
+                                                value="/img/icons/luz_verde.png"/>
+                                        </p:commandLink>
+                                    </p:column>
+                                </ui:fragment>
+                            </p:repeat>
+                        </p:repeat>
+                    </p:row>
+                </p:panelGrid>
             </p:column>
         </p:dataTable>
     </p:tab>

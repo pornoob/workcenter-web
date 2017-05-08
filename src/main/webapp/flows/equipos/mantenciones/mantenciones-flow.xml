@@ -12,6 +12,7 @@
         <transition on="flowEditarSemiRemolque" to="editar"/>
         <transition on="flowEditarMaquinaria" to="editarMaquinaria"/>
         <transition on="flowHistorial" to="historial"/>
+        <transition on="flowHistorialMaquina" to="historialMaquina"/>
     </view-state>    
     
     <view-state id="editarMaquinaria">
@@ -24,5 +25,10 @@
 
     <view-state id="historial">
         <transition on="flowListar" to="listar"/>
+    </view-state>
+    
+    <view-state id="historialMaquina">
+        <transition on="flowListar" to="listar"/>
+        <transition on="flowEditarMaquinaria" to="editarMaquinaria"/>
     </view-state>
 </flow>

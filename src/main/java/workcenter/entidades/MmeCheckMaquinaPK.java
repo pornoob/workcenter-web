@@ -7,24 +7,20 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Basic;
 import javax.persistence.Column;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Embeddable;
 
 /**
  *
  * @author claudio
  */
+@Embeddable
 public class MmeCheckMaquinaPK implements Serializable {
 
     private static final long serialVersionUID = 270251934939613522L;
 
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "mantencion_id")
     private Integer mantencionMaquinaId;
-    @Basic(optional = false)
-    @NotNull
     @Column(name = "tarea_id")
     private Integer tareaMaquinaId;
 

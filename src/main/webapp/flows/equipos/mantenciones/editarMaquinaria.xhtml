@@ -18,7 +18,7 @@
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionMaquina.maquina}" id="iMaquina"
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                    <f:selectItems value="#{mantenedorMantenciones.maquinas}" var="t" itemLabel="#{t.patente}"/>
+                    <f:selectItems value="#{mantencionesMaquinaView.maquinas}" var="t" itemLabel="#{t.patente}"/>
                     
                     <p:ajax event="change" listener="#{mantenedorMantenciones.obtenerUltimaMantencionMaquina}"/>
                 </p:selectOneMenu>
@@ -44,15 +44,15 @@
                     <h:outputText value="#{tarea.nombre}"/>
                 </p:column>
                 
-                <p:column headerText="Cada X Hras">
+                <p:column headerText="Cada X Hras" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{tarea.cantHoras}"/>
                 </p:column>
                 
-                <p:column headerText="Última Hra. Componente">
+                <p:column headerText="Última Hra. Componente" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas}"/>
                 </p:column>
                 
-                <p:column headerText="Hras. Restantes">
+                <p:column headerText="Hras. Restantes" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{tarea.cantHoras - (mantenedorMantenciones.mantencionMaquina.hrasAnotadas - mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas)}"/>
                 </p:column>
             </p:dataTable>

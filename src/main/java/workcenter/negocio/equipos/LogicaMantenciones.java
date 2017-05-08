@@ -14,6 +14,7 @@ import workcenter.entidades.MmeMantencionSemiremolque;
 import workcenter.entidades.MmeMantencionTracto;
 import workcenter.entidades.MmeTareaMaquina;
 import workcenter.entidades.MmeTipoMantencion;
+import workcenter.negocio.LogicaDocumentos;
 
 /**
  * Created by claudio on 08-09-14.
@@ -21,8 +22,12 @@ import workcenter.entidades.MmeTipoMantencion;
 @Component
 @Scope(proxyMode = ScopedProxyMode.TARGET_CLASS)
 public class LogicaMantenciones {
+
     @Autowired
     MmeMantencionesDao mmeMantencionesDao;
+
+    @Autowired
+    private LogicaDocumentos logicaDocumentos;
 
     @Transactional(readOnly = true)
     public List<MmeTipoMantencion> obtenerTiposMantencion() {
@@ -40,8 +45,8 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
-        return mmeMantencionesDao.obtenerUltimasMantenciones();
+    public List<MmeMantencionTracto> obtenerUltimasMantenciones(Integer mes, Integer anio) {
+        return mmeMantencionesDao.obtenerUltimasMantenciones(mes, anio);
     }
 
     @Transactional(readOnly = true, noRollbackFor = SQLGrammarException.class)
@@ -55,8 +60,8 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
-        return mmeMantencionesDao.obtenerUltimasMantencionesSemiremolques();
+    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques(Integer mes, Integer anio) {
+        return mmeMantencionesDao.obtenerUltimasMantencionesSemiremolques(mes, anio);
     }
 
     @Transactional(readOnly = true)
@@ -69,19 +74,28 @@ public class LogicaMantenciones {
         return mmeMantencionesDao.obtenerMantencionesSemiremolques(e);
     }
 
+    @Transactional(readOnly = true)
     public List<MmeTareaMaquina> obtenerTiposMantencionMaquina() {
         return mmeMantencionesDao.obtenerTiposMantencionMaquina();
     }
 
-    public void guardar(MmeMantencionMaquina mantencionMaquina) {
-        mmeMantencionesDao.guardar(mantencionMaquina);
+    @Transactional(readOnly = false)
+    public MmeMantencionMaquina guardar(MmeMantencionMaquina mantencionMaquina) {
+        return mmeMantencionesDao.guardar(mantencionMaquina);
     }
 
-    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina() {
-        return mmeMantencionesDao.obtenerUltimasMantencionesMaquina();
+    @Transactional(readOnly = true)
+    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
+        return mmeMantencionesDao.obtenerUltimasMantencionesMaquina(mes, anio);
     }
 
+    @Transactional(readOnly = true)
     public MmeMantencionMaquina obtenerUltimaMantencionMaquina(Equipo maquina) {
         return mmeMantencionesDao.obtenerUltimaMantencionMaquina(maquina);
+    }
+
+    @Transactional(readOnly = true)
+    public List<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo e) {
+        return mmeMantencionesDao.obtenerMantencionesMaquina(e);
     }
 }
