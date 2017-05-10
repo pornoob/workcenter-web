@@ -1,6 +1,7 @@
 package workcenter.negocio.equipos;
 
 import java.util.List;
+import java.util.Set;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -85,7 +86,7 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
+    public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
         return mmeMantencionesDao.obtenerUltimasMantencionesMaquina(mes, anio);
     }
 
@@ -95,7 +96,12 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo e) {
+    public Set<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo e) {
         return mmeMantencionesDao.obtenerMantencionesMaquina(e);
+    }
+
+    @Transactional(readOnly = true)
+    public MmeMantencionMaquina obtenerMantencionMaquinaPrevia(MmeMantencionMaquina mantencion) {
+        return mmeMantencionesDao.obtenerMantencionMaquinaPrevia(mantencion);
     }
 }

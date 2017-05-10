@@ -7,7 +7,12 @@
 
     <ui:define name="contenido">
 
-        <h2>Agregar Mantención</h2>
+        <ui:fragment rendered="#{mantenedorMantenciones.mantencionMaquina.id eq null}">
+            <h2>Agregar Mantención</h2>
+        </ui:fragment>
+        <ui:fragment rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
+            <h2>Editar Mantención</h2>
+        </ui:fragment>
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <ui:include src="/components/cargadorArchivos.xhtml">
             <ui:param name="padre" value="#{mantenedorMantenciones}"/>
@@ -19,7 +24,7 @@
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
                     <f:selectItems value="#{mantencionesMaquinaView.maquinas}" var="t" itemLabel="#{t.patente}"/>
-                    
+
                     <p:ajax event="change" listener="#{mantenedorMantenciones.obtenerUltimaMantencionMaquina}"/>
                 </p:selectOneMenu>
 
@@ -30,30 +35,42 @@
                 </p:selectOneMenu>
                 <h:outputLabel for="iFecha" value="Fecha"/>:
                 <p:calendar value="#{mantenedorMantenciones.mantencionMaquina.fecha}" id="iFecha" pattern="dd-MM-yyyy"
-                        requiredMessage="Debes especificar la fecha de la mantención"/>
-                
+                            requiredMessage="Debes especificar la fecha de la mantención"/>
+
                 <h:outputLabel for="iHorasActuales" value="Total Hras Funcionando"/>:
                 <p:inputText value="#{mantenedorMantenciones.mantencionMaquina.hrasAnotadas}" id="iHorasActuales"/>
             </h:panelGrid>
-            
+
             <p:dataTable value="#{mantenedorMantenciones.tiposMantencionMaquina}" var="tarea"
                          rowKey="#{tarea.id}" selection="#{mantenedorMantenciones.tiposMantencionMaquinaSeleccionadas}">
                 <p:column selectionMode="multiple"/>
-                
+
                 <p:column headerText="Nombre de la actividad">
                     <h:outputText value="#{tarea.nombre}"/>
                 </p:column>
-                
+
                 <p:column headerText="Cada X Hras" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{tarea.cantHoras}"/>
                 </p:column>
-                
+
                 <p:column headerText="Última Hra. Componente" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas}"/>
                 </p:column>
-                
+
                 <p:column headerText="Hras. Restantes" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
-                    <h:outputText value="#{tarea.cantHoras - (mantenedorMantenciones.mantencionMaquina.hrasAnotadas - mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas)}"/>
+                    <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas}"/>
+                </p:column>
+
+                <p:column headerText="Estado">
+                    <h:graphicImage
+                        rendered="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas lt 0 and mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas lt -tarea.cantHoras/2}"
+                        value="/img/icons/luz_roja.png"/>
+                    <h:graphicImage
+                        rendered="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas lt 0 and mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas gt -tarea.cantHoras/2}"
+                        value="/img/icons/luz_amarilla.png"/>
+                    <h:graphicImage
+                        rendered="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas gt 0}"
+                        value="/img/icons/luz_verde.png"/>
                 </p:column>
             </p:dataTable>
 

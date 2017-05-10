@@ -9,9 +9,9 @@
         <h:form prependId="false">
             <p:messages autoUpdate="true" closable="true"/>
             <h:panelGrid columns="3">
-                <h:outputLabel for="transVentanasUser" value="Rut"/>:
+                <h:outputLabel for="transVentanasUser" value="Rut/Nombre Usuario"/>:
                 <h:panelGroup>
-                    <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"/> (Formato: 12345678-0)
+                    <h:inputText id="transVentanasUser" value="#{autentificacionBean.rut}"/> (Formato: En caso de rut &lt; ej: 12345678-0 &gt; y en caso de nombre usuario &lt; ej: admin &gt;)
                 </h:panelGroup>
                 <h:outputLabel for="transVentanasPass" value="Contraseña"/>:
                 <h:inputSecret id="transVentanasPass" value="#{autentificacionBean.pass}"/>
@@ -22,11 +22,5 @@
                                  ajax="false"/>
             </h:panelGrid>
         </h:form>
-        <script type="text/javascript">
-            $(document).ready(function() {
-                $("#transVentanasUser").keyup(WebCenter.Input.formatearRut);
-                $("#transVentanasUser").blur(WebCenter.Input.formatearRut);
-            });
-        </script>
     </ui:define>
 </ui:composition>

@@ -26,36 +26,40 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "mme_mantenciones_maquinaria")
 @NamedQueries({
-    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC"),
-    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC")
+    ,
+    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC")
+    ,
+    @NamedQuery(name = "MmeMantencionMaquina.findPreviousByFechaAndMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.fecha < :fecha and m.maquina = :maquina ORDER BY m.fecha DESC")
+    ,
     @NamedQuery(name = "MmeMantencionMaquina.findByMesAndAnio", query = "SELECT m FROM MmeMantencionMaquina m WHERE YEAR(m.fecha) = :anio AND MONTH(m.fecha) = :mes ORDER BY m.fecha DESC")
 })
-public class MmeMantencionMaquina implements Serializable {
+public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantencionMaquina> {
 
     private static final long serialVersionUID = -7971947037702767059L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    
+
     @Column(name = "horas_anotadas")
     private Integer hrasAnotadas;
-    
+
     @Column(name = "horas_diferencia")
     private Integer hrasDiff;
-    
+
     @Temporal(TemporalType.DATE)
     @Column(name = "fecha")
     private Date fecha;
-    
+
     @ManyToOne
     @JoinColumn(name = "equipo_id")
     private Equipo maquina;
-    
+
     @ManyToOne
     @JoinColumn(name = "mecanico_id")
     private Personal mecanicoResponsable;
-    
+
     @OneToMany(mappedBy = "mantencionMaquina", cascade = CascadeType.ALL)
     private List<MmeCheckMaquina> checkeoRealizado;
 
@@ -141,5 +145,19 @@ public class MmeMantencionMaquina implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(MmeMantencionMaquina o) {
+        if (this.fecha == null || o.fecha == null) {
+            return -2;
+        }
+        if (this.fecha.before(o.fecha)) {
+            return 1;
+        } else if (this.fecha.after(o.fecha)) {
+            return -1;
+        } else {
+            return -2;
+        }
     }
 }

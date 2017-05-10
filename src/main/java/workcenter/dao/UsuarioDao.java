@@ -11,6 +11,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import workcenter.entidades.MuePermisoUsuario;
 
 /**
  * @author colivares
@@ -130,13 +131,18 @@ public class UsuarioDao {
         sb.append("where u.usuario = :usuario ");
         sb.append("and pro.titulo = :permiso ");
         sb.append("and per.nivel = :acceso ");
-        Query q = em.createNativeQuery(sb.toString(), Permiso.class);
+        Query q = em.createNativeQuery(sb.toString(), MuePermisoUsuario.class);
         q.setParameter("usuario", usuario);
         q.setParameter("permiso", permiso);
         q.setParameter("acceso", acceso);
         try {
-            return (Permiso) q.getSingleResult();
+            MuePermisoUsuario permisoUsuario = (MuePermisoUsuario) q.getSingleResult();
+            Permiso p = new Permiso();
+            p.setProyecto(permisoUsuario.getModulo());
+            p.setNivel(permisoUsuario.getNivel());
+            return p;
         } catch(Exception e) {
+            e.printStackTrace();
             return null;
         }
     }

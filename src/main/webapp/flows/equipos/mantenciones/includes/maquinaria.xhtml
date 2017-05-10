@@ -42,10 +42,11 @@
                             <p:repeat value="#{semana.dias}" var="dia">
                                 <ui:fragment rendered="#{dia.fecha ne null}">
                                     <p:column style="text-align: center; height: 17px">
-                                        <p:commandLink ajax="false" action="#{mantenedorMantenciones.obtenerDescargable(tabsMantenciones.obtenerMantencion(maquina, dia.fecha))}">
+                                        <p:commandLink ajax="false">
                                             <h:graphicImage
                                                 rendered="#{tabsMantenciones.dibujarSemaforoMaquina(maquina, dia.fecha)}"
                                                 value="/img/icons/luz_verde.png"/>
+                                            <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableMaquina(tabsMantenciones.obtenerMantencion(maquina, dia.fecha))}"/>
                                         </p:commandLink>
                                     </p:column>
                                 </ui:fragment>

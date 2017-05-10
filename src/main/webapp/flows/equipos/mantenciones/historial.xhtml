@@ -8,9 +8,9 @@
 
     <ui:define name="contenido">
 
-        <h2>Historial de Mantenciones #{mantenedorMantenciones.equipo.patente}</h2>
+        <h2>Historial de Mantenciones #{mantenedorMantencionesView.equipo.patente}</h2>
         <h:form id="formMantenciones">
-            <p:dataTable rendered="#{mantenedorMantenciones.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
+            <p:dataTable rendered="#{mantenedorMantencionesView.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
                          value="#{tabsMantenciones.mantencionesTractos}" var="m"
                          rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                          paginatorTemplate="#{constantes.paginadorTemplate}"
@@ -32,14 +32,14 @@
                         <h:outputText value="#{m.kilometraje}">
                             <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                         </h:outputText>
-                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(m)}"/>
+                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableTracto(m)}"/>
                     </p:commandLink>
                 </p:column>
                 <p:column headerText="Mecánico Encargado">
                     #{m.mecanicoResponsable.nombreCompleto}
                 </p:column>
             </p:dataTable>
-            <p:dataTable rendered="#{mantenedorMantenciones.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
+            <p:dataTable rendered="#{mantenedorMantencionesView.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
                          value="#{tabsMantenciones.mantencionesSemiremolque}" var="m"
                          rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                          paginatorTemplate="#{constantes.paginadorTemplate}"
@@ -52,7 +52,7 @@
                         <h:outputText value="#{ms.fecha}">
                             <f:convertDateTime pattern="dd-MM-yyyy"/>
                         </h:outputText>
-                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargable(m)}"/>
+                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableSemiremolque(m)}"/>
                     </p:commandLink>
                 </p:column>
                 <p:column headerText="Mecánico Encargado">

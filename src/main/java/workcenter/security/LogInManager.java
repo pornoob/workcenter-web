@@ -21,6 +21,8 @@ import workcenter.util.dto.UsuarioDto;
  */
 @Component
 public class LogInManager implements AuthenticationProvider, Serializable {
+
+    private static final long serialVersionUID = -5117201650243282098L;
     @Autowired
     LogicaUsuario logicaUsuario;
 

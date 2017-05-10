@@ -1,12 +1,17 @@
 package workcenter.dao;
 
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.Subgraph;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.Equipo;
+import workcenter.entidades.MmeCheckMaquina;
 import workcenter.entidades.MmeMantencionMaquina;
 import workcenter.entidades.MmeMantencionSemiremolque;
 import workcenter.entidades.MmeMantencionTracto;
@@ -17,7 +22,7 @@ import workcenter.entidades.MmeTipoMantencion;
  * Created by claudio on 09-09-14.
  */
 @Repository
-public class MmeMantencionesDao {
+public class MmeMantencionesDao extends MyDao {
 
     @PersistenceContext
     EntityManager em;
@@ -109,11 +114,19 @@ public class MmeMantencionesDao {
         return em.createNamedQuery("MmeMantencionSemiremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
     }
 
-    public List<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
-        return em.createNamedQuery("MmeMantencionMaquina.findByMesAndAnio", MmeMantencionMaquina.class)
+    public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
+        Query q = em.createNamedQuery("MmeMantencionMaquina.findByMesAndAnio", MmeMantencionMaquina.class)
                 .setParameter("mes", mes)
-                .setParameter("anio", anio)
-                .getResultList();
+                .setParameter("anio", anio);
+        
+        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
+        graph.addAttributeNodes("checkeoRealizado", "maquina");
+        
+        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
+        checkGraph.addAttributeNodes("tareaMaquina");
+        
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return new TreeSet<>(q.getResultList());
     }
 
     public List<MmeTareaMaquina> obtenerTiposMantencionMaquina() {
@@ -137,9 +150,30 @@ public class MmeMantencionesDao {
 
     }
 
-    public List<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo maquina) {
+    public Set<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo maquina) {
         Query q = em.createNamedQuery("MmeMantencionMaquina.findLastByMaquina", MmeMantencionMaquina.class);
         q.setParameter("maquina", maquina);
-        return q.getResultList();
+        
+        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
+        graph.addAttributeNodes("checkeoRealizado", "maquina");
+        
+        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
+        checkGraph.addAttributeNodes("tareaMaquina");
+        
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return new TreeSet<>(q.getResultList());
+    }
+
+    public MmeMantencionMaquina obtenerMantencionMaquinaPrevia(MmeMantencionMaquina mantencion) {
+        Query q = em.createNamedQuery("MmeMantencionMaquina.findPreviousByFechaAndMaquina", MmeMantencionMaquina.class);
+        q.setParameter("fecha", mantencion.getFecha());
+        q.setParameter("maquina", mantencion.getMaquina());
+        q.setMaxResults(1);
+
+        try {
+            return (MmeMantencionMaquina) q.getSingleResult();
+        } catch (NoResultException exception) {
+            return null;
+        }
     }
 }

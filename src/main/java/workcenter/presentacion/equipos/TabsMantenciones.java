@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import javax.annotation.PostConstruct;
 import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,7 +35,7 @@ public class TabsMantenciones implements Serializable {
 
     private List<MmeMantencionTracto> mantencionesTractos;
     private List<MmeMantencionSemiremolque> mantencionesSemiremolque;
-    private List<MmeMantencionMaquina> mantencionesMaquina;
+    private Set<MmeMantencionMaquina> mantencionesMaquina;
     
     private Equipo equipo;
     
@@ -132,16 +133,8 @@ public class TabsMantenciones implements Serializable {
     }
     
     public MmeMantencionMaquina obtenerMantencion(Equipo e, Date dia) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
-        Date fecha = sdf.parse(
-                FacesUtil.obtenerVariableFlow("mes")
-                + "-"
-                + FacesUtil.obtenerVariableFlow("anio")
-        );
-        Calendar calendar = Calendar.getInstance();
         for (MmeMantencionMaquina mantencion : mantencionesMaquina) {
-            calendar.setTime(mantencion.getFecha());
-            if (fecha.equals(dia) && e.equals(mantencion.getMaquina())) {
+            if (mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
                 return mantencion;
             }
         }
@@ -149,16 +142,8 @@ public class TabsMantenciones implements Serializable {
     }
 
     public boolean dibujarSemaforoMaquina(Equipo e, Date dia) throws ParseException {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
-        Date fecha = sdf.parse(
-                FacesUtil.obtenerVariableFlow("mes")
-                + "-"
-                + FacesUtil.obtenerVariableFlow("anio")
-        );
-        Calendar calendar = Calendar.getInstance();
         for (MmeMantencionMaquina mantencion : mantencionesMaquina) {
-            calendar.setTime(mantencion.getFecha());
-            if (fecha.equals(dia) && e.equals(mantencion.getMaquina())) {
+            if (mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
                 return true;
             }
         }
@@ -200,11 +185,11 @@ public class TabsMantenciones implements Serializable {
         this.mantencionesSemiremolque = mantencionesSemiremolque;
     }
 
-    public List<MmeMantencionMaquina> getMantencionesMaquina() {
+    public Set<MmeMantencionMaquina> getMantencionesMaquina() {
         return mantencionesMaquina;
     }
 
-    public void setMantencionesMaquina(List<MmeMantencionMaquina> mantencionesMaquina) {
+    public void setMantencionesMaquina(Set<MmeMantencionMaquina> mantencionesMaquina) {
         this.mantencionesMaquina = mantencionesMaquina;
     }
 
