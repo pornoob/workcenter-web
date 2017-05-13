@@ -149,6 +149,10 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
 
     @Override
     public int compareTo(MmeMantencionMaquina o) {
+        if (!this.maquina.equals(o.maquina)) {
+            return this.maquina.getPatente().compareTo(o.maquina.getPatente());
+        }
+        
         if (this.fecha == null || o.fecha == null) {
             return -2;
         }
@@ -156,6 +160,8 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
             return 1;
         } else if (this.fecha.after(o.fecha)) {
             return -1;
+        } else if (this.fecha.equals(o.fecha)) {
+            return 0;
         } else {
             return -2;
         }

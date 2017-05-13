@@ -15,7 +15,7 @@
                          paginatorTemplate="#{constantes.paginadorTemplate}"
                          rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
                 <p:column headerText="Máquina">
-                    #{m.maquina.modelo.nombre}
+                    #{m.maquina.patente} - #{m.maquina.modelo.nombre}
                 </p:column>
                 <p:column headerText="Fecha">
                     <p:commandLink action="#{mantenedorMantenciones.irEditarMaquinaria(m)}">

@@ -16,20 +16,26 @@
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      filterEvent="enter"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
-            <p:column headerText="Patente" width="60">
+            <p:column headerText="Patente" width="75">
+                <h:graphicImage
+                    rendered="#{not mantencionesMaquinaView.todosLosCheckRealizados(maquina)}"
+                    value="/img/icons/luz_roja.png"/>
+                <h:graphicImage
+                    rendered="#{mantencionesMaquinaView.todosLosCheckRealizados(maquina)}"
+                    value="/img/icons/luz_verde.png"/>
                 <p:commandLink action="#{tabsMantenciones.irHistorialMaquina(maquina)}" value="#{maquina.patente}"/>
             </p:column>
             <p:column headerText="Modelo" width="60">
                 <h:outputText value="#{maquina.modelo.nombre}"/>
             </p:column>
-            <p:column headerText="Calendario">
+            <p:column headerText="Calendario" style="padding:0">
                 <p:panelGrid>
                     <p:row>
                         <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
                             <p:repeat value="#{semana.dias}" var="dia">
                                 <ui:fragment rendered="#{dia.fecha ne null}">
-                                    <p:column style="width: 16px">
-                                        <p:outputLabel value="#{dia.fecha}">
+                                    <p:column style="width: 10px">
+                                        <p:outputLabel value="#{dia.fecha}" style="font-size: 7pt">
                                             <f:convertDateTime pattern="dd"/>
                                         </p:outputLabel>
                                     </p:column>

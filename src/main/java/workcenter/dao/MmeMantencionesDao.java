@@ -141,6 +141,14 @@ public class MmeMantencionesDao extends MyDao {
         Query q = em.createNamedQuery("MmeMantencionMaquina.findLastByMaquina", MmeMantencionMaquina.class);
         q.setParameter("maquina", maquina);
         q.setMaxResults(1);
+        
+        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
+        graph.addAttributeNodes("checkeoRealizado", "maquina");
+        
+        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
+        checkGraph.addAttributeNodes("tareaMaquina");
+        
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
 
         try {
             return (MmeMantencionMaquina) q.getSingleResult();
@@ -169,6 +177,14 @@ public class MmeMantencionesDao extends MyDao {
         q.setParameter("fecha", mantencion.getFecha());
         q.setParameter("maquina", mantencion.getMaquina());
         q.setMaxResults(1);
+        
+        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
+        graph.addAttributeNodes("checkeoRealizado", "maquina");
+        
+        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
+        checkGraph.addAttributeNodes("tareaMaquina");
+        
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
 
         try {
             return (MmeMantencionMaquina) q.getSingleResult();

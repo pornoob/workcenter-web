@@ -54,14 +54,14 @@
                 </p:column>
 
                 <p:column headerText="Última Hra. Componente" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
-                    <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas}"/>
+                    <h:outputText value="#{mantenedorMantenciones.obtenerHoraComponente(tarea)}"/>
                 </p:column>
 
                 <p:column headerText="Hras. Restantes" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:outputText value="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas}"/>
                 </p:column>
 
-                <p:column headerText="Estado">
+                <p:column headerText="Estado" rendered="#{mantenedorMantenciones.mantencionMaquina.id ne null}">
                     <h:graphicImage
                         rendered="#{mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas lt 0 and mantenedorMantenciones.ultimaMantencionMaquina.hrasAnotadas + tarea.cantHoras - mantenedorMantenciones.mantencionMaquina.hrasAnotadas lt -tarea.cantHoras/2}"
                         value="/img/icons/luz_roja.png"/>
