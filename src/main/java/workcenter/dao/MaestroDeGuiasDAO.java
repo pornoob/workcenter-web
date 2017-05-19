@@ -20,4 +20,11 @@ public class MaestroDeGuiasDAO {
                 .setParameter("ordenDeCarga", ordenConsulta)
                 .getSingleResult();
     }
+
+    public void guardarOrdenDeCarga(Vuelta ordenDeCarga) {
+        if (ordenDeCarga.getId() == null)
+            em.persist(ordenDeCarga);
+        else
+            em.merge(ordenDeCarga);
+    }
 }

@@ -40,7 +40,6 @@ public class MantenedorMaestroGuias implements Serializable{
     private List<TipoProducto> lstTipoDeProductos;
     private Producto producto;
     private GuiaPetroleo guiaPetroleo;
-    private List<GuiaPetroleo> lstGuiaDePetrolio;
     private List<EstacionServicio> lstEstacionServicio;
     private Date fechaDesde;
     private Date fechaHasta;
@@ -87,12 +86,21 @@ public class MantenedorMaestroGuias implements Serializable{
     }
 
     public void buscarTramoContrato(){
-        lstTipoDeProductos = new ArrayList<TipoProducto>();
+        lstTipoDeProductos = new ArrayList<>();
         lstTramoContrato = logicaTramoContrato.obtenerTramoPorContrato(empresaSeleccionada);
     }
 
     public void irGuardarProducto(){
         producto = new Producto();
+    }
+    
+    public void irEditarProducto(Producto p) {
+        producto = p;
+    }
+    
+    public void irEliminarProducto(Producto p) {
+        ordenDeCarga.getProductosList().remove(p);
+        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public void irGuiasDePretrolio(){
@@ -100,7 +108,16 @@ public class MantenedorMaestroGuias implements Serializable{
         System.err.println("se obtiene lstEstacionServicio, guia de pretroleo se instancea");
         lstEstacionServicio = logicaGuiaDePetroleo.obtenerEstacionesDeServicio();
         guiaPetroleo = new GuiaPetroleo();
-        lstGuiaDePetrolio = logicaGuiaDePetroleo.obtenerPetrolioPorOrden(ordenDeCarga);
+    }
+    
+    public void irEditarGuiaPetroleo(GuiaPetroleo gp) {
+        if (ordenDeCarga == null) return;
+        lstEstacionServicio = logicaGuiaDePetroleo.obtenerEstacionesDeServicio();
+        guiaPetroleo = gp;
+    }
+    
+    public void irEliminarGuiaPetroleo(GuiaPetroleo gp) {
+        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public void onRowSelect(SelectEvent event) {
@@ -119,8 +136,9 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void guardarGuiaDePetrolio(){
         System.err.println(guiaPetroleo);
-        guiaPetroleo.setOrdendecarga(ordenDeCarga.getId());
-        lstGuiaDePetrolio.add(guiaPetroleo);
+        guiaPetroleo.setOrdendecarga(ordenDeCarga);
+        ordenDeCarga.getGuiasPetroleo().add(guiaPetroleo);
+        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
         guiaPetroleo  = new GuiaPetroleo();
     }
 
@@ -128,6 +146,7 @@ public class MantenedorMaestroGuias implements Serializable{
         producto.setOrdencarga(ordenDeCarga);
         producto.setTramo(tramoContratoSeleccionado);
         ordenDeCarga.getProductosList().add(producto);
+        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public void irConsulta(){
@@ -148,6 +167,10 @@ public class MantenedorMaestroGuias implements Serializable{
         }catch (Exception ex){
             ex.printStackTrace();
         }
+    }
+    
+    public void guardarOrdenDeCarga() {
+        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public Integer getOrdenConsulta() {
@@ -252,14 +275,6 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void setGuiaPetroleo(GuiaPetroleo guiaPetroleo) {
         this.guiaPetroleo = guiaPetroleo;
-    }
-
-    public List<GuiaPetroleo> getLstGuiaDePetrolio() {
-        return lstGuiaDePetrolio;
-    }
-
-    public void setLstGuiaDePetrolio(List<GuiaPetroleo> lstGuiaDePetrolio) {
-        this.lstGuiaDePetrolio = lstGuiaDePetrolio;
     }
 
     public List<EstacionServicio> getLstEstacionServicio() {

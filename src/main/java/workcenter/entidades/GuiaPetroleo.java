@@ -59,8 +59,9 @@ public class GuiaPetroleo implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @Column(name = "ordendecarga")
-    private Integer ordendecarga;
+    @ManyToOne
+    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    private Vuelta ordendecarga;
     @ManyToOne
     @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
     private EstacionServicio estaciondeservicio;
@@ -135,11 +136,11 @@ public class GuiaPetroleo implements Serializable {
         this.fecha = fecha;
     }
 
-    public Integer getOrdendecarga() {
+    public Vuelta getOrdendecarga() {
         return ordendecarga;
     }
 
-    public void setOrdendecarga(Integer ordendecarga) {
+    public void setOrdendecarga(Vuelta ordendecarga) {
         this.ordendecarga = ordendecarga;
     }
 

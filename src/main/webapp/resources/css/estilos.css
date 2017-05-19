@@ -143,10 +143,6 @@ table {
     width: 100%;
 }
 
-.ui-datatable, .ui-widget {
-    font-size: 8pt;
-}
-
 .ui-datatable-empty-message {
     text-align: center;
 }

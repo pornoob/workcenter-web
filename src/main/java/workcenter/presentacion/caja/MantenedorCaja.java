@@ -72,9 +72,8 @@ public class MantenedorCaja implements Serializable {
 
     public void inicio() {
         inicializarDinero();
-        lstDineros = logicaCaja.obtenerDinerosConDescuentos();
-        lstPersonal = logicaPersonal.obtenerTodos();
         lstConceptos = logicaConceptos.obtenerConceptos();
+//        lstDineros = logicaCaja.obtenerDinerosConDescuentos();
     }
 
     public void inicializarDinero() {
@@ -145,12 +144,7 @@ public class MantenedorCaja implements Serializable {
         devolucion = 0;
         gastos = 0;
         motivos = constantes.getLstMotivos();
-        lstDinerosRendicion = new ArrayList<Dinero>();
-        for (Dinero d : lstDineros) {
-            if (d.getConcepto().getId() == constantes.getASIGNACION_CAJA() && d.getLstDescuentos().size() > 0) {
-                lstDinerosRendicion.add(d);
-            }
-        }
+        lstDinerosRendicion = logicaCaja.obtenerDinerosConDescuentos();
         return "flowRendirAsignacion";
     }
 
@@ -226,6 +220,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irAsignacionCaja(int tipoConcepto) {
+        lstPersonal = logicaPersonal.obtenerTodos();
         asignarConcepto(tipoConcepto);
         lstTipoDinero = constantes.getLstTipoDineros();
         dinero.setFechareal(new Date());

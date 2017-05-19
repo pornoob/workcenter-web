@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:tvp="http://transportesventanas.cl"
                 xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
@@ -39,10 +40,14 @@
                             <h:outputText value="#{ren.receptor.nombreCompleto}" />
                         </p:column>
                         <p:column headerText="FECHA">
-                            <h:outputText value="#{ren.fechaactivo}" />
+                            <h:outputText value="#{ren.fechaactivo}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
                         </p:column>
                         <p:column headerText="MONTO">
-                            <h:outputText value="#{ren.monto}" />
+                            <h:outputText value="#{ren.monto}">
+                                <tvp:convertNumber groupingUsed="true"/>
+                            </h:outputText>
                         </p:column>
                     </p:dataTable>
                 </h:panelGrid>
