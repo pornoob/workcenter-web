@@ -17,7 +17,7 @@
                     <td>
                         <p:inputText value="#{mantenedorMaestroGuias.ordenConsulta}">
                             <p:ajax event="change" listener="#{mantenedorMaestroGuias.consultarOrdenDeCarga}" update="frmMaestroguias"/>
-                         </p:inputText>
+                        </p:inputText>
                     </td>
                     <td></td>
                     <td></td>
@@ -101,15 +101,15 @@
                 </h:panelGrid>
                 <h:panelGrid columns="1" cellpadding="5">
                     <p:outputLabel value="KM RECORRIDOS: ">
-                    <p:outputLabel value="0"/>
+                        <p:outputLabel value="0"/>
                     </p:outputLabel>
 
                     <p:outputLabel value="RENDIMIENTO: ">
-                    <p:outputLabel value="0 "/>
+                        <p:outputLabel value="0 "/>
                     </p:outputLabel>
 
                     <p:outputLabel value="TOTAL GASTO: ">
-                    <p:outputLabel value="0 "/>
+                        <p:outputLabel value="0 "/>
                     </p:outputLabel>
                 </h:panelGrid>
                 <f:facet name="actions">
@@ -129,17 +129,29 @@
                                  emptyMessage="No hay productos Asociados a la Orden"
                                  sortMode="true"
                                  var="p">
-                        <p:column>
+                        <p:column headerText="N° Guía">
                             <p:outputLabel value="#{p.numeroguia}"/>
                         </p:column>
-                        <p:column>
+                        <p:column headerText="Tipo Producto">
                             <p:outputLabel value="#{p.tramo.tipoProducto.etiqueta}"/>
                         </p:column>
-                        <p:column>
-                            <p:outputLabel value="#{p.fechacarga}"/>
+                        <p:column headerText="Fecha de carga">
+                            <p:outputLabel value="#{p.fechacarga}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </p:outputLabel>
+                        </p:column>
+                        <p:column headerText="Fecha de descarga">
+                            <p:outputLabel value="#{p.fechadescarga}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </p:outputLabel>
                         </p:column>
                         <p:column>
-                            <p:outputLabel value="#{p.fechadescarga}"/>
+                            <p:commandButton icon="fa fa-edit"
+                                             oncomplete="PF('wProducto').show()"
+                                             action="#{mantenedorMaestroGuias.irEditarProducto(p)}"/>
+                            <p:commandButton icon="fa fa-remove"
+                                             update="dtProductos"
+                                             action="#{mantenedorMaestroGuias.irEliminarProducto(p)}"/>
                         </p:column>
                     </p:dataTable>
                 </h:panelGrid>
@@ -152,7 +164,7 @@
             </p:panel>
             <p:panel id="pAccion" header="Acción" style="margin-bottom:20px">
                 <h:panelGrid columns="5" cellpadding="10">
-                    <p:commandButton value="Guardar OC"/>
+                    <p:commandButton value="Guardar OC" action="#{mantenedorMaestroGuias.guardarOrdenDeCarga()}"/>
                     <p:commandButton value="Imprimir IC con Colilla"/>
                     <p:commandButton value="Imprimir IC"/>
                     <p:commandButton value="Imprimir Dinero Viaje"/>
@@ -162,7 +174,7 @@
         </h:form>
 
 
-<!--FROM PRODUCTO -->
+        <!--FROM PRODUCTO -->
         <h:form id="frmProducto">
             <p:dialog id="dProducto"
                       widgetVar="wProducto"
@@ -175,17 +187,22 @@
                             <p:inputText value="#{mantenedorMaestroGuias.producto.numeroguia}"/>
                         </p:outputLabel>
                         <p:outputLabel value="CLIENTE:">
-                            <p:selectOneMenu value="#{mantenedorMaestroGuias.empresaSeleccionada}" converter="entityConverter">
+                            <p:selectOneMenu value="#{mantenedorMaestroGuias.empresaSeleccionada}"
+                                             filter="true" filterMatchMode="contains"
+                                             converter="entityConverter">
                                 <f:selectItems value="#{mantenedorMaestroGuias.lstEmpresas}" var="emp"
                                                itemLabel="#{emp.empresa.nombre}" itemValue="#{emp}"/>
                                 <p:ajax event="change" listener="#{mantenedorMaestroGuias.buscarTramoContrato()}" update="frmProducto:cbProducto itDestino itOrigen"/>
                             </p:selectOneMenu>
                         </p:outputLabel>
                         <p:outputLabel value="PRODUCTO:">
-                            <p:selectOneMenu id="cbProducto" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado}" converter="entityConverter">
+                            <p:selectOneMenu id="cbProducto" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado}"
+                                             filter="true" filterMatchMode="contains"
+                                             disabled="#{mantenedorMaestroGuias.empresaSeleccionada eq null}"
+                                             converter="entityConverter">
                                 <f:selectItems value="#{mantenedorMaestroGuias.lstTramoContrato}" var="pro"
                                                itemLabel="#{pro.tipoProducto.etiqueta}___
-                                                Origen:#{pro.origen.nombre}/Destino:#{pro.destino.nombre}" itemValue="#{pro}"/>
+                                               Origen:#{pro.origen.nombre}/Destino:#{pro.destino.nombre}" itemValue="#{pro}"/>
                                 <p:ajax event="change" update="pOrigenDestino"/>
                             </p:selectOneMenu>
                         </p:outputLabel>
@@ -196,7 +213,7 @@
                         <p:outputLabel value="Fecha">
                             <p:calendar id="cCarga"
                                         value="#{mantenedorMaestroGuias.producto.fechacarga}"
-                                        pattern="MM/dd/yyyy HH:mm:ss"
+                                        pattern="dd-MM-yyyy"
                                         locale="es"/>
                         </p:outputLabel>
                     </h:panelGrid>
@@ -206,12 +223,12 @@
                         <p:outputLabel value="Fecha">
                             <p:calendar id="cDescarga"
                                         value="#{mantenedorMaestroGuias.producto.fechadescarga}"
-                                        pattern="yyyy-MM-dd HH:mm:ss"
+                                        pattern="dd-MM-yyyy"
                                         locale="es"/>
                         </p:outputLabel>
                     </h:panelGrid>
                 </p:panel>
-                <p:panel id="pOrigenDestino" header="ORIGEN/DESTINO:">
+                <p:panel id="pOrigenDestino" header="TONELAJE ORIGEN/DESTINO:">
                     <h:panelGrid columns="2" cellpadding="4">
                         <p:outputLabel value="ORIGEN:">
                             <p:outputLabel id="itOrigen" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado.origen.nombre}"/>
@@ -220,7 +237,7 @@
                             <p:outputLabel id="itDestino" value="#{mantenedorMaestroGuias.tramoContratoSeleccionado.destino.nombre}"/>
                         </p:outputLabel>
                         <p:inputText value="#{mantenedorMaestroGuias.producto.tonsalida}"/>
-                        <p:inputText value="#{mantenedorMaestroGuias.producto.tonsalida}"/>
+                        <p:inputText value="#{mantenedorMaestroGuias.producto.tonentrega}"/>
                     </h:panelGrid>
                 </p:panel>
                 <p:panel>
@@ -235,7 +252,7 @@
         </h:form>
 
 
-<!--FORM PETROLEO-->
+        <!--FORM PETROLEO-->
         <h:form id="frmPetrolio">
             <p:dialog id="dPetrolio"
                       widgetVar="wPetrolio"
@@ -276,7 +293,7 @@
                     </f:facet>
                 </p:panel>
                 <p:dataTable id="dtPetrolio"
-                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
+                             value="#{mantenedorMaestroGuias.ordenDeCarga.guiasPetroleo}"
                              emptyMessage="No hay guias de petrolio asociadas a la orden"
                              sortMode="true"
                              var="petroleo"
@@ -299,6 +316,15 @@
                     </p:column>
                     <p:column headerText="Total">
                         <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
+                    </p:column>
+
+                    <p:column headerText="Total">
+                        <p:commandButton icon="fa fa-edit"
+                                         oncomplete="PF('wProducto').show()"
+                                         action="#{mantenedorMaestroGuias.irEditarGuiaPetroleo(petroleo)}"/>
+                        <p:commandButton icon="fa fa-remove"
+                                         update="dtPetrolio"
+                                         action="#{mantenedorMaestroGuias.irEliminarGuiaPetroleo(petroleo)}"/>
                     </p:column>
                 </p:dataTable>
 
@@ -349,7 +375,7 @@
                     </h:panelGrid>
                 </p:panel>
                 <p:dataTable id="dtConsulta"
-                             value="#{mantenedorMaestroGuias.lstGuiaDePetrolio}"
+                             value="#{mantenedorMaestroGuias.guiaPetroleo}"
                              emptyMessage="No hay guias de petrolio asociadas a la orden"
                              sortMode="true"
                              var="petroleo"

@@ -9,6 +9,7 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -79,8 +80,11 @@ public class Vuelta implements Serializable {
     @ManyToOne
     @JoinColumn(name = "batea", referencedColumnName = "patente")
     private Equipo batea;
-    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER,orphanRemoval = true)
+    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
     private List<Producto> productosList;
+    
+    @OneToMany(mappedBy = "ordendecarga", fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
+    private List<GuiaPetroleo> guiasPetroleo;
 
     public Vuelta() {
         this.tracto = new Equipo();
@@ -206,21 +210,37 @@ public class Vuelta implements Serializable {
         this.productosList = productosList;
     }
 
+    public List<GuiaPetroleo> getGuiasPetroleo() {
+        return guiasPetroleo;
+    }
+
+    public void setGuiasPetroleo(List<GuiaPetroleo> guiasPetroleo) {
+        this.guiasPetroleo = guiasPetroleo;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 71 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Vuelta)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Vuelta other = (Vuelta) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final Vuelta other = (Vuelta) obj;
+        if (this.id == null || other.id == null) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
             return false;
         }
         return true;
