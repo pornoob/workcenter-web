@@ -1,0 +1,52 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml"
+                xmlns:tvp="http://transportesventanas.cl">
+    <ui:define name="contenido">
+        <h:form>
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Mes"/>:
+                <p:inputText value="#{consultaFiniquitoView.mes}"/>
+                <p:outputLabel value="Año"/>:
+                <p:inputText value="#{consultaFiniquitoView.anio}"/>
+
+            </h:panelGrid>
+
+            <p:outputPanel>
+                <p:commandButton value="Volver" action="flowVolver"
+                                 icon="fa fa-arrow-left"/>
+                <p:commandButton value="Consultar" action="#{consultaFiniquitoView.consultar()}"
+                                 update="tblFiniquitos" icon="fa fa-search"/>
+            </p:outputPanel>
+
+            <p:dataTable id="tblFiniquitos"
+                         value="#{consultaFiniquitoView.finiquitos}" var="finiquito">
+                <p:column headerText="Fecha Finiquito">
+                    <h:outputText value="#{finiquito.fechaFiniquito}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Fecha Ingreso">
+                    <h:outputText value="#{finiquito.fechaIngreso}">
+                        <f:convertDateTime pattern="dd-MM-yyyy"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Trabajador">
+                    <h:outputText value="#{finiquito.trabajador.rut}">
+                        <tvp:convertNumber groupingUsed="true"/>
+                    </h:outputText>-#{finiquito.trabajador.digitoverificador}<br/>#{finiquito.trabajador.nombreCompleto}
+                </p:column>
+
+                <p:column headerText="Empleador">
+                    <h:outputText value="#{finiquito.empleador.rut}">
+                        <tvp:convertNumber groupingUsed="true"/>
+                    </h:outputText>-#{finiquito.empleador.digitoverificador}<br/>#{finiquito.empleador.nombre}
+                </p:column>
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>
+

@@ -51,4 +51,12 @@ public class FiniquitoDao {
         
         return q.getResultList();
     }
+
+    public List<Finiquito> obtenerFiniquitosTrabajador(Integer mes, Integer anio) {
+        Query q = em.createNamedQuery("Finiquito.findByMonthAndYear", Finiquito.class);
+        q.setParameter("month", mes);
+        q.setParameter("year", anio);
+        
+        return q.getResultList();
+    }
 }

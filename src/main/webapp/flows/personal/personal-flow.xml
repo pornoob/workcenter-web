@@ -9,6 +9,7 @@
     <view-state id="menu">
         <transition on="flowListarPersonal" to="personal"/>
         <transition on="flowFiniquitos" to="finiquitos"/>
+        <transition on="flowConsultaFiniquitos" to="finiquitos/consulta"/>
     </view-state>
     
     <view-state id="personal">

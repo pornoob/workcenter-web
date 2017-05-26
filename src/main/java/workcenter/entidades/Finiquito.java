@@ -34,9 +34,10 @@ import javax.xml.bind.annotation.XmlRootElement;
 @NamedQueries({
     @NamedQuery(name = "Finiquito.findAll", query = "SELECT f FROM Finiquito f")
     , @NamedQuery(name = "Finiquito.findById", query = "SELECT f FROM Finiquito f WHERE f.id = :id")
-    , @NamedQuery(name = "Finiquito.findByPersonMonthYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND YEAR(f.fechaFiniquito) = :year AND MONTH(f.fechaFiniquito) = :month")
-    , @NamedQuery(name = "Finiquito.findByPersonAndYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND YEAR(f.fechaFiniquito) = :year")
-    , @NamedQuery(name = "Finiquito.findByFactoryAndYear", query = "SELECT f FROM Finiquito f WHERE f.empleador = :factory and YEAR(f.fechaFiniquito) = :year")
+    , @NamedQuery(name = "Finiquito.findByPersonMonthYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND FUNCTION('YEAR', f.fechaFiniquito) = :year AND FUNCTION('MONTH', f.fechaFiniquito) = :month")
+    , @NamedQuery(name = "Finiquito.findByPersonAndYear", query = "SELECT f FROM Finiquito f WHERE f.trabajador = :person AND FUNCTION('YEAR', f.fechaFiniquito) = :year")
+    , @NamedQuery(name = "Finiquito.findByFactoryAndYear", query = "SELECT f FROM Finiquito f WHERE f.empleador = :factory and FUNCTION('YEAR', f.fechaFiniquito) = :year")
+    , @NamedQuery(name = "Finiquito.findByMonthAndYear", query = "SELECT f FROM Finiquito f WHERE FUNCTION('MONTH', f.fechaFiniquito) = :month and FUNCTION('YEAR', f.fechaFiniquito) = :year ORDER BY f.fechaIngreso DESC")
 })
 public class Finiquito implements Serializable {
 
