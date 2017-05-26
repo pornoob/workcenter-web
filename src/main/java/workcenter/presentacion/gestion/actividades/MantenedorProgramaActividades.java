@@ -71,14 +71,14 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     LogicaDocumentos logicaDocumentos;
 
     public String inicio() {
-        filasPlan = new ArrayList<String>();
+        filasPlan = new ArrayList<>();
         filasPlan.add("");
         obtenerResponsables();
         obtenerProgramas();
         obtenerActividades();
         contratos =  logicaProgramaActividades.obtenerContratos();
         anioSeleccionado = Calendar.getInstance().get(Calendar.YEAR);
-        mesesSeleccionados = new ArrayList<Mes>(constantes.getMeses());
+        mesesSeleccionados = new ArrayList<>(constantes.getMeses());
         return irMostrarPlan();
     }
 
@@ -88,7 +88,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
                 programa = programas.get(0);
             }
         }
-        cantActividades = new HashMap<Mes, Integer>();
+        cantActividades = new HashMap<>();
         for (Mes m : constantes.getMeses()) {
             cantActividades.put(m, 0);
         }
@@ -114,7 +114,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
             return null;
         }
         planSeleccionado = logicaProgramaActividades.obtenerPlan(programa, actividad, responsable, contrato, anioSeleccionado);
-        cantActividades = new HashMap<Mes, Integer>();
+        cantActividades = new HashMap<>();
         if (planSeleccionado == null) {
             FacesUtil.mostrarMensajeError("Operación Fallida", "No existe un programa para los datos seleccionados");
             return null;
@@ -194,16 +194,12 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
 
     public String ingresarEjecuciones(MpaPlanPrograma plan, Mes mes) {
         planSeleccionado = plan;
-        programa = plan.getIdPrograma();
-        actividad = plan.getIdActividad();
-        contrato = plan.getContrato();
-        responsable = plan.getRutResponsable();
         mesSeleccionado = mes;
         return "flowRealizarActividad";
     }
 
     public List<Descargable> obtenerDescargables() {
-        List<Descargable> descargables = new ArrayList<Descargable>();
+        List<Descargable> descargables = new ArrayList<>();
         List<MpaEjecucionPlan> ejecuciones = logicaProgramaActividades.obtenerEjecuciones(planSeleccionado, mesSeleccionado);
         for (MpaEjecucionPlan e : ejecuciones) {
             List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(e);
@@ -291,7 +287,7 @@ public class MantenedorProgramaActividades implements Serializable, WorkcenterFi
     }
 
     public List<MpaPlanPrograma> obtenerPlanes(MpaPrograma p) {
-        List<MpaPlanPrograma> planesFiltrados = new ArrayList<MpaPlanPrograma>();
+        List<MpaPlanPrograma> planesFiltrados = new ArrayList<>();
         if (planes != null) {
             for (MpaPlanPrograma plan : planes) {
                 if (plan.getIdPrograma().equals(p)) {

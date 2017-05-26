@@ -6,7 +6,10 @@
                 template="/templates/default.xhtml"
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
     <ui:define name="contenido">
-        <h2>Crear Plan de Actividades</h2>
+        <h2>
+            <h:outputText value="Crear Plan de Actividades" rendered="#{mantenedorProgramaActividades.planSeleccionado.id eq null}"/>
+            <h:outputText value="Editar Plan de Actividades" rendered="#{mantenedorProgramaActividades.planSeleccionado.id ne null}"/>
+        </h2>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmCrearProAct">
             <h:panelGrid columns="4">

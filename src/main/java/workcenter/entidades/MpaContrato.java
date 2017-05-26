@@ -2,6 +2,7 @@ package workcenter.entidades;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created by claudio on 04-12-14.
@@ -48,19 +49,30 @@ public class MpaContrato implements Serializable {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-
-        MpaContrato that = (MpaContrato) o;
-
-        if (this.getId() == null || that.getId() == null) return false;
-        else if (this.getId().intValue() != that.getId().intValue()) return false;
-        else return true;
+    public int hashCode() {
+        int hash = 7;
+        hash = 41 * hash + Objects.hashCode(this.id);
+        return hash;
     }
 
     @Override
-    public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
+            return false;
+        }
+        if (getClass() != obj.getClass()) {
+            return false;
+        }
+        final MpaContrato other = (MpaContrato) obj;
+        if (this.id == null || other.id == null) {
+            return false;
+        }
+        if (!Objects.equals(this.id, other.id)) {
+            return false;
+        }
+        return true;
     }
 }
