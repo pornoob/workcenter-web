@@ -7,6 +7,7 @@
                 xmlns:tvp="http://transportesventanas.cl">
     <ui:define name="contenido">
         <h:form>
+            <p:defaultCommand target="btnConsultar"/>
             <h:panelGrid columns="3">
                 <p:outputLabel value="Mes"/>:
                 <p:inputText value="#{consultaFiniquitoView.mes}"/>
@@ -18,7 +19,9 @@
             <p:outputPanel>
                 <p:commandButton value="Volver" action="flowVolver"
                                  icon="fa fa-arrow-left"/>
-                <p:commandButton value="Consultar" action="#{consultaFiniquitoView.consultar()}"
+                <p:commandButton value="Consultar"
+                                 id="btnConsultar"
+                                 action="#{consultaFiniquitoView.consultar()}"
                                  update="tblFiniquitos" icon="fa fa-search"/>
             </p:outputPanel>
 
@@ -34,6 +37,11 @@
                         <f:convertDateTime pattern="dd-MM-yyyy"/>
                     </h:outputText>
                 </p:column>
+                <p:column headerText="Monto">
+                    <h:outputText value="#{finiquito.monto}">
+                        <tvp:convertNumber  groupingUsed="true"/>
+                    </h:outputText>
+                </p:column>
                 <p:column headerText="Trabajador">
                     <h:outputText value="#{finiquito.trabajador.rut}">
                         <tvp:convertNumber groupingUsed="true"/>
@@ -44,6 +52,12 @@
                     <h:outputText value="#{finiquito.empleador.rut}">
                         <tvp:convertNumber groupingUsed="true"/>
                     </h:outputText>-#{finiquito.empleador.digitoverificador}<br/>#{finiquito.empleador.nombre}
+                </p:column>
+                
+                <p:column headerText="">
+                    <p:commandButton icon="fa fa-remove"
+                                     update="tblFiniquitos"
+                                     action="#{consultaFiniquitoView.eliminar(finiquito)}"/>
                 </p:column>
             </p:dataTable>
         </h:form>

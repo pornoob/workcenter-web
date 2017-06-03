@@ -59,4 +59,9 @@ public class FiniquitoDao {
         
         return q.getResultList();
     }
+
+    public void eliminar(Finiquito finiquito) {
+        Finiquito finiquitoToRemove = em.find(Finiquito.class, finiquito.getId());
+        em.remove(finiquitoToRemove);
+    }
 }

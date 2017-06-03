@@ -42,6 +42,11 @@ public class ConsultaFiniquitoView implements Serializable {
     public void consultar() {
         finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(mes, anio);
     }
+    
+    public void eliminar(Finiquito finiquito) {
+        logicaFiniquito.eliminar(finiquito);
+        finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(mes, anio);
+    }
 
     public Integer getMes() {
         return mes;
