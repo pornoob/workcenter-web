@@ -5,11 +5,15 @@
         http://www.springframework.org/schema/webflow
         http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
 
-      <on-start>
-            <evaluate expression="mantenedorMaestroGuias.inicio()" />
-      </on-start>
+    <on-start>
+        <evaluate expression="mantenedorMaestroGuias.inicio()" />
+    </on-start>
 
-      <view-state id="maestro_guias">
-            <!--<transition on="flowMostrarCalendario" to="mostrarCalendario"/>-->
-      </view-state>
+    <view-state id="maestro_guias">
+        <transition on="flowConsulta" to="consulta"/>
+    </view-state>
+    
+    <view-state id="consulta">
+        <transition on="flowVolver" to="maestro_guias"/>
+    </view-state>
 </flow>

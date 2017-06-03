@@ -1,11 +1,14 @@
 package workcenter.negocio.maestro_guias;
 
+import java.util.Date;
+import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MaestroDeGuiasDAO;
+import workcenter.entidades.Personal;
 import workcenter.entidades.Vuelta;
 
 /**
@@ -23,5 +26,9 @@ public class LogicaMaestroGuias {
     @Transactional(readOnly = false)
     public void guardarOrdenDeCarga(Vuelta ordenDeCarga) {
         maestroDeGuiasDAO.guardarOrdenDeCarga(ordenDeCarga);
+    }
+
+    public List<Vuelta> buscar(Date fechaDesde, Date fechaHasta, Personal conductor) {
+        return maestroDeGuiasDAO.buscar(fechaDesde, fechaHasta, conductor);
     }
 }
