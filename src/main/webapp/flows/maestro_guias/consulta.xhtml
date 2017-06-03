@@ -41,18 +41,30 @@
                 <p:commandButton value="Buscar"
                                  id="btnBuscar"
                                  icon="fa fa-search"
+                                 update="resultados"
                                  action="#{mantenedorMaestroGuias.buscarGuias()}"/>
             </p:panel>
-            
+
             <p:outputPanel id="resultados">
-                <p:dataTable value="#{mantenedorMaestroGuias.ordenesCarga}"
-                             var="oc">
-                    <p:column headerText="N° O.C.">
-                        <h:outputText value="#{oc.id}">
-                            <tvp:convertNumber groupingUsed="true"/>
-                        </h:outputText>
-                    </p:column>
-                </p:dataTable>
+                <p:panel header="Resultados">
+                    <p:dataTable value="#{mantenedorMaestroGuias.ordenesCarga}"
+                                 var="oc">
+                        <p:column headerText="O.C.">
+                            <h:outputText value="#{oc.id}">
+                                <tvp:convertNumber groupingUsed="true"/>
+                            </h:outputText>
+                        </p:column>
+                        <p:column headerText="Conductor">
+                            <h:outputText value="#{oc.conductor.nombreCompleto}"/>
+                        </p:column>
+                        <p:column headerText="Tracto">
+                            <h:outputText value="#{oc.tracto.patente}"/>
+                        </p:column>
+                        <p:column headerText="Batea">
+                            <h:outputText value="#{oc.batea.patente}"/>
+                        </p:column>
+                    </p:dataTable>
+                </p:panel>
             </p:outputPanel>
         </h:form>
     </ui:define>
