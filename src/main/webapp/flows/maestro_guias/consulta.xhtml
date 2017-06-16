@@ -48,20 +48,29 @@
             <p:outputPanel id="resultados">
                 <p:panel header="Resultados">
                     <p:dataTable value="#{mantenedorMaestroGuias.ordenesCarga}"
-                                 var="oc">
+                                 var="oc" tableStyle="table-layout:auto">
                         <p:column headerText="O.C.">
                             <h:outputText value="#{oc.id}">
                                 <tvp:convertNumber groupingUsed="true"/>
                             </h:outputText>
                         </p:column>
-                        <p:column headerText="Conductor">
-                            <h:outputText value="#{oc.conductor.nombreCompleto}"/>
+                        <p:column headerText="Fecha">
+                            <h:outputText value="#{oc.fecha}">
+                                <f:convertDateTime pattern="dd-MM-yyyy"/>
+                            </h:outputText>
                         </p:column>
                         <p:column headerText="Tracto">
                             <h:outputText value="#{oc.tracto.patente}"/>
                         </p:column>
                         <p:column headerText="Batea">
-                            <h:outputText value="#{oc.batea.patente}"/>
+                            <h:outputText rendered="#{oc.batea ne null}" value="#{oc.batea.patente}"/>
+                        </p:column>
+                        <p:column headerText="Conductor">
+                            <h:outputText value="#{oc.conductor.nombreCompleto}"/>
+                        </p:column>
+                        <p:column headerText="Cantidad de Guías" styleClass="text-right">
+                            <h:outputText rendered="#{oc.guiasPetroleo ne null}" value="#{oc.guiasPetroleo.size()}"/>
+                            <h:outputText rendered="#{oc.guiasPetroleo eq null}" value="0"/>
                         </p:column>
                     </p:dataTable>
                 </p:panel>

@@ -36,6 +36,8 @@
                        rendered="#{sesionCliente.tienePermiso('CAJA')}"/>
             <p:tooltip for="mConsultaDocEquipo" value="Consulta Documentos Equipos"
                        rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
+            <p:tooltip for="mMaestroGuias" value="Maestro de Guias"
+                       rendered="#{sesionCliente.tienePermiso('MAESTRO_DE_GUIAS')}"/>
         </ui:fragment>
 
         <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
@@ -87,6 +89,9 @@
             <p:menuitem id="mConsultaDocEquipo" styleClass="fa fa-search fa-1x" style="color: black; font-size: 1.26em"
                         url="/m/consulta_doc_equipo" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
+            <p:menuitem id="mMaestroGuias" rendered="#{sesionCliente.tienePermiso('MAESTRO_DE_GUIAS')}"
+                        url="/m/maestro_guias" ajax="false"
+                        styleClass="fa fa-file-text"  style="color: black; font-size: 1.26em"/>
         </p:tabMenu>
     </h:form>
 </ui:composition>
