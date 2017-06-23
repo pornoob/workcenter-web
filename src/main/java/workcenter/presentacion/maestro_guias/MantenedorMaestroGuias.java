@@ -14,11 +14,13 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.tramo_contrato.LogicaTramoContrato;
 
 import java.io.Serializable;
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by renholders on 23-11-2015.
@@ -26,7 +28,8 @@ import java.util.List;
 @Component
 @Scope("flow")
 public class MantenedorMaestroGuias implements Serializable{
-
+    private static final Logger LOG = Logger.getLogger(MantenedorMaestroGuias.class.getName());
+    
     private Integer ordenConsulta;
     private Vuelta ordenDeCarga;
     private List<Equipo> lstEquipos;
@@ -43,17 +46,22 @@ public class MantenedorMaestroGuias implements Serializable{
     private List<EstacionServicio> lstEstacionServicio;
     private Date fechaDesde;
     private Date fechaHasta;
+    private Personal conductor;
+    private List<Personal> conductores;
+    private List<Vuelta> ordenesCarga;
+    
     @Autowired
-    LogicaMaestroGuias logicaMaestroGuias;
+    private LogicaMaestroGuias logicaMaestroGuias;
     @Autowired
-    LogicaEquipos logicaEquipos;
+    private LogicaEquipos logicaEquipos;
     @Autowired
-    LogicaPersonal logicaPersonal;
+    private LogicaPersonal logicaPersonal;
     @Autowired
-    LogicaContratoEmpresa logicaContratoEmpresa;
-    @Autowired LogicaTramoContrato logicaTramoContrato;
+    private LogicaContratoEmpresa logicaContratoEmpresa;
     @Autowired
-    LogicaGuiaDePetroleo logicaGuiaDePetroleo;
+    private LogicaTramoContrato logicaTramoContrato;
+    @Autowired
+    private LogicaGuiaDePetroleo logicaGuiaDePetroleo;
 
     public void inicio(){
         ordenDeCarga = new Vuelta();
@@ -61,6 +69,10 @@ public class MantenedorMaestroGuias implements Serializable{
         lstConductores = logicaPersonal.obtenerConductores();
         lstBateas = logicaEquipos.obtenerBateas();
         lstEmpresas = logicaContratoEmpresa.obtenerContratoEmpresas();
+    }
+    
+    public void buscarGuias() {
+        ordenesCarga = logicaMaestroGuias.buscar(fechaDesde, fechaHasta, conductor);
     }
 
     public void consultarOrdenDeCarga(){
@@ -70,11 +82,7 @@ public class MantenedorMaestroGuias implements Serializable{
     public boolean estaBloqueado() {
         if (ordenDeCarga.getConductor() != null){
         ordenDeCarga.getConductor().setSancion(logicaPersonal.obtenerSancion(ordenDeCarga.getConductor()));
-        if (ordenDeCarga.getConductor().getSancion() == null) {
-            return false;
-        } else {
-            return true;
-        }
+            return ordenDeCarga.getConductor().getSancion() != null;
         }
         return false;
     }
@@ -149,7 +157,7 @@ public class MantenedorMaestroGuias implements Serializable{
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
-    public void irConsulta(){
+    public String irConsulta(){
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String fechaDesdeTmp = sdf.format(new Date());
         String fechaHastaTmp = sdf.format(new Date());
@@ -164,9 +172,11 @@ public class MantenedorMaestroGuias implements Serializable{
             SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
             fechaDesde = sdfParse.parse(fechaDesdeTmp);
             fechaHasta = sdfParse.parse(fechaHastaTmp);
-        }catch (Exception ex){
-            ex.printStackTrace();
+            conductores = logicaPersonal.obtenerConductores();
+        }catch (NumberFormatException | ParseException ex){
+            LOG.info(ex.getMessage());
         }
+        return "flowConsulta";
     }
     
     public void guardarOrdenDeCarga() {
@@ -299,5 +309,29 @@ public class MantenedorMaestroGuias implements Serializable{
 
     public void setFechaHasta(Date fechaHasta) {
         this.fechaHasta = fechaHasta;
+    }
+
+    public Personal getConductor() {
+        return conductor;
+    }
+
+    public void setConductor(Personal conductor) {
+        this.conductor = conductor;
+    }
+
+    public List<Personal> getConductores() {
+        return conductores;
+    }
+
+    public void setConductores(List<Personal> conductores) {
+        this.conductores = conductores;
+    }
+
+    public List<Vuelta> getOrdenesCarga() {
+        return ordenesCarga;
+    }
+
+    public void setOrdenesCarga(List<Vuelta> ordenesCarga) {
+        this.ordenesCarga = ordenesCarga;
     }
 }

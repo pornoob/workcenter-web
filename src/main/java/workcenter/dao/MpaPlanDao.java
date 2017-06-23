@@ -118,8 +118,10 @@ public class MpaPlanDao {
             q.setParameter("plan", plan.getId());
 
             List<Object[]> resultados = q.list();
-            if (((Integer) resultados.get(0)[0]).intValue() > 0) {
-                return (float) ((BigInteger) resultados.get(0)[1]).intValue() / ((Integer) resultados.get(0)[0]).intValue();
+            if (((Integer)resultados.get(0)[0]) == 0) {
+                return 1;
+            } else {
+                return (float) ((BigInteger) resultados.get(0)[1]).intValue() / ((Integer) resultados.get(0)[0]);
             }
         } catch (Exception e) {
 //            System.err.println(sql.toString()
@@ -183,7 +185,9 @@ public class MpaPlanDao {
                     .setParameter("anio", anio)
                     .setMaxResults(1)
                     .getSingleResult();
-        } catch (Exception e) { return null; }
+        } catch (Exception e) {
+            return null;
+        }
     }
 
     public List<MpaContrato> obtenerContratos(Servicio servicio) {

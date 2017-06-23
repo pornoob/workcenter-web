@@ -360,6 +360,10 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     }
 }
 
+.text-right {
+    text-align: right;
+}
+
 /*** Estilos para grillas sin bordes ***/
 table.ui-panelgrid.no-border-grid {
     border:0;

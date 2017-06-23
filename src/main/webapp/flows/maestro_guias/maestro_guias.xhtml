@@ -165,10 +165,12 @@
             <p:panel id="pAccion" header="Acción" style="margin-bottom:20px">
                 <h:panelGrid columns="5" cellpadding="10">
                     <p:commandButton value="Guardar OC" action="#{mantenedorMaestroGuias.guardarOrdenDeCarga()}"/>
+                    <ui:remove>
                     <p:commandButton value="Imprimir IC con Colilla"/>
                     <p:commandButton value="Imprimir IC"/>
                     <p:commandButton value="Imprimir Dinero Viaje"/>
-                    <p:commandButton value="Consultar" oncomplete="PF('wConsulta').show()" action="#{mantenedorMaestroGuias.irConsulta}" update="frmConsulta"/>
+                    </ui:remove>
+                    <p:commandButton value="Consultar" action="#{mantenedorMaestroGuias.irConsulta}"/>
                 </h:panelGrid>
             </p:panel>
         </h:form>
@@ -330,78 +332,6 @@
 
             </p:dialog>
         </h:form>
-
-        <!-- CONSULTA -->
-        <p:dialog id="dlgConsulta"
-                  widgetVar="wConsulta"
-                  width="800" height="300"
-                  modal="true"
-                  header="Consulta Orden De Carga">
-            <h:form id="frmConsulta">
-                <p:panel id="pnlFiltros" header="Filtros">
-                    <h:panelGrid columns="4" cellpadding="5">
-                        <p:outputLabel value="Fecha Desde: "/>
-                        <p:calendar navigator="true"
-                                    pattern="yyyy-MM-dd"
-                                    placeholder="Desde..."
-                                    locale="es"
-                                    value="#{mantenedorMaestroGuias.fechaDesde}"/>
-                        <p:outputLabel value="Hasta: "/>
-                        <p:calendar navigator="true"
-                                    pattern="yyyy-MM-dd"
-                                    placeholder="Hasta..."
-                                    locale="es"
-                                    value="#{mantenedorMaestroGuias.fechaHasta}" />
-                        <p:outputLabel value="Personal: "/>
-                        <p:selectOneMenu filterMatchMode="contains"
-                                         filter="true"
-                                         converter="entityConverter" value="#{mantenedorCaja.personal}">
-                            <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                            <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                           itemLabel="#{p.nombreCompleto}"
-                                           itemValue="#{p}"/>
-                        </p:selectOneMenu>
-                        <p:outputLabel value=""/>
-                        <p:outputLabel value=""/>
-                        <p:outputLabel value=""/>
-                        <p:outputLabel value=""/>
-                        <p:commandButton value="Buscar"
-                                         icon="fa fa-search"
-                                         action="#{mantenedorCaja.filtrarDinerosConsulta()}"
-                                         />
-                        <p:outputLabel value=""/>
-                        <p:outputLabel value=""/>
-                        <p:outputLabel value=""/>
-                    </h:panelGrid>
-                </p:panel>
-                <p:dataTable id="dtConsulta"
-                             value="#{mantenedorMaestroGuias.guiaPetroleo}"
-                             emptyMessage="No hay guias de petrolio asociadas a la orden"
-                             sortMode="true"
-                             var="petroleo"
-                             selectionMode="single"
-                             selection="#{mantenedorMaestroGuias.guiaPetroleo}" rowKey="#{petroleo}">
-                    <p:ajax event="rowSelect" listener="#{mantenedorMaestroGuias.onRowSelect}" update="frmPetrolio:pPetrolioGuardar"/>
-                    <p:ajax event="rowUnselect" listener="#{mantenedorMaestroGuias.onRowUnselect}" update="frmPetrolio:pPetrolioGuardar" />
-
-                    <p:column headerText="Guía">
-                        <p:outputLabel value="#{petroleo.numeroguia}"/>
-                    </p:column>
-                    <p:column headerText="Fecha">
-                        <p:outputLabel value="#{petroleo.fecha}"/>
-                    </p:column>
-                    <p:column headerText="Litros">
-                        <p:outputLabel value="#{petroleo.litros}"/>
-                    </p:column>
-                    <p:column headerText="Precio Litro">
-                        <p:outputLabel value="#{petroleo.preciolitro}"/>
-                    </p:column>
-                    <p:column headerText="Total">
-                        <p:outputLabel value="#{mantenedorMaestroGuias.calcularTotalRendicion(petroleo)}"/>
-                    </p:column>
-                </p:dataTable>
-            </h:form>
-        </p:dialog>
 
     </ui:define>
 </ui:composition>

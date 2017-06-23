@@ -61,7 +61,12 @@
                     
                     <p:row>
                         <p:column colspan="3">
-                            <p:commandButton value="Ingresar" update="pFiniquito" action="#{ingresoFiniquitoView.guardar()}">
+                            <p:commandButton value="Volver" icon="fa fa-arrow-left"
+                                             action="flowVolver"/>
+                            <p:commandButton value="Ingresar"
+                                             icon="fa fa-plus"
+                                             update="pFiniquito" 
+                                             action="#{ingresoFiniquitoView.guardar()}">
                                 <p:resetInput target="pFiniquito"/>
                             </p:commandButton>
                         </p:column>

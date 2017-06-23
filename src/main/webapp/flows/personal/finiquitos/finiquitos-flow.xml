@@ -3,9 +3,19 @@
      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
      xsi:schemaLocation="
         http://www.springframework.org/schema/webflow
-        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
+        http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+     start-state="menu">
+    
+    <view-state id="menu">
+        <transition on="flowIngresar" to="ingresar"/>
+        <transition on="flowConsultar" to="consulta"/>
+    </view-state>
     
     <view-state id="ingresar">
-        
+        <transition on="flowVolver" to="menu"/>
+    </view-state>
+    
+    <view-state id="consulta">
+        <transition on="flowVolver" to="menu"/>
     </view-state>
 </flow>

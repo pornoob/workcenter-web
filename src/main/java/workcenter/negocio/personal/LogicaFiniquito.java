@@ -38,4 +38,12 @@ public class LogicaFiniquito {
     public List<Finiquito> obtenerFiniquitosTrabajador(Empresa empleador, Integer anio) {
         return finiquitoDao.obtenerFiniquitosTrabajador(empleador, anio);
     }
+
+    public List<Finiquito> obtenerFiniquitosTrabajador(Integer mes, Integer anio) {
+        return finiquitoDao.obtenerFiniquitosTrabajador(mes, anio);
+    }
+
+    public void eliminar(Finiquito finiquito) {
+        finiquitoDao.eliminar(finiquito);
+    }
 }
