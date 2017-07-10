@@ -46,8 +46,8 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionTracto> obtenerUltimasMantenciones(Integer mes, Integer anio) {
-        return mmeMantencionesDao.obtenerUltimasMantenciones(mes, anio);
+    public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
+        return mmeMantencionesDao.obtenerUltimasMantenciones();
     }
 
     @Transactional(readOnly = true, noRollbackFor = SQLGrammarException.class)
@@ -61,8 +61,8 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques(Integer mes, Integer anio) {
-        return mmeMantencionesDao.obtenerUltimasMantencionesSemiremolques(mes, anio);
+    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
+        return mmeMantencionesDao.obtenerUltimasMantencionesSemiremolques();
     }
 
     @Transactional(readOnly = true)

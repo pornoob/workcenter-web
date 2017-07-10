@@ -47,7 +47,7 @@ public class MmeMantencionesDao extends MyDao {
         }
     }
 
-    public List<MmeMantencionTracto> obtenerUltimasMantenciones(Integer mes, Integer anio) {
+    public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.id_tipo, m.fecha as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
         sql.append("from mme_mantenciones_tractos m ");
@@ -55,11 +55,8 @@ public class MmeMantencionesDao extends MyDao {
         sql.append("select max(fecha) as fecha,equipo from mme_mantenciones_tractos group by 2");
         sql.append(") u on m.fecha = u.fecha and m.equipo = u.equipo ");
         sql.append("where m.id_tipo is not null ");
-        sql.append("and YEAR(m.fecha) = :anio and MONTH(m.fecha) = :mes ");
         sql.append("order by u.fecha desc");
         return em.createNativeQuery(sql.toString(), MmeMantencionTracto.class)
-                .setParameter("mes", mes)
-                .setParameter("anio", anio)
                 .getResultList();
     }
 
@@ -94,15 +91,12 @@ public class MmeMantencionesDao extends MyDao {
         }
     }
 
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques(Integer mes, Integer anio) {
+    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable ");
         sql.append("from mme_mantenciones_semiremolque m ");
-        sql.append("WHERE YEAR(m.fecha) = :anio and MONTH(m.fecha) = :mes ");
         sql.append("group by m.equipo order by fecha desc ");
         return em.createNativeQuery(sql.toString(), MmeMantencionSemiremolque.class)
-                .setParameter("mes", mes)
-                .setParameter("anio", anio)
                 .getResultList();
     }
 

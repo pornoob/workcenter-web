@@ -8,8 +8,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
-import javax.annotation.PostConstruct;
-import org.primefaces.event.TabChangeEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -41,19 +39,23 @@ public class TabsMantenciones implements Serializable {
     
     private Mes mesData;
 
-    private String tabSelected;
     private Integer mes;
     private Integer anio;
 
     @Autowired
     private LogicaMantenciones logicaMantenciones;
-
-    @PostConstruct
-    private void init() {
-        mes = (Integer) FacesUtil.obtenerVariableFlow("mes");
-        anio = (Integer) FacesUtil.obtenerVariableFlow("anio");
-        mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones(mes, anio);
-        tabSelected = "Tractos";
+    
+    public void cargarMantencionesSemiremolques() {
+        mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
+    }
+    
+    public void cargarMantencionesTracto() {
+        mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones();
+    }
+    
+    public void cargarMantencionesMaquinas() throws ParseException {
+        initMesData();
+        mantencionesMaquina = logicaMantenciones.obtenerUltimasMantencionesMaquina(mes, anio);
     }
     
     private void initMesData() throws ParseException {
@@ -97,39 +99,6 @@ public class TabsMantenciones implements Serializable {
                 }
             }
         }
-    }
-
-    public void onTabChange(TabChangeEvent event) throws ParseException {
-        mes = (Integer) FacesUtil.obtenerVariableFlow("mes");
-        anio = (Integer) FacesUtil.obtenerVariableFlow("anio");
-
-        if (null != event.getTab().getTitle()) {
-            tabSelected = event.getTab().getTitle();
-            cargarMantenciones(tabSelected);
-        }
-    }
-
-    private void cargarMantenciones(String tab) throws ParseException {
-        switch (tab) {
-            case "Tractos":
-                mantencionesTractos = logicaMantenciones.obtenerUltimasMantenciones(mes, anio);
-                break;
-            case "Semiremolques":
-                mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques(mes, anio);
-                break;
-            case "Máquinas":
-                initMesData();
-                mantencionesMaquina = logicaMantenciones.obtenerUltimasMantencionesMaquina(mes, anio);
-                break;
-            default:
-                break;
-        }
-    }
-
-    public void actualizarFiltros() throws ParseException {
-        mes = (Integer) FacesUtil.obtenerVariableFlow("mes");
-        anio = (Integer) FacesUtil.obtenerVariableFlow("anio");
-        cargarMantenciones(tabSelected);
     }
     
     public MmeMantencionMaquina obtenerMantencion(Equipo e, Date dia) throws ParseException {

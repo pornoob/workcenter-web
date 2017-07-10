@@ -8,7 +8,11 @@
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarSemiRemolque()}"
                          icon="ui-icon-plus"/>
+        <p:commandButton value="Cargar listado"
+                         action="#{tabsMantenciones.cargarMantencionesSemiremolques()}" icon="fa fa-refresh"
+                         update="tblBateas"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
+                     id="tblBateas" tableStyle="table-layout: auto"
                      value="#{tabsMantenciones.mantencionesSemiremolque}" var="ms"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"

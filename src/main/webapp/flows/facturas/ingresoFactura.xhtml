@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <h:form id="formFactura">
+            <p:panelGrid columns="3">
+                <p:outputLabel value="Número Factura"/>
+                <p:outputLabel value=":"/>
+                <p:inputText #{mantenedorFacturas.factura.numero}/>
+                
+                <p:outputLabel value="Proveedor (Emisor)"/>
+                <p:outputLabel value=":"/>
+                <p:selectOneMenu value="#{mantenedorFacturas.factura.emisor}"
+                                 converter="entityConverter"
+                                 filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                    <f:selectItems value="#{mantenedorFacturas.empresas}"
+                                   var='emisor' itemLabel="#{emisor.nombre}"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Cliente (Receptor)"/>
+                <p:outputLabel value=":"/>
+                <p:selectOneMenu value="#{mantenedorFacturas.factura.receptor}"
+                                 converter="entityConverter"
+                                 filter="true" filterMatchMode="contains">
+                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                    <f:selectItems value="#{mantenedorFacturas.empresas}"
+                                   var='receptor' itemLabel="#{receptor.nombre}"/>
+                </p:selectOneMenu>
+                
+                <p:outputLabel value="Fecha factura"/>
+                <p:outputLabel value=":"/>
+                <p:calendar value="#{mantenedorFacturas.factura.fecha}"
+                            pattern="dd-MM-yyyy" navigator="true"/>
+            </p:panelGrid>
+            
+            <p:outputLabel value='Ítems'/>
+            <p:dataTable value="#{mantenedorFacturas.factura.items}" var='item'>
+                <p
+            </p:dataTable>
+        </h:form>
+    </ui:define>
+</ui:composition>

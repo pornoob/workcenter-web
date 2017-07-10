@@ -52,25 +52,25 @@ var WebCenter = {
             $('.inputFilter').keypress(this.inputKeyPress.bind(this));
         },
         inputKeyDown: function (event) {
-            if (event.which == 13) {
+            if (event.which === 13) {
                 event.preventDefault();
                 return false;
             }
         },
         inputKeyUp: function (event) {
-            if (event.which == 13) {
+            if (event.which === 13) {
                 event.preventDefault();
                 PF(this.componente).filter();
             }
         },
         inputKeyPress: function (event) {
-            if (event.which == 13) {
+            if (event.which === 13) {
                 event.preventDefault();
                 return false;
             }
         }
     }
-}
+};
 
 PrimeFaces.locales['es'] = {
     closeText: 'Cerrar',

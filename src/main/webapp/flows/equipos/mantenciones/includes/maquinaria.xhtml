@@ -7,10 +7,22 @@
                 xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
 
     <p:tab title="Máquinas">
+        <p:fieldset legend="Filtros">
+            <h:panelGrid columns="3">
+                <p:outputLabel value="Mes"/>:
+                <p:inputText value="#{flowScope.mes}"/>
+                <p:outputLabel value="Año"/>:
+                <p:inputText value="#{flowScope.anio}"/>
+            </h:panelGrid>
+        </p:fieldset>
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarMaquinaria()}"
                          icon="ui-icon-plus"/>
+        <p:commandButton value="Cargar listado" update="tblMaquinas"
+                         icon="fa fa-refresh"
+                         action="#{tabsMantenciones.cargarMantencionesMaquinas()}"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
+                     id="tblMaquinas"
                      value="#{mantencionesMaquinaView.maquinas}" var="maquina"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
@@ -28,7 +40,7 @@
             <p:column headerText="Modelo" width="60">
                 <h:outputText value="#{maquina.modelo.nombre}"/>
             </p:column>
-            <p:column headerText="Calendario" style="padding:0">
+            <p:column headerText="Calendario" style="padding:0; overflow-x: auto">
                 <p:panelGrid>
                     <p:row>
                         <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
