@@ -40,7 +40,7 @@ public class FactDetalleFactura implements Serializable {
     @JoinColumn(name = "factura_id", referencedColumnName = "factura_id")
     private FactFactura factura;
     @ManyToOne
-    @Column(name = "producto_id")
+    @JoinColumn(name = "producto_id")
     private FactProducto producto;
     @Column(name = "precio_unitario")
     private Integer precioUnitario;
