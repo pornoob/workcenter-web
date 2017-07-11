@@ -45,7 +45,7 @@ public class ValorPrevisionPersonal implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "valor")
-    private double valor;
+    private Double valor;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechavigencia")
@@ -91,11 +91,11 @@ public class ValorPrevisionPersonal implements Serializable {
         this.unidad = unidad;
     }
 
-    public double getValor() {
+    public Double getValor() {
         return valor;
     }
 
-    public void setValor(double valor) {
+    public void setValor(Double valor) {
         this.valor = valor;
     }
 

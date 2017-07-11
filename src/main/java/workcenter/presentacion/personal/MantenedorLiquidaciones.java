@@ -187,14 +187,14 @@ public class MantenedorLiquidaciones implements Serializable {
 
             if (vPP.getPrevision().getTipo().equals("salud")) {
                 if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
-                    liquidacion.setDctoPrevision((int) vPP.getValor());
+                    liquidacion.setDctoPrevision(vPP.getValor().intValue());
                 } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
                     liquidacion.setDctoPrevision((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
                 } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {
                     liquidacion.setDctoPrevision((int) Math.round(vPP.getValor() * Float.parseFloat(uf.getValor())));
                 }
             } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
-                liquidacion.setDectoAFP((int) vPP.getValor());
+                liquidacion.setDectoAFP(vPP.getValor().intValue());
             } else if (vPP.getUnidad().getId().intValue() == constantes.getUnidadPorcentaje()) {
                 liquidacion.setDectoAFP((int) Math.round(liquidacion.getTotalImponible() * vPP.getValor() / 100));
             } else if (vPP.getUnidad().getId() == constantes.getUnidadUf()) {

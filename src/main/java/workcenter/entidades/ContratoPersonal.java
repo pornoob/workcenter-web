@@ -37,7 +37,7 @@ public class ContratoPersonal implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "sueldoBase")
-    private int sueldoBase;
+    private Integer sueldoBase;
     @Column(name = "vencimiento")
     @Temporal(TemporalType.DATE)
     private Date vencimiento;
@@ -100,11 +100,11 @@ public class ContratoPersonal implements Serializable {
         this.rut = rut;
     }
 
-    public int getSueldoBase() {
+    public Integer getSueldoBase() {
         return sueldoBase;
     }
 
-    public void setSueldoBase(int sueldoBase) {
+    public void setSueldoBase(Integer sueldoBase) {
         this.sueldoBase = sueldoBase;
     }
 

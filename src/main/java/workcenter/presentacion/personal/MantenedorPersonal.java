@@ -448,7 +448,7 @@ public class MantenedorPersonal implements Serializable {
         if (valorSalud == null) {
             valorSalud = new ValorPrevisionPersonal();
             valorSalud.setContrato(cp);
-            valorSalud.setValor(0);
+            valorSalud.setValor((double) 0);
             for (TipoUnidad tu : constantes.getTiposUnidad()) {
                 if (tu.getId().intValue() == constantes.getUnidadPesos()) {
                     valorSalud.setUnidad(tu);
@@ -461,7 +461,7 @@ public class MantenedorPersonal implements Serializable {
         if (valorAfp == null) {
             valorAfp = new ValorPrevisionPersonal();
             valorAfp.setContrato(cp);
-            valorAfp.setValor(0);
+            valorAfp.setValor((double) 0);
             for (TipoUnidad tu : constantes.getTiposUnidad()) {
                 if (tu.getId().intValue() == constantes.getUnidadPesos()) {
                     valorAfp.setUnidad(tu);
@@ -482,7 +482,7 @@ public class MantenedorPersonal implements Serializable {
         ValorPrevisionPersonal valorAfp = new ValorPrevisionPersonal();
 
         if (this.valorAfp.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
-            int valor = (int) this.valorAfp.getValor();
+            double valor = this.valorAfp.getValor().doubleValue();
             valorAfp.setValor(valor);
         } else {
             valorAfp.setValor(this.valorAfp.getValor());
@@ -516,7 +516,7 @@ public class MantenedorPersonal implements Serializable {
         }
 
         if (this.valorSalud.getUnidad().getId().intValue() == constantes.getUnidadPesos()) {
-            int valor = (int) this.valorSalud.getValor();
+            double valor = this.valorSalud.getValor().doubleValue();
             valorSalud.setValor(valor);
         } else {
             valorSalud.setValor(this.valorSalud.getValor());
