@@ -360,6 +360,10 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     }
 }
 
+.text-center {
+   text-align: center;
+}
+
 .text-right {
     text-align: right;
 }

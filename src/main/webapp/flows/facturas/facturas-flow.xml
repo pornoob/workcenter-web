@@ -3,7 +3,18 @@
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
     
+    <on-start>
+        <evaluate expression="mantenedorFacturas.init()"/>
+    </on-start>
+    
     <view-state id="ingresoFactura">
-        
+        <transition on="addProduct" to="bodega_taller"/>
     </view-state>
+    
+    <subflow-state id="bodega_taller" subflow="bodega_taller">
+        <input name="isChildFlow" value="true"/>
+        <transition on="end_flow" to="ingresoFactura">
+            <evaluate expression="mantenedorFacturas.reloadProducts()"/>
+        </transition>
+    </subflow-state>
 </flow>

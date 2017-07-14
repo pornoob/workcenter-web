@@ -7,6 +7,31 @@
 
     <ui:define name="contenido">
         <h:form id="formBodegaTaller">
+            
+            <h2>Bodega Taller</h2>
+            
+            <p:outputPanel styleClass="ui-g">
+                <p:outputPanel styleClass="ui-g-8">
+                    <p:outputLabel value="Nombre producto" styleClass="ui-g-6"/>
+                    <p:outputPanel styleClass="ui-g-6">
+                        <p:inputText/>
+                    </p:outputPanel>
+                </p:outputPanel>
+                <p:outputPanel styleClass="ui-g-4 text-right">
+                    <p:commandButton icon="fa fa-plus"
+                                     value="Agregar producto"/>
+                    <p:commandButton icon="fa fa-arrow-left"
+                                     rendered="#{isChildFlow}"
+                                     action="back"
+                                     value="Volver"/>
+                </p:outputPanel>
+            </p:outputPanel>
+            <p:dataTable>
+                <p:column headerText="Id"></p:column>
+                <p:column headerText="Nombre"></p:column>
+                <p:column headerText="Proveedores"></p:column>
+                <p:column headerText="Precio Actual"></p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
 </ui:composition>

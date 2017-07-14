@@ -107,7 +107,9 @@ public class FactDetalleFactura implements Serializable {
     @Override
     public int hashCode() {
         int hash = 7;
-        hash = 71 * hash + Objects.hashCode(this.detalleId);
+        hash = 79 * hash + Objects.hashCode(this.detalleId);
+        hash = 79 * hash + Objects.hashCode(this.factura);
+        hash = 79 * hash + Objects.hashCode(this.producto);
         return hash;
     }
 
@@ -126,7 +128,16 @@ public class FactDetalleFactura implements Serializable {
         if (this.detalleId == null || other.detalleId == null) {
             return false;
         }
-        return Objects.equals(this.detalleId, other.detalleId);
+        if (!Objects.equals(this.detalleId, other.detalleId)) {
+            return false;
+        }
+        if (!Objects.equals(this.factura, other.factura)) {
+            return false;
+        }
+        if (!Objects.equals(this.producto, other.producto)) {
+            return false;
+        }
+        return true;
     }
 
     @Override

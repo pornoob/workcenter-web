@@ -3,15 +3,17 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
+        <h2>Ingreso de Facturas</h2>
         <h:form id="formFactura">
             <p:panelGrid columns="3">
                 <p:outputLabel value="Número Factura"/>
                 <p:outputLabel value=":"/>
-                <p:inputText #{mantenedorFacturas.factura.numero}/>
-                
+                <p:inputText value="#{mantenedorFacturas.factura.numero}"/>
+
                 <p:outputLabel value="Proveedor (Emisor)"/>
                 <p:outputLabel value=":"/>
                 <p:selectOneMenu value="#{mantenedorFacturas.factura.emisor}"
@@ -21,7 +23,7 @@
                     <f:selectItems value="#{mantenedorFacturas.empresas}"
                                    var='emisor' itemLabel="#{emisor.nombre}"/>
                 </p:selectOneMenu>
-                
+
                 <p:outputLabel value="Cliente (Receptor)"/>
                 <p:outputLabel value=":"/>
                 <p:selectOneMenu value="#{mantenedorFacturas.factura.receptor}"
@@ -31,17 +33,92 @@
                     <f:selectItems value="#{mantenedorFacturas.empresas}"
                                    var='receptor' itemLabel="#{receptor.nombre}"/>
                 </p:selectOneMenu>
-                
+
                 <p:outputLabel value="Fecha factura"/>
                 <p:outputLabel value=":"/>
                 <p:calendar value="#{mantenedorFacturas.factura.fecha}"
                             pattern="dd-MM-yyyy" navigator="true"/>
             </p:panelGrid>
-            
-            <p:outputLabel value='Ítems'/>
-            <p:dataTable value="#{mantenedorFacturas.factura.items}" var='item'>
-                <p
+
+            <h3>Ítems</h3>
+            <p:outputPanel styleClass="ui-g">
+                <p:outputPanel styleClass="ui-g-12 text-right">
+                    <p:commandButton icon="fa fa-plus"
+                                     action="addProduct"
+                                     value="Crear producto"/>
+                </p:outputPanel>
+            </p:outputPanel>
+            <p:dataTable value="#{mantenedorFacturas.factura.items}" var="item"
+                         id="tblDetalleFactura" widgetVar="tblDetalleFactura"
+                         rowIndexVar="#{row}" editMode="cell" editable="true">
+                <f:facet name="header">
+                    <p:outputPanel styleClass="ui-g">
+                        <p:outputPanel styleClass="ui-g-12 text-right">
+                            <p:commandButton icon="fa fa-plus"
+                                             action="#{mantenedorFacturas.addItem()}"
+                                             update="tblDetalleFactura"
+                                             value="Agregar ítem"/>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </f:facet>
+                
+                <p:ajax event="cellEdit"/>
+
+                <p:column headerText="Ítem">
+                    <p:cellEditor>
+                        <f:facet name="input">
+                            <p:selectOneMenu value="#{mantenedorFacturas.detalleFactura.producto}"
+                                             converter="entityConverter"
+                                             autoWidth="false">
+                                <f:selectItem itemLabel="-- Seleccione --"
+                                              noSelectionOption="true"/>
+                                <f:selectItems value="#{mantenedorFacturas.productos}"
+                                               var="p" 
+                                               itemLabel="#{p.nombre}"/>
+                            </p:selectOneMenu>
+                        </f:facet>
+                        <f:facet name="output">
+                            <h:outputText value="#{item.producto.nombre}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Cantidad">
+                    <p:cellEditor>
+                        <f:facet name="input">
+                            <p:spinner min="0" value="#{mantenedorFacturas.detalleFactura.cantidad}"/>
+                        </f:facet>
+                        <f:facet name="output">
+                            <h:outputText value="#{item.cantidad}"/>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+
+                <p:column headerText="Precio Unitario (Neto)">
+                    <p:cellEditor>
+                        <f:facet name="input">
+                            <p:inputText value="#{mantenedorFacturas.detalleFactura.precioUnitario}">
+                                <tvp:convertNumber/>
+                            </p:inputText>
+                        </f:facet>
+                        <f:facet name="output">
+                            <h:outputText value="#{item.precioUnitario}">
+                                <tvp:convertNumber groupingUsed="true"/>
+                            </h:outputText>
+                        </f:facet>
+                    </p:cellEditor>
+                </p:column>
+                
+                <p:column headerText="Acciones">
+                    <p:commandButton icon="fa fa-remove"/>
+                </p:column>
             </p:dataTable>
+            <p:outputPanel styleClass="ui-g">
+                <p:outputPanel styleClass="ui-g-12 text-center">
+                    <p:commandButton icon="fa fa-save"
+                                     value="Guardar Factura"/>
+                </p:outputPanel>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

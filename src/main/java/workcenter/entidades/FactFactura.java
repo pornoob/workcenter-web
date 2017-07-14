@@ -113,51 +113,31 @@ public class FactFactura implements Serializable {
     }
     
     /**
-     * Agrega un detalle a la factura, siempre y cuando el producto especificado
-     * no exista con anterioridad.
+     * Agrega un detalle a la factura
      * 
      * @param item item que se desea agregar
      * @return boolean, true en caso de haber agregado el producto y false
      * en caso contrario.
      */
     public boolean addItem(FactDetalleFactura item) {
-        boolean retorno = false;
         if (this.items == null) {
             this.items = new HashSet<>();
         }
-        Iterator<FactDetalleFactura> iterator = items.iterator();
-        while(iterator.hasNext()) {
-            FactDetalleFactura current = iterator.next();
-            if (current.getProducto().equals(item.getProducto())) {
-                return retorno;
-            }
-        }
-        this.items.add(item);
-        retorno = true;
-        return retorno;
+        return this.items.add(item);
     }
     
     /**
-     * Quita un detalle a la factura en base al producto que se esté detallando.
+     * Quita un detalle a la factura.
      * 
      * @param item que se desea quitar
-     * @return boolean, true en caso de eliminar el producto especificado, false
+     * @return boolean, true en caso de eliminar, false
      * en caso contrario.
      */
     public boolean removeItem(FactDetalleFactura item) {
-        boolean retorno = false;
         if (this.items == null) {
-            return retorno;
+            return false;
         }
-        Iterator<FactDetalleFactura> iterator = items.iterator();
-        while(iterator.hasNext()) {
-            FactDetalleFactura current = iterator.next();
-            if (current.getProducto().equals(item.getProducto())) {
-                iterator.remove();
-                break;
-            }
-        }
-        return retorno;
+        return this.items.remove(item);
     }
 
     @Override
