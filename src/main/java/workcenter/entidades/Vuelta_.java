@@ -11,6 +11,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class Vuelta_ {
 
 	public static volatile SingularAttribute<Vuelta, Integer> ingresadoPor;
+	public static volatile ListAttribute<Vuelta, GuiaPetroleo> guiasPetroleo;
 	public static volatile SingularAttribute<Vuelta, Equipo> batea;
 	public static volatile SingularAttribute<Vuelta, Integer> totalCombustible;
 	public static volatile SingularAttribute<Vuelta, Integer> dineroEntregado;

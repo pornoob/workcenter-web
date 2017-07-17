@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import workcenter.dao.FactProductoBodega;
 import workcenter.entidades.FactProducto;
 import workcenter.negocio.facturas.LogicaStock;
 import workcenter.util.components.FacesUtil;
@@ -17,14 +18,17 @@ import workcenter.util.components.FacesUtil;
 @Scope("flow")
 public class MantenedorBodegaTaller implements Serializable {
 
-    private List<FactProducto> productos;
+    private static final long serialVersionUID = -7124335107068287607L;
+
+    private List<FactProductoBodega> productos;
     private FactProducto producto;
 
     @Autowired
     private LogicaStock logicaStock;
 
     public void init() {
-        productos = logicaStock.findAll();
+        productos = logicaStock.findProductosBodega();
+        producto = new FactProducto();
     }
     
     public void addProducto() {
@@ -34,13 +38,16 @@ public class MantenedorBodegaTaller implements Serializable {
             return;
         }
         logicaStock.save(producto);
+        producto = new FactProducto();
+        productos = logicaStock.findProductosBodega();
+        FacesUtil.mostrarMensajeError("Operación exitosa", "Producto agregado con éxito");
     }
 
-    public List<FactProducto> getProductos() {
+    public List<FactProductoBodega> getProductos() {
         return productos;
     }
 
-    public void setProductos(List<FactProducto> productos) {
+    public void setProductos(List<FactProductoBodega> productos) {
         this.productos = productos;
     }
 

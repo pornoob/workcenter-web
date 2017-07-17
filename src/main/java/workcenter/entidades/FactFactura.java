@@ -8,12 +8,14 @@ package workcenter.entidades;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.Objects;
 import java.util.Set;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -23,7 +25,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -40,8 +41,8 @@ public class FactFactura implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "factura_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long facturaId;
     @Column(name = "numero")
     private Integer numero;
@@ -54,7 +55,7 @@ public class FactFactura implements Serializable {
     @ManyToOne
     @JoinColumn(name = "receptor", referencedColumnName = "id")
     private Empresa receptor;
-    @OneToMany(mappedBy = "factura")
+    @OneToMany(mappedBy = "factura", cascade = CascadeType.ALL)
     private Set<FactDetalleFactura> items;
 
     public FactFactura() {

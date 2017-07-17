@@ -13,7 +13,7 @@ public abstract class GuiaPetroleo_ {
 	public static volatile SingularAttribute<GuiaPetroleo, Integer> numeroguia;
 	public static volatile SingularAttribute<GuiaPetroleo, Float> litros;
 	public static volatile SingularAttribute<GuiaPetroleo, String> equipo;
-	public static volatile SingularAttribute<GuiaPetroleo, Integer> ordendecarga;
+	public static volatile SingularAttribute<GuiaPetroleo, Vuelta> ordendecarga;
 	public static volatile SingularAttribute<GuiaPetroleo, Integer> id;
 	public static volatile SingularAttribute<GuiaPetroleo, Integer> preciolitro;
 	public static volatile SingularAttribute<GuiaPetroleo, EstacionServicio> estaciondeservicio;

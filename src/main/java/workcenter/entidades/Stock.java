@@ -10,13 +10,14 @@ import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,8 +34,8 @@ public class Stock implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "stock_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stockId;
     @ManyToOne
     @JoinColumn(name = "producto_id")
@@ -42,6 +43,8 @@ public class Stock implements Serializable {
     @ManyToOne
     @JoinColumn(name = "detalle_id")
     private FactDetalleFactura detalle;
+    @Column(name = "cantidad")
+    private Integer cantidad;
 
     public Stock() {
     }
@@ -72,6 +75,14 @@ public class Stock implements Serializable {
 
     public void setDetalle(FactDetalleFactura detalle) {
         this.detalle = detalle;
+    }
+
+    public Integer getCantidad() {
+        return cantidad;
+    }
+
+    public void setCantidad(Integer cantidad) {
+        this.cantidad = cantidad;
     }
 
     @Override

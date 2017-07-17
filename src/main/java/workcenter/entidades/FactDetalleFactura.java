@@ -7,16 +7,19 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.UUID;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.validation.constraints.NotNull;
+import javax.persistence.Transient;
 import javax.xml.bind.annotation.XmlRootElement;
 
 /**
@@ -33,8 +36,8 @@ public class FactDetalleFactura implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @Basic(optional = false)
-    @NotNull
     @Column(name = "detalle_id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long detalleId;
     @ManyToOne
     @JoinColumn(name = "factura_id", referencedColumnName = "factura_id")
@@ -48,8 +51,12 @@ public class FactDetalleFactura implements Serializable {
     private Integer precioTotal;
     @Column(name = "cantidad")
     private Integer cantidad;
+    
+    @Transient
+    private String rowKey;
 
     public FactDetalleFactura() {
+        this.rowKey = "RK" + UUID.randomUUID();
     }
 
     public FactDetalleFactura(Long detalleId) {
@@ -102,6 +109,14 @@ public class FactDetalleFactura implements Serializable {
 
     public void setCantidad(Integer cantidad) {
         this.cantidad = cantidad;
+    }
+
+    public String getRowKey() {
+        return rowKey;
+    }
+
+    public void setRowKey(String rowKey) {
+        this.rowKey = rowKey;
     }
 
     @Override

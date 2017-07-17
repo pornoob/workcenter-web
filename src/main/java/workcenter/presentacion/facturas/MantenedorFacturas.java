@@ -1,6 +1,7 @@
 package workcenter.presentacion.facturas;
 
 import java.io.Serializable;
+import java.util.Iterator;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -10,7 +11,9 @@ import workcenter.entidades.FactDetalleFactura;
 import workcenter.entidades.FactFactura;
 import workcenter.entidades.FactProducto;
 import workcenter.negocio.LogicaEmpresas;
+import workcenter.negocio.facturas.LogicaFactura;
 import workcenter.negocio.facturas.LogicaStock;
+import workcenter.util.components.FacesUtil;
 
 /**
  *
@@ -32,6 +35,8 @@ public class MantenedorFacturas implements Serializable {
     private LogicaEmpresas logicaEmpresas;
     @Autowired
     private LogicaStock logicaStock;
+    @Autowired
+    private LogicaFactura logicaFactura;
 
     public void init() {
         empresas = logicaEmpresas.obtenerEmpresas();
@@ -50,7 +55,34 @@ public class MantenedorFacturas implements Serializable {
         detalleFactura.setPrecioUnitario(0);
         factura.addItem(detalleFactura);
     }
+    
+    public void removeItem(FactDetalleFactura item) {
+        Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
+        while (iterator.hasNext()) {
+            FactDetalleFactura current = iterator.next();
+            if (current.getRowKey().equals(item.getRowKey())) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
+    
+    public void save() {
+        Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
+        while(iterator.hasNext()) {
+            FactDetalleFactura item = iterator.next();
+            if (item.getCantidad() == null || item.getCantidad() == 0 ||
+                    item.getPrecioUnitario() == null ||
+                    item.getProducto() == null) {
+                iterator.remove();
+            }
+        }
+        logicaFactura.save(factura);
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Factura guardada con éxito");
+        factura = new FactFactura();
+    }
 
+    // getters and setters
     public FactFactura getFactura() {
         return factura;
     }

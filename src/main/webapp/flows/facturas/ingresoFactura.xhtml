@@ -8,6 +8,7 @@
 
     <ui:define name="contenido">
         <h2>Ingreso de Facturas</h2>
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
         <h:form id="formFactura">
             <p:panelGrid columns="3">
                 <p:outputLabel value="Número Factura"/>
@@ -43,14 +44,15 @@
             <h3>Ítems</h3>
             <p:outputPanel styleClass="ui-g">
                 <p:outputPanel styleClass="ui-g-12 text-right">
-                    <p:commandButton icon="fa fa-plus"
+                    <p:commandButton icon="fa fa-lock"
                                      action="addProduct"
-                                     value="Crear producto"/>
+                                     value="Ir Bodega"/>
                 </p:outputPanel>
             </p:outputPanel>
             <p:dataTable value="#{mantenedorFacturas.factura.items}" var="item"
                          id="tblDetalleFactura" widgetVar="tblDetalleFactura"
-                         rowIndexVar="#{row}" editMode="cell" editable="true">
+                         rowIndexVar="#{row}" editMode="cell" editable="true"
+                         rowKey="#{item.rowKey}">
                 <f:facet name="header">
                     <p:outputPanel styleClass="ui-g">
                         <p:outputPanel styleClass="ui-g-12 text-right">
@@ -110,12 +112,15 @@
                 </p:column>
                 
                 <p:column headerText="Acciones">
-                    <p:commandButton icon="fa fa-remove"/>
+                    <p:commandButton icon="fa fa-remove"
+                                     action="#{mantenedorFacturas.removeItem(item)}"/>
                 </p:column>
             </p:dataTable>
             <p:outputPanel styleClass="ui-g">
                 <p:outputPanel styleClass="ui-g-12 text-center">
                     <p:commandButton icon="fa fa-save"
+                                     update=":formFactura"
+                                     action="#{mantenedorFacturas.save()}"
                                      value="Guardar Factura"/>
                 </p:outputPanel>
             </p:outputPanel>

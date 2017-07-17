@@ -4,6 +4,11 @@
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
     
     <input name="isChildFlow" type="java.lang.Boolean"/>
+    
+    <on-start>
+        <evaluate expression="mantenedorBodegaTaller.init()"/>
+    </on-start>
+    
     <view-state id="ingresoProducto">
         <transition on="back" to="end_flow"/>
     </view-state>

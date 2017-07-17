@@ -27,6 +27,7 @@ public class StockDao {
 
     public FactProducto findByName(String name) {
         Query q = em.createNamedQuery("FactProducto.findByName", FactProducto.class);
+        q.setParameter("name", name);
         q.setMaxResults(1);
         try {
             return (FactProducto) q.getSingleResult();
@@ -42,6 +43,11 @@ public class StockDao {
         } else {
             em.merge(product);
         }
+    }
+
+    public List<FactProductoBodega> findProductosBodega() {
+        Query q = em.createNamedQuery("FactProductoBodega.findAll", FactProductoBodega.class);
+        return q.getResultList();
     }
 
 }
