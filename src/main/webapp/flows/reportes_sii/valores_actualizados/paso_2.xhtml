@@ -73,8 +73,8 @@
                                 </h:outputText>
                             </f:facet>
                         </p:column>
-                        <p:column headerText="Renta No Afecta">
-                            <h:outputText value="#{r.rentaAfecta}">
+                        <p:column headerText="Renta No Afecta" rendered="false">
+                            <h:outputText value="-">
                                 <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
@@ -123,7 +123,7 @@
                                 <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                             </h:outputText>
                             <f:facet name="footer">
-                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaRentaNoAfectaActualizada}">
+                                <h:outputText value="#{mantenedorValoresActualizados.sumatoriaNoRentaAfectaActualizada}">
                                     <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
                                 </h:outputText>
                             </f:facet>

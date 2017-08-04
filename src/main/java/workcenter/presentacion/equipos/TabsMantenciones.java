@@ -61,10 +61,12 @@ public class TabsMantenciones implements Serializable {
     private void initMesData() throws ParseException {
         mesData = new Mes();
         SimpleDateFormat sdf = new SimpleDateFormat("MM-yyyy");
+        mes = (Integer) FacesUtil.obtenerVariableFlow("mes");
+        anio = (Integer) FacesUtil.obtenerVariableFlow("anio");
         Date fecha = sdf.parse(
-                FacesUtil.obtenerVariableFlow("mes")
+                mes
                 + "-"
-                + FacesUtil.obtenerVariableFlow("anio")
+                + anio
         );
 
         Calendar calendar = Calendar.getInstance();

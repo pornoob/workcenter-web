@@ -32,7 +32,15 @@ public class LogicaFiniquito {
     }
     
     public List<Finiquito> obtenerFiniquitosTrabajador(Personal p, Integer anio, Integer mes) {
-        return finiquitoDao.obtenerFiniquitosTrabajador(p,anio, mes);
+        Integer mesBuscado = mes;
+        Integer anioBuscado = anio;
+        if (mesBuscado < 12) {
+            mesBuscado++;
+        } else {
+            mesBuscado = 1;
+            anioBuscado++;
+        }
+        return finiquitoDao.obtenerFiniquitosTrabajador(p,anioBuscado, mesBuscado);
     }
 
     public List<Finiquito> obtenerFiniquitosTrabajador(Empresa empleador, Integer anio) {
