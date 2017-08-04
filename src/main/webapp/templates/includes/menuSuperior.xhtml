@@ -38,6 +38,8 @@
                        rendered="#{sesionCliente.tienePermiso('CONSULTA_DOCUMENTOS')}"/>
             <p:tooltip for="mMaestroGuias" value="Maestro de Guias"
                        rendered="#{sesionCliente.tienePermiso('MAESTRO_DE_GUIAS')}"/>
+            <p:tooltip for="mBodegaTaller" value="Bodega taller"
+                       rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"/>
         </ui:fragment>
 
         <p:tabMenu activeIndex="#{menuSuperior.seleccionado}" styleClass="nav navBar">
@@ -63,6 +65,9 @@
                         rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"/>
             <p:menuitem id="mCargaMasiva" styleClass="fa fa-upload fa-1x" url="/m/carga_masiva" ajax="false" style="color: black; font-size: 1.26em"
                         rendered="#{sesionCliente.tienePermiso('MODULO_CARGA_MASIVA')}"/>
+            <p:menuitem id="mBodegaTaller" styleClass="fa fa-lock fa-1x" style="color: black; font-size: 1.26em"
+                        url="/m/bodega_taller" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"/>
             <p:menuitem id="mAlarmasGPS" styleClass="ui-icon ui-icon-m-alarmas-gps" url="/m/alarmas_gps" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_ALARMAS_GPS')}"/>
             <p:menuitem id="mInfActividades" styleClass="fa fa-bar-chart fa-1x" style="color: black; font-size: 1.26em"

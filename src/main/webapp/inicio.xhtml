@@ -79,6 +79,13 @@
                         <i class="fa fa-file-text fa-5x"></i>
                         <h:outputLabel value="Maestro de Guias" style="margin-top: 10px"/>
                     </h:commandLink>
+                    
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"
+                                   action="#{facesUtil.redirigir('/m/bodega_taller')}"
+                                   class="menuWorkcenter" style="display: block">
+                        <i class="fa fa-lock fa-5x"></i>
+                        <h:outputLabel value="Bodega Taller" style="margin-top: 10px"/>
+                    </h:commandLink>
                 </h:panelGrid>
             </p:panel>
 
