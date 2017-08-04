@@ -11,16 +11,66 @@
             
             <p:panelGrid columns="3">
                 <p:outputLabel value="Solicitante"/>:
-                <p:selectOneMenu></p:selectOneMenu>
-                <p:outputLabel value="Pautas requeridas"/>:
+                <p:selectOneMenu converter="entityConverter">
+                    <f:selectItem itemLabel="-- Seleccione --"/>
+                    <f:selectItems value="#{mantenedorOT.empresas}" var="e"
+                                   itemLabel="#{e.nombre}"/>
+                </p:selectOneMenu>
+                <p:outputLabel value="Tipo de trabajo"/>:
                 <p:selectManyCheckbox>
-                    <f:selectItem itemLabel="Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
-                    <f:selectItem itemLabel="Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
-                    <f:selectItem itemLabel="Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
+                    <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
+                    <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
+                    <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
+                    <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
                 </p:selectManyCheckbox>
                 <p:outputLabel value="Descripción del trabajo"/>:
                 <p:inputTextarea/>
             </p:panelGrid>
+            <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"/>
+            
+            
+            <p:dataTable value="#{mantenedorOT.ots_esperando}" var="ot">
+                <f:facet name="header">
+                    <p:outputLabel value="En espera"/>
+                </f:facet>
+                
+                <p:column headerText="OT"></p:column>
+                <p:column headerText="Fecha Ingreso"></p:column>
+                <p:column headerText="Solicitante"></p:column>
+                <p:column headerText="Tipo Trabajo"></p:column>
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Asignar" action="#{mantenedorOT.toAssign(ot)}"/>
+                    <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
+                </p:column>
+            </p:dataTable>
+            
+            <p:dataTable value="#{mantenedorOT.ots_ejecutando}" var="ot">
+                <f:facet name="header">
+                    <p:outputLabel value="En Progreso"/>
+                </f:facet>
+                
+                <p:column headerText="OT"></p:column>
+                <p:column headerText="Fecha Ingreso"></p:column>
+                <p:column headerText="Fecha Asignación"></p:column>
+                <p:column headerText="Solicitante"></p:column>
+                <p:column headerText="Tipo Trabajo"></p:column>
+                
+                <p:column headerText="Acciones">
+                    <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
+                </p:column>
+            </p:dataTable>
+            
+            <p:dataTable value="#{mantenedorOT.ots_resueltas}" var="ot">
+                <f:facet name="header">
+                    <p:outputLabel value="Últimas resueltas"/>
+                </f:facet>
+                
+                <p:column headerText="OT"></p:column>
+                <p:column headerText="Fecha Ingreso"></p:column>
+                <p:column headerText="Fecha Finalizacion"></p:column>
+                <p:column headerText="Solicitante"></p:column>
+                <p:column headerText="Tipo Trabajo"></p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
 </ui:composition>

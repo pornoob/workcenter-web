@@ -72,9 +72,16 @@ public class Constantes implements Serializable {
     private static final int equipoTipoMaquina = 4;
     private static final int alarmaProximaMantencion = 2000;
     
+    // Zona OT
     private static final int PAUTA_TRACTO = 1;
     private static final int PAUTA_SEMIREMOLQUE = 2;
     private static final int PAUTA_MAQUINARIA = 3;
+    private static final int PAUTA_VENTA_REPUESTO = 4;
+    
+    private static final int ESTADO_OT_SIN_ASIGNAR = 1;
+    private static final int ESTADO_OT_ASIGNADA = 2;
+    private static final int ESTADO_OT_ANULADA = 3;
+    private static final int ESTADO_OT_FINALIZADA = 4;
 
     // Zona registros
     private static final int registroR112 = 1;
@@ -648,5 +655,9 @@ public class Constantes implements Serializable {
 
     public static int getPAUTA_MAQUINARIA() {
         return PAUTA_MAQUINARIA;
+    }
+
+    public static int getPAUTA_VENTA_REPUESTO() {
+        return PAUTA_VENTA_REPUESTO;
     }
 }
