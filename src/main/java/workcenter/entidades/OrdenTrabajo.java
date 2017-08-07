@@ -22,6 +22,7 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import org.hibernate.annotations.SortNatural;
 
 /**
  *
@@ -31,11 +32,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ordenes_trabajo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
-    @NamedQuery(
-            name = "OrdenTrabajo.findByStatus",
-            query = "SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to, (SELECT MAX(to.fecha) AS fecha TrazabilidadOt to WHERE to.ot = o) fo WHERE to.fecha = fo.fecha"
-    )
+    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o")
 })
 public class OrdenTrabajo implements Serializable {
 
@@ -54,6 +51,7 @@ public class OrdenTrabajo implements Serializable {
     @Column(name = "descripcion")
     private String descripcion;
     @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY)
+    @SortNatural
     private SortedSet<TrazabilidadOt> trazabilidad;
 
     public OrdenTrabajo() {
