@@ -368,6 +368,13 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     text-align: right;
 }
 
+.fa-ot:before {
+    content: 'ot';
+    font-family: Arial;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
 /*** Estilos para grillas sin bordes ***/
 table.ui-panelgrid.no-border-grid {
     border:0;

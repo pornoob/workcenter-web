@@ -11,10 +11,11 @@
             
             <p:panelGrid columns="3">
                 <p:outputLabel value="Solicitante"/>:
-                <p:selectOneMenu converter="entityConverter">
+                <p:selectOneMenu converter="entityConverter"
+                                 filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="-- Seleccione --"/>
-                    <f:selectItems value="#{mantenedorOT.empresas}" var="e"
-                                   itemLabel="#{e.nombre}"/>
+                    <f:selectItems value="#{mantenedorOT.solicitantes}" var="s"
+                                   itemLabel="#{s.nombre}"/>
                 </p:selectOneMenu>
                 <p:outputLabel value="Tipo de trabajo"/>:
                 <p:selectManyCheckbox>
@@ -26,7 +27,8 @@
                 <p:outputLabel value="Descripción del trabajo"/>:
                 <p:inputTextarea/>
             </p:panelGrid>
-            <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"/>
+            <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"
+                             icon="fa fa-plus"/>
             
             
             <p:dataTable value="#{mantenedorOT.ots_esperando}" var="ot">
@@ -34,9 +36,14 @@
                     <p:outputLabel value="En espera"/>
                 </f:facet>
                 
-                <p:column headerText="OT"></p:column>
-                <p:column headerText="Fecha Ingreso"></p:column>
-                <p:column headerText="Solicitante"></p:column>
+                <p:column headerText="OT">
+                    <p:outputLabel value="#{ot.id}"/>
+                </p:column>
+                <p:column headerText="Fecha Ingreso">
+                </p:column>
+                <p:column headerText="Solicitante">
+                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                </p:column>
                 <p:column headerText="Tipo Trabajo"></p:column>
                 <p:column headerText="Acciones">
                     <p:commandButton value="Asignar" action="#{mantenedorOT.toAssign(ot)}"/>
@@ -49,10 +56,14 @@
                     <p:outputLabel value="En Progreso"/>
                 </f:facet>
                 
-                <p:column headerText="OT"></p:column>
+                <p:column headerText="OT">
+                    <p:outputLabel value="#{ot.id}"/>
+                </p:column>
                 <p:column headerText="Fecha Ingreso"></p:column>
                 <p:column headerText="Fecha Asignación"></p:column>
-                <p:column headerText="Solicitante"></p:column>
+                <p:column headerText="Solicitante">
+                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                </p:column>
                 <p:column headerText="Tipo Trabajo"></p:column>
                 
                 <p:column headerText="Acciones">
@@ -65,11 +76,16 @@
                     <p:outputLabel value="Últimas resueltas"/>
                 </f:facet>
                 
-                <p:column headerText="OT"></p:column>
+                <p:column headerText="OT">
+                    <p:outputLabel value="#{ot.id}"/>
+                </p:column>
                 <p:column headerText="Fecha Ingreso"></p:column>
                 <p:column headerText="Fecha Finalizacion"></p:column>
-                <p:column headerText="Solicitante"></p:column>
-                <p:column headerText="Tipo Trabajo"></p:column>
+                <p:column headerText="Solicitante">
+                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                </p:column>
+                <p:column headerText="Tipo Trabajo">
+                </p:column>
             </p:dataTable>
         </h:form>
     </ui:define>

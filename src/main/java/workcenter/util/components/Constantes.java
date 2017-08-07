@@ -78,7 +78,7 @@ public class Constantes implements Serializable {
     private static final int PAUTA_MAQUINARIA = 3;
     private static final int PAUTA_VENTA_REPUESTO = 4;
     
-    private static final int ESTADO_OT_SIN_ASIGNAR = 1;
+    private static final int ESTADO_OT_CREADA = 1;
     private static final int ESTADO_OT_ASIGNADA = 2;
     private static final int ESTADO_OT_ANULADA = 3;
     private static final int ESTADO_OT_FINALIZADA = 4;
@@ -641,23 +641,39 @@ public class Constantes implements Serializable {
         return fonasaId;
     }
 
-    public static int getEquipoTipoMaquina() {
+    public int getEquipoTipoMaquina() {
         return equipoTipoMaquina;
     }
 
-    public static int getPAUTA_TRACTO() {
+    public int getPAUTA_TRACTO() {
         return PAUTA_TRACTO;
     }
 
-    public static int getPAUTA_SEMIREMOLQUE() {
+    public int getPAUTA_SEMIREMOLQUE() {
         return PAUTA_SEMIREMOLQUE;
     }
 
-    public static int getPAUTA_MAQUINARIA() {
+    public int getPAUTA_MAQUINARIA() {
         return PAUTA_MAQUINARIA;
     }
 
-    public static int getPAUTA_VENTA_REPUESTO() {
+    public int getPAUTA_VENTA_REPUESTO() {
         return PAUTA_VENTA_REPUESTO;
+    }
+
+    public int getESTADO_OT_CREADA() {
+        return ESTADO_OT_CREADA;
+    }
+
+    public int getESTADO_OT_ASIGNADA() {
+        return ESTADO_OT_ASIGNADA;
+    }
+
+    public int getESTADO_OT_ANULADA() {
+        return ESTADO_OT_ANULADA;
+    }
+
+    public int getESTADO_OT_FINALIZADA() {
+        return ESTADO_OT_FINALIZADA;
     }
 }

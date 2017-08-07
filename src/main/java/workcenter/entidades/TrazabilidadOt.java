@@ -7,12 +7,16 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
@@ -29,7 +33,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
     @NamedQuery(name = "TrazabilidadOt.findAll", query = "SELECT t FROM TrazabilidadOt t")})
-public class TrazabilidadOt implements Serializable {
+public class TrazabilidadOt implements Serializable, Comparable<TrazabilidadOt> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -44,8 +48,11 @@ public class TrazabilidadOt implements Serializable {
     private Integer estadoId;
     @Column(name = "autor")
     private Integer autor;
-    @Column(name = "ot_id")
-    private Integer otId;
+    @Column(name = "ejecutor")
+    private Integer ejecutor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ot_id", referencedColumnName = "id")
+    private OrdenTrabajo ot;
 
     public TrazabilidadOt() {
     }
@@ -86,32 +93,58 @@ public class TrazabilidadOt implements Serializable {
         this.autor = autor;
     }
 
-    public Integer getOtId() {
-        return otId;
+    public OrdenTrabajo getOtId() {
+        return ot;
     }
 
-    public void setOtId(Integer otId) {
-        this.otId = otId;
+    public void setOtId(OrdenTrabajo otId) {
+        this.ot = otId;
+    }
+
+    public Integer getEjecutor() {
+        return ejecutor;
+    }
+
+    public void setEjecutor(Integer ejecutor) {
+        this.ejecutor = ejecutor;
+    }
+
+    public OrdenTrabajo getOt() {
+        return ot;
+    }
+
+    public void setOt(OrdenTrabajo ot) {
+        this.ot = ot;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 3;
+        hash = 37 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TrazabilidadOt)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        TrazabilidadOt other = (TrazabilidadOt) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final TrazabilidadOt other = (TrazabilidadOt) obj;
+        if (this.id == null || other.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, other.id);
+    }
+
+    @Override
+    public int compareTo(TrazabilidadOt o) {
+        return this.fecha.compareTo(o.fecha);
     }
 
     @Override

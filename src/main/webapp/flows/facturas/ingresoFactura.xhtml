@@ -71,6 +71,8 @@
                         <f:facet name="input">
                             <p:selectOneMenu value="#{mantenedorFacturas.detalleFactura.producto}"
                                              converter="entityConverter"
+                                             filter="true"
+                                             filterMatchMode="contains"
                                              autoWidth="false">
                                 <f:selectItem itemLabel="-- Seleccione --"
                                               noSelectionOption="true"/>

@@ -6,14 +6,19 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
+import java.util.SortedSet;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -26,7 +31,12 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "ordenes_trabajo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o")})
+    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
+    @NamedQuery(
+            name = "OrdenTrabajo.findByStatus",
+            query = "SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to, (SELECT MAX(to.fecha) AS fecha TrazabilidadOt to WHERE to.ot = o) fo WHERE to.fecha = fo.fecha"
+    )
+})
 public class OrdenTrabajo implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -35,13 +45,16 @@ public class OrdenTrabajo implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "solicitante")
-    private Integer solicitante;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "solicitante", referencedColumnName = "id")
+    private SolicitanteOt solicitante;
     @Column(name = "tipo_trabajo")
     private Integer tipoTrabajo;
     @Size(max = 3000)
     @Column(name = "descripcion")
     private String descripcion;
+    @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY)
+    private SortedSet<TrazabilidadOt> trazabilidad;
 
     public OrdenTrabajo() {
     }
@@ -58,11 +71,11 @@ public class OrdenTrabajo implements Serializable {
         this.id = id;
     }
 
-    public Integer getSolicitante() {
+    public SolicitanteOt getSolicitante() {
         return solicitante;
     }
 
-    public void setSolicitante(Integer solicitante) {
+    public void setSolicitante(SolicitanteOt solicitante) {
         this.solicitante = solicitante;
     }
 
@@ -80,6 +93,14 @@ public class OrdenTrabajo implements Serializable {
 
     public void setDescripcion(String descripcion) {
         this.descripcion = descripcion;
+    }
+
+    public SortedSet<TrazabilidadOt> getTrazabilidad() {
+        return trazabilidad;
+    }
+
+    public void setTrazabilidad(SortedSet<TrazabilidadOt> trazabilidad) {
+        this.trazabilidad = trazabilidad;
     }
 
     @Override

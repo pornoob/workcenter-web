@@ -2,17 +2,13 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
-      start-state="bodega_taller">
+      start-state="ingresoProducto">
     
     <input name="isChildFlow" type="java.lang.Boolean"/>
     
     <on-start>
         <evaluate expression="mantenedorBodegaTaller.init()"/>
     </on-start>
-    
-    <view-state id="bodega_taller">
-        <transition on="stock" to="ingresoProducto"/>
-    </view-state>
     
     <view-state id="ingresoProducto">
         <transition on="back" to="end_flow"/>

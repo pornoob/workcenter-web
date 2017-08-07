@@ -23,12 +23,6 @@
                         <h:outputLabel value="Mantenedor de Equipos"/>
                     </h:commandLink>
 
-                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"
-                                   action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter">
-                        <i class="fa fa-wrench fa-5x"></i>
-                        <h:outputLabel value="Módulo de Mantenciones"/>
-                    </h:commandLink>
-
                     <h:commandLink rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
                                    class="menuWorkcenter">
                         <h:graphicImage value="/img/icons/64/m_empresas.png"/>
@@ -80,11 +74,10 @@
                         <h:outputLabel value="Maestro de Guias" style="margin-top: 10px"/>
                     </h:commandLink>
                     
-                    <h:commandLink rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"
-                                   action="#{facesUtil.redirigir('/m/bodega_taller')}"
-                                   class="menuWorkcenter" style="display: block">
-                        <i class="fa fa-lock fa-5x"></i>
-                        <h:outputLabel value="Bodega Taller" style="margin-top: 10px"/>
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES') or sesionCliente.tienePermiso('BODEGA_TALLER') or sesionCliente.tienePermiso('GESTION_OT')}"
+                                   action="#{facesUtil.redirigir('/m/taller')}" class="menuWorkcenter">
+                        <i class="fa fa-wrench fa-5x"></i>
+                        <h:outputLabel value="Módulo de Taller"/>
                     </h:commandLink>
                 </h:panelGrid>
             </p:panel>
