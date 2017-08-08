@@ -220,7 +220,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irAsignacionCaja(int tipoConcepto) {
-        lstPersonal = logicaPersonal.obtenerTodos();
+        lstPersonal = logicaPersonal.findAll();
         asignarConcepto(tipoConcepto);
         lstTipoDinero = constantes.getLstTipoDineros();
         dinero.setFechareal(new Date());

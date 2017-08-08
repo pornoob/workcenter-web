@@ -329,7 +329,7 @@ public class MantenedorPersonal implements Serializable {
 
     public String irListaPersonal() {
 //        listaPersonalLazy = new PersonalLazyModel(logicaPersonal);
-        listaPersonal = logicaPersonal.obtenerTodos();
+        listaPersonal = logicaPersonal.findAllWithService();
         return "flowListarPersonal";
     }
 

@@ -23,12 +23,12 @@ import java.util.List;
     @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos")
     ,
         @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario")
+            + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection")
     ,
         @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut")
     ,
         @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario "
+            + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection "
             + "WHERE p.rut = :rut")
     ,
         @NamedQuery(
@@ -47,11 +47,11 @@ import java.util.List;
 })
 public class Personal implements Serializable {
 
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable", fetch = FetchType.LAZY)
     private Collection<MpaEjecucionPlan> mpaEjecucionPlanCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCreador")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutCreador", fetch = FetchType.LAZY)
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "rutResponsable", fetch = FetchType.LAZY)
     private Collection<MpaPlanPrograma> mpaPlanProgramaCollection1;
     @OneToOne(cascade = CascadeType.ALL, mappedBy = "sancionado", fetch = FetchType.LAZY, orphanRemoval = true)
     private Sancionado sancion;
@@ -108,7 +108,7 @@ public class Personal implements Serializable {
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rut")
     private List<ContratoPersonal> contratospersonalCollection;
-    @OneToMany(fetch = FetchType.EAGER)
+    @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_servicio_ruta",
             inverseJoinColumns = {
@@ -123,7 +123,7 @@ public class Personal implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "idPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<BonoDescuentoPersonal> bonosDescuentos;
 
-    @OneToMany(fetch = FetchType.EAGER, mappedBy = "rutPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "rutPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<CargasFamiliares> lstCargasFamiliares;
 
     public Personal() {

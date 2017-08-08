@@ -498,13 +498,13 @@ public class MantenedorLiquidaciones implements Serializable {
     }
 
     public String ingresarLiquidacionOtros() {
-        personal = logicaPersonal.obtenerTodos();
+        personal = logicaPersonal.findAll();
         inicio();
         return "flowAgregarLiqOtros";
     }
 
     public String ingresarLiquidacionConductores() {
-        personal = logicaPersonal.obtenerTodos();
+        personal = logicaPersonal.findAll();
         return "flowAgregarLiqConductores";
     }
 

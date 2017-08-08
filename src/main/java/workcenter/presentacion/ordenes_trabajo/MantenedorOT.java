@@ -25,22 +25,23 @@ import workcenter.util.components.SesionCliente;
 public class MantenedorOT implements Serializable {
 
     private static final long serialVersionUID = -4399796587348042523L;
-    
+
     private Personal ejecutor;
     private OrdenTrabajo ot;
-    
+    private List<String> tiposTrabajo;
+
     private List<OrdenTrabajo> ots_esperando;
     private List<OrdenTrabajo> ots_ejecutando;
     private List<OrdenTrabajo> ots_resueltas;
     private List<SolicitanteOt> solicitantes;
-    
+
     @Autowired
     private LogicaOt logicaOt;
     @Autowired
     private Constantes constantes;
     @Autowired
     private SesionCliente sesionCliente;
-    
+
     public void init() {
         ot = new OrdenTrabajo();
         solicitantes = logicaOt.findApplicants();
@@ -48,7 +49,42 @@ public class MantenedorOT implements Serializable {
         ots_ejecutando = logicaOt.findByStatus(constantes.getESTADO_OT_ASIGNADA());
         ots_resueltas = logicaOt.findByStatus(constantes.getESTADO_OT_FINALIZADA());
     }
-    
+
+    private String listTipoTrabajoToString() {
+        StringBuilder sb = new StringBuilder();
+        for (String tipoTrabajo : tiposTrabajo) {
+            sb.append(tipoTrabajo).append(',');
+        }
+        sb.setLength(sb.length() - 1);
+        return sb.toString();
+    }
+
+    public String tipoTrabajoToPrettyName(String tipoTrabajo) {
+        if (tipoTrabajo == null) {
+            return null;
+        }
+        String[] tipos = tipoTrabajo.split(",");
+        StringBuilder sb = new StringBuilder();
+        for (String tipo : tipos) {
+            if (tipo.isEmpty()) {
+                continue;
+            }
+            if (Integer.valueOf(tipo) == constantes.getPAUTA_TRACTO()) {
+                sb.append("Mantenimiento Tracto - ");
+            } else if (Integer.valueOf(tipo) == constantes.getPAUTA_SEMIREMOLQUE()) {
+                sb.append("Mantenimiento Semirremolque - ");
+            } else if (Integer.valueOf(tipo) == constantes.getPAUTA_MAQUINARIA()) {
+                sb.append("Mantenimiento Maquinaria - ");
+            } else if (Integer.valueOf(tipo) == constantes.getPAUTA_VENTA_REPUESTO()) {
+                sb.append("Venta Repuesto - ");
+            }
+        }
+        if (sb.length() > 0) {
+            sb.setLength(sb.length() - 3);
+        }
+        return sb.toString();
+    }
+
     public void create() {
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
@@ -57,10 +93,11 @@ public class MantenedorOT implements Serializable {
         state.setOtId(ot);
         SortedSet<TrazabilidadOt> history = new TreeSet<>();
         history.add(state);
+        ot.setTipoTrabajo(listTipoTrabajoToString());
         ot.setTrazabilidad(history);
         logicaOt.create(ot);
     }
-    
+
     public void toAssign(OrdenTrabajo ot) {
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
@@ -69,7 +106,7 @@ public class MantenedorOT implements Serializable {
         state.setOtId(ot);
         ot.getTrazabilidad().add(state);
     }
-    
+
     public void toCancel(OrdenTrabajo ot) {
     }
 
@@ -120,5 +157,13 @@ public class MantenedorOT implements Serializable {
 
     public void setEjecutor(Personal ejecutor) {
         this.ejecutor = ejecutor;
+    }
+
+    public List<String> getTiposTrabajo() {
+        return tiposTrabajo;
+    }
+
+    public void setTiposTrabajo(List<String> tiposTrabajo) {
+        this.tiposTrabajo = tiposTrabajo;
     }
 }

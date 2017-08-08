@@ -6,8 +6,10 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.SortedSet;
 import javax.persistence.Basic;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -32,7 +34,8 @@ import org.hibernate.annotations.SortNatural;
 @Table(name = "ordenes_trabajo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o")
+    @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
+    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status")
 })
 public class OrdenTrabajo implements Serializable {
 
@@ -46,11 +49,11 @@ public class OrdenTrabajo implements Serializable {
     @JoinColumn(name = "solicitante", referencedColumnName = "id")
     private SolicitanteOt solicitante;
     @Column(name = "tipo_trabajo")
-    private Integer tipoTrabajo;
+    private String tipoTrabajo;
     @Size(max = 3000)
     @Column(name = "descripcion")
     private String descripcion;
-    @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @SortNatural
     private SortedSet<TrazabilidadOt> trazabilidad;
 
@@ -77,11 +80,11 @@ public class OrdenTrabajo implements Serializable {
         this.solicitante = solicitante;
     }
 
-    public Integer getTipoTrabajo() {
+    public String getTipoTrabajo() {
         return tipoTrabajo;
     }
 
-    public void setTipoTrabajo(Integer tipoTrabajo) {
+    public void setTipoTrabajo(String tipoTrabajo) {
         this.tipoTrabajo = tipoTrabajo;
     }
 
@@ -103,22 +106,27 @@ public class OrdenTrabajo implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 47 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof OrdenTrabajo)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        OrdenTrabajo other = (OrdenTrabajo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final OrdenTrabajo other = (OrdenTrabajo) obj;
+        if (this.id == null || other.id == null) {
+            return false;
+        }
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

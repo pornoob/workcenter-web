@@ -41,7 +41,7 @@ public class IngresoFiniquitoView implements Serializable {
     @PostConstruct
     public void inicio() {
         empleadores = logicaEmpresas.obtenerEmpleadores();
-        trabajadores = logicaPersonal.obtenerTodos();
+        trabajadores = logicaPersonal.findAll();
     }
     
     public void guardar() {

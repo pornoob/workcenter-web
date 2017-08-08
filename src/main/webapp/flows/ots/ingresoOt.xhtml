@@ -12,20 +12,23 @@
             <p:panelGrid columns="3">
                 <p:outputLabel value="Solicitante"/>:
                 <p:selectOneMenu converter="entityConverter"
+                                 required="true"
+                                 value="#{mantenedorOT.ot.solicitante}"
                                  filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="-- Seleccione --"/>
                     <f:selectItems value="#{mantenedorOT.solicitantes}" var="s"
                                    itemLabel="#{s.nombre}"/>
                 </p:selectOneMenu>
                 <p:outputLabel value="Tipo de trabajo"/>:
-                <p:selectManyCheckbox>
+                <p:selectManyCheckbox value="#{mantenedorOT.tiposTrabajo}" required="true">
                     <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
                     <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
                     <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
                     <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
                 </p:selectManyCheckbox>
                 <p:outputLabel value="Descripción del trabajo"/>:
-                <p:inputTextarea/>
+                <p:inputTextarea required="true"
+                                 value="#{mantenedorOT.ot.descripcion}"/>
             </p:panelGrid>
             <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"
                              icon="fa fa-plus"/>
@@ -40,11 +43,16 @@
                     <p:outputLabel value="#{ot.id}"/>
                 </p:column>
                 <p:column headerText="Fecha Ingreso">
+                    <p:outputLabel value="#{ot.trazabilidad.first().fecha}">
+                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                    </p:outputLabel>
                 </p:column>
                 <p:column headerText="Solicitante">
                     <p:outputLabel value="#{ot.solicitante.nombre}"/>
                 </p:column>
-                <p:column headerText="Tipo Trabajo"></p:column>
+                <p:column headerText="Tipo Trabajo">
+                    <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
+                </p:column>
                 <p:column headerText="Acciones">
                     <p:commandButton value="Asignar" action="#{mantenedorOT.toAssign(ot)}"/>
                     <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>

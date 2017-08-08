@@ -144,7 +144,7 @@ public class TrazabilidadOt implements Serializable, Comparable<TrazabilidadOt> 
 
     @Override
     public int compareTo(TrazabilidadOt o) {
-        return this.fecha.compareTo(o.fecha);
+        return o.fecha.compareTo(this.fecha);
     }
 
     @Override

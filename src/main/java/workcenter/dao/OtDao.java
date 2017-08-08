@@ -13,7 +13,7 @@ import workcenter.entidades.SolicitanteOt;
  * @author Claudio Olivares
  */
 @Repository
-public class OtDao {
+public class OtDao extends MyDao {
 
     @PersistenceContext
     private EntityManager em;

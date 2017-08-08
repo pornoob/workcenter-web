@@ -146,7 +146,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
 
         tipoActividades = logicaRegistroActividades.obtenerTiposActividades(constantes.getRegistroR112());
         subTipoActividades = logicaRegistroActividades.obtenerSubTiposActividades(tipoActividad);
-        personal = logicaPersonal.obtenerTodos();
+        personal = logicaPersonal.findAll();
         cargaMaterialesApoyo();
         return irNuevoR112();
     }
@@ -165,7 +165,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
         tipoActividad = null;
         subTipoActividades = null;
         subTipoActividad = null;
-        personal = logicaPersonal.obtenerTodos();
+        personal = logicaPersonal.findAll();
         participantes = new ArrayList<MarParticipantesAct>();
         participante = null;
         return irNuevoR112();

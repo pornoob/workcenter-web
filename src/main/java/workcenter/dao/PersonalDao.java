@@ -13,12 +13,13 @@ import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
+import javax.persistence.EntityGraph;
 
 /**
  * @author colivares
  */
 @Repository
-public class PersonalDao {
+public class PersonalDao extends MyDao {
 
     @PersistenceContext
     private EntityManager em;
@@ -319,6 +320,14 @@ public class PersonalDao {
                 .append("where v.contrato = :contrato");
         Query q = em.createQuery(jql.toString());
         q.setParameter("contrato", contrato);
+        return q.getResultList();
+    }
+
+    public List<Personal> findAllWithService() {
+        Query q = em.createNamedQuery("Personal.findAll", Personal.class);
+        EntityGraph<Personal> personalGraph = em.createEntityGraph(Personal.class);
+        personalGraph.addAttributeNodes("servicios");
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, personalGraph);
         return q.getResultList();
     }
 }

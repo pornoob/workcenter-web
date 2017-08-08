@@ -32,8 +32,13 @@ public class LogicaPersonal {
     Constantes constantes;
 
     @Transactional(readOnly = true)
-    public List<Personal> obtenerTodos() {
+    public List<Personal> findAll() {
         return personalDao.obtenerTodos();
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Personal> findAllWithService() {
+        return personalDao.findAllWithService();
     }
 
     @Transactional(readOnly = true)

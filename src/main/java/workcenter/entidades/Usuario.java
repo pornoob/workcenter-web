@@ -2,7 +2,6 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
-import java.util.List;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -36,7 +35,7 @@ public class Usuario implements Serializable {
     @JoinColumn(name = "rut", referencedColumnName = "rut")
     @OneToOne(fetch = FetchType.LAZY)
     private Personal personal;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.EAGER, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
     private Collection<Permiso> permisosCollection;
     @Column(name = "habilitado")
     private Boolean habilitado;

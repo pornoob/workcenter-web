@@ -153,7 +153,7 @@ public class MantenedorInspeccionAvanzada implements Serializable, WorkcenterFil
     }
 
     public void obtenerEncargados() {
-        encargados = logicaPersonal.obtenerTodos();
+        encargados = logicaPersonal.findAll();
     }
 
     public void obtenerEquipos() {
