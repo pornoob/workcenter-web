@@ -6,6 +6,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.OrdenTrabajo;
+import workcenter.entidades.SolicitanteOt;
 
 /**
  *
@@ -28,6 +29,11 @@ public class OtDao {
     public List<OrdenTrabajo> findByStatus(Integer status) {
         Query q = em.createNamedQuery("OrdenTrabajo.findByStatus", OrdenTrabajo.class);
         q.setParameter("status", status);
+        return q.getResultList();
+    }
+
+    public List<SolicitanteOt> findApplicants() {
+        Query q = em.createNamedQuery("SolicitanteOt.findAll", SolicitanteOt.class);
         return q.getResultList();
     }
 }

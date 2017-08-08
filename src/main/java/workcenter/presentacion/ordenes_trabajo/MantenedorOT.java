@@ -43,6 +43,7 @@ public class MantenedorOT implements Serializable {
     
     public void init() {
         ot = new OrdenTrabajo();
+        solicitantes = logicaOt.findApplicants();
         ots_esperando = logicaOt.findByStatus(constantes.getESTADO_OT_CREADA());
         ots_ejecutando = logicaOt.findByStatus(constantes.getESTADO_OT_ASIGNADA());
         ots_resueltas = logicaOt.findByStatus(constantes.getESTADO_OT_FINALIZADA());

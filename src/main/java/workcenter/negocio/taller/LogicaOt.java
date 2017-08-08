@@ -7,6 +7,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import workcenter.entidades.OrdenTrabajo;
+import workcenter.entidades.SolicitanteOt;
 
 /**
  *
@@ -25,5 +26,9 @@ public class LogicaOt {
 
     public List<OrdenTrabajo> findByStatus(Integer estadoOt) {
         return otDao.findByStatus(estadoOt);
+    }
+
+    public List<SolicitanteOt> findApplicants() {
+        return otDao.findApplicants();
     }
 }

@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "solicitante_ot")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "SolicitanteOt.findAll", query = "SELECT s FROM SolicitanteOt s")})
+    @NamedQuery(name = "SolicitanteOt.findAll", query = "SELECT s FROM SolicitanteOt s ORDER BY UPPER(s.nombre) ASC")})
 public class SolicitanteOt implements Serializable {
 
     private static final long serialVersionUID = 1L;
