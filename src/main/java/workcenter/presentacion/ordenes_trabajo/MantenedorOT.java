@@ -6,9 +6,12 @@ import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
+import javax.faces.event.AjaxBehaviorEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionTracto;
 import workcenter.entidades.OrdenTrabajo;
 import workcenter.entidades.Personal;
 import workcenter.entidades.SolicitanteOt;
@@ -29,6 +32,10 @@ public class MantenedorOT implements Serializable {
     private Personal ejecutor;
     private OrdenTrabajo ot;
     private List<String> tiposTrabajo;
+    private Boolean renderTractoBatea;
+    private Boolean renderMaquinaria;
+    private MmeMantencionTracto mantencionTracto;
+    private MmeMantencionSemiremolque mantencionSemirremolque;
 
     private List<OrdenTrabajo> ots_esperando;
     private List<OrdenTrabajo> ots_ejecutando;
@@ -85,6 +92,21 @@ public class MantenedorOT implements Serializable {
         return sb.toString();
     }
 
+    public void updateRequestedFields(AjaxBehaviorEvent event) {
+        if (tiposTrabajo == null) {
+            return;
+        }
+        for (String tipoTrabajo : tiposTrabajo) {
+            if (tipoTrabajo.equals(constantes.getPAUTA_TRACTO()) || tipoTrabajo.equals(constantes.getPAUTA_SEMIREMOLQUE())) {
+                renderMaquinaria = Boolean.FALSE;
+                renderTractoBatea = Boolean.TRUE;
+            } else {
+                renderMaquinaria = Boolean.TRUE;
+                renderTractoBatea = Boolean.FALSE;
+            }
+        }
+    }
+
     public void create() {
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
@@ -98,13 +120,18 @@ public class MantenedorOT implements Serializable {
         logicaOt.create(ot);
     }
 
-    public void toAssign(OrdenTrabajo ot) {
+    public String prepareToAssign(OrdenTrabajo ot) {
+        this.ot = ot;
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
-        state.setFecha(new Date());
-        state.setEstadoId(constantes.getESTADO_OT_ASIGNADA());
-        state.setOtId(ot);
-        ot.getTrazabilidad().add(state);
+        state.setOtId(this.ot);
+        this.ot.getTrazabilidad().add(state);
+        return "assign";
+    }
+
+    public void toAssign(OrdenTrabajo ot) {
+        this.ot.getTrazabilidad().last().setFecha(new Date());
+        this.ot.getTrazabilidad().last().setEstadoId(constantes.getESTADO_OT_ASIGNADA());
     }
 
     public void toCancel(OrdenTrabajo ot) {
@@ -165,5 +192,37 @@ public class MantenedorOT implements Serializable {
 
     public void setTiposTrabajo(List<String> tiposTrabajo) {
         this.tiposTrabajo = tiposTrabajo;
+    }
+
+    public Boolean getRenderTractoBatea() {
+        return renderTractoBatea;
+    }
+
+    public void setRenderTractoBatea(Boolean renderTractoBatea) {
+        this.renderTractoBatea = renderTractoBatea;
+    }
+
+    public Boolean getRenderMaquinaria() {
+        return renderMaquinaria;
+    }
+
+    public void setRenderMaquinaria(Boolean renderMaquinaria) {
+        this.renderMaquinaria = renderMaquinaria;
+    }
+
+    public MmeMantencionTracto getMantencionTracto() {
+        return mantencionTracto;
+    }
+
+    public void setMantencionTracto(MmeMantencionTracto mantencionTracto) {
+        this.mantencionTracto = mantencionTracto;
+    }
+
+    public MmeMantencionSemiremolque getMantencionSemirremolque() {
+        return mantencionSemirremolque;
+    }
+
+    public void setMantencionSemirremolque(MmeMantencionSemiremolque mantencionSemirremolque) {
+        this.mantencionSemirremolque = mantencionSemirremolque;
     }
 }

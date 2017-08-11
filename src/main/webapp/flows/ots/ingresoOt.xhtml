@@ -8,7 +8,7 @@
     <ui:define name="contenido">
         <h:form id="formOt">
             <h2>Ingreso de OT</h2>
-            
+
             <p:panelGrid columns="3">
                 <p:outputLabel value="Solicitante"/>:
                 <p:selectOneMenu converter="entityConverter"
@@ -20,25 +20,65 @@
                                    itemLabel="#{s.nombre}"/>
                 </p:selectOneMenu>
                 <p:outputLabel value="Tipo de trabajo"/>:
-                <p:selectManyCheckbox value="#{mantenedorOT.tiposTrabajo}" required="true">
-                    <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
-                    <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
-                    <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
-                    <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
-                </p:selectManyCheckbox>
+                <p:outputPanel>
+                    <p:selectManyCheckbox value="#{mantenedorOT.tiposTrabajo}" required="true">
+                        <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
+                        <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
+                        <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
+                        <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
+
+                        <p:ajax event="change" listener="#{mantenedorOT.updateRequestedFields}"
+                                update="requestedFields"/>
+                    </p:selectManyCheckbox>
+
+                    <p:outputPanel id="requestedFields">
+                        <h:panelGrid columns="3">
+                            <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tipo}" id="iTipo"
+                                             converter="entityConverter" required="false">
+                                <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
+                                <f:selectItems value="#{mantenedorOT.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel for="iTracto" value="Camión"/>:
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tracto}" id="iMaquina"
+                                             converter="entityConverter" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
+                                <f:selectItems value="#{mantenedorOT.tractos}" var="t" itemLabel="#{t.patente}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputLabel for="iBatea" value="Batea"/>:
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionSemirremolque.semiRemolque}" id="iBatea"
+                                             converter="entityConverter" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
+                                <f:selectItems value="#{mantenedorOT.bateas}" var="b" itemLabel="#{b.patente}"/>
+                            </p:selectOneMenu>
+
+                            <h:outputLabel for="iMecanico" value="Mecánico Encargado"/>:
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.mecanicoResponsable}" id="iMecanico"
+                                             converter="entityConverter" filter="true" filterMatchMode="contains">
+                                <f:selectItems value="#{mantenedorOT.mecanicos}" var="m" itemLabel="#{m.nombreCompleto}"/>
+                            </p:selectOneMenu>
+                            <h:outputLabel for="iFecha" value="Fecha"/>:
+                            <p:calendar value="#{mantenedorOT.mantencionTracto.fecha}" id="iFecha" pattern="dd-MM-yyyy"
+                                        requiredMessage="Debes especificar la fecha de la mantención"/>
+                            <h:outputLabel for="iKm" value="Kilometraje"/>:
+                            <p:inputText value="#{mantenedorOT.mantencionTracto.kilometraje}" id="iKm"/>
+                        </h:panelGrid>
+                    </p:outputPanel>
+                </p:outputPanel>
                 <p:outputLabel value="Descripción del trabajo"/>:
                 <p:inputTextarea required="true"
                                  value="#{mantenedorOT.ot.descripcion}"/>
             </p:panelGrid>
             <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"
                              icon="fa fa-plus"/>
-            
-            
+
+
             <p:dataTable value="#{mantenedorOT.ots_esperando}" var="ot">
                 <f:facet name="header">
                     <p:outputLabel value="En espera"/>
                 </f:facet>
-                
+
                 <p:column headerText="OT">
                     <p:outputLabel value="#{ot.id}"/>
                 </p:column>
@@ -54,16 +94,18 @@
                     <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
                 </p:column>
                 <p:column headerText="Acciones">
-                    <p:commandButton value="Asignar" action="#{mantenedorOT.toAssign(ot)}"/>
+                    <p:commandButton value="Asignar" 
+                                     immediate="true"
+                                     action="#{mantenedorOT.prepareToAssign(ot)}"/>
                     <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
                 </p:column>
             </p:dataTable>
-            
+
             <p:dataTable value="#{mantenedorOT.ots_ejecutando}" var="ot">
                 <f:facet name="header">
                     <p:outputLabel value="En Progreso"/>
                 </f:facet>
-                
+
                 <p:column headerText="OT">
                     <p:outputLabel value="#{ot.id}"/>
                 </p:column>
@@ -73,17 +115,17 @@
                     <p:outputLabel value="#{ot.solicitante.nombre}"/>
                 </p:column>
                 <p:column headerText="Tipo Trabajo"></p:column>
-                
+
                 <p:column headerText="Acciones">
                     <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
                 </p:column>
             </p:dataTable>
-            
+
             <p:dataTable value="#{mantenedorOT.ots_resueltas}" var="ot">
                 <f:facet name="header">
                     <p:outputLabel value="Últimas resueltas"/>
                 </f:facet>
-                
+
                 <p:column headerText="OT">
                     <p:outputLabel value="#{ot.id}"/>
                 </p:column>

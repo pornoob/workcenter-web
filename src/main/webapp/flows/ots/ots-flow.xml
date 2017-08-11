@@ -8,7 +8,12 @@
     </on-start>
     
     <view-state id="ingresoOt">
+        <transition on="assign" to="asignarOt"/>
         <transition on="back" to="end_flow"/>
+    </view-state>
+    
+    <view-state id="asignarOt">
+        
     </view-state>
     
     <end-state id="end_flow"/>

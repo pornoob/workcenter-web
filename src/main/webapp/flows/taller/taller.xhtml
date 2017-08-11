@@ -9,11 +9,17 @@
         <p:messages autoUpdate="true" showDetail="true" closable="true"/>
         <h:form id="formBodegaTaller">
             <p:panel header="Taller">
-                <h:panelGrid columns="3">
+                <h:panelGrid columns="4">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES')}"
                                    action="#{facesUtil.redirigir('/m/equipos/mantenciones')}" class="menuWorkcenter">
                         <i class="fa fa-wrench fa-5x"></i>
                         <h:outputLabel value="Módulo de Mantenciones"/>
+                    </h:commandLink>
+                    
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"
+                                   action="#{facesUtil.redirigir('/m/facturas')}" class="menuWorkcenter">
+                        <i class="fa fa-usd fa-5x"></i>
+                        <h:outputLabel value="Facturas Taller"/>
                     </h:commandLink>
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"

@@ -22,12 +22,12 @@ import java.util.List;
 @NamedQueries({
     @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos")
     ,
-        @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT p FROM Personal p "
+        @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT DISTINCT p FROM Personal p "
             + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection")
     ,
         @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut")
     ,
-        @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT p FROM Personal p "
+        @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT DISTINCT p FROM Personal p "
             + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection "
             + "WHERE p.rut = :rut")
     ,

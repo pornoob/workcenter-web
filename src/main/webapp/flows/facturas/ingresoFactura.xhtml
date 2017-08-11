@@ -14,6 +14,10 @@
                 <p:outputLabel value="Número Factura"/>
                 <p:outputLabel value=":"/>
                 <p:inputText value="#{mantenedorFacturas.factura.numero}"/>
+                
+                <p:outputLabel value="Número Factura"/>
+                <p:outputLabel value=":"/>
+                <p:inputText value="#{mantenedorFacturas.totalNeto}"/>
 
                 <p:outputLabel value="Proveedor (Emisor)"/>
                 <p:outputLabel value=":"/>
@@ -64,7 +68,7 @@
                     </p:outputPanel>
                 </f:facet>
                 
-                <p:ajax event="cellEdit"/>
+                <p:ajax event="cellEdit" update="tblDetalleFactura"/>
 
                 <p:column headerText="Ítem">
                     <p:cellEditor>
@@ -117,6 +121,8 @@
                     <p:commandButton icon="fa fa-remove"
                                      action="#{mantenedorFacturas.removeItem(item)}"/>
                 </p:column>
+                
+                <p:summaryRow 
             </p:dataTable>
             <p:outputPanel styleClass="ui-g">
                 <p:outputPanel styleClass="ui-g-12 text-center">

@@ -27,6 +27,7 @@ public class MantenedorFacturas implements Serializable {
     
     private FactFactura factura;
     private FactDetalleFactura detalleFactura;
+    private Integer totalNeto;
     
     private List<Empresa> empresas;
     private List<FactProducto> productos;
@@ -53,6 +54,7 @@ public class MantenedorFacturas implements Serializable {
         detalleFactura.setFactura(factura);
         detalleFactura.setCantidad(0);
         detalleFactura.setPrecioUnitario(0);
+        detalleFactura.setProducto(null);
         factura.addItem(detalleFactura);
     }
     
@@ -113,5 +115,13 @@ public class MantenedorFacturas implements Serializable {
 
     public void setProductos(List<FactProducto> productos) {
         this.productos = productos;
+    }
+
+    public Integer getTotalNeto() {
+        return totalNeto;
+    }
+
+    public void setTotalNeto(Integer totalNeto) {
+        this.totalNeto = totalNeto;
     }
 }
