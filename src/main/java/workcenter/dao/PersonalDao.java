@@ -327,6 +327,7 @@ public class PersonalDao extends MyDao {
         Query q = em.createNamedQuery("Personal.findAll", Personal.class);
         EntityGraph<Personal> personalGraph = em.createEntityGraph(Personal.class);
         personalGraph.addAttributeNodes("servicios");
+        personalGraph.addAttributeNodes("lstCargasFamiliares");
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, personalGraph);
         return q.getResultList();
     }

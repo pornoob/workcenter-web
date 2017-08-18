@@ -11,6 +11,7 @@ import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -124,7 +125,7 @@ public class Personal implements Serializable {
     private List<BonoDescuentoPersonal> bonosDescuentos;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "rutPersonal", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<CargasFamiliares> lstCargasFamiliares;
+    private Set<CargasFamiliares> lstCargasFamiliares;
 
     public Personal() {
     }
@@ -378,11 +379,11 @@ public class Personal implements Serializable {
         this.bonosDescuentos = bonosDescuentos;
     }
 
-    public List<CargasFamiliares> getLstCargasFamiliares() {
+    public Set<CargasFamiliares> getLstCargasFamiliares() {
         return lstCargasFamiliares;
     }
 
-    public void setLstCargasFamiliares(List<CargasFamiliares> lstCargasFamiliares) {
+    public void setLstCargasFamiliares(Set<CargasFamiliares> lstCargasFamiliares) {
         this.lstCargasFamiliares = lstCargasFamiliares;
     }
 

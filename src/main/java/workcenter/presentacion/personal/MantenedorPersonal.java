@@ -28,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
+import java.util.Set;
 
 import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 
@@ -227,12 +228,12 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public void ModificarDatosCargaFamiliar() {
-        List<CargasFamiliares> tmpLista = personalSeleccionado.getLstCargasFamiliares();
-        for (int i = 0; i < tmpLista.size(); i++) {
-            if (tmpLista.get(i).getRutCarga() == cargaFamiliares.getRutCarga()) {
-                tmpLista.get(i).setNombres(cargaFamiliares.getNombres());
-                tmpLista.get(i).setApellidos(cargaFamiliares.getApellidos());
-                tmpLista.get(i).setNacimiento(cargaFamiliares.getNacimiento());
+        Set<CargasFamiliares> tmpLista = personalSeleccionado.getLstCargasFamiliares();
+        for (CargasFamiliares carga : tmpLista) {
+            if (carga.getRutCarga().equals(cargaFamiliares.getRutCarga())) {
+                carga.setNombres(cargaFamiliares.getNombres());
+                carga.setApellidos(cargaFamiliares.getApellidos());
+                carga.setNacimiento(cargaFamiliares.getNacimiento());
             }
         }
         personalSeleccionado.setLstCargasFamiliares(tmpLista);
