@@ -2,6 +2,7 @@ package workcenter.presentacion.ordenes_trabajo;
 
 import workcenter.negocio.taller.LogicaOt;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -10,13 +11,19 @@ import javax.faces.event.AjaxBehaviorEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import workcenter.entidades.Equipo;
 import workcenter.entidades.MmeMantencionSemiremolque;
 import workcenter.entidades.MmeMantencionTracto;
+import workcenter.entidades.MmeTipoMantencion;
 import workcenter.entidades.OrdenTrabajo;
 import workcenter.entidades.Personal;
 import workcenter.entidades.SolicitanteOt;
 import workcenter.entidades.TrazabilidadOt;
+import workcenter.negocio.equipos.LogicaEquipos;
+import workcenter.negocio.equipos.LogicaMantenciones;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 
 /**
@@ -42,8 +49,19 @@ public class MantenedorOT implements Serializable {
     private List<OrdenTrabajo> ots_resueltas;
     private List<SolicitanteOt> solicitantes;
 
+    private List<MmeTipoMantencion> tiposMantencion;
+    private List<Equipo> tractos;
+    private List<Equipo> bateas;
+    private List<Personal> mecanicos;
+
     @Autowired
     private LogicaOt logicaOt;
+    @Autowired
+    private LogicaMantenciones logicaMantenciones;
+    @Autowired
+    private LogicaEquipos logicaEquipos;
+    @Autowired
+    private LogicaPersonal logicaPersonal;
     @Autowired
     private Constantes constantes;
     @Autowired
@@ -93,17 +111,30 @@ public class MantenedorOT implements Serializable {
     }
 
     public void updateRequestedFields(AjaxBehaviorEvent event) {
-        if (tiposTrabajo == null) {
+        renderMaquinaria = Boolean.FALSE;
+        renderTractoBatea = Boolean.FALSE;
+        if (tiposTrabajo == null || tiposTrabajo.isEmpty()) {
             return;
         }
+
         for (String tipoTrabajo : tiposTrabajo) {
-            if (tipoTrabajo.equals(constantes.getPAUTA_TRACTO()) || tipoTrabajo.equals(constantes.getPAUTA_SEMIREMOLQUE())) {
+            if (Integer.valueOf(tipoTrabajo).equals(constantes.getPAUTA_TRACTO()) || Integer.valueOf(tipoTrabajo).equals(constantes.getPAUTA_SEMIREMOLQUE())) {
                 renderMaquinaria = Boolean.FALSE;
-                renderTractoBatea = Boolean.TRUE;
+
+                tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
+                mecanicos = logicaPersonal.obtenerMecanicos();
+                bateas = logicaEquipos.obtenerBateas();
+                tractos = logicaEquipos.obtenerTractos();
             } else {
                 renderMaquinaria = Boolean.TRUE;
-                renderTractoBatea = Boolean.FALSE;
             }
+        }
+
+        if (Boolean.TRUE.equals(renderMaquinaria) && Boolean.TRUE.equals(renderTractoBatea)) {
+            tiposTrabajo = null;
+            renderMaquinaria = Boolean.FALSE;
+            renderTractoBatea = Boolean.FALSE;
+            FacesUtil.mostrarMensajeError("Error", "No se puede seleccionar mantenciones multiples para una OT, a excepción de Tracto/Semirremolque");
         }
     }
 
@@ -224,5 +255,37 @@ public class MantenedorOT implements Serializable {
 
     public void setMantencionSemirremolque(MmeMantencionSemiremolque mantencionSemirremolque) {
         this.mantencionSemirremolque = mantencionSemirremolque;
+    }
+
+    public List<MmeTipoMantencion> getTiposMantencion() {
+        return tiposMantencion;
+    }
+
+    public void setTiposMantencion(List<MmeTipoMantencion> tiposMantencion) {
+        this.tiposMantencion = tiposMantencion;
+    }
+
+    public List<Equipo> getTractos() {
+        return tractos;
+    }
+
+    public void setTractos(List<Equipo> tractos) {
+        this.tractos = tractos;
+    }
+
+    public List<Equipo> getBateas() {
+        return bateas;
+    }
+
+    public void setBateas(List<Equipo> bateas) {
+        this.bateas = bateas;
+    }
+
+    public List<Personal> getMecanicos() {
+        return mecanicos;
+    }
+
+    public void setMecanicos(List<Personal> mecanicos) {
+        this.mecanicos = mecanicos;
     }
 }

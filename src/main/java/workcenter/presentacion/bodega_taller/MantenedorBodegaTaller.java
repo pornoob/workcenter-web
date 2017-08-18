@@ -40,7 +40,7 @@ public class MantenedorBodegaTaller implements Serializable {
         logicaStock.save(producto);
         producto = new FactProducto();
         productos = logicaStock.findProductosBodega();
-        FacesUtil.mostrarMensajeError("Operación exitosa", "Producto agregado con éxito");
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Producto agregado con éxito");
     }
 
     public List<FactProductoBodega> getProductos() {

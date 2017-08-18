@@ -21,18 +21,19 @@
                 </p:selectOneMenu>
                 <p:outputLabel value="Tipo de trabajo"/>:
                 <p:outputPanel>
-                    <p:selectManyCheckbox value="#{mantenedorOT.tiposTrabajo}" required="true">
+                    <p:selectManyCheckbox value="#{mantenedorOT.tiposTrabajo}" required="#{not empty param['btnCrearOt']}">
                         <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
                         <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
                         <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
                         <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
 
-                        <p:ajax event="change" listener="#{mantenedorOT.updateRequestedFields}"
+                        <p:ajax listener="#{mantenedorOT.updateRequestedFields}"
+                                process="@this"
                                 update="requestedFields"/>
                     </p:selectManyCheckbox>
 
                     <p:outputPanel id="requestedFields">
-                        <h:panelGrid columns="3">
+                        <h:panelGrid columns="3" rendered="#{mantenedorOT.renderTractoBatea}">
                             <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
                             <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tipo}" id="iTipo"
                                              converter="entityConverter" required="false">
@@ -64,6 +65,10 @@
                             <h:outputLabel for="iKm" value="Kilometraje"/>:
                             <p:inputText value="#{mantenedorOT.mantencionTracto.kilometraje}" id="iKm"/>
                         </h:panelGrid>
+                        
+                        <h:panelGrid>
+                            
+                        </h:panelGrid>
                     </p:outputPanel>
                 </p:outputPanel>
                 <p:outputLabel value="Descripción del trabajo"/>:
@@ -71,6 +76,7 @@
                                  value="#{mantenedorOT.ot.descripcion}"/>
             </p:panelGrid>
             <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"
+                             id="btnCrearOt"
                              icon="fa fa-plus"/>
 
 
