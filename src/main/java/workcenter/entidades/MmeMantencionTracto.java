@@ -23,6 +23,7 @@ public class MmeMantencionTracto implements Serializable {
     private Equipo tracto;
     private Integer kilometraje;
     private Integer ciclo;
+    private OrdenTrabajo ot;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -94,6 +95,16 @@ public class MmeMantencionTracto implements Serializable {
 
     public void setCiclo(Integer ciclo) {
         this.ciclo = ciclo;
+    }
+
+    @JoinColumn(name = "ot_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    public OrdenTrabajo getOt() {
+        return ot;
+    }
+
+    public void setOt(OrdenTrabajo ot) {
+        this.ot = ot;
     }
 
     @Override

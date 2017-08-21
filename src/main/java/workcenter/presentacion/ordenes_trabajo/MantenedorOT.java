@@ -2,7 +2,6 @@ package workcenter.presentacion.ordenes_trabajo;
 
 import workcenter.negocio.taller.LogicaOt;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -12,7 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionMaquina;
+import workcenter.entidades.MmeMantencionSemirremolque;
 import workcenter.entidades.MmeMantencionTracto;
 import workcenter.entidades.MmeTipoMantencion;
 import workcenter.entidades.OrdenTrabajo;
@@ -42,7 +42,8 @@ public class MantenedorOT implements Serializable {
     private Boolean renderTractoBatea;
     private Boolean renderMaquinaria;
     private MmeMantencionTracto mantencionTracto;
-    private MmeMantencionSemiremolque mantencionSemirremolque;
+    private MmeMantencionSemirremolque mantencionSemirremolque;
+    private MmeMantencionMaquina mantencionMaquina;
 
     private List<OrdenTrabajo> ots_esperando;
     private List<OrdenTrabajo> ots_ejecutando;
@@ -52,6 +53,7 @@ public class MantenedorOT implements Serializable {
     private List<MmeTipoMantencion> tiposMantencion;
     private List<Equipo> tractos;
     private List<Equipo> bateas;
+    private List<Equipo> maquinas;
     private List<Personal> mecanicos;
 
     @Autowired
@@ -125,8 +127,16 @@ public class MantenedorOT implements Serializable {
                 mecanicos = logicaPersonal.obtenerMecanicos();
                 bateas = logicaEquipos.obtenerBateas();
                 tractos = logicaEquipos.obtenerTractos();
+                mantencionTracto = new MmeMantencionTracto();
+                mantencionSemirremolque = new MmeMantencionSemirremolque();
+                mantencionTracto.setOt(ot);
+                mantencionSemirremolque.setOt(ot);
             } else {
                 renderMaquinaria = Boolean.TRUE;
+                mecanicos = logicaPersonal.obtenerMecanicos();
+                maquinas = logicaEquipos.obtenerMaquinas();
+                mantencionMaquina = new MmeMantencionMaquina();
+                mantencionMaquina.setOt(ot);
             }
         }
 
@@ -148,7 +158,23 @@ public class MantenedorOT implements Serializable {
         history.add(state);
         ot.setTipoTrabajo(listTipoTrabajoToString());
         ot.setTrazabilidad(history);
-        logicaOt.create(ot);
+        if (Boolean.TRUE.equals(renderMaquinaria)) {
+            logicaOt.create(ot, mantencionMaquina);
+        } else {
+            if (mantencionTracto.getTracto() == null && mantencionSemirremolque.getSemiRremolque() == null) {
+                FacesUtil.mostrarMensajeError("Error", "Debes especificar al menos un Tracto y/o Semirremolque");
+                return;
+            }
+            
+            if (mantencionTracto.getTracto() != null && mantencionSemirremolque.getSemiRremolque() != null) {
+                logicaOt.create(ot, mantencionTracto, mantencionSemirremolque);
+            } else if (mantencionTracto.getTracto() != null) {
+                logicaOt.create(ot, mantencionTracto);
+            } else {
+                logicaOt.create(ot, mantencionSemirremolque);
+            }
+        }
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha generado una nueva orden de trabajo");
     }
 
     public String prepareToAssign(OrdenTrabajo ot) {
@@ -249,11 +275,11 @@ public class MantenedorOT implements Serializable {
         this.mantencionTracto = mantencionTracto;
     }
 
-    public MmeMantencionSemiremolque getMantencionSemirremolque() {
+    public MmeMantencionSemirremolque getMantencionSemirremolque() {
         return mantencionSemirremolque;
     }
 
-    public void setMantencionSemirremolque(MmeMantencionSemiremolque mantencionSemirremolque) {
+    public void setMantencionSemirremolque(MmeMantencionSemirremolque mantencionSemirremolque) {
         this.mantencionSemirremolque = mantencionSemirremolque;
     }
 
@@ -287,5 +313,21 @@ public class MantenedorOT implements Serializable {
 
     public void setMecanicos(List<Personal> mecanicos) {
         this.mecanicos = mecanicos;
+    }
+
+    public MmeMantencionMaquina getMantencionMaquina() {
+        return mantencionMaquina;
+    }
+
+    public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
+        this.mantencionMaquina = mantencionMaquina;
+    }
+
+    public List<Equipo> getMaquinas() {
+        return maquinas;
+    }
+
+    public void setMaquinas(List<Equipo> maquinas) {
+        this.maquinas = maquinas;
     }
 }

@@ -64,7 +64,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private List<MmeTareaMaquina> tiposMantencionMaquinaSeleccionadas;
     private List<Personal> mecanicos;
     private MmeMantencionTracto mantencionTracto;
-    private MmeMantencionSemiremolque mantencionSemiremolque;
+    private MmeMantencionSemirremolque mantencionSemiremolque;
     private MmeMantencionMaquina mantencionMaquina;
     private MmeMantencionMaquina ultimaMantencionMaquina;
     private Map<String, List<Documento>> comprobantesMantencion;
@@ -94,7 +94,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public String irEditarSemiRemolque() {
         bateas = logicaEquipos.obtenerBateas();
         mecanicos = logicaPersonal.obtenerMecanicos();
-        mantencionSemiremolque = new MmeMantencionSemiremolque();
+        mantencionSemiremolque = new MmeMantencionSemirremolque();
         return "flowEditarSemiRemolque";
     }
 
@@ -169,7 +169,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return false;
     }
 
-    public boolean dibujarSemaforoRojoSemiremolque(MmeMantencionSemiremolque m) {
+    public boolean dibujarSemaforoRojoSemiremolque(MmeMantencionSemirremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
         fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
@@ -177,7 +177,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return new Date().after(fechaMantencion.getTime());
     }
 
-    public boolean dibujarSemaforoAmarilloSemiremolque(MmeMantencionSemiremolque m) {
+    public boolean dibujarSemaforoAmarilloSemiremolque(MmeMantencionSemirremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
         fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
@@ -189,7 +189,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return false;
     }
 
-    public boolean dibujarSemaforoVerdeSemiremolque(MmeMantencionSemiremolque m) {
+    public boolean dibujarSemaforoVerdeSemiremolque(MmeMantencionSemirremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
         fechaMantencion.add(Calendar.DAY_OF_MONTH, m.getCriterioSiguiente());
@@ -256,7 +256,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return c.getTime();
     }
 
-    public Date obtenerFechaSiguienteMantencionSemiremolque(MmeMantencionSemiremolque ms) {
+    public Date obtenerFechaSiguienteMantencionSemiremolque(MmeMantencionSemirremolque ms) {
         Calendar c = Calendar.getInstance();
         c.setTime(ms.getFecha());
         c.add(Calendar.DAY_OF_MONTH, 30);
@@ -322,7 +322,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             FacesUtil.mostrarMensajeError("Operación fallida", "Debes adjuntar al menos un respaldo de la mantención");
             return;
         }
-        if (mantencionTracto.getTracto() == null && mantencionSemiremolque.getSemiRemolque() == null) {
+        if (mantencionTracto.getTracto() == null && mantencionSemiremolque.getSemiRremolque() == null) {
             FacesUtil.mostrarMensajeError("Operación fallida", "La mantención se realiza sobre un equipo al menos");
             return;
         }
@@ -333,7 +333,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             logicaMantenciones.guardar(mantencionTracto);
         }
 
-        if (mantencionSemiremolque.getSemiRemolque() != null) {
+        if (mantencionSemiremolque.getSemiRremolque() != null) {
             mantencionSemiremolque.setMecanicoResponsable(mantencionTracto.getMecanicoResponsable());
             mantencionSemiremolque.setFecha(mantencionTracto.getFecha());
             mantencionSemiremolque.setCriterioSiguiente(30);
@@ -343,7 +343,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             if (mantencionTracto.getTracto() != null) {
                 logicaDocumentos.asociarDocumento(d, mantencionTracto);
             }
-            if (mantencionSemiremolque.getSemiRemolque() != null) {
+            if (mantencionSemiremolque.getSemiRremolque() != null) {
                 logicaDocumentos.asociarDocumento(d, mantencionSemiremolque);
             }
         }
@@ -352,7 +352,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         comprobantesMantencion = null;
     }
 
-    public StreamedContent obtenerDescargableSemiremolque(MmeMantencionSemiremolque m) {
+    public StreamedContent obtenerDescargableSemiremolque(MmeMantencionSemirremolque m) {
         List<Documento> docs = logicaDocumentos.obtenerDocumentosAsociados(m);
         Documento doc = docs.get(docs.size() - 1);
         Descargable d = new Descargable(new File(constantes.getPathArchivos() + doc.getId()));
@@ -405,11 +405,11 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.mantencionTracto = mantencionTracto;
     }
 
-    public MmeMantencionSemiremolque getMantencionSemiremolque() {
+    public MmeMantencionSemirremolque getMantencionSemiremolque() {
         return mantencionSemiremolque;
     }
 
-    public void setMantencionSemiremolque(MmeMantencionSemiremolque mantencionSemiremolque) {
+    public void setMantencionSemiremolque(MmeMantencionSemirremolque mantencionSemiremolque) {
         this.mantencionSemiremolque = mantencionSemiremolque;
     }
 

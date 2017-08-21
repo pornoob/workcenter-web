@@ -13,7 +13,7 @@ import org.springframework.stereotype.Repository;
 import workcenter.entidades.Equipo;
 import workcenter.entidades.MmeCheckMaquina;
 import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionSemirremolque;
 import workcenter.entidades.MmeMantencionTracto;
 import workcenter.entidades.MmeTareaMaquina;
 import workcenter.entidades.MmeTipoMantencion;
@@ -31,7 +31,7 @@ public class MmeMantencionesDao extends MyDao {
         return em.createNamedQuery("MmeTipoMantencion.findAll").getResultList();
     }
 
-    public void guardar(MmeMantencionSemiremolque m) {
+    public void guardar(MmeMantencionSemirremolque m) {
         if (m.getId() == null) {
             em.persist(m);
         } else {
@@ -91,12 +91,12 @@ public class MmeMantencionesDao extends MyDao {
         }
     }
 
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
+    public List<MmeMantencionSemirremolque> obtenerUltimasMantencionesSemiremolques() {
         StringBuilder sql = new StringBuilder();
         sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable ");
         sql.append("from mme_mantenciones_semiremolque m ");
         sql.append("group by m.equipo order by fecha desc ");
-        return em.createNativeQuery(sql.toString(), MmeMantencionSemiremolque.class)
+        return em.createNativeQuery(sql.toString(), MmeMantencionSemirremolque.class)
                 .getResultList();
     }
 
@@ -104,8 +104,8 @@ public class MmeMantencionesDao extends MyDao {
         return em.createNamedQuery("MmeMantencionTracto.findByTracto").setParameter("tracto", e).getResultList();
     }
 
-    public List<MmeMantencionSemiremolque> obtenerMantencionesSemiremolques(Equipo e) {
-        return em.createNamedQuery("MmeMantencionSemiremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
+    public List<MmeMantencionSemirremolque> obtenerMantencionesSemiremolques(Equipo e) {
+        return em.createNamedQuery("MmeMantencionSemirremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
     }
 
     public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {

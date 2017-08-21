@@ -11,7 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MmeMantencionesDao;
 import workcenter.entidades.Equipo;
 import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionSemirremolque;
 import workcenter.entidades.MmeMantencionTracto;
 import workcenter.entidades.MmeTareaMaquina;
 import workcenter.entidades.MmeTipoMantencion;
@@ -41,7 +41,7 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = false)
-    public void guardar(MmeMantencionSemiremolque m) {
+    public void guardar(MmeMantencionSemirremolque m) {
         mmeMantencionesDao.guardar(m);
     }
 
@@ -61,7 +61,7 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionSemiremolque> obtenerUltimasMantencionesSemiremolques() {
+    public List<MmeMantencionSemirremolque> obtenerUltimasMantencionesSemiremolques() {
         return mmeMantencionesDao.obtenerUltimasMantencionesSemiremolques();
     }
 
@@ -71,7 +71,7 @@ public class LogicaMantenciones {
     }
 
     @Transactional(readOnly = true)
-    public List<MmeMantencionSemiremolque> obtenerMantencionesSemiremolques(Equipo e) {
+    public List<MmeMantencionSemirremolque> obtenerMantencionesSemiremolques(Equipo e) {
         return mmeMantencionesDao.obtenerMantencionesSemiremolques(e);
     }
 

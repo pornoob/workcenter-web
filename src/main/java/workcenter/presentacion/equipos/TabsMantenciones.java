@@ -13,7 +13,7 @@ import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.Equipo;
 import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemiremolque;
+import workcenter.entidades.MmeMantencionSemirremolque;
 import workcenter.entidades.MmeMantencionTracto;
 import workcenter.negocio.equipos.LogicaMantenciones;
 import workcenter.util.components.FacesUtil;
@@ -32,7 +32,7 @@ public class TabsMantenciones implements Serializable {
     private static final long serialVersionUID = -8603051539908186924L;
 
     private List<MmeMantencionTracto> mantencionesTractos;
-    private List<MmeMantencionSemiremolque> mantencionesSemiremolque;
+    private List<MmeMantencionSemirremolque> mantencionesSemiremolque;
     private Set<MmeMantencionMaquina> mantencionesMaquina;
     
     private Equipo equipo;
@@ -148,11 +148,11 @@ public class TabsMantenciones implements Serializable {
         this.mantencionesTractos = mantencionesTractos;
     }
 
-    public List<MmeMantencionSemiremolque> getMantencionesSemiremolque() {
+    public List<MmeMantencionSemirremolque> getMantencionesSemiremolque() {
         return mantencionesSemiremolque;
     }
 
-    public void setMantencionesSemiremolque(List<MmeMantencionSemiremolque> mantencionesSemiremolque) {
+    public void setMantencionesSemiremolque(List<MmeMantencionSemirremolque> mantencionesSemiremolque) {
         this.mantencionesSemiremolque = mantencionesSemiremolque;
     }
 

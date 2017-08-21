@@ -11,16 +11,17 @@ import java.util.Date;
 @Table(name = "mme_mantenciones_semiremolque", schema = "")
 @NamedQueries(
         @NamedQuery(
-                name = "MmeMantencionSemiremolque.findBySemiremolque",
-                query = "select m from MmeMantencionSemiremolque m where m.semiRemolque=:semiremolque order by m.fecha desc"
+                name = "MmeMantencionSemirremolque.findBySemiremolque",
+                query = "select m from MmeMantencionSemirremolque m where m.semiRremolque=:semiremolque order by m.fecha desc"
         )
 )
-public class MmeMantencionSemiremolque implements Serializable {
+public class MmeMantencionSemirremolque implements Serializable {
     private Integer id;
     private Date fecha;
     private Personal mecanicoResponsable;
     private Integer criterioSiguiente;
-    private Equipo semiRemolque;
+    private Equipo semiRremolque;
+    private OrdenTrabajo ot;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -66,12 +67,22 @@ public class MmeMantencionSemiremolque implements Serializable {
 
     @ManyToOne
     @JoinColumn(name = "equipo", referencedColumnName = "patente")
-    public Equipo getSemiRemolque() {
-        return semiRemolque;
+    public Equipo getSemiRremolque() {
+        return semiRremolque;
     }
 
-    public void setSemiRemolque(Equipo tracto) {
-        this.semiRemolque = tracto;
+    public void setSemiRremolque(Equipo tracto) {
+        this.semiRremolque = tracto;
+    }
+    
+    @JoinColumn(name = "ot_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    public OrdenTrabajo getOt() {
+        return ot;
+    }
+
+    public void setOt(OrdenTrabajo ot) {
+        this.ot = ot;
     }
 
     @Override
@@ -79,7 +90,7 @@ public class MmeMantencionSemiremolque implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        MmeMantencionSemiremolque that = (MmeMantencionSemiremolque) o;
+        MmeMantencionSemirremolque that = (MmeMantencionSemirremolque) o;
 
         if (this.getId() == null || that.getId() == null) return false;
         else if (this.getId().intValue() != that.getId().intValue()) return false;

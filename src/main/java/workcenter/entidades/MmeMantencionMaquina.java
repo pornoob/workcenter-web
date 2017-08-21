@@ -7,6 +7,7 @@ import java.util.Objects;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -15,6 +16,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
@@ -62,6 +64,10 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
 
     @OneToMany(mappedBy = "mantencionMaquina", cascade = CascadeType.ALL)
     private List<MmeCheckMaquina> checkeoRealizado;
+    
+    @JoinColumn(name = "ot_id", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)
+    private OrdenTrabajo ot;
 
     public Integer getId() {
         return id;
@@ -117,6 +123,14 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
 
     public void setCheckeoRealizado(List<MmeCheckMaquina> checkeoRealizado) {
         this.checkeoRealizado = checkeoRealizado;
+    }
+    
+    public OrdenTrabajo getOt() {
+        return ot;
+    }
+
+    public void setOt(OrdenTrabajo ot) {
+        this.ot = ot;
     }
 
     @Override
