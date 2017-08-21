@@ -18,10 +18,10 @@
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      filterEvent="enter"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
-            <p:column headerText="Patente" filterBy="#{ms.semiRemolque.patente}"
+            <p:column headerText="Patente" filterBy="#{ms.semiRremolque.patente}"
                       filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                <p:commandLink value="#{ms.semiRemolque.patente}" ajax="false"
-                               action="#{tabsMantenciones.irHistorialSemiremolque(ms.semiRemolque)}"/>
+                <p:commandLink value="#{ms.semiRremolque.patente}" ajax="false"
+                               action="#{tabsMantenciones.irHistorialSemiremolque(ms.semiRremolque)}"/>
             </p:column>
             <p:column headerText="Fecha">
                 <p:commandLink ajax="false">

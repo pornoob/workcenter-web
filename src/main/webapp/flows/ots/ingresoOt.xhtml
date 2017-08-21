@@ -36,7 +36,7 @@
                         <h:panelGrid columns="3" rendered="#{mantenedorOT.renderTractoBatea}">
                             <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
                             <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tipo}" id="iTipo"
-                                             converter="entityConverter" required="false">
+                                             converter="entityConverter" required="#{not empty param['btnCrearOt']}">
                                 <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
                                 <f:selectItems value="#{mantenedorOT.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
                             </p:selectOneMenu>
@@ -48,26 +48,21 @@
                             </p:selectOneMenu>
 
                             <h:outputLabel for="iBatea" value="Batea"/>:
-                            <p:selectOneMenu value="#{mantenedorOT.mantencionSemirremolque.semiRemolque}" id="iBatea"
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionSemirremolque.semiRremolque}" id="iBatea"
                                              converter="entityConverter" filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
                                 <f:selectItems value="#{mantenedorOT.bateas}" var="b" itemLabel="#{b.patente}"/>
                             </p:selectOneMenu>
-
-                            <h:outputLabel for="iMecanico" value="Mecánico Encargado"/>:
-                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.mecanicoResponsable}" id="iMecanico"
-                                             converter="entityConverter" filter="true" filterMatchMode="contains">
-                                <f:selectItems value="#{mantenedorOT.mecanicos}" var="m" itemLabel="#{m.nombreCompleto}"/>
-                            </p:selectOneMenu>
-                            <h:outputLabel for="iFecha" value="Fecha"/>:
-                            <p:calendar value="#{mantenedorOT.mantencionTracto.fecha}" id="iFecha" pattern="dd-MM-yyyy"
-                                        requiredMessage="Debes especificar la fecha de la mantención"/>
-                            <h:outputLabel for="iKm" value="Kilometraje"/>:
-                            <p:inputText value="#{mantenedorOT.mantencionTracto.kilometraje}" id="iKm"/>
                         </h:panelGrid>
-                        
-                        <h:panelGrid>
-                            
+
+                        <h:panelGrid columns="3" rendered="#{mantenedorOT.renderMaquinaria}">
+                            <h:outputLabel for="iMaquina" value="Máquina"/>:
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionMaquina.maquina}" id="iMaquina"
+                                             required="#{not empty param['btnCrearOt']}"
+                                             converter="entityConverter" filter="true" filterMatchMode="contains">
+                                <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                                <f:selectItems value="#{mantenedorOT.maquinas}" var="t" itemLabel="#{t.patente}"/>
+                            </p:selectOneMenu>
                         </h:panelGrid>
                     </p:outputPanel>
                 </p:outputPanel>
