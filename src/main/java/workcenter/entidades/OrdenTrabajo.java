@@ -21,6 +21,7 @@ import javax.persistence.ManyToOne;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
@@ -56,6 +57,13 @@ public class OrdenTrabajo implements Serializable {
     @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @SortNatural
     private SortedSet<TrazabilidadOt> trazabilidad;
+    
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    private MmeMantencionTracto mantencionTracto;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    private MmeMantencionSemirremolque mantencionSemirremolque;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    private MmeMantencionMaquina mantencionMaquina;
 
     public OrdenTrabajo() {
     }
@@ -102,6 +110,30 @@ public class OrdenTrabajo implements Serializable {
 
     public void setTrazabilidad(SortedSet<TrazabilidadOt> trazabilidad) {
         this.trazabilidad = trazabilidad;
+    }
+
+    public MmeMantencionTracto getMantencionTracto() {
+        return mantencionTracto;
+    }
+
+    public void setMantencionTracto(MmeMantencionTracto mantencionTracto) {
+        this.mantencionTracto = mantencionTracto;
+    }
+
+    public MmeMantencionSemirremolque getMantencionSemirremolque() {
+        return mantencionSemirremolque;
+    }
+
+    public void setMantencionSemirremolque(MmeMantencionSemirremolque mantencionSemirremolque) {
+        this.mantencionSemirremolque = mantencionSemirremolque;
+    }
+
+    public MmeMantencionMaquina getMantencionMaquina() {
+        return mantencionMaquina;
+    }
+
+    public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
+        this.mantencionMaquina = mantencionMaquina;
     }
 
     @Override

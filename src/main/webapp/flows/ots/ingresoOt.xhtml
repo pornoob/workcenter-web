@@ -6,6 +6,7 @@
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
+        <p:messages autoUpdate="true" showDetail="true"/>
         <h:form id="formOt">
             <h2>Ingreso de OT</h2>
 
@@ -29,7 +30,7 @@
 
                         <p:ajax listener="#{mantenedorOT.updateRequestedFields}"
                                 process="@this"
-                                update="requestedFields"/>
+                                update="requestedFields @this"/>
                     </p:selectManyCheckbox>
 
                     <p:outputPanel id="requestedFields">
@@ -41,7 +42,7 @@
                                 <f:selectItems value="#{mantenedorOT.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
                             </p:selectOneMenu>
                             <h:outputLabel for="iTracto" value="Camión"/>:
-                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tracto}" id="iMaquina"
+                            <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tracto}" id="iTracto"
                                              converter="entityConverter" filter="true" filterMatchMode="contains">
                                 <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
                                 <f:selectItems value="#{mantenedorOT.tractos}" var="t" itemLabel="#{t.patente}"/>
@@ -71,73 +72,85 @@
                                  value="#{mantenedorOT.ot.descripcion}"/>
             </p:panelGrid>
             <p:commandButton value="Crear OT" action="#{mantenedorOT.create()}"
-                             id="btnCrearOt"
+                             id="btnCrearOt" update="dtContainer"
                              icon="fa fa-plus"/>
 
 
-            <p:dataTable value="#{mantenedorOT.ots_esperando}" var="ot">
-                <f:facet name="header">
-                    <p:outputLabel value="En espera"/>
-                </f:facet>
+            <p:outputPanel id="dtContainer">
+                <p:dataTable value="#{mantenedorOT.ots_esperando}" var="ot">
+                    <f:facet name="header">
+                        <p:outputLabel value="En espera"/>
+                    </f:facet>
 
-                <p:column headerText="OT">
-                    <p:outputLabel value="#{ot.id}"/>
-                </p:column>
-                <p:column headerText="Fecha Ingreso">
-                    <p:outputLabel value="#{ot.trazabilidad.first().fecha}">
-                        <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
-                    </p:outputLabel>
-                </p:column>
-                <p:column headerText="Solicitante">
-                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
-                </p:column>
-                <p:column headerText="Tipo Trabajo">
-                    <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
-                </p:column>
-                <p:column headerText="Acciones">
-                    <p:commandButton value="Asignar" 
-                                     immediate="true"
-                                     action="#{mantenedorOT.prepareToAssign(ot)}"/>
-                    <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
-                </p:column>
-            </p:dataTable>
+                    <p:column headerText="OT">
+                        <p:outputLabel value="#{ot.id}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Ingreso">
+                        <p:outputLabel value="#{ot.trazabilidad.first().fecha}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Solicitante">
+                        <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Trabajo">
+                        <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Asignar" 
+                                         immediate="true"
+                                         action="#{mantenedorOT.prepareToAssign(ot)}"/>
+                        <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
+                    </p:column>
+                </p:dataTable>
 
-            <p:dataTable value="#{mantenedorOT.ots_ejecutando}" var="ot">
-                <f:facet name="header">
-                    <p:outputLabel value="En Progreso"/>
-                </f:facet>
+                <p:dataTable value="#{mantenedorOT.ots_ejecutando}" var="ot">
+                    <f:facet name="header">
+                        <p:outputLabel value="En Progreso"/>
+                    </f:facet>
 
-                <p:column headerText="OT">
-                    <p:outputLabel value="#{ot.id}"/>
-                </p:column>
-                <p:column headerText="Fecha Ingreso"></p:column>
-                <p:column headerText="Fecha Asignación"></p:column>
-                <p:column headerText="Solicitante">
-                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
-                </p:column>
-                <p:column headerText="Tipo Trabajo"></p:column>
+                    <p:column headerText="OT">
+                        <p:outputLabel value="#{ot.id}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Ingreso">
+                        <p:outputLabel value="#{ot.trazabilidad.first().fecha}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Fecha Asignación">
+                        <p:outputLabel value="#{ot.trazabilidad.last().fecha}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Solicitante">
+                        <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Trabajo">
+                        <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
+                    </p:column>
 
-                <p:column headerText="Acciones">
-                    <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
-                </p:column>
-            </p:dataTable>
+                    <p:column headerText="Acciones">
+                        <p:commandButton value="Anular" action="#{mantenedorOT.toCancel(ot)}"/>
+                    </p:column>
+                </p:dataTable>
 
-            <p:dataTable value="#{mantenedorOT.ots_resueltas}" var="ot">
-                <f:facet name="header">
-                    <p:outputLabel value="Últimas resueltas"/>
-                </f:facet>
+                <p:dataTable value="#{mantenedorOT.ots_resueltas}" var="ot">
+                    <f:facet name="header">
+                        <p:outputLabel value="Últimas resueltas"/>
+                    </f:facet>
 
-                <p:column headerText="OT">
-                    <p:outputLabel value="#{ot.id}"/>
-                </p:column>
-                <p:column headerText="Fecha Ingreso"></p:column>
-                <p:column headerText="Fecha Finalizacion"></p:column>
-                <p:column headerText="Solicitante">
-                    <p:outputLabel value="#{ot.solicitante.nombre}"/>
-                </p:column>
-                <p:column headerText="Tipo Trabajo">
-                </p:column>
-            </p:dataTable>
+                    <p:column headerText="OT">
+                        <p:outputLabel value="#{ot.id}"/>
+                    </p:column>
+                    <p:column headerText="Fecha Ingreso"></p:column>
+                    <p:column headerText="Fecha Finalizacion"></p:column>
+                    <p:column headerText="Solicitante">
+                        <p:outputLabel value="#{ot.solicitante.nombre}"/>
+                    </p:column>
+                    <p:column headerText="Tipo Trabajo">
+                    </p:column>
+                </p:dataTable>
+            </p:outputPanel>
         </h:form>
     </ui:define>
 </ui:composition>

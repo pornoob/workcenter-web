@@ -11,21 +11,21 @@
             
             <p:panelGrid columns="3">
                 <p:outputLabel value="Solicitante"/>:
-                <h:outputText/>
+                <h:outputText value="#{mantenedorOT.ot.solicitante.nombre}"/>
                 <p:outputLabel value="Pautas requeridas"/>:
-                <p:selectManyCheckbox>
-                    <f:selectItem itemLabel="Mantenimiento Tracto" itemValue="#{constantes.PAUTA_TRACTO}"/>
-                    <f:selectItem itemLabel="Mantenimiento Semiremolque" itemValue="#{constantes.PAUTA_SEMIREMOLQUE}"/>
-                    <f:selectItem itemLabel="Mantenimiento Maquinaria" itemValue="#{constantes.PAUTA_MAQUINARIA}"/>
-                    <f:selectItem itemLabel="Mantenimiento Venta de repuestos" itemValue="#{constantes.PAUTA_VENTA_REPUESTO}"/>
-                </p:selectManyCheckbox>
+                <h:outputText value="#{mantenedorOT.tipoTrabajoToPrettyName(mantenedorOT.ot.tipoTrabajo)}"/>
                 <p:outputLabel value="Descripción del trabajo"/>:
-                <h:outputText/>
+                <h:outputText value="#{mantenedorOT.ot.descripcion}"/>
                 
                 <p:outputLabel value="Encargado"/>:
-                <p:selectOneMenu/>
+                <p:selectOneMenu filter="true" filterMatchMode="contains"
+                                 converter="entityConverter" value="#{mantenedorOT.ejecutor}">
+                    <f:selectItems value="#{mantenedorOT.mecanicos}" var="m"
+                                   itemLabel="#{m.nombreCompleto}"/>
+                </p:selectOneMenu>
             </p:panelGrid>
-            <p:commandButton value="Asignar" icon="fa fa-check">
+            <p:commandButton value="Asignar" icon="fa fa-check"
+                             action="#{mantenedorOT.toAssign()}">
                 
             </p:commandButton>
         </h:form>

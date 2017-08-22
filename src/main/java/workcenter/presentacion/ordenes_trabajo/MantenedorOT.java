@@ -121,7 +121,7 @@ public class MantenedorOT implements Serializable {
 
         for (String tipoTrabajo : tiposTrabajo) {
             if (Integer.valueOf(tipoTrabajo).equals(constantes.getPAUTA_TRACTO()) || Integer.valueOf(tipoTrabajo).equals(constantes.getPAUTA_SEMIREMOLQUE())) {
-                renderMaquinaria = Boolean.FALSE;
+                renderTractoBatea = Boolean.TRUE;
 
                 tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
                 mecanicos = logicaPersonal.obtenerMecanicos();
@@ -129,14 +129,19 @@ public class MantenedorOT implements Serializable {
                 tractos = logicaEquipos.obtenerTractos();
                 mantencionTracto = new MmeMantencionTracto();
                 mantencionSemirremolque = new MmeMantencionSemirremolque();
+                
                 mantencionTracto.setOt(ot);
                 mantencionSemirremolque.setOt(ot);
+                
+                ot.setMantencionTracto(mantencionTracto);
+                ot.setMantencionSemirremolque(mantencionSemirremolque);
             } else {
                 renderMaquinaria = Boolean.TRUE;
                 mecanicos = logicaPersonal.obtenerMecanicos();
                 maquinas = logicaEquipos.obtenerMaquinas();
                 mantencionMaquina = new MmeMantencionMaquina();
                 mantencionMaquina.setOt(ot);
+                ot.setMantencionMaquina(mantencionMaquina);
             }
         }
 
@@ -165,10 +170,17 @@ public class MantenedorOT implements Serializable {
                 FacesUtil.mostrarMensajeError("Error", "Debes especificar al menos un Tracto y/o Semirremolque");
                 return;
             }
-            
+
             if (mantencionTracto.getTracto() != null && mantencionSemirremolque.getSemiRremolque() != null) {
+                int ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
+                int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
+                mantencionTracto.setCiclo(cicloActual);
+                mantencionSemirremolque.setCriterioSiguiente(30);
                 logicaOt.create(ot, mantencionTracto, mantencionSemirremolque);
             } else if (mantencionTracto.getTracto() != null) {
+                int ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
+                int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
+                mantencionTracto.setCiclo(cicloActual);
                 logicaOt.create(ot, mantencionTracto);
             } else {
                 logicaOt.create(ot, mantencionSemirremolque);
@@ -179,14 +191,33 @@ public class MantenedorOT implements Serializable {
 
     public String prepareToAssign(OrdenTrabajo ot) {
         this.ot = ot;
-        TrazabilidadOt state = new TrazabilidadOt();
-        state.setAutor(sesionCliente.getUsuario().getRut());
-        state.setOtId(this.ot);
-        this.ot.getTrazabilidad().add(state);
+        if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(this.ot.getTipoTrabajo())) {
+            mecanicos = logicaPersonal.findAll();
+        } else {
+            mecanicos = logicaPersonal.obtenerMecanicos();
+        }
         return "assign";
     }
 
-    public void toAssign(OrdenTrabajo ot) {
+    public void toAssign() {
+        TrazabilidadOt state = new TrazabilidadOt();
+        state.setAutor(sesionCliente.getUsuario().getRut());
+        state.setOtId(this.ot);
+        state.setEjecutor(ejecutor.getRut());
+        
+        if (constantes.getPAUTA_VENTA_REPUESTO() != Integer.valueOf(this.ot.getTipoTrabajo())) {
+            if (ot.getMantencionTracto() != null) {
+                ot.getMantencionTracto().setMecanicoResponsable(ejecutor);
+            }
+            if (ot.getMantencionSemirremolque()!= null) {
+                ot.getMantencionSemirremolque().setMecanicoResponsable(ejecutor);
+            }
+            if (ot.getMantencionMaquina() != null) {
+                ot.getMantencionMaquina().setMecanicoResponsable(ejecutor);
+            }
+        }
+        
+        this.ot.getTrazabilidad().add(state);
         this.ot.getTrazabilidad().last().setFecha(new Date());
         this.ot.getTrazabilidad().last().setEstadoId(constantes.getESTADO_OT_ASIGNADA());
     }
