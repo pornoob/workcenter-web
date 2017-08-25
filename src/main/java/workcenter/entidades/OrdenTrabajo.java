@@ -35,8 +35,10 @@ import org.hibernate.annotations.SortNatural;
 @Table(name = "ordenes_trabajo")
 @XmlRootElement
 @NamedQueries({
+    @NamedQuery(name = "OrdenTrabajo.findById", query = "SELECT o FROM OrdenTrabajo o WHERE o.id = :id"),
     @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
-    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status")
+    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status"),
+    @NamedQuery(name = "OrdenTrabajo.findByIdAndStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE o.id = :id to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status")
 })
 public class OrdenTrabajo implements Serializable {
 

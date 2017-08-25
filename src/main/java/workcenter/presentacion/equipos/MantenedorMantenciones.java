@@ -16,6 +16,7 @@ import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.equipos.LogicaMantenciones;
 import workcenter.negocio.equipos.LogicaProveedorPetroleo;
 import workcenter.negocio.personal.LogicaPersonal;
+import workcenter.negocio.taller.LogicaOt;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
@@ -55,6 +56,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     @Autowired
     private LogicaProveedorPetroleo logicaProveedorPetroleo;
+    
+    @Autowired
+    private LogicaOt logicaOt;
 
     private List<Equipo> tractos;
     private List<Equipo> bateas;
@@ -68,6 +72,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private MmeMantencionMaquina mantencionMaquina;
     private MmeMantencionMaquina ultimaMantencionMaquina;
     private Map<String, List<Documento>> comprobantesMantencion;
+    private OrdenTrabajo ot;
 
     // caché
     private MmeMantencionTracto panne;
@@ -84,6 +89,16 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
         tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
         ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
+        ot = new OrdenTrabajo();
+    }
+    
+    public void findOtById() {
+        ot = logicaOt.findByIdAndStatus(ot.getId(), constantes.getESTADO_OT_ASIGNADA());
+        if (ot == null) {
+            FacesUtil.mostrarMensajeError("Error", "No se ha encontrado una OT vigente con el ID especificado");
+            return;
+        }
+        ot = logicaOt.findWithMantenimientos(ot.getId());
     }
 
     public String irListar() {
@@ -459,6 +474,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public void setUltimaMantencionMaquina(MmeMantencionMaquina ultimaMantencionMaquina) {
         this.ultimaMantencionMaquina = ultimaMantencionMaquina;
+    }
+
+    public OrdenTrabajo getOt() {
+        return ot;
+    }
+
+    public void setOt(OrdenTrabajo otId) {
+        this.ot = otId;
     }
 
     @Override

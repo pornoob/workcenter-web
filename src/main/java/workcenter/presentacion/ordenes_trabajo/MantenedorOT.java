@@ -164,6 +164,7 @@ public class MantenedorOT implements Serializable {
         ot.setTipoTrabajo(listTipoTrabajoToString());
         ot.setTrazabilidad(history);
         if (Boolean.TRUE.equals(renderMaquinaria)) {
+            mantencionMaquina.setOt(ot);
             logicaOt.create(ot, mantencionMaquina);
         } else {
             if (mantencionTracto.getTracto() == null && mantencionSemirremolque.getSemiRremolque() == null) {
@@ -176,11 +177,13 @@ public class MantenedorOT implements Serializable {
                 int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
                 mantencionTracto.setCiclo(cicloActual);
                 mantencionSemirremolque.setCriterioSiguiente(30);
+                mantencionSemirremolque.setOt(ot);
                 logicaOt.create(ot, mantencionTracto, mantencionSemirremolque);
             } else if (mantencionTracto.getTracto() != null) {
                 int ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
                 int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
                 mantencionTracto.setCiclo(cicloActual);
+                mantencionTracto.setOt(ot);
                 logicaOt.create(ot, mantencionTracto);
             } else {
                 logicaOt.create(ot, mantencionSemirremolque);

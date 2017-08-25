@@ -51,6 +51,7 @@ public class LogicaFiniquito {
         return finiquitoDao.obtenerFiniquitosTrabajador(mes, anio);
     }
 
+    @Transactional(readOnly = false)
     public void eliminar(Finiquito finiquito) {
         finiquitoDao.eliminar(finiquito);
     }

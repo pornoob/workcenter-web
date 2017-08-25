@@ -24,6 +24,52 @@
                 <p:commandButton action="#{importadorDatosCopec.subir}" ajax="false" icon="ui-icon-arrowthickstop-1-n"
                                  value="Subir"/>
             </p:panel>
+            <p:panel header="Agregar mantenimiento">
+                <h:panelGrid columns="3">
+                    <p:outputLabel for="iOt" value="Ingrese OT"/>:
+                    <p:outputPanel>
+                        <p:inputText id="iOt" value="#{mantenedorMantenciones.ot.id}"/>
+                        <p:commandButton value="Buscar" icon="fa fa-search"
+                                         update="requestedFields"
+                                         action="#{mantenedorMantenciones.findOtById()}"/>
+                    </p:outputPanel>
+                </h:panelGrid>
+
+                <p:outputPanel id="requestedFields">
+                    <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}">
+                        <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
+                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionTracto.tipo}" id="iTipo"
+                                         converter="entityConverter" required="#{not empty param['btnCrearOt']}">
+                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
+                            <f:selectItems value="#{mantenedorMantenciones.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
+                        </p:selectOneMenu>
+                        <h:outputLabel for="iTracto" value="Camión"/>:
+                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionTracto.tracto}" id="iTracto"
+                                         converter="entityConverter" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorMantenciones.tractos}" var="t" itemLabel="#{t.patente}"/>
+                        </p:selectOneMenu>
+
+                        <h:outputLabel for="iBatea" value="Batea"/>:
+                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionSemirremolque.semiRremolque}" id="iBatea"
+                                         converter="entityConverter" filter="true" filterMatchMode="contains"
+                                         rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque ne null}">
+                            <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorMantenciones.bateas}" var="b" itemLabel="#{b.patente}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+
+                    <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionMaquina ne null}">
+                        <h:outputLabel for="iMaquina" value="Máquina"/>:
+                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionMaquina.maquina}" id="iMaquina"
+                                         required="#{not empty param['btnCrearOt']}"
+                                         converter="entityConverter" filter="true" filterMatchMode="contains">
+                            <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                            <f:selectItems value="#{mantenedorMantenciones.maquinas}" var="t" itemLabel="#{t.patente}"/>
+                        </p:selectOneMenu>
+                    </h:panelGrid>
+                </p:outputPanel>
+            </p:panel>
             <p:tabView>
                 <ui:include src="/flows/equipos/mantenciones/includes/tracto.xhtml"/>
                 <ui:include src="/flows/equipos/mantenciones/includes/semiremolque.xhtml"/>

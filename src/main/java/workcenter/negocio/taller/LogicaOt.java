@@ -61,4 +61,19 @@ public class LogicaOt {
     public List<SolicitanteOt> findApplicants() {
         return otDao.findApplicants();
     }
+
+    @Transactional(readOnly = true)
+    public OrdenTrabajo findById(Integer otId) {
+        return otDao.findById(otId);
+    }
+
+    @Transactional(readOnly = true)
+    public OrdenTrabajo findByIdAndStatus(Integer id, Integer status) {
+        return otDao.findByIdAndStatus(id, status);
+    }
+
+    @Transactional(readOnly = true)
+    public OrdenTrabajo findWithMantenimientos(Integer id) {
+        return otDao.findWithMantenimientos(id);
+    }
 }

@@ -98,11 +98,11 @@ public class Finiquito implements Serializable {
         this.fechaFiniquito = fechaFiniquito;
     }
 
-    public int getMonto() {
+    public Integer getMonto() {
         return monto;
     }
 
-    public void setMonto(int monto) {
+    public void setMonto(Integer monto) {
         this.monto = monto;
     }
 
