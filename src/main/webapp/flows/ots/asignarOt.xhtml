@@ -6,6 +6,7 @@
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
+        <p:messages autoUpdate="true" showDetail="true"/>
         <h:form id="formOt">
             <h2>Asignación de OT</h2>
             
@@ -25,9 +26,9 @@
                 </p:selectOneMenu>
             </p:panelGrid>
             <p:commandButton value="Asignar" icon="fa fa-check"
-                             action="#{mantenedorOT.toAssign()}">
-                
-            </p:commandButton>
+                             action="#{mantenedorOT.toAssign()}"/>
+            <p:commandButton value="Volver" icon="fa fa-arrow-left"
+                             action="back"/>
         </h:form>
     </ui:define>
 </ui:composition>

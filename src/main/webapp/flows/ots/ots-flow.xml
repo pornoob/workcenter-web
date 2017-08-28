@@ -13,7 +13,7 @@
     </view-state>
     
     <view-state id="asignarOt">
-        
+        <transition on="back" to="ingresoOt"/>
     </view-state>
     
     <end-state id="end_flow"/>

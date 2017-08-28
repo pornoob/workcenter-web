@@ -5,7 +5,10 @@ import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
+import javax.persistence.Subgraph;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Equipo;
+import workcenter.entidades.MmeMantencionMaquina;
 import workcenter.entidades.OrdenTrabajo;
 import workcenter.entidades.SolicitanteOt;
 
@@ -44,7 +47,7 @@ public class OtDao extends MyDao {
 
     public OrdenTrabajo findByIdAndStatus(Integer id, Integer status) {
         Query q = em.createNamedQuery("OrdenTrabajo.findByIdAndStatus", OrdenTrabajo.class);
-        q.setParameter("id", q);
+        q.setParameter("id", id);
         q.setParameter("status", status);
         try {
             return (OrdenTrabajo) q.getSingleResult();
@@ -61,10 +64,25 @@ public class OtDao extends MyDao {
         graph.addAttributeNodes("mantencionTracto");
         graph.addAttributeNodes("mantencionSemirremolque");
         graph.addAttributeNodes("mantencionMaquina");
+        
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        q.setMaxResults(1);
         
         try {
-            return (OrdenTrabajo) q.getSingleResult();
+            OrdenTrabajo ot = (OrdenTrabajo) q.getSingleResult();
+            if (ot.getMantencionMaquina() != null) {
+                EntityGraph<MmeMantencionMaquina> mGraph = em.createEntityGraph(MmeMantencionMaquina.class);
+                Subgraph<Equipo> eGraph = mGraph.addSubgraph("maquina", Equipo.class);
+                eGraph.addAttributeNodes("modelo");
+                
+                Query q2 = em.createNamedQuery("MmeMantencionMaquina.findById", MmeMantencionMaquina.class);
+                q2.setParameter("id", ot.getMantencionMaquina().getId());
+                q2.setHint(ENTITY_GRAPH_OVERRIDE_HINT, mGraph);
+                
+                MmeMantencionMaquina mantencionMaquina = (MmeMantencionMaquina) q2.getSingleResult();
+                ot.setMantencionMaquina(mantencionMaquina);
+            }
+            return ot;
         } catch (Exception e) {
             return null;
         }

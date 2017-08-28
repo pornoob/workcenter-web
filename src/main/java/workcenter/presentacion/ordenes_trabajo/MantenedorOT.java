@@ -75,6 +75,9 @@ public class MantenedorOT implements Serializable {
         ots_esperando = logicaOt.findByStatus(constantes.getESTADO_OT_CREADA());
         ots_ejecutando = logicaOt.findByStatus(constantes.getESTADO_OT_ASIGNADA());
         ots_resueltas = logicaOt.findByStatus(constantes.getESTADO_OT_FINALIZADA());
+        mantencionMaquina = null;
+        mantencionSemirremolque = null;
+        mantencionTracto = null;
     }
 
     private String listTipoTrabajoToString() {
@@ -177,18 +180,33 @@ public class MantenedorOT implements Serializable {
                 int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
                 mantencionTracto.setCiclo(cicloActual);
                 mantencionSemirremolque.setCriterioSiguiente(30);
+                
                 mantencionSemirremolque.setOt(ot);
+                mantencionTracto.setOt(ot);
+                
+                ot.setMantencionSemirremolque(mantencionSemirremolque);
+                ot.setMantencionTracto(mantencionTracto);
+                ot.setMantencionMaquina(null);
+                
                 logicaOt.create(ot, mantencionTracto, mantencionSemirremolque);
             } else if (mantencionTracto.getTracto() != null) {
                 int ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
                 int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
                 mantencionTracto.setCiclo(cicloActual);
                 mantencionTracto.setOt(ot);
+                ot.setMantencionTracto(mantencionTracto);
+                ot.setMantencionSemirremolque(null);
+                ot.setMantencionMaquina(null);
                 logicaOt.create(ot, mantencionTracto);
             } else {
+                mantencionSemirremolque.setOt(ot);
+                ot.setMantencionSemirremolque(mantencionSemirremolque);
+                ot.setMantencionTracto(null);
+                ot.setMantencionMaquina(null);
                 logicaOt.create(ot, mantencionSemirremolque);
             }
         }
+        init();
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha generado una nueva orden de trabajo");
     }
 
@@ -206,7 +224,9 @@ public class MantenedorOT implements Serializable {
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
         state.setOtId(this.ot);
-        state.setEjecutor(ejecutor.getRut());
+        state.setEjecutor(ejecutor);
+        state.setFecha(new Date());
+        state.setEstadoId(constantes.getESTADO_OT_ASIGNADA());
         
         if (constantes.getPAUTA_VENTA_REPUESTO() != Integer.valueOf(this.ot.getTipoTrabajo())) {
             if (ot.getMantencionTracto() != null) {
@@ -221,8 +241,9 @@ public class MantenedorOT implements Serializable {
         }
         
         this.ot.getTrazabilidad().add(state);
-        this.ot.getTrazabilidad().last().setFecha(new Date());
-        this.ot.getTrazabilidad().last().setEstadoId(constantes.getESTADO_OT_ASIGNADA());
+        logicaOt.updateOt(this.ot);
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "La OT ha sido asignada correctamente");
+        init();
     }
 
     public void toCancel(OrdenTrabajo ot) {

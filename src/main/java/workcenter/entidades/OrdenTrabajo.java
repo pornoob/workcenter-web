@@ -37,8 +37,8 @@ import org.hibernate.annotations.SortNatural;
 @NamedQueries({
     @NamedQuery(name = "OrdenTrabajo.findById", query = "SELECT o FROM OrdenTrabajo o WHERE o.id = :id"),
     @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
-    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status"),
-    @NamedQuery(name = "OrdenTrabajo.findByIdAndStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN FETCH o.trazabilidad to WHERE o.id = :id to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status")
+    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT DISTINCT ot FROM OrdenTrabajo ot INNER JOIN FETCH ot.solicitante s INNER JOIN FETCH ot.trazabilidad tot LEFT JOIN FETCH tot.ejecutor WHERE EXISTS ( SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status AND ot.id = o.id )"),
+    @NamedQuery(name = "OrdenTrabajo.findByIdAndStatus", query = "SELECT o FROM OrdenTrabajo o INNER JOIN FETCH o.solicitante s INNER JOIN o.trazabilidad to WHERE o.id = :id AND to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status")
 })
 public class OrdenTrabajo implements Serializable {
 
@@ -60,11 +60,11 @@ public class OrdenTrabajo implements Serializable {
     @SortNatural
     private SortedSet<TrazabilidadOt> trazabilidad;
     
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionTracto mantencionTracto;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionSemirremolque mantencionSemirremolque;
-    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot")
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionMaquina mantencionMaquina;
 
     public OrdenTrabajo() {

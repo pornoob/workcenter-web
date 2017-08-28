@@ -44,19 +44,19 @@ public class Equipo implements Serializable {
     @Size(min = 1, max = 7)
     @Column(name = "patente")
     private String patente;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "duenio", referencedColumnName = "id")
     private Empresa duenio;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "tipo", referencedColumnName = "id")
     private TipoEquipo tipo;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "subtipo", referencedColumnName = "id")
     private SubtipoEquipo subtipo;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "marca", referencedColumnName = "id")
     private MarcaEquipo marca;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "modelo", referencedColumnName = "id")
     private ModeloEquipo modelo;
     @Basic(optional = false)

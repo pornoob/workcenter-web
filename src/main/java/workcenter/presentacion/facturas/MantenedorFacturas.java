@@ -27,6 +27,7 @@ public class MantenedorFacturas implements Serializable {
     
     private FactFactura factura;
     private FactDetalleFactura detalleFactura;
+    private Integer totalNetoCalculado;
     private Integer totalNeto;
     
     private List<Empresa> empresas;
@@ -43,6 +44,7 @@ public class MantenedorFacturas implements Serializable {
         empresas = logicaEmpresas.obtenerEmpresas();
         productos =logicaStock.findAll();
         factura = new FactFactura();
+        totalNetoCalculado = 0;
     }
     
     public void reloadProducts() {
@@ -58,12 +60,22 @@ public class MantenedorFacturas implements Serializable {
         factura.addItem(detalleFactura);
     }
     
+    public void updateNeto() {
+        totalNetoCalculado = 0;
+        Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
+        while (iterator.hasNext()) {
+            FactDetalleFactura current = iterator.next();
+            totalNetoCalculado += current.getPrecioUnitario();
+        }
+    }
+    
     public void removeItem(FactDetalleFactura item) {
         Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
         while (iterator.hasNext()) {
             FactDetalleFactura current = iterator.next();
             if (current.getRowKey().equals(item.getRowKey())) {
                 iterator.remove();
+                totalNetoCalculado -= current.getPrecioUnitario();
                 break;
             }
         }
@@ -78,6 +90,10 @@ public class MantenedorFacturas implements Serializable {
                     item.getProducto() == null) {
                 iterator.remove();
             }
+        }
+        if (!totalNeto.equals(totalNetoCalculado)) {
+            FacesUtil.mostrarMensajeError("Operación fallida", "no coincide el monto total ingresado con el total calculado");
+            return;
         }
         logicaFactura.save(factura);
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Factura guardada con éxito");
@@ -115,6 +131,14 @@ public class MantenedorFacturas implements Serializable {
 
     public void setProductos(List<FactProducto> productos) {
         this.productos = productos;
+    }
+
+    public Integer getTotalNetoCalculado() {
+        return totalNetoCalculado;
+    }
+
+    public void setTotalNetoCalculado(Integer totalNetoCalculado) {
+        this.totalNetoCalculado = totalNetoCalculado;
     }
 
     public Integer getTotalNeto() {

@@ -38,35 +38,57 @@
                 <p:outputPanel id="requestedFields">
                     <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}">
                         <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
-                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionTracto.tipo}" id="iTipo"
-                                         converter="entityConverter" required="#{not empty param['btnCrearOt']}">
-                            <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
-                            <f:selectItems value="#{mantenedorMantenciones.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
-                        </p:selectOneMenu>
-                        <h:outputLabel for="iTracto" value="Camión"/>:
-                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionTracto.tracto}" id="iTracto"
-                                         converter="entityConverter" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
-                            <f:selectItems value="#{mantenedorMantenciones.tractos}" var="t" itemLabel="#{t.patente}"/>
-                        </p:selectOneMenu>
+                        <h:outputText id="iTipo" value="#{mantenedorMantenciones.ot.mantencionTracto.tipo.nombre}"/>
+                        
+                        <h:outputLabel for="iTracto" value="Camión"
+                                       rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"/>
+                        <h:outputLabel for="iTracto2" value="Camión"
+                                       rendered="#{mantenedorMantenciones.ot.mantencionTracto eq null}"/>
+                        :
+                        <h:outputText id="iTracto"
+                                      rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"
+                                      value="#{mantenedorMantenciones.ot.mantencionTracto.tracto.patente}"/>
+                        <h:outputText id="iTracto2"
+                                      rendered="#{mantenedorMantenciones.ot.mantencionTracto eq null}"/>
 
-                        <h:outputLabel for="iBatea" value="Batea"/>:
-                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionSemirremolque.semiRremolque}" id="iBatea"
-                                         converter="entityConverter" filter="true" filterMatchMode="contains"
-                                         rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque ne null}">
-                            <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
-                            <f:selectItems value="#{mantenedorMantenciones.bateas}" var="b" itemLabel="#{b.patente}"/>
-                        </p:selectOneMenu>
+                        <h:outputLabel for="iBatea" value="Batea"
+                                       rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque ne null}"/>
+                        <h:outputLabel for="iBatea2" value="Batea"
+                                       rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque eq null}"/>
+                        :
+                        <h:outputText id="iBatea"
+                                      rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque ne null}"
+                                      value="#{mantenedorMantenciones.ot.mantencionSemirremolque.semiRremolque.patente}"/>
+                        <h:outputText id="iBatea2"
+                                      rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque eq null}"/>
+                        
+                        <h:outputLabel for="iEncargado" value="Encargado"/>:
+                        <h:outputText value="#{mantenedorMantenciones.ot.mantencionTracto.mecanicoResponsable.nombreCompleto}" id="iEncargado"/>
+                        
+                        <h:outputLabel for="iKm" value="Kilometraje"/>:
+                        <p:inputText value="#{mantenedorMantenciones.ot.mantencionTracto.kilometraje}" id="iKm"/>
+                        
+                        <h:outputLabel for="iFechaMantenimiento" value="Fecha"/>:
+                        <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
+                                    id="iFechaMantenimiento" pattern="dd-MM-yyyy"/>
+                        
+                        <p:commandButton value="Agregar" icon="fa fa-plus"/>
                     </h:panelGrid>
 
                     <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionMaquina ne null}">
                         <h:outputLabel for="iMaquina" value="Máquina"/>:
-                        <p:selectOneMenu value="#{mantenedorMantenciones.ot.mantencionMaquina.maquina}" id="iMaquina"
-                                         required="#{not empty param['btnCrearOt']}"
-                                         converter="entityConverter" filter="true" filterMatchMode="contains">
-                            <f:selectItem itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                            <f:selectItems value="#{mantenedorMantenciones.maquinas}" var="t" itemLabel="#{t.patente}"/>
-                        </p:selectOneMenu>
+                        <h:outputText value="#{mantenedorMantenciones.ot.mantencionMaquina.maquina.patente} - #{mantenedorMantenciones.ot.mantencionMaquina.maquina.modelo.nombre}" id="iMaquina"/>
+                        
+                        <h:outputLabel for="iEncargadoM" value="Encargado"/>:
+                        <h:outputText value="#{mantenedorMantenciones.ot.mantencionMaquina.mecanicoResponsable.nombreCompleto}" id="iEncargadoM"/>
+                        
+                        <h:outputLabel for="iHrs" value="Horas Anotadas"/>:
+                        <p:inputText value="#{mantenedorMantenciones.ot.mantencionMaquina.hrasAnotadas}" id="iHrs"/>
+                        
+                        <h:outputLabel for="iFechaMantenimientoM" value="Fecha"/>:
+                        <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
+                                    id="iFechaMantenimientoM" pattern="dd-MM-yyyy"/>
+                        <p:commandButton value="Agregar" icon="fa fa-plus"/>
                     </h:panelGrid>
                 </p:outputPanel>
             </p:panel>

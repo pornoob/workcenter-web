@@ -2,6 +2,7 @@ package workcenter.dao;
 
 import java.util.Date;
 import java.util.List;
+import javax.persistence.EntityGraph;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.PersistenceException;
@@ -15,7 +16,7 @@ import workcenter.util.components.Constantes;
  * Created by colivares on 19-08-14.
  */
 @Repository
-public class EquipoDao {
+public class EquipoDao extends MyDao{
     @PersistenceContext
     EntityManager em;
 
@@ -195,4 +196,14 @@ public class EquipoDao {
 		return em.createNamedQuery("Equipo.findByTipo")
                 .setParameter("tipo", tipo).getResultList();
 	}
+
+    public List<Equipo> obtenerMaquinasConModelo() {
+        Query q = em.createNamedQuery("Equipo.findByTipo");
+        q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina()));
+        
+        EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
+        graph.addAttributeNodes("modelo");
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return q.getResultList();
+    }
 }

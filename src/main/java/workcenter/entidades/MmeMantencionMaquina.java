@@ -28,6 +28,7 @@ import javax.persistence.TemporalType;
 @Entity
 @Table(name = "mme_mantenciones_maquinaria")
 @NamedQueries({
+    @NamedQuery(name = "MmeMantencionMaquina.findById", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.id = :id"),
     @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC")
     ,
     @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC")

@@ -32,7 +32,7 @@ public class MantencionesMaquinaView implements Serializable {
 
     @PostConstruct
     private void init() {
-        maquinas = logicaEquipos.obtenerMaquinas();
+        maquinas = logicaEquipos.obtenerMaquinasConModelo();
     }
 
     public boolean todosLosCheckRealizados(Equipo maquina) {

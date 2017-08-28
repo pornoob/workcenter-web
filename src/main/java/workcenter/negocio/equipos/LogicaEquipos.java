@@ -138,4 +138,9 @@ public class LogicaEquipos {
         equipoDao.eliminar(sancion);
         equipoDao.guardar(retiro);
     }
+
+    @Transactional(readOnly = true)
+    public List<Equipo> obtenerMaquinasConModelo() {
+        return equipoDao.obtenerMaquinasConModelo();
+    }
 }

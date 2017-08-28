@@ -96,6 +96,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ot = logicaOt.findByIdAndStatus(ot.getId(), constantes.getESTADO_OT_ASIGNADA());
         if (ot == null) {
             FacesUtil.mostrarMensajeError("Error", "No se ha encontrado una OT vigente con el ID especificado");
+            ot = new OrdenTrabajo();
             return;
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());

@@ -15,7 +15,7 @@
                 <p:outputLabel value=":"/>
                 <p:inputText value="#{mantenedorFacturas.factura.numero}"/>
                 
-                <p:outputLabel value="Número Factura"/>
+                <p:outputLabel value="Total Neto"/>
                 <p:outputLabel value=":"/>
                 <p:inputText value="#{mantenedorFacturas.totalNeto}"/>
 
@@ -68,7 +68,8 @@
                     </p:outputPanel>
                 </f:facet>
                 
-                <p:ajax event="cellEdit" update="tblDetalleFactura"/>
+                <p:ajax event="cellEdit" listener="#{mantenedorFacturas.updateNeto}"
+                        update="tblDetalleFactura"/>
 
                 <p:column headerText="Ítem">
                     <p:cellEditor>
@@ -122,7 +123,13 @@
                                      action="#{mantenedorFacturas.removeItem(item)}"/>
                 </p:column>
                 
-                <p:summaryRow 
+                <f:facet name="footer">
+                    <p:outputPanel styleClass="ui-g text-right">
+                        <p:outputPanel styleClass="ui-g-12">
+                            <p:outputLabel value="Total Neto: #{mantenedorFacturas.totalNetoCalculado}"/>
+                        </p:outputPanel>
+                    </p:outputPanel>
+                </f:facet>
             </p:dataTable>
             <p:outputPanel styleClass="ui-g">
                 <p:outputPanel styleClass="ui-g-12 text-center">

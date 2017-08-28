@@ -48,8 +48,9 @@ public class TrazabilidadOt implements Serializable, Comparable<TrazabilidadOt> 
     private Integer estadoId;
     @Column(name = "autor")
     private Integer autor;
-    @Column(name = "ejecutor")
-    private Integer ejecutor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ejecutor", referencedColumnName = "rut")
+    private Personal ejecutor;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "ot_id", referencedColumnName = "id")
     private OrdenTrabajo ot;
@@ -101,11 +102,11 @@ public class TrazabilidadOt implements Serializable, Comparable<TrazabilidadOt> 
         this.ot = otId;
     }
 
-    public Integer getEjecutor() {
+    public Personal getEjecutor() {
         return ejecutor;
     }
 
-    public void setEjecutor(Integer ejecutor) {
+    public void setEjecutor(Personal ejecutor) {
         this.ejecutor = ejecutor;
     }
 
