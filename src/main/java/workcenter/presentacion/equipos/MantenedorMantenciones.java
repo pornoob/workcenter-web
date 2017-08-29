@@ -101,6 +101,18 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());
     }
+    
+    public void save() {
+        TrazabilidadOt state = new TrazabilidadOt();
+        state.setAutor(sesionCliente.getUsuario().getRut());
+        state.setOtId(this.ot);
+        state.setFecha(new Date());
+        state.setEstadoId(constantes.getESTADO_OT_FINALIZADA());
+        this.ot.getTrazabilidad().add(state);
+        logicaOt.updateOt(this.ot);
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "El mantenimiento se ha guardado correctamente");
+        ot = new OrdenTrabajo();
+    }
 
     public String irListar() {
         inicio();

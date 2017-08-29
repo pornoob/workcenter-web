@@ -72,7 +72,8 @@
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
                                     id="iFechaMantenimiento" pattern="dd-MM-yyyy"/>
                         
-                        <p:commandButton value="Agregar" icon="fa fa-plus"/>
+                        <p:commandButton value="Agregar" icon="fa fa-plus"
+                                         action="#{mantenedorMantenciones.save()}"/>
                     </h:panelGrid>
 
                     <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionMaquina ne null}">
@@ -88,7 +89,8 @@
                         <h:outputLabel for="iFechaMantenimientoM" value="Fecha"/>:
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
                                     id="iFechaMantenimientoM" pattern="dd-MM-yyyy"/>
-                        <p:commandButton value="Agregar" icon="fa fa-plus"/>
+                        <p:commandButton value="Agregar" icon="fa fa-plus"
+                                         action="#{mantenedorMantenciones.save()}"/>
                     </h:panelGrid>
                 </p:outputPanel>
             </p:panel>
