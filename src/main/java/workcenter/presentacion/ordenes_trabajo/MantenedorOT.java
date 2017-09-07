@@ -212,7 +212,14 @@ public class MantenedorOT implements Serializable {
 
     public String prepareToAssign(OrdenTrabajo ot) {
         this.ot = ot;
-        if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(this.ot.getTipoTrabajo())) {
+        Boolean isSelling = Boolean.FALSE;
+        for (String tipoTrabajo : this.ot.getTipoTrabajo().split(",")) {
+            if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(tipoTrabajo)) {
+                isSelling = Boolean.TRUE;
+                break;
+            }
+        }
+        if (Boolean.TRUE.equals(isSelling)) {
             mecanicos = logicaPersonal.findAll();
         } else {
             mecanicos = logicaPersonal.obtenerMecanicos();

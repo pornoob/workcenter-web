@@ -39,7 +39,7 @@
                     <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}">
                         <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
                         <h:outputText id="iTipo" value="#{mantenedorMantenciones.ot.mantencionTracto.tipo.nombre}"/>
-                        
+
                         <h:outputLabel for="iTracto" value="Camión"
                                        rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"/>
                         <h:outputLabel for="iTracto2" value="Camión"
@@ -61,37 +61,146 @@
                                       value="#{mantenedorMantenciones.ot.mantencionSemirremolque.semiRremolque.patente}"/>
                         <h:outputText id="iBatea2"
                                       rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque eq null}"/>
-                        
+
                         <h:outputLabel for="iEncargado" value="Encargado"/>:
                         <h:outputText value="#{mantenedorMantenciones.ot.mantencionTracto.mecanicoResponsable.nombreCompleto}" id="iEncargado"/>
-                        
+
                         <h:outputLabel for="iKm" value="Kilometraje"/>:
                         <p:inputText value="#{mantenedorMantenciones.ot.mantencionTracto.kilometraje}" id="iKm"/>
-                        
+
                         <h:outputLabel for="iFechaMantenimiento" value="Fecha"/>:
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
                                     id="iFechaMantenimiento" pattern="dd-MM-yyyy"/>
-                        
-                        <p:commandButton value="Agregar" icon="fa fa-plus"
-                                         action="#{mantenedorMantenciones.save()}"/>
                     </h:panelGrid>
 
                     <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionMaquina ne null}">
                         <h:outputLabel for="iMaquina" value="Máquina"/>:
                         <h:outputText value="#{mantenedorMantenciones.ot.mantencionMaquina.maquina.patente} - #{mantenedorMantenciones.ot.mantencionMaquina.maquina.modelo.nombre}" id="iMaquina"/>
-                        
+
                         <h:outputLabel for="iEncargadoM" value="Encargado"/>:
                         <h:outputText value="#{mantenedorMantenciones.ot.mantencionMaquina.mecanicoResponsable.nombreCompleto}" id="iEncargadoM"/>
-                        
+
                         <h:outputLabel for="iHrs" value="Horas Anotadas"/>:
                         <p:inputText value="#{mantenedorMantenciones.ot.mantencionMaquina.hrasAnotadas}" id="iHrs"/>
-                        
+
                         <h:outputLabel for="iFechaMantenimientoM" value="Fecha"/>:
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
                                     id="iFechaMantenimientoM" pattern="dd-MM-yyyy"/>
-                        <p:commandButton value="Agregar" icon="fa fa-plus"
-                                         action="#{mantenedorMantenciones.save()}"/>
                     </h:panelGrid>
+                    <p:fieldset legend="Repuestos Utilizados"
+                                rendered="#{mantenedorMantenciones.ot.id ne null}">
+                        <p:dataTable value="#{mantenedorMantenciones.ot.repuestos}" var="item"
+                                     id="tblRepOt" widgetVar="tblRepOt"
+                                     rowIndexVar="#{row}" editMode="cell" editable="true"
+                                     rowKey="#{item.rowKey}">
+                            <f:facet name="header">
+                                <p:outputPanel styleClass="ui-g">
+                                    <p:outputPanel styleClass="ui-g-12 text-right">
+                                        <p:commandButton icon="fa fa-plus"
+                                                         update="tblRepOt"
+                                                         action="#{mantenedorMantenciones.initRepuesto()}"
+                                                         value="Agregar Repuesto"/>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column headerText="Ítem">
+                                <p:cellEditor>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{mantenedorMantenciones.repuestoOt.producto}"
+                                                         converter="entityConverter"
+                                                         filter="true"
+                                                         filterMatchMode="contains"
+                                                         autoWidth="false">
+                                            <f:selectItem itemLabel="-- Seleccione --"
+                                                          noSelectionOption="true"/>
+                                            <f:selectItems value="#{mantenedorMantenciones.productos}"
+                                                           var="p" 
+                                                           itemLabel="#{p.nombre}"/>
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item.producto.nombre}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="Cantidad">
+                                <p:cellEditor>
+                                    <f:facet name="input">
+                                        <p:spinner min="0" value="#{mantenedorMantenciones.repuestoOt.cantidad}"/>
+                                    </f:facet>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item.cantidad}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Acciones">
+                                <p:commandButton icon="fa fa-remove"
+                                                 update="tblRepOt"
+                                                 action="#{mantenedorMantenciones.removeRepuesto(item)}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+
+                    <p:fieldset legend="Asistentes de OT"
+                                rendered="#{mantenedorMantenciones.ot.id ne null}">
+                        <p:dataTable value="#{mantenedorMantenciones.ot.asistentes}" var="item"
+                                     id="tblAsisOt" widgetVar="tblAsisOt"
+                                     rowIndexVar="#{row}" editMode="cell" editable="true"
+                                     rowKey="#{item.rowKey}">
+                            <f:facet name="header">
+                                <p:outputPanel styleClass="ui-g">
+                                    <p:outputPanel styleClass="ui-g-12 text-right">
+                                        <p:commandButton icon="fa fa-plus"
+                                                         update="tblAsisOt"
+                                                         action="#{mantenedorMantenciones.initAsistente()}"
+                                                         value="Agregar Asistente"/>
+                                    </p:outputPanel>
+                                </p:outputPanel>
+                            </f:facet>
+
+                            <p:column headerText="Asistente">
+                                <p:cellEditor>
+                                    <f:facet name="input">
+                                        <p:selectOneMenu value="#{mantenedorMantenciones.asistenteOt.personal}"
+                                                         converter="entityConverter"
+                                                         filter="true"
+                                                         filterMatchMode="contains"
+                                                         autoWidth="false">
+                                            <f:selectItem itemLabel="-- Seleccione --"
+                                                          noSelectionOption="true"/>
+                                            <f:selectItems value="#{mantenedorMantenciones.personal}"
+                                                           var="p" 
+                                                           itemLabel="#{p.nombreCompleto}"/>
+                                        </p:selectOneMenu>
+                                    </f:facet>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item.personal.nombreCompleto}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+
+                            <p:column headerText="H.H.">
+                                <p:cellEditor>
+                                    <f:facet name="input">
+                                        <p:spinner min="0" value="#{mantenedorMantenciones.asistenteOt.horasHombre}"/>
+                                    </f:facet>
+                                    <f:facet name="output">
+                                        <h:outputText value="#{item.horasHombre}"/>
+                                    </f:facet>
+                                </p:cellEditor>
+                            </p:column>
+                            <p:column headerText="Acciones">
+                                <p:commandButton icon="fa fa-remove"
+                                                 update="tblAsisOt"
+                                                 action="#{mantenedorMantenciones.removeAsistente(item)}"/>
+                            </p:column>
+                        </p:dataTable>
+                    </p:fieldset>
+                    <p:commandButton value="Agregar" icon="fa fa-plus"
+                                     rendered="#{mantenedorMantenciones.ot.id ne null}"
+                                     action="#{mantenedorMantenciones.save()}"/>
                 </p:outputPanel>
             </p:panel>
             <p:tabView>

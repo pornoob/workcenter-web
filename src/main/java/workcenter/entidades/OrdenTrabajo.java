@@ -7,6 +7,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 import java.util.SortedSet;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
@@ -66,6 +67,12 @@ public class OrdenTrabajo implements Serializable {
     private MmeMantencionSemirremolque mantencionSemirremolque;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionMaquina mantencionMaquina;
+    
+    
+    @OneToMany(mappedBy = "ot")
+    private Set<AsistenteOt> asistentes;
+    @OneToMany(mappedBy = "ot")
+    private Set<RepuestoOt> repuestos;
 
     public OrdenTrabajo() {
     }
@@ -136,6 +143,22 @@ public class OrdenTrabajo implements Serializable {
 
     public void setMantencionMaquina(MmeMantencionMaquina mantencionMaquina) {
         this.mantencionMaquina = mantencionMaquina;
+    }
+
+    public Set<AsistenteOt> getAsistentes() {
+        return asistentes;
+    }
+
+    public void setAsistentes(Set<AsistenteOt> asistentes) {
+        this.asistentes = asistentes;
+    }
+
+    public Set<RepuestoOt> getRepuestos() {
+        return repuestos;
+    }
+
+    public void setRepuestos(Set<RepuestoOt> repuestos) {
+        this.repuestos = repuestos;
     }
 
     @Override

@@ -64,6 +64,8 @@ public class OtDao extends MyDao {
         graph.addAttributeNodes("mantencionTracto");
         graph.addAttributeNodes("mantencionSemirremolque");
         graph.addAttributeNodes("mantencionMaquina");
+        graph.addAttributeNodes("asistentes");
+        graph.addAttributeNodes("repuestos");
         
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         q.setMaxResults(1);

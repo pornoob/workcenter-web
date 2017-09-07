@@ -73,6 +73,10 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private MmeMantencionMaquina ultimaMantencionMaquina;
     private Map<String, List<Documento>> comprobantesMantencion;
     private OrdenTrabajo ot;
+    private AsistenteOt asistenteOt;
+    private RepuestoOt repuestoOt;
+    private List<Personal> personal;
+    private List<FactProducto> productos;
 
     // caché
     private MmeMantencionTracto panne;
@@ -90,6 +94,40 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
         ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
         ot = new OrdenTrabajo();
+    }
+    
+    public void initAsistente() {
+        asistenteOt = new AsistenteOt();
+        if (ot.getAsistentes() == null) ot.setAsistentes(new HashSet<AsistenteOt>());
+        ot.getAsistentes().add(asistenteOt);
+    }
+    
+    public void removeAsistente(AsistenteOt item) {
+        Iterator<AsistenteOt> iterator = ot.getAsistentes().iterator();
+        while (iterator.hasNext()) {
+            AsistenteOt current = iterator.next();
+            if (current.getRowKey().equals(item.getRowKey())) {
+                iterator.remove();
+                break;
+            }
+        }
+    }
+    
+    public void initRepuesto() {
+        repuestoOt = new RepuestoOt();
+        if (ot.getRepuestos() == null) ot.setRepuestos(new HashSet<RepuestoOt>());
+        ot.getRepuestos().add(repuestoOt);
+    }
+    
+    public void removeRepuesto(RepuestoOt item) {
+        Iterator<RepuestoOt> iterator = ot.getRepuestos().iterator();
+        while (iterator.hasNext()) {
+            RepuestoOt current = iterator.next();
+            if (current.getRowKey().equals(item.getRowKey())) {
+                iterator.remove();
+                break;
+            }
+        }
     }
     
     public void findOtById() {
@@ -465,6 +503,38 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public void setOt(OrdenTrabajo otId) {
         this.ot = otId;
+    }
+
+    public AsistenteOt getAsistenteOt() {
+        return asistenteOt;
+    }
+
+    public void setAsistenteOt(AsistenteOt asistenteOt) {
+        this.asistenteOt = asistenteOt;
+    }
+
+    public RepuestoOt getRepuestoOt() {
+        return repuestoOt;
+    }
+
+    public void setRepuestoOt(RepuestoOt repuestoOt) {
+        this.repuestoOt = repuestoOt;
+    }
+
+    public List<FactProducto> getProductos() {
+        return productos;
+    }
+
+    public void setProductos(List<FactProducto> productos) {
+        this.productos = productos;
+    }
+
+    public List<Personal> getPersonal() {
+        return personal;
+    }
+
+    public void setPersonal(List<Personal> personal) {
+        this.personal = personal;
     }
 
     @Override
