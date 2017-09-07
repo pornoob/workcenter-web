@@ -119,36 +119,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return "flowListar";
     }
 
-    public String irEditarSemiRemolque() {
-        bateas = logicaEquipos.obtenerBateas();
-        mecanicos = logicaPersonal.obtenerMecanicos();
-        mantencionSemiremolque = new MmeMantencionSemirremolque();
-        return "flowEditarSemiRemolque";
-    }
-
-    public String irEditarTracto() {
-        tractos = logicaEquipos.obtenerTractos();
-        mecanicos = logicaPersonal.obtenerMecanicos();
-        mantencionTracto = new MmeMantencionTracto();
-        return "flowEditarTracto";
-    }
-
-    public String irEditarMaquinaria(MmeMantencionMaquina mantencionMaquina) {
-        mecanicos = logicaPersonal.obtenerMecanicos();
-        this.mantencionMaquina = mantencionMaquina;
-        tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
-
-        obtenerMantencionMaquinaPrevia(mantencionMaquina);
-
-        tiposMantencionMaquinaSeleccionadas = new ArrayList<>();
-        for (MmeCheckMaquina check : mantencionMaquina.getCheckeoRealizado()) {
-            if (check.getHrasAnotadas().equals(mantencionMaquina.getHrasAnotadas())) {
-                tiposMantencionMaquinaSeleccionadas.add(check.getTareaMaquina());
-            }
-        }
-        return "flowEditarMaquinaria";
-    }
-
     public String irEditarMaquinaria() {
         mecanicos = logicaPersonal.obtenerMecanicos();
         mantencionMaquina = new MmeMantencionMaquina();

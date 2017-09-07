@@ -15,9 +15,6 @@
                 <p:inputText value="#{flowScope.anio}"/>
             </h:panelGrid>
         </p:fieldset>
-        <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
-                         action="#{mantenedorMantenciones.irEditarMaquinaria()}"
-                         icon="ui-icon-plus"/>
         <p:commandButton value="Cargar listado" update="tblMaquinas"
                          icon="fa fa-refresh"
                          action="#{tabsMantenciones.cargarMantencionesMaquinas()}"/>

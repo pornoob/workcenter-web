@@ -5,8 +5,6 @@
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:tvp="http://transportesventanas.cl">
     <p:tab title="Tractos">        
-        <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
-                         action="#{mantenedorMantenciones.irEditarTracto()}" icon="ui-icon-plus"/>
         <p:commandButton value="Cargar listado"
                          action="#{tabsMantenciones.cargarMantencionesTracto()}" icon="fa fa-refresh"
                          update="tblTractos"/>
