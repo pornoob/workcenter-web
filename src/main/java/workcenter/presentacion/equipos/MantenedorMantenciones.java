@@ -15,6 +15,7 @@ import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.equipos.LogicaMantenciones;
 import workcenter.negocio.equipos.LogicaProveedorPetroleo;
+import workcenter.negocio.facturas.LogicaStock;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.taller.LogicaOt;
 import workcenter.presentacion.includes.FicheroUploader;
@@ -59,6 +60,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     
     @Autowired
     private LogicaOt logicaOt;
+    
+    @Autowired
+    private LogicaStock logicaStock;
 
     private List<Equipo> tractos;
     private List<Equipo> bateas;
@@ -138,6 +142,8 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             return;
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());
+        personal = logicaPersonal.obtenerMecanicos();
+        productos =logicaStock.findAll();
     }
     
     public void save() {

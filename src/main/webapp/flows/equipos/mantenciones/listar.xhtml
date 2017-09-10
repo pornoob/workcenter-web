@@ -91,6 +91,7 @@
                                 rendered="#{mantenedorMantenciones.ot.id ne null}">
                         <p:dataTable value="#{mantenedorMantenciones.ot.repuestos}" var="item"
                                      id="tblRepOt" widgetVar="tblRepOt"
+                                     emptyMessage="No se han asociado repuestos"
                                      rowIndexVar="#{row}" editMode="cell" editable="true"
                                      rowKey="#{item.rowKey}">
                             <f:facet name="header">
@@ -147,6 +148,7 @@
                                 rendered="#{mantenedorMantenciones.ot.id ne null}">
                         <p:dataTable value="#{mantenedorMantenciones.ot.asistentes}" var="item"
                                      id="tblAsisOt" widgetVar="tblAsisOt"
+                                     emptyMessage="No se han asociado asistentes"
                                      rowIndexVar="#{row}" editMode="cell" editable="true"
                                      rowKey="#{item.rowKey}">
                             <f:facet name="header">

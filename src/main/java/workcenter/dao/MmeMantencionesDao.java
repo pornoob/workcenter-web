@@ -49,7 +49,7 @@ public class MmeMantencionesDao extends MyDao {
 
     public List<MmeMantencionTracto> obtenerUltimasMantenciones() {
         StringBuilder sql = new StringBuilder();
-        sql.append("select m.id, m.id_tipo, m.fecha as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
+        sql.append("select m.id, m.id_tipo, m.fecha as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo, m.ot_id ");
         sql.append("from mme_mantenciones_tractos m ");
         sql.append("inner join (");
         sql.append("select max(fecha) as fecha,equipo from mme_mantenciones_tractos group by 2");
@@ -63,7 +63,7 @@ public class MmeMantencionesDao extends MyDao {
     public MmeMantencionTracto obtenerUltimaPanne(Equipo e) {
         StringBuilder sql = new StringBuilder();
         sql.append("select * from ( ");
-        sql.append("select m.id, m.id_tipo, max(m.fecha) as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo ");
+        sql.append("select m.id, m.id_tipo, max(m.fecha) as fecha, m.mecanico_responsable, m.equipo, m.kilometraje, m.ciclo, m.ot_id ");
         sql.append("from mme_mantenciones_tractos m where m.id_tipo is null and m.equipo = :equipo ");
         sql.append("group by m.equipo order by m.id desc ");
         sql.append(") t group by equipo ");
@@ -93,7 +93,7 @@ public class MmeMantencionesDao extends MyDao {
 
     public List<MmeMantencionSemirremolque> obtenerUltimasMantencionesSemiremolques() {
         StringBuilder sql = new StringBuilder();
-        sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable ");
+        sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable, m.ot_id ");
         sql.append("from mme_mantenciones_semiremolque m ");
         sql.append("group by m.equipo order by fecha desc ");
         return em.createNativeQuery(sql.toString(), MmeMantencionSemirremolque.class)

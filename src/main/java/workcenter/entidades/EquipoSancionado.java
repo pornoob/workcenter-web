@@ -33,7 +33,7 @@ public class EquipoSancionado implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "sancionado", referencedColumnName = "patente")
     private Equipo sancionado;
     @Basic(optional = false)

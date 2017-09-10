@@ -69,9 +69,9 @@ public class OrdenTrabajo implements Serializable {
     private MmeMantencionMaquina mantencionMaquina;
     
     
-    @OneToMany(mappedBy = "ot")
+    @OneToMany(mappedBy = "ot", cascade = CascadeType.ALL)
     private Set<AsistenteOt> asistentes;
-    @OneToMany(mappedBy = "ot")
+    @OneToMany(mappedBy = "ot", cascade = CascadeType.ALL)
     private Set<RepuestoOt> repuestos;
 
     public OrdenTrabajo() {
