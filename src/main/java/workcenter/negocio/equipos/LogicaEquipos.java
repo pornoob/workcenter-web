@@ -22,6 +22,11 @@ public class LogicaEquipos {
     public List<Equipo> obtenerTodos() {
         return equipoDao.obtenerTodos();
     }
+    
+    @Transactional(readOnly = true)
+    public List<Equipo> obtenerTodosParaMantenedor() {
+        return equipoDao.obtenerTodosParaMantenedor();
+    }
 
     @Transactional(readOnly = true)
     public List<Equipo> obtenerTractos() {

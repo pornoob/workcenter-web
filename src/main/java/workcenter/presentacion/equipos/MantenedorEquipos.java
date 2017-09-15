@@ -60,7 +60,7 @@ public class MantenedorEquipos implements Serializable {
     private EquipoSancionado equipoSancionado;
 
     public void inicio() {
-        equipos = logicaEquipos.obtenerTodos();
+        equipos = logicaEquipos.obtenerTodosParaMantenedor();
         tiposEquipos = logicaEquipos.obtenerTipos();
         subtiposEquipos = logicaEquipos.obtenerSubtipos();
         marcasEquipos = logicaEquipos.obtenerMarcas();

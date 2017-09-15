@@ -26,6 +26,22 @@ public class EquipoDao extends MyDao{
     public List<Equipo> obtenerTodos() {
         return em.createNamedQuery("Equipo.findAll").getResultList();
     }
+    
+    public List<Equipo> obtenerTodosParaMantenedor() {
+        Query q = em.createNamedQuery("Equipo.findAll");
+        EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
+        
+        graph.addAttributeNodes(
+                "tipo",
+                "subtipo",
+                "duenio",
+                "marca",
+                "modelo"
+        );
+        
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return q.getResultList();
+    }
 
     public List<Equipo> obtenerTractos() {
         return em.createNamedQuery("Equipo.findByTipo")
