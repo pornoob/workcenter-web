@@ -81,7 +81,7 @@ public class MantenedorEquipos implements Serializable {
     }
 
     public String irListar() {
-        equipos = logicaEquipos.obtenerTodos();
+        equipos = logicaEquipos.obtenerTodosParaMantenedor();
         tiposEquipos = logicaEquipos.obtenerTipos();
         subtiposEquipos = logicaEquipos.obtenerSubtipos();
         marcasEquipos = logicaEquipos.obtenerMarcas();
