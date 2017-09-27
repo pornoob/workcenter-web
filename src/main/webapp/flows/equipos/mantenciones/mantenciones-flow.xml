@@ -10,6 +10,11 @@
     <view-state id="listar">
         <transition on="flowHistorial" to="historial"/>
         <transition on="flowHistorialMaquina" to="historialMaquina"/>
+        <transition on="flowEditarMaquinaria" to="editarMaquinaria"/>
+    </view-state>
+    
+    <view-state id="editarMaquinaria">
+        
     </view-state>
 
     <view-state id="historial">
