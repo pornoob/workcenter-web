@@ -18,7 +18,7 @@ import javax.persistence.Table;
 @NamedQueries({
     @NamedQuery(name = "MmeTareaMaquina.findAll", query = "SELECT t FROM MmeTareaMaquina t")
 })
-public class MmeTareaMaquina implements Serializable {
+public class MmeTareaMaquina implements Serializable, Comparable<MmeTareaMaquina> {
 
     private static final long serialVersionUID = -2362490414765102501L;
     
@@ -31,6 +31,9 @@ public class MmeTareaMaquina implements Serializable {
     
     @Column(name = "cantidad_horas")
     private Integer cantHoras;
+    
+    @Column(name = "orden")
+    private Integer orden;
 
     public Integer getId() {
         return id;
@@ -54,6 +57,14 @@ public class MmeTareaMaquina implements Serializable {
 
     public void setCantHoras(Integer cantHoras) {
         this.cantHoras = cantHoras;
+    }
+
+    public Integer getOrden() {
+        return orden;
+    }
+
+    public void setOrden(Integer orden) {
+        this.orden = orden;
     }
 
     @Override
@@ -82,5 +93,10 @@ public class MmeTareaMaquina implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(MmeTareaMaquina o) {
+        return this.orden.compareTo(o.orden);
     }
 }

@@ -176,7 +176,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ultimaMantencionMaquina = logicaMantenciones.obtenerUltimaMantencionMaquina(maquina);
         if (ultimaMantencionMaquina == null) {
             ultimaMantencionMaquina = new MmeMantencionMaquina();
-            ultimaMantencionMaquina.setCheckeoRealizado(new ArrayList<MmeCheckMaquina>());
+            ultimaMantencionMaquina.setCheckeoRealizado(new TreeSet<MmeCheckMaquina>());
             ultimaMantencionMaquina.setHrasAnotadas(0);
         }
     }
@@ -330,7 +330,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             return;
         }
 
-        mantencionMaquina.setCheckeoRealizado(new ArrayList<MmeCheckMaquina>());
+        mantencionMaquina.setCheckeoRealizado(new TreeSet<MmeCheckMaquina>());
         for (MmeTareaMaquina tipoMantencion : tiposMantencionMaquinaSeleccionadas) {
             MmeCheckMaquina checkMaquina = new MmeCheckMaquina();
             checkMaquina.setHrasAnotadas(mantencionMaquina.getHrasAnotadas());

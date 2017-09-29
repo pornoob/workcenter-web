@@ -2,8 +2,8 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -20,6 +20,7 @@ import javax.persistence.OneToOne;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
+import org.hibernate.annotations.SortNatural;
 
 /**
  *
@@ -29,12 +30,9 @@ import javax.persistence.TemporalType;
 @Table(name = "mme_mantenciones_maquinaria")
 @NamedQueries({
     @NamedQuery(name = "MmeMantencionMaquina.findById", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.id = :id"),
-    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC")
-    ,
-    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC")
-    ,
-    @NamedQuery(name = "MmeMantencionMaquina.findPreviousByFechaAndMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.fecha < :fecha and m.maquina = :maquina ORDER BY m.fecha DESC")
-    ,
+    @NamedQuery(name = "MmeMantencionMaquina.findAll", query = "SELECT m FROM MmeMantencionMaquina m ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "MmeMantencionMaquina.findLastByMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.maquina = :maquina ORDER BY m.fecha DESC"),
+    @NamedQuery(name = "MmeMantencionMaquina.findPreviousByFechaAndMaquina", query = "SELECT m FROM MmeMantencionMaquina m WHERE m.fecha < :fecha and m.maquina = :maquina ORDER BY m.fecha DESC"),
     @NamedQuery(name = "MmeMantencionMaquina.findByMesAndAnio", query = "SELECT m FROM MmeMantencionMaquina m WHERE YEAR(m.fecha) = :anio AND MONTH(m.fecha) = :mes ORDER BY m.fecha DESC")
 })
 public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantencionMaquina> {
@@ -64,7 +62,8 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
     private Personal mecanicoResponsable;
 
     @OneToMany(mappedBy = "mantencionMaquina", cascade = CascadeType.ALL)
-    private List<MmeCheckMaquina> checkeoRealizado;
+    @SortNatural
+    private SortedSet<MmeCheckMaquina> checkeoRealizado;
     
     @JoinColumn(name = "ot_id", referencedColumnName = "id")
     @OneToOne(fetch = FetchType.LAZY)
@@ -118,11 +117,11 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
         this.mecanicoResponsable = mecanicoResponsable;
     }
 
-    public List<MmeCheckMaquina> getCheckeoRealizado() {
+    public SortedSet<MmeCheckMaquina> getCheckeoRealizado() {
         return checkeoRealizado;
     }
 
-    public void setCheckeoRealizado(List<MmeCheckMaquina> checkeoRealizado) {
+    public void setCheckeoRealizado(SortedSet<MmeCheckMaquina> checkeoRealizado) {
         this.checkeoRealizado = checkeoRealizado;
     }
     

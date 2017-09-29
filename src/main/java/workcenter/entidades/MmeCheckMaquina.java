@@ -26,7 +26,7 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement
 @NamedQueries({
 })
-public class MmeCheckMaquina implements Serializable {
+public class MmeCheckMaquina implements Serializable, Comparable<MmeCheckMaquina> {
     
     private static final long serialVersionUID = 5252750644329354248L;
     
@@ -107,5 +107,17 @@ public class MmeCheckMaquina implements Serializable {
             return false;
         }
         return true;
+    }
+
+    @Override
+    public int compareTo(MmeCheckMaquina o) {
+        if (this.tareaMaquina == null && o.tareaMaquina != null)
+            return 1;
+        else if (this.tareaMaquina != null && o.tareaMaquina == null)
+            return -1;
+        else if (this.tareaMaquina == null && o.tareaMaquina == null)
+            return 0;
+        else
+            return this.tareaMaquina.compareTo(o.tareaMaquina);
     }
 }
