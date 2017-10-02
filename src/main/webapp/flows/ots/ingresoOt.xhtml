@@ -38,7 +38,7 @@
                             <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
                             <p:selectOneMenu value="#{mantenedorOT.mantencionTracto.tipo}" id="iTipo"
                                              converter="entityConverter" required="#{not empty param['btnCrearOt']}">
-                                <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
+                                <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantenimiento Panne"/>
                                 <f:selectItems value="#{mantenedorOT.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
                             </p:selectOneMenu>
                             <h:outputLabel for="iTracto" value="Camión"/>:

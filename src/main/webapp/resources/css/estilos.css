@@ -23,7 +23,7 @@ html, body {
     margin-left: auto;
     margin-right: auto;
     border: 0;
-    
+
     background: yellow;
     background: -moz-linear-gradient(top, yellow 0, orange 100%);
     background: -webkit-gradient(linear, left top, left bottom, color-stop(0%, yellow), color-stop(100%, orange));
@@ -302,12 +302,12 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 }
 
 .tblDocs table .ui-state-default {
-	width:150px;
+    width:150px;
     max-width: 150px;
 }
 
 .tblDocs table tbody td.text-left {
-	text-align: left;
+    text-align: left;
 }
 
 .tblDocs table tbody td.text-center {
@@ -315,7 +315,7 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 }
 
 .tblDocs table thead th {
-	text-align: center;
+    text-align: center;
 }
 
 .tblScroll .ui-datatable-tablewrapper,.scrolling-div .ui-datatable-tablewrapper{
@@ -335,25 +335,89 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     padding: 4px 10px;
 }
 
+.print-area {
+    display: none;
+}
+
 /*Configuraciones a la hora de imprimir*/
-@media print {
+@media print {    
+    page {
+        size: letter;
+    }
+
+    body {
+        font-size: 10pt;
+    }
+    
+    .print-area {
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    table.table-bordered {
+        border: 1px solid black;
+    }
+
+    table.table-bordered > thead > tr > th {
+        border: 1px solid black;
+    }
+
+    table.table-bordered > tbody > tr > td {
+        border: 1px solid black;
+    }
+
+    table.table-bordered tr.emptyRow td {
+        height: 19px;
+    }
+
+    table.auto-layout {
+        table-layout: auto;
+    }
+
+    table.table-layout-fixed {
+        table-layout: fixed;
+    }
+
+    .text-right {
+        text-align: right;
+    }
+
+    .text-center {
+        text-align: center;
+    }
+
+    .pneumatic-icon {
+        height: 40px;
+        width: 20px;
+        -moz-border-radius: 10%;
+        -webkit-border-radius: 10%;
+        border-radius: 10%;
+        display: inline-block;
+        padding: 3px 10px 3px 10px;
+        overflow: hidden;
+    }
+
     .certificadoValorActualizado .tabla-factor-actualizado {
         font-size: 6pt !important;
     }
-    
+
     .certificadoValorActualizado p {
         font-size: 6pt !important;
     }
-    
+
     .certificadoValorActualizado .ui-datatable-header {
         display: none !important;
     }
-    
+
     .certificadoValorActualizado img {
         height: 80px !important;
         width: 80px !important;
     }
-    
+
     .certificadoValorActualizado h3 {
         font-size: 10pt;
         font-weight: bold;
@@ -361,7 +425,7 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
 }
 
 .text-center {
-   text-align: center;
+    text-align: center;
 }
 
 .text-right {

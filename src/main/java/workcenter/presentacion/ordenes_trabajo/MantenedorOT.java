@@ -44,6 +44,7 @@ public class MantenedorOT implements Serializable {
     private MmeMantencionTracto mantencionTracto;
     private MmeMantencionSemirremolque mantencionSemirremolque;
     private MmeMantencionMaquina mantencionMaquina;
+    private Date currentDate;
 
     private List<OrdenTrabajo> ots_esperando;
     private List<OrdenTrabajo> ots_ejecutando;
@@ -228,11 +229,12 @@ public class MantenedorOT implements Serializable {
     }
 
     public void toAssign() {
+        currentDate = new Date();
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
         state.setOtId(this.ot);
         state.setEjecutor(ejecutor);
-        state.setFecha(new Date());
+        state.setFecha(currentDate);
         state.setEstadoId(constantes.getESTADO_OT_ASIGNADA());
         
         if (constantes.getPAUTA_VENTA_REPUESTO() != Integer.valueOf(this.ot.getTipoTrabajo())) {
@@ -249,8 +251,10 @@ public class MantenedorOT implements Serializable {
         
         this.ot.getTrazabilidad().add(state);
         logicaOt.updateOt(this.ot);
+        OrdenTrabajo selected = this.ot;
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "La OT ha sido asignada correctamente");
         init();
+        this.ot = ots_ejecutando.get(ots_ejecutando.indexOf(selected));
     }
 
     public void toCancel(OrdenTrabajo ot) {
@@ -391,5 +395,13 @@ public class MantenedorOT implements Serializable {
 
     public void setMaquinas(List<Equipo> maquinas) {
         this.maquinas = maquinas;
+    }
+
+    public Date getCurrentDate() {
+        return currentDate;
+    }
+
+    public void setCurrentDate(Date currentDate) {
+        this.currentDate = currentDate;
     }
 }

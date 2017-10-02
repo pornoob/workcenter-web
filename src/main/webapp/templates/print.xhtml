@@ -1,78 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?> 
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml"
-      xmlns:ui="http://java.sun.com/jsf/facelets"
-      xmlns:h="http://java.sun.com/jsf/html"
-      xmlns:f="http://java.sun.com/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui">
 
-    <f:view contentType="text/html">
-        <h:head>
-            <style>
-                page {
-                    size: letter;
-                }
 
-                body {
-                    font-size: 10pt;
-                }
-
-                table {
-                    width: 100%;
-                    border-collapse: collapse;
-                }
-
-                table.table-bordered {
-                    border: 1px solid black;
-                }
-
-                table.table-bordered > thead > tr > th {
-                    border: 1px solid black;
-                }
-
-                table.table-bordered > tbody > tr > td {
-                    border: 1px solid black;
-                }
-
-                table.table-bordered tr.emptyRow td {
-                    height: 19px;
-                }
-
-                table.auto-layout {
-                    table-layout: auto;
-                }
-
-                table.table-layout-fixed {
-                    table-layout: fixed;
-                }
-
-                .text-right {
-                    text-align: right;
-                }
-
-                .text-center {
-                    text-align: center;
-                }
-
-                .pneumatic-icon {
-                    background: url('#{resource["css/img/mantenimiento/horizontal-black-line.png"]}');
-                    background-position: left top;
-                    background-repeat: repeat;
-                    background-size: 40px 20px;
-                    height: 40px;
-                    width: 20px;
-                    -moz-border-radius: 10%;
-                    -webkit-border-radius: 10%;
-                    border-radius: 10%;
-                    display: inline-block;
-                    margin: 3px 10px 3px 10px;
-                    overflow: hidden;
-                }
-            </style>
-        </h:head>
-        <h:body>
-            <ui:insert name="contenido"></ui:insert>
-        </h:body>
-    </f:view>
-</html>
+</ui:composition>
