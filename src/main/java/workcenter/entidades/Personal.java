@@ -28,6 +28,8 @@ import java.util.Set;
     ,
         @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut")
     ,
+        @NamedQuery(name = "Personal.findByRuts", query = "SELECT p FROM Personal p WHERE p.rut in :ruts")
+    ,
         @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT DISTINCT p FROM Personal p "
             + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection "
             + "WHERE p.rut = :rut")

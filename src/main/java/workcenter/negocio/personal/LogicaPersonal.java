@@ -1,5 +1,6 @@
 package workcenter.negocio.personal;
 
+import java.util.Arrays;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -86,6 +87,11 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public Personal obtener(Integer rut) {
         return personalDao.obtener(rut);
+    }
+    
+    @Transactional(readOnly = true)
+    public List<Personal> obtener(Integer... rut) {
+        return personalDao.obtener(Arrays.asList(rut));
     }
 
     @Transactional(readOnly = true)

@@ -2,6 +2,7 @@ package workcenter.presentacion.ordenes_trabajo;
 
 import workcenter.negocio.taller.LogicaOt;
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
@@ -55,7 +56,7 @@ public class MantenedorOT implements Serializable {
     private List<Equipo> tractos;
     private List<Equipo> bateas;
     private List<Equipo> maquinas;
-    private List<Personal> mecanicos;
+    private List<Personal> encargados;
 
     @Autowired
     private LogicaOt logicaOt;
@@ -128,7 +129,7 @@ public class MantenedorOT implements Serializable {
                 renderTractoBatea = Boolean.TRUE;
 
                 tiposMantencion = logicaMantenciones.obtenerTiposMantencion();
-                mecanicos = logicaPersonal.obtenerMecanicos();
+                encargados = logicaPersonal.obtenerMecanicos();
                 bateas = logicaEquipos.obtenerBateas();
                 tractos = logicaEquipos.obtenerTractos();
                 mantencionTracto = new MmeMantencionTracto();
@@ -141,7 +142,7 @@ public class MantenedorOT implements Serializable {
                 ot.setMantencionSemirremolque(mantencionSemirremolque);
             } else {
                 renderMaquinaria = Boolean.TRUE;
-                mecanicos = logicaPersonal.obtenerMecanicos();
+                encargados = logicaPersonal.obtenerMecanicos();
                 maquinas = logicaEquipos.obtenerMaquinas();
                 mantencionMaquina = new MmeMantencionMaquina();
                 mantencionMaquina.setOt(ot);
@@ -221,9 +222,10 @@ public class MantenedorOT implements Serializable {
             }
         }
         if (Boolean.TRUE.equals(isSelling)) {
-            mecanicos = logicaPersonal.findAll();
+            encargados = logicaPersonal.findAll();
         } else {
-            mecanicos = logicaPersonal.obtenerMecanicos();
+            encargados = logicaPersonal.obtenerMecanicos();
+            encargados.addAll(logicaPersonal.obtener(12223177, 12895251, 12895251, 7024796)); // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada
         }
         return "assign";
     }
@@ -237,7 +239,14 @@ public class MantenedorOT implements Serializable {
         state.setFecha(currentDate);
         state.setEstadoId(constantes.getESTADO_OT_ASIGNADA());
         
-        if (constantes.getPAUTA_VENTA_REPUESTO() != Integer.valueOf(this.ot.getTipoTrabajo())) {
+        Boolean isSelling = Boolean.FALSE;
+        for (String tipoTrabajo : this.ot.getTipoTrabajo().split(",")) {
+            if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(tipoTrabajo)) {
+                isSelling = Boolean.TRUE;
+                break;
+            }
+        }
+        if (!Boolean.TRUE.equals(isSelling)) {
             if (ot.getMantencionTracto() != null) {
                 ot.getMantencionTracto().setMecanicoResponsable(ejecutor);
             }
@@ -373,12 +382,12 @@ public class MantenedorOT implements Serializable {
         this.bateas = bateas;
     }
 
-    public List<Personal> getMecanicos() {
-        return mecanicos;
+    public List<Personal> getEncargados() {
+        return encargados;
     }
 
-    public void setMecanicos(List<Personal> mecanicos) {
-        this.mecanicos = mecanicos;
+    public void setEncargados(List<Personal> encargados) {
+        this.encargados = encargados;
     }
 
     public MmeMantencionMaquina getMantencionMaquina() {

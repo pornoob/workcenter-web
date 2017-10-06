@@ -54,7 +54,9 @@ public class PersonalDao extends MyDao {
         sb.append("    p.* ");
         sb.append("from personal p ");
         sb.append("inner join ( ");
-        sb.append("    select max(fecha) as fecha, rut from contratospersonal GROUP BY rut ");
+        sb.append("    select max(fecha) as fecha, rut from contratospersonal cpi ");
+        sb.append("    where cpi.vencimiento is null or cpi.vencimiento >= CURRENT_DATE ");
+        sb.append("    GROUP BY rut ");
         sb.append(") maxContrato on maxContrato.rut = p.rut ");
         sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
 
@@ -69,7 +71,9 @@ public class PersonalDao extends MyDao {
         sb.append("    p.* ");
         sb.append("from personal p ");
         sb.append("inner join ( ");
-        sb.append("    select max(fecha) as fecha, rut from contratospersonal GROUP BY rut ");
+        sb.append("    select max(fecha) as fecha, rut from contratospersonal cpi ");
+        sb.append("    where cpi.vencimiento is null or cpi.vencimiento >= CURRENT_DATE ");
+        sb.append("    GROUP BY rut ");
         sb.append(") maxContrato on maxContrato.rut = p.rut ");
         sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
         if (servicio != null){
@@ -96,6 +100,12 @@ public class PersonalDao extends MyDao {
 
     public Personal obtener(Integer rut) {
         return em.find(Personal.class, rut);
+    }
+    
+    public List<Personal> obtener(List<Integer> rut) {
+        Query q = em.createNamedQuery("Personal.findByRuts", Personal.class);
+        q.setParameter("ruts", rut);
+        return q.getResultList();
     }
 
     public Empresa obtenerEmpleador(Personal p) {
