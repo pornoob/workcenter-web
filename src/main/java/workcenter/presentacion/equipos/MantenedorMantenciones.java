@@ -143,6 +143,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());
         personal = logicaPersonal.obtenerMecanicos();
+        personal.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796)); // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada
         productos =logicaStock.findAll();
     }
     
