@@ -225,7 +225,8 @@ public class MantenedorOT implements Serializable {
             encargados = logicaPersonal.findAll();
         } else {
             encargados = logicaPersonal.obtenerMecanicos();
-            encargados.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796)); // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada
+            // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada, Richard Freire
+            encargados.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796, 9545871));
         }
         return "assign";
     }

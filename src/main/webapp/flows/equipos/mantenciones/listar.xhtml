@@ -10,9 +10,9 @@
 
         <h2>Listado de Mantenciones</h2>
         <p:messages autoUpdate="true" showDetail="true" closable="true"/>
-        <h:form id="formMantenciones" enctype="multipart/form-data">
-            <p:panel rendered="#{sesionCliente.esAdministrador(constantes.getModuloMantenciones())}"
-                     header="Información Copec">
+        <p:panel rendered="#{sesionCliente.esAdministrador(constantes.getModuloMantenciones())}"
+                 header="Información Copec">
+            <h:form id="formMantencionesCopec" enctype="multipart/form-data">
                 <h:panelGrid columns="3">
                     <h:outputLabel for="iFecha" value="Última Actualización"/>:
                     <p:inputText readonly="true" id="iFecha" value="#{importadorDatosCopec.ultimaActualizacion}">
@@ -23,8 +23,13 @@
                 </h:panelGrid>
                 <p:commandButton action="#{importadorDatosCopec.subir}" ajax="false" icon="ui-icon-arrowthickstop-1-n"
                                  value="Subir"/>
-            </p:panel>
-            <p:panel header="Agregar mantenimiento">
+            </h:form>
+        </p:panel>
+        <p:panel header="Agregar mantenimiento">
+            <ui:include src="/components/cargadorArchivos.xhtml">
+                <ui:param name="padre" value="#{mantenedorMantenciones}"/>
+            </ui:include>
+            <h:form id="formMantencionesOt">
                 <h:panelGrid columns="3">
                     <p:outputLabel for="iOt" value="Ingrese OT"/>:
                     <p:outputPanel>
@@ -204,7 +209,9 @@
                                      rendered="#{mantenedorMantenciones.ot.id ne null}"
                                      action="#{mantenedorMantenciones.save()}"/>
                 </p:outputPanel>
-            </p:panel>
+            </h:form>
+        </p:panel>
+        <h:form id="formMantencionesListado">
             <p:tabView>
                 <ui:include src="/flows/equipos/mantenciones/includes/tracto.xhtml"/>
                 <ui:include src="/flows/equipos/mantenciones/includes/semiremolque.xhtml"/>

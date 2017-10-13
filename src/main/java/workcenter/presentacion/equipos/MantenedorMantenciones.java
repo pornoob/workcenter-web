@@ -57,10 +57,10 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     @Autowired
     private LogicaProveedorPetroleo logicaProveedorPetroleo;
-    
+
     @Autowired
     private LogicaOt logicaOt;
-    
+
     @Autowired
     private LogicaStock logicaStock;
 
@@ -99,13 +99,15 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
         ot = new OrdenTrabajo();
     }
-    
+
     public void initAsistente() {
         asistenteOt = new AsistenteOt();
-        if (ot.getAsistentes() == null) ot.setAsistentes(new HashSet<AsistenteOt>());
+        if (ot.getAsistentes() == null) {
+            ot.setAsistentes(new HashSet<AsistenteOt>());
+        }
         ot.getAsistentes().add(asistenteOt);
     }
-    
+
     public void removeAsistente(AsistenteOt item) {
         Iterator<AsistenteOt> iterator = ot.getAsistentes().iterator();
         while (iterator.hasNext()) {
@@ -116,13 +118,15 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             }
         }
     }
-    
+
     public void initRepuesto() {
         repuestoOt = new RepuestoOt();
-        if (ot.getRepuestos() == null) ot.setRepuestos(new HashSet<RepuestoOt>());
+        if (ot.getRepuestos() == null) {
+            ot.setRepuestos(new HashSet<RepuestoOt>());
+        }
         ot.getRepuestos().add(repuestoOt);
     }
-    
+
     public void removeRepuesto(RepuestoOt item) {
         Iterator<RepuestoOt> iterator = ot.getRepuestos().iterator();
         while (iterator.hasNext()) {
@@ -133,7 +137,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
             }
         }
     }
-    
+
     public void findOtById() {
         ot = logicaOt.findByIdAndStatus(ot.getId(), constantes.getESTADO_OT_ASIGNADA());
         if (ot == null) {
@@ -143,10 +147,11 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());
         personal = logicaPersonal.obtenerMecanicos();
-        personal.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796)); // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada
-        productos =logicaStock.findAll();
+        // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada, Richard Freire
+        personal.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796, 9545871));
+        productos = logicaStock.findAll();
     }
-    
+
     public void save() {
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
@@ -156,6 +161,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         this.ot.getTrazabilidad().add(state);
         logicaOt.updateOt(this.ot);
         FacesUtil.mostrarMensajeInformativo("Operación exitosa", "El mantenimiento se ha guardado correctamente");
+        for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
+            logicaDocumentos.asociarDocumento(d, ot);
+        }
         ot = new OrdenTrabajo();
     }
 
