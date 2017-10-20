@@ -49,7 +49,7 @@ public class ValorPrevisionPersonal implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechavigencia")
-    @Temporal(TemporalType.DATE)
+    @Temporal(TemporalType.TIMESTAMP)
     private Date fechaVigencia;
 
     public ValorPrevisionPersonal() {
