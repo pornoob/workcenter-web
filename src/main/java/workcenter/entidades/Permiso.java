@@ -4,6 +4,7 @@ import java.io.Serializable;
 import javax.persistence.Basic;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -36,10 +37,10 @@ public class Permiso implements Serializable {
     @Column(name = "nivel")
     private int nivel;
     @JoinColumn(name = "usuario", referencedColumnName = "rut")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Usuario usuario;
     @JoinColumn(name = "proyecto", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Proyecto proyecto;
 
     public Permiso() {

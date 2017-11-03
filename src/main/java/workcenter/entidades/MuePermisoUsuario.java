@@ -39,7 +39,7 @@ public class MuePermisoUsuario {
         this.nivel = nivel;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_usuario", referencedColumnName = "id")
     public MueUsuarioExterno getUsuario() {
         return usuario;

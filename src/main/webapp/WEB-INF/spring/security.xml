@@ -40,13 +40,16 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/m/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/equipos/mantenciones" access="hasRole('MODULO_MANTENCIONES')"/>
+        <security:intercept-url pattern="/m/taller" access="hasAnyRole('MODULO_MANTENCIONES', 'BODEGA_TALLER', 'GESTION_OT')"/>
+        <security:intercept-url pattern="/m/ots" access="hasAnyRole('GESTION_OT')"/>
+        <security:intercept-url pattern="/m/taller" access="hasAnyRole('BODEGA_TALLER')"/>
         
-		<security:intercept-url pattern="/m/ficha_viajes" access="hasRole('MODULO_ALARMAS_GPS')"/>
-		<security:intercept-url pattern="/m/hoja_servicio" access="hasRole('MODULO_MANTENCIONES')"/>
-		<security:intercept-url pattern="/m/carga_masiva" access="hasRole('MODULO_CARGA_MASIVA')"/>
+        <security:intercept-url pattern="/m/ficha_viajes" access="hasRole('MODULO_ALARMAS_GPS')"/>
+        <security:intercept-url pattern="/m/hoja_servicio" access="hasRole('MODULO_MANTENCIONES')"/>
+        <security:intercept-url pattern="/m/carga_masiva" access="hasRole('MODULO_CARGA_MASIVA')"/>
 		
-		<security:intercept-url pattern="/m/consulta_doc_equipo" access="hasRole('CONSULTA_DOCUMENTOS')"/>
-		<security:intercept-url pattern="/m/caja" access="hasRole('CAJA')"/>
+        <security:intercept-url pattern="/m/consulta_doc_equipo" access="hasRole('CONSULTA_DOCUMENTOS')"/>
+        <security:intercept-url pattern="/m/caja" access="hasRole('CAJA')"/>
         <security:intercept-url pattern="/m/maestro_guias" access="hasRole('MAESTRO_DE_GUIAS')"/>
 		 
         <security:logout invalidate-session="true"

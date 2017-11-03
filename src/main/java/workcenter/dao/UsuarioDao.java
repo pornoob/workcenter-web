@@ -55,10 +55,10 @@ public class UsuarioDao {
 
     public List<Proyecto> obtenerPermisos(Integer rut) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select pro.* from permisos per ");
-        sb.append("inner join proyectos pro on (pro.tipo='app' and per.proyecto=pro.id) ");
-        sb.append("where per.usuario = :rut");
-        Query q = em.createNativeQuery(sb.toString(), Proyecto.class);
+        sb.append("select distinct p from Proyecto p join fetch p.permisos per ");
+        sb.append("where p.tipo = 'app' and ");
+        sb.append("per.usuario.rut = :rut");
+        Query q = em.createQuery(sb.toString(), Proyecto.class);
         q.setParameter("rut", rut);
         return q.getResultList();
     }
@@ -114,11 +114,10 @@ public class UsuarioDao {
 
     public List<Proyecto> obtenerPermisos(String usuario) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select pro.* from mue_permisos_usuarios per ");
-        sb.append("inner join proyectos pro on (pro.tipo='app' and per.id_modulo=pro.id) ");
-        sb.append("inner join mue_usuario_externo u on (u.id = per.id_usuario) ");
-        sb.append("where u.usuario = :usuario");
-        Query q = em.createNativeQuery(sb.toString(), Proyecto.class);
+        sb.append("select distinct p from Proyecto p join fetch p.permisosExternos per ");
+        sb.append("where p.tipo = 'app' and ");
+        sb.append("per.usuario.usuario = :usuario");
+        Query q = em.createQuery(sb.toString(), Proyecto.class);
         q.setParameter("usuario", usuario);
         return q.getResultList();
     }

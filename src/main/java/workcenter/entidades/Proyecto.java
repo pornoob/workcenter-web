@@ -7,11 +7,13 @@
 package workcenter.entidades;
 
 import java.io.Serializable;
-import java.util.Collection;
+import java.util.Objects;
+import java.util.Set;
 import javax.persistence.Basic;
 import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -57,8 +59,11 @@ public class Proyecto implements Serializable {
     @Column(name = "tipo")
     private String tipo;
     
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyecto")
-    private Collection<Permiso> permisosCollection;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "proyecto", fetch = FetchType.LAZY)
+    private Set<Permiso> permisos;
+    
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "modulo", fetch = FetchType.LAZY)
+    private Set<MuePermisoUsuario> permisosExternos;
 
     public Proyecto() {
     }
@@ -105,32 +110,43 @@ public class Proyecto implements Serializable {
         this.tipo = tipo;
     }
 
-    public Collection<Permiso> getPermisosCollection() {
-        return permisosCollection;
+    public Set<Permiso> getPermisos() {
+        return permisos;
     }
 
-    public void setPermisosCollection(Collection<Permiso> permisosCollection) {
-        this.permisosCollection = permisosCollection;
+    public void setPermisos(Set<Permiso> permisos) {
+        this.permisos = permisos;
+    }
+
+    public Set<MuePermisoUsuario> getPermisosExternos() {
+        return permisosExternos;
+    }
+
+    public void setPermisosExternos(Set<MuePermisoUsuario> permisosExternos) {
+        this.permisosExternos = permisosExternos;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 7;
+        hash = 17 * hash + Objects.hashCode(this.id);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Proyecto)) {
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+        if (obj == null) {
             return false;
         }
-        Proyecto other = (Proyecto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
+        if (getClass() != obj.getClass()) {
             return false;
         }
-        return true;
+        final Proyecto other = (Proyecto) obj;
+        if (this.id == null || other.id == null) return false;
+        return Objects.equals(this.id, other.id);
     }
 
     @Override

@@ -19,7 +19,8 @@ import javax.xml.bind.annotation.XmlTransient;
     @NamedQuery(name = "Usuario.findAll", query = "SELECT u FROM Usuario u"),
     @NamedQuery(name = "Usuario.findByRut", query = "SELECT u FROM Usuario u WHERE u.rut = :rut"),
     @NamedQuery(name = "Usuario.findByPassword", query = "SELECT u FROM Usuario u WHERE u.password = :password"),
-    @NamedQuery(name = "Usuario.findByRutAndPassword", query = "SELECT u FROM Usuario u WHERE u.rut=:rut and u.password = :password")})
+    @NamedQuery(name = "Usuario.findByRutAndPassword", query = "SELECT u FROM Usuario u WHERE u.rut=:rut and u.password = :password")
+})
 public class Usuario implements Serializable {
     @OneToMany(mappedBy = "idUsuario", fetch = FetchType.LAZY)
     private Collection<GestionAlarmaGps> gestionAlarmaGpsCollection;

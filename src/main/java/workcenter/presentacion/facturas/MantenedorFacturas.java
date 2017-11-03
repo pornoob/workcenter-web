@@ -1,8 +1,10 @@
 package workcenter.presentacion.facturas;
 
 import java.io.Serializable;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
+import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -26,7 +28,6 @@ public class MantenedorFacturas implements Serializable {
     private static final long serialVersionUID = -5016398205437195408L;
     
     private FactFactura factura;
-    private FactDetalleFactura detalleFactura;
     private Integer totalNetoCalculado;
     private Integer totalNeto;
     
@@ -52,7 +53,7 @@ public class MantenedorFacturas implements Serializable {
     }
     
     public void addItem() {
-        detalleFactura = new FactDetalleFactura();
+        FactDetalleFactura detalleFactura = new FactDetalleFactura();
         detalleFactura.setFactura(factura);
         detalleFactura.setCantidad(0);
         detalleFactura.setPrecioUnitario(0);
@@ -65,20 +66,20 @@ public class MantenedorFacturas implements Serializable {
         Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
         while (iterator.hasNext()) {
             FactDetalleFactura current = iterator.next();
-            totalNetoCalculado += current.getPrecioUnitario();
+            totalNetoCalculado += current.getCantidad() * current.getPrecioUnitario();
         }
     }
     
     public void removeItem(FactDetalleFactura item) {
-        Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
-        while (iterator.hasNext()) {
-            FactDetalleFactura current = iterator.next();
-            if (current.getRowKey().equals(item.getRowKey())) {
-                iterator.remove();
-                totalNetoCalculado -= current.getPrecioUnitario();
-                break;
+        Set<FactDetalleFactura> oldItems = factura.getItems();
+        Set<FactDetalleFactura> newItems = new HashSet<>();
+        for (FactDetalleFactura oldItem : oldItems) {
+            if (!oldItem.getRowKey().equals(item.getRowKey())) {
+                newItems.add(oldItem);
             }
         }
+        factura.setItems(newItems);
+        updateNeto();
     }
     
     public void save() {
@@ -107,14 +108,6 @@ public class MantenedorFacturas implements Serializable {
 
     public void setFactura(FactFactura factura) {
         this.factura = factura;
-    }
-
-    public FactDetalleFactura getDetalleFactura() {
-        return detalleFactura;
-    }
-
-    public void setDetalleFactura(FactDetalleFactura detalleFactura) {
-        this.detalleFactura = detalleFactura;
     }
 
     public List<Empresa> getEmpresas() {

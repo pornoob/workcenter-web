@@ -1,17 +1,18 @@
 package workcenter.util.components;
 
+import java.io.Serializable;
+import java.util.Collection;
+import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
-import workcenter.entidades.Permiso;
 import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
-
-import javax.servlet.http.HttpServletRequest;
-import java.io.Serializable;
 
 /**
  * @author colivares
@@ -81,13 +82,13 @@ public class SesionCliente implements Serializable {
     }
 
     public boolean tieneNivel(Integer nivel, String permiso) {
-        Permiso p = null;
         if (this.getUsuario() == null) return false;
-        if (!this.getUsuario().isExterno())
-            p = logicaUsuario.obtenerPermiso(this.getUsuario().getRut(), permiso, nivel);
-        else
-            p = logicaUsuario.obtenerPermiso(this.getUsuario().getUsuario(), permiso, nivel);
-        return p != null;
+        SecurityContext context = SecurityContextHolder.getContext();
+        Collection<? extends GrantedAuthority> authorities = context.getAuthentication().getAuthorities();
+        for (GrantedAuthority authority : authorities) {
+            if (authority.getAuthority().equals(permiso + "_" + nivel)) return true;
+        }
+        return false;
     }
 
     public void setUsuario(UsuarioDto usuario) {

@@ -41,7 +41,7 @@
                 </h:panelGrid>
 
                 <p:outputPanel id="requestedFields">
-                    <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}">
+                    <h:panelGrid columns="3" rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null or mantenedorMantenciones.ot.mantencionSemirremolque ne null}">
                         <h:outputLabel for="iTipo" value="Tipo Mantención"/>:
                         <h:outputText id="iTipo" value="#{mantenedorMantenciones.ot.mantencionTracto.tipo.nombre}"/>
 

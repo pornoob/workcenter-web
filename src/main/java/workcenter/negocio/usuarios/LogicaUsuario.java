@@ -12,6 +12,7 @@ import workcenter.util.dto.UsuarioDto;
 import workcenter.util.pojo.Md5;
 
 import java.util.List;
+import workcenter.entidades.Usuario;
 
 /**
  * @author colivares

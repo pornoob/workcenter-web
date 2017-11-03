@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import workcenter.entidades.Permiso;
 import workcenter.entidades.Proyecto;
 import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
@@ -26,6 +27,7 @@ public class LogInManager implements AuthenticationProvider, Serializable {
     @Autowired
     LogicaUsuario logicaUsuario;
 
+    @Override
     public Authentication authenticate(Authentication a) throws AuthenticationException {
         String rut = a.getName();
         String password = "";
@@ -44,20 +46,28 @@ public class LogInManager implements AuthenticationProvider, Serializable {
     }
 
     private List<GrantedAuthority> getAcceso(UsuarioDto u) {
-        List<GrantedAuthority> listaRoles = new ArrayList<GrantedAuthority>();
-        List<Proyecto> permisos = null;
+        List<GrantedAuthority> listaRoles = new ArrayList<>();
+        List<Proyecto> modulos;
+        String modulo;
 
         if (!u.isExterno())
-            permisos = logicaUsuario.obtenerPermisos(u.getRut());
+            modulos = logicaUsuario.obtenerPermisos(u.getRut());
         else
-            permisos = logicaUsuario.obtenerPermisos(u.getUsuario());
-        for (Proyecto p : permisos) {
-            listaRoles.add(new SimpleGrantedAuthority(p.getTitulo().toUpperCase().replaceAll(" ", "_")));
+            modulos = logicaUsuario.obtenerPermisos(u.getUsuario());
+
+        for (Proyecto p : modulos) {
+            modulo = p.getTitulo().toUpperCase().replaceAll(" ", "_");
+            listaRoles.add(new SimpleGrantedAuthority(modulo));
+            
+            for (Permiso permiso : p.getPermisos()) {
+                listaRoles.add(new SimpleGrantedAuthority(modulo + "_" + permiso.getNivel()));
+            }
         }
         listaRoles.add(new SimpleGrantedAuthority("USUARIO_WEB"));
         return listaRoles;
     }
 
+    @Override
     public boolean supports(Class<? extends Object> authentication) {
         return (UsernamePasswordAuthenticationToken.class.isAssignableFrom(authentication));
     }
