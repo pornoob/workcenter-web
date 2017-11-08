@@ -86,7 +86,7 @@ public class SesionCliente implements Serializable {
         SecurityContext context = SecurityContextHolder.getContext();
         Collection<? extends GrantedAuthority> authorities = context.getAuthentication().getAuthorities();
         for (GrantedAuthority authority : authorities) {
-            if (authority.getAuthority().equals(permiso + "_" + nivel)) return true;
+            if (authority.getAuthority().equals(permiso.toUpperCase().replaceAll(" ", "_") + "_" + nivel)) return true;
         }
         return false;
     }
