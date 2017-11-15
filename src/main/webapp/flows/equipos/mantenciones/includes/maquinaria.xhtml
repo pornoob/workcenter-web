@@ -35,7 +35,7 @@
                 <h:graphicImage
                     rendered="#{mantencionesMaquinaView.todosLosCheckRealizados(maquina)}"
                     value="/img/icons/luz_verde.png"/>
-                <p:commandLink action="#{tabsMantenciones.irHistorialMaquina(maquina)}" value="#{maquina.patente}"/>
+                <p:commandLink style="white-space: nowrap" action="#{tabsMantenciones.irHistorialMaquina(maquina)}" value="#{maquina.patente}"/>
             </p:column>
             <p:column headerText="Modelo" width="60">
                 <h:outputText value="#{maquina.modelo.nombre}"/>

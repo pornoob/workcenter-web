@@ -25,7 +25,7 @@
                                  value="Subir"/>
             </h:form>
         </p:panel>
-        <p:panel header="Agregar mantenimiento">
+        <p:panel header="Agregar mantenimiento" rendered="#{sesionCliente.esEditor('MODULO_MANTENCIONES')}">
             <ui:include src="/components/cargadorArchivos.xhtml">
                 <ui:param name="padre" value="#{mantenedorMantenciones}"/>
             </ui:include>

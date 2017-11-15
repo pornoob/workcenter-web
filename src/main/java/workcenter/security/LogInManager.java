@@ -12,6 +12,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
+import workcenter.entidades.MuePermisoUsuario;
 import workcenter.entidades.Permiso;
 import workcenter.entidades.Proyecto;
 import workcenter.negocio.usuarios.LogicaUsuario;
@@ -50,20 +51,29 @@ public class LogInManager implements AuthenticationProvider, Serializable {
         List<Proyecto> modulos;
         String modulo;
 
-        if (!u.isExterno())
+        if (!u.isExterno()) {
             modulos = logicaUsuario.obtenerPermisos(u.getRut());
-        else
-            modulos = logicaUsuario.obtenerPermisos(u.getUsuario());
+            for (Proyecto p : modulos) {
+                modulo = "ROLE_" + p.getTitulo().toUpperCase().replaceAll(" ", "_");
+                listaRoles.add(new SimpleGrantedAuthority(modulo));
 
-        for (Proyecto p : modulos) {
-            modulo = p.getTitulo().toUpperCase().replaceAll(" ", "_");
-            listaRoles.add(new SimpleGrantedAuthority(modulo));
-            
-            for (Permiso permiso : p.getPermisos()) {
-                listaRoles.add(new SimpleGrantedAuthority(modulo + "_" + permiso.getNivel()));
+                for (Permiso permiso : p.getPermisos()) {
+                    listaRoles.add(new SimpleGrantedAuthority(modulo + "_" + permiso.getNivel()));
+                }
+            }
+        } else {
+            modulos = logicaUsuario.obtenerPermisos(u.getUsuario());
+            for (Proyecto p : modulos) {
+                modulo = "ROLE_" + p.getTitulo().toUpperCase().replaceAll(" ", "_");
+                listaRoles.add(new SimpleGrantedAuthority(modulo));
+
+                for (MuePermisoUsuario permiso : p.getPermisosExternos()) {
+                    listaRoles.add(new SimpleGrantedAuthority(modulo + "_" + permiso.getNivel()));
+                }
             }
         }
-        listaRoles.add(new SimpleGrantedAuthority("USUARIO_WEB"));
+
+        listaRoles.add(new SimpleGrantedAuthority("ROLE_USUARIO_WEB"));
         return listaRoles;
     }
 

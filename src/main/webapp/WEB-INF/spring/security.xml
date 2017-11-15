@@ -4,9 +4,9 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.2.xsd    
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.2.xsd   
-http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security-3.2.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd    
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd   
+http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <security:http pattern="/templates/**" security="none"/>
     <security:http pattern="/resources/**" security="none"/>
@@ -14,7 +14,6 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
 
     <security:http auto-config="false"
                    use-expressions="true"
-                   access-denied-page="/inicio.jsf"
                    entry-point-ref="authenticationEntryPoint" >
 
         <security:intercept-url pattern="/m/usuarios" access="hasRole('MODULO_USUARIOS')"/>
@@ -42,7 +41,6 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/m/equipos/mantenciones" access="hasRole('MODULO_MANTENCIONES')"/>
         <security:intercept-url pattern="/m/taller" access="hasAnyRole('MODULO_MANTENCIONES', 'BODEGA_TALLER', 'GESTION_OT')"/>
         <security:intercept-url pattern="/m/ots" access="hasAnyRole('GESTION_OT')"/>
-        <security:intercept-url pattern="/m/taller" access="hasAnyRole('BODEGA_TALLER')"/>
         
         <security:intercept-url pattern="/m/ficha_viajes" access="hasRole('MODULO_ALARMAS_GPS')"/>
         <security:intercept-url pattern="/m/hoja_servicio" access="hasRole('MODULO_MANTENCIONES')"/>
@@ -56,6 +54,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                          delete-cookies="jsessionid"
                          logout-success-url="/inicio.jsf"
                          logout-url="/logOut"/>
+        <security:csrf disabled="true"/>
 
         <security:session-management>
             <security:concurrency-control max-sessions="1"/>

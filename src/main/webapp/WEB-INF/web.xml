@@ -27,7 +27,7 @@
     <context-param>
         <param-name>facelets.LIBRARIES</param-name>
         <!--<param-name>javax.faces.LIBRARIES</param-name>-->
-        <param-value>/WEB-INF/tvp.taglib.xml</param-value>
+        <param-value>/WEB-INF/springsecurity.taglib.xml;/WEB-INF/tvp.taglib.xml</param-value>
     </context-param>
     <!-- Enforce UTF-8 Character Encoding -->
     <filter>

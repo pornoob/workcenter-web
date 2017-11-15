@@ -2,6 +2,7 @@
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:p="http://primefaces.org/ui"
+                xmlns:security="http://www.springframework.org/security/tags"
                 template="/templates/default.xhtml">
 
     <ui:define name="contenido">
@@ -82,7 +83,7 @@
                 </h:panelGrid>
             </p:panel>
 
-            <p:panel header="Módulos Gestión">
+            <p:panel header="Módulos Gestión" rendered="#{security:areAnyGranted('MODULO_INCIDENCIAS,MODULO_ALARMAS_GPS,MODULO_INFORME_ACTIVIDADES,MODULO_PROGRAMA_ACTIVIDADES,LIBRO_REMUNERACIONES_CONDUCTORES,CONSULTA_DOCUMENTOS,MODULO_ALARMAS_GPS,HOJA_DE_SERVICIOS,CAJA,CONSULTA_DOCUMENTOS')}">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="8">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
                                    action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter">
