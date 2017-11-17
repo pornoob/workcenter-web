@@ -25,7 +25,7 @@ import javax.xml.bind.annotation.XmlRootElement;
         @NamedQuery(name = "Permiso.findAll", query = "SELECT p FROM Permiso p"),
         @NamedQuery(name = "Permiso.findById", query = "SELECT p FROM Permiso p WHERE p.id = :id"),
         @NamedQuery(name = "Permiso.findByNivel", query = "SELECT p FROM Permiso p WHERE p.nivel = :nivel"),
-        @NamedQuery(name = "Permiso.findByRut", query = "SELECT p FROM Permiso  p WHERE p.usuario.rut = :rut")
+        @NamedQuery(name = "Permiso.findByRutWithProyecto", query = "SELECT p FROM Permiso p LEFT JOIN FETCH p.proyecto WHERE p.usuario.rut = :rut")
 })
 public class Permiso implements Serializable {
     private static final long serialVersionUID = 1L;

@@ -2,9 +2,9 @@ package workcenter.presentacion.usuarios;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map.Entry;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ import workcenter.entidades.Personal;
 import workcenter.entidades.Proyecto;
 import workcenter.entidades.Usuario;
 import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.negocio.usuarios.LogicaProyecto;
 import workcenter.negocio.usuarios.LogicaPermiso;
+import workcenter.negocio.usuarios.LogicaProyecto;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.Md5;
@@ -59,12 +59,11 @@ public class MantenedorUsuarios implements Serializable {
             Usuario u = new Usuario();
             u.setRut(personalSeleccionado.getRut());
             u.setPassword(Md5.hash(String.valueOf(personalSeleccionado.getRut())));
-            u.setPermisosCollection(new ArrayList<Permiso>());
+            u.setPermisos(new HashSet<Permiso>());
             u.setHabilitado(false);
             personalSeleccionado.setUsuario(u);
             logicaPersonal.guardar(personalSeleccionado);
         }
-        permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
         proyectosDisponibles = logicaProyecto.obtenerTodos();
         return irEditarUsuario();
     }
@@ -91,7 +90,7 @@ public class MantenedorUsuarios implements Serializable {
     public String irEditarUsuario() {
         personalSeleccionado = logicaPersonal.obtenerConAccesos(personalSeleccionado.getRut());
         if (personalSeleccionado.getUsuario() != null)
-            permisosUsuario = (List<Permiso>) personalSeleccionado.getUsuario().getPermisosCollection();
+            permisosUsuario = new ArrayList<>(personalSeleccionado.getUsuario().getPermisos());
         return "flowEditarAccesos";
     }
 
@@ -116,10 +115,10 @@ public class MantenedorUsuarios implements Serializable {
         permiso.setUsuario(personalSeleccionado.getUsuario());
         permiso.setNivel(nivel);
         if (permiso.getId() == null) {
-            if (personalSeleccionado.getUsuario().getPermisosCollection() == null)
-                personalSeleccionado.getUsuario().setPermisosCollection(new ArrayList<Permiso>());
+            if (personalSeleccionado.getUsuario().getPermisos() == null)
+                personalSeleccionado.getUsuario().setPermisos(new HashSet<Permiso>());
            // if (!personalSeleccionado.getUsuario().getPermisosCollection().contains(permiso.getProyecto()))
-            personalSeleccionado.getUsuario().getPermisosCollection().add(permiso);
+            personalSeleccionado.getUsuario().getPermisos().add(permiso);
         }
 
         logicaPersonal.guardar(personalSeleccionado);

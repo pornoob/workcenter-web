@@ -2,6 +2,7 @@ package workcenter.entidades;
 
 import java.io.Serializable;
 import java.util.Collection;
+import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
@@ -37,7 +38,7 @@ public class Usuario implements Serializable {
     @OneToOne(fetch = FetchType.LAZY)
     private Personal personal;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "usuario", fetch = FetchType.LAZY, orphanRemoval = true)
-    private Collection<Permiso> permisosCollection;
+    private Set<Permiso> permisos;
     @Column(name = "habilitado")
     private Boolean habilitado;
 
@@ -65,12 +66,12 @@ public class Usuario implements Serializable {
         this.password = password;
     }
 
-    public Collection<Permiso> getPermisosCollection() {
-        return permisosCollection;
+    public Set<Permiso> getPermisos() {
+        return permisos;
     }
 
-    public void setPermisosCollection(Collection<Permiso> permisosCollection) {
-        this.permisosCollection = permisosCollection;
+    public void setPermisos(Set<Permiso> permisos) {
+        this.permisos = permisos;
     }
 
     public Boolean isHabilitado() {

@@ -1,17 +1,16 @@
 package workcenter.entidades;
 
-import org.springframework.util.StringUtils;
-
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
+import javax.xml.bind.annotation.XmlTransient;
+import org.springframework.util.StringUtils;
 
 /**
  *
@@ -21,31 +20,32 @@ import java.util.Set;
 @Table(name = "personal")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos")
-    ,
-        @NamedQuery(name = "Personal.findAllWithUser", query = "SELECT DISTINCT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection")
-    ,
-        @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut")
-    ,
-        @NamedQuery(name = "Personal.findByRuts", query = "SELECT p FROM Personal p WHERE p.rut in :ruts")
-    ,
-        @NamedQuery(name = "Personal.findByRutWithAccess", query = "SELECT DISTINCT p FROM Personal p "
-            + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisosCollection "
-            + "WHERE p.rut = :rut")
-    ,
-        @NamedQuery(
-            name = "Personal.findByRutWithLiquidacion",
-            query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
-    )
-    ,
-        @NamedQuery(
-            name = "Personal.findContratoActual",
-            query = "SELECT cp FROM Personal p "
-            + "INNER JOIN p.contratospersonalCollection cp "
-            + "INNER JOIN FETCH cp.previsiones "
-            + "WHERE p = :personal "
-            + "ORDER BY cp.fecha DESC, cp.numero DESC"
+    @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos"),
+    @NamedQuery(
+            name = "Personal.findAllWithUser", 
+            query = "SELECT DISTINCT p FROM Personal p "
+            + "LEFT JOIN FETCH p.usuario u "
+    ),
+    @NamedQuery(name = "Personal.findByRut", query = "SELECT p FROM Personal p WHERE p.rut = :rut"),
+    @NamedQuery(name = "Personal.findByRuts", query = "SELECT p FROM Personal p WHERE p.rut in :ruts"),
+    @NamedQuery(
+            name = "Personal.findByRutWithAccess",
+            query = "SELECT DISTINCT p FROM Personal p "
+            + "LEFT JOIN FETCH p.usuario u LEFT JOIN FETCH u.permisos per "
+            + "LEFT JOIN FETCH per.proyecto "
+            + "WHERE p.rut = :rut"
+    ),
+    @NamedQuery(
+        name = "Personal.findByRutWithLiquidacion",
+        query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+    ),
+    @NamedQuery(
+        name = "Personal.findContratoActual",
+        query = "SELECT cp FROM Personal p "
+        + "INNER JOIN p.contratospersonalCollection cp "
+        + "INNER JOIN FETCH cp.previsiones "
+        + "WHERE p = :personal "
+        + "ORDER BY cp.fecha DESC, cp.numero DESC"
     )
 })
 public class Personal implements Serializable {
