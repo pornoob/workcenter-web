@@ -100,6 +100,40 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ot = new OrdenTrabajo();
     }
 
+    // se debe borrar
+    public String irEditarSemiRemolque() {
+        bateas = logicaEquipos.obtenerBateas();
+        mecanicos = logicaPersonal.obtenerMecanicos();
+        mantencionSemiremolque = new MmeMantencionSemirremolque();
+        return "flowEditarSemiRemolque";
+    }
+
+    public String irEditarTracto() {
+        tractos = logicaEquipos.obtenerTractos();
+        mecanicos = logicaPersonal.obtenerMecanicos();
+        // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada, Richard Freire
+        mecanicos.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796, 9545871));
+        mantencionTracto = new MmeMantencionTracto();
+        return "flowEditarTracto";
+    }
+
+    public String irEditarMaquinaria(MmeMantencionMaquina mantencionMaquina) {
+        mecanicos = logicaPersonal.obtenerMecanicos();
+        this.mantencionMaquina = mantencionMaquina;
+        tiposMantencionMaquina = logicaMantenciones.obtenerTiposMantencionMaquina();
+
+        obtenerMantencionMaquinaPrevia(mantencionMaquina);
+
+        tiposMantencionMaquinaSeleccionadas = new ArrayList<>();
+        for (MmeCheckMaquina check : mantencionMaquina.getCheckeoRealizado()) {
+            if (check.getHrasAnotadas().equals(mantencionMaquina.getHrasAnotadas())) {
+                tiposMantencionMaquinaSeleccionadas.add(check.getTareaMaquina());
+            }
+        }
+        return "flowEditarMaquinaria";
+    }
+    // fin se debe borrar
+
     public void initAsistente() {
         asistenteOt = new AsistenteOt();
         if (ot.getAsistentes() == null) {
@@ -159,11 +193,15 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         state.setFecha(new Date());
         state.setEstadoId(constantes.getESTADO_OT_FINALIZADA());
         this.ot.getTrazabilidad().add(state);
+        if (comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")==null) {
+            FacesUtil.mostrarMensajeError("Operación erronea", "Debes adjuntar al menos un archivo");
+            return;
+        }
         logicaOt.updateOt(this.ot);
-        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "El mantenimiento se ha guardado correctamente");
         for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
             logicaDocumentos.asociarDocumento(d, ot);
         }
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "El mantenimiento se ha guardado correctamente");
         ot = new OrdenTrabajo();
     }
 

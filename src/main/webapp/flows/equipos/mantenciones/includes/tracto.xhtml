@@ -8,6 +8,8 @@
         <p:commandButton value="Cargar listado"
                          action="#{tabsMantenciones.cargarMantencionesTracto()}" icon="fa fa-refresh"
                          update="tblTractos"/>
+        <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                         action="#{mantenedorMantenciones.irEditarTracto()}" icon="fa fa-plus"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones" widgetVar="tTractos"
                      id="tblTractos" tableStyle="table-layout: auto"
                      value="#{tabsMantenciones.mantencionesTractos}" var="mt"

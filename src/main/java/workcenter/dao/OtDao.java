@@ -7,10 +7,7 @@ import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import javax.persistence.Subgraph;
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.OrdenTrabajo;
-import workcenter.entidades.SolicitanteOt;
+import workcenter.entidades.*;
 
 /**
  *
@@ -66,7 +63,8 @@ public class OtDao extends MyDao {
         graph.addAttributeNodes("mantencionMaquina");
         graph.addAttributeNodes("asistentes");
         graph.addAttributeNodes("repuestos");
-        
+        graph.addAttributeNodes("trazabilidad");
+
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         q.setMaxResults(1);
         
