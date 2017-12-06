@@ -111,9 +111,9 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     public String irEditarTracto() {
         tractos = logicaEquipos.obtenerTractos();
         mecanicos = logicaPersonal.obtenerMecanicos();
-        // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada, Richard Freire
-        mecanicos.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796, 9545871));
+        bateas = logicaEquipos.obtenerBateas();
         mantencionTracto = new MmeMantencionTracto();
+        mantencionSemiremolque = new MmeMantencionSemirremolque();
         return "flowEditarTracto";
     }
 
@@ -181,8 +181,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         }
         ot = logicaOt.findWithMantenimientos(ot.getId());
         personal = logicaPersonal.obtenerMecanicos();
-        // Nildo Saez, Alejandro Farias, Manuel Reyes, Mario Arriagada, Richard Freire
-        personal.addAll(logicaPersonal.obtener(12223177, 12895251, 12146903, 7024796, 9545871));
         productos = logicaStock.findAll();
     }
 
