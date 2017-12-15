@@ -29,7 +29,8 @@
 
                 <h:outputLabel for="iBatea" value="Batea"/>:
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionSemiremolque.semiRremolque}" id="iBatea"
-                                 converter="entityConverter" filter="true" filterMatchMode="contains">
+                                 converter="entityConverter" filter="true" filterMatchMode="contains"
+                                 required="false">
                     <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
                     <f:selectItems value="#{mantenedorMantenciones.bateas}" var="b" itemLabel="#{b.patente}"/>
                 </p:selectOneMenu>

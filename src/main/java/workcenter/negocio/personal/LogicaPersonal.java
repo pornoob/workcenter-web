@@ -1,5 +1,6 @@
 package workcenter.negocio.personal;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -142,7 +143,14 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public List<Personal> obtenerMecanicos() {
         List<Personal> mecanicos = personalDao.obtenerSegunCargo(constantes.getCargoMecanico());
-        mecanicos.add(personalDao.obtener(8846226)); // don freddy (socio empresa)
+        List<Integer> rutAnexos = new ArrayList<>();
+        rutAnexos.add(8846226); // Freddy Freire (socio empresa)
+        rutAnexos.add(12223177); // Nildo Saez
+        rutAnexos.add(12895251); // Alejandro Farias
+        rutAnexos.add(12146903); // Manuel Reyes
+        rutAnexos.add(7024796); // Mario Arriagada
+
+        mecanicos.addAll(personalDao.obtener(rutAnexos));
         return mecanicos;
     }
 
