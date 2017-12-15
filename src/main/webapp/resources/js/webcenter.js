@@ -1,11 +1,28 @@
 var WebCenter = {
+    Init: function() {
+        WebCenter.Form.initHelper();
+    },
     Key: {
         LEFT_ARROW: 37,
         RIGHT_ARROR: 39,
         BACKSPACE: 8,
         DELETE: 46,
         SHIFT: 16,
-        HOME: 36
+        HOME: 36,
+        ENTER: 13
+    },
+    Form: {
+        initHelper: function() {
+            WebCenter.Form.disableSubmitWithEnterKey();
+        },
+        disableSubmitWithEnterKey: function () {
+            $('form').off('keypress.disableAutoSubmitOnEnter').on('keypress.disableAutoSubmitOnEnter', function (event) {
+                var target = $(event.target);
+                if (event.which === $.ui.keyCode.ENTER && target.is(':input:not(textarea,:button,:submit,:reset)')) {
+                    event.preventDefault();
+                }
+            });
+        },
     },
     Input: {
         formatearRut: function(event) {
@@ -42,6 +59,13 @@ var WebCenter = {
             });
         }
     },
+    DataTable: {
+        keyUpFilter: function (widget) {
+            if ((event.keyCode || event.which) === WebCenter.Key.ENTER) {
+                PF(widget).filter();
+            }
+        }
+    },
     Filter: {
         componente: null,
         run: function (componente) {
@@ -52,19 +76,19 @@ var WebCenter = {
             $('.inputFilter').keypress(this.inputKeyPress.bind(this));
         },
         inputKeyDown: function (event) {
-            if (event.which === 13) {
+            if (event.which === WebCenter.Key.ENTER) {
                 event.preventDefault();
                 return false;
             }
         },
         inputKeyUp: function (event) {
-            if (event.which === 13) {
+            if (event.which === WebCenter.Key.ENTER) {
                 event.preventDefault();
                 PF(this.componente).filter();
             }
         },
         inputKeyPress: function (event) {
-            if (event.which === 13) {
+            if (event.which === WebCenter.Key.ENTER) {
                 event.preventDefault();
                 return false;
             }

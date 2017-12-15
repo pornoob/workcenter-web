@@ -13,6 +13,7 @@
         <p:dataTable emptyMessage="No se han registrado mantenciones" widgetVar="tTractos"
                      id="tblTractos" tableStyle="table-layout: auto"
                      value="#{tabsMantenciones.mantencionesTractos}" var="mt"
+                     filterEvent="enter"
                      rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                      paginatorTemplate="#{constantes.paginadorTemplate}"
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
@@ -21,7 +22,7 @@
                     <p:column rowspan="2" filterBy="#{mt.tracto.patente}" headerText="Patente"
                               filterFunction="#{dataTableFilter.filtroInsensitivo}">
                         <f:facet name="filter">
-                            <p:inputText styleClass="inputFilter" style="width: 50px"/>
+                            <p:inputText styleClass="inputFilter" style="width: 50px" onkeyup="WebCenter.DataTable.keyUpFilter('tblTractos')"/>
                         </f:facet>
                     </p:column>
                     <p:column width="240" colspan="3" headerText="Última mantención"/>
