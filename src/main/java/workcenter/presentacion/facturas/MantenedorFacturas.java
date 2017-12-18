@@ -1,10 +1,5 @@
 package workcenter.presentacion.facturas;
 
-import java.io.Serializable;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Set;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -16,6 +11,12 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.facturas.LogicaFactura;
 import workcenter.negocio.facturas.LogicaStock;
 import workcenter.util.components.FacesUtil;
+
+import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Set;
 
 /**
  *

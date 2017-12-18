@@ -6,12 +6,12 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -59,11 +59,9 @@ public class GuiaPetroleo implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @ManyToOne
-    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
     private Vuelta ordendecarga;
-    @ManyToOne
-    @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
     private EstacionServicio estaciondeservicio;
 
     public GuiaPetroleo() {

@@ -1,17 +1,13 @@
 package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.MueUsuarioExterno;
-import workcenter.entidades.Permiso;
-import workcenter.entidades.Proyecto;
-import workcenter.entidades.Usuario;
+import workcenter.entidades.*;
 import workcenter.util.dto.UsuarioDto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
-import workcenter.entidades.MuePermisoUsuario;
 
 /**
  * @author colivares
@@ -22,7 +18,7 @@ public class UsuarioDao {
     @PersistenceContext
     private EntityManager em;
     
-    public UsuarioDto obtenerUsuario(Integer rut, String pass) {
+    public UsuarioDto obtenerUsuario(Long rut, String pass) {
         UsuarioDto usuario = null;
         Query q = em.createNamedQuery("Usuario.findByRutAndPassword", Usuario.class);
         q.setParameter("rut", rut);
@@ -38,7 +34,7 @@ public class UsuarioDao {
         return usuario;
     }
     
-    public UsuarioDto obtenerUsuario(Integer rut) {
+    public UsuarioDto obtenerUsuario(Long rut) {
         UsuarioDto usuario = null;
         Query q = em.createNamedQuery("Usuario.findByRut", Usuario.class);
         q.setParameter("rut", rut);
@@ -53,7 +49,7 @@ public class UsuarioDao {
         return usuario;
     }
 
-    public List<Proyecto> obtenerPermisos(Integer rut) {
+    public List<Proyecto> obtenerPermisos(Long rut) {
         StringBuilder sb = new StringBuilder();
         sb.append("select distinct p from Proyecto p join fetch p.permisos per ");
         sb.append("where p.tipo = 'app' and ");
@@ -63,7 +59,7 @@ public class UsuarioDao {
         return q.getResultList();
     }
 
-    public Permiso obtenerPermiso(Integer rut, String permiso, Integer acceso) {
+    public Permiso obtenerPermiso(Long rut, String permiso, Integer acceso) {
         permiso = permiso.replaceAll("_", " ");
         
         StringBuilder sb = new StringBuilder();
@@ -153,7 +149,7 @@ public class UsuarioDao {
         em.merge(u);
     }
 
-    public void cambiarClave(Integer rut, String clave) {
+    public void cambiarClave(Long rut, String clave) {
         Usuario u = (Usuario) em.createNamedQuery("Usuario.findByRut").setParameter("rut", rut).getSingleResult();
         u.setPassword(clave);
         em.merge(u);

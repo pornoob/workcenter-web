@@ -56,8 +56,7 @@ public class MarParticipantesAct implements Serializable {
         return this.getClass().getName() + "[ id = "+id+" ]";
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_actividad", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_actividad", referencedColumnName = "id", nullable = false)
     public MarActividad getMarActividadByIdActividad() {
         return marActividadByIdActividad;
     }

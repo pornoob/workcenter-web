@@ -1,17 +1,9 @@
 package workcenter.entidades;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  *
@@ -26,13 +18,11 @@ public class AsistenteOt implements Serializable  {
     @Id
     private Long personalId;
     
-    @ManyToOne
-    @MapsId(value = "otId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "otId")
     @JoinColumn(name = "ot_id")
     private OrdenTrabajo ot;
 
-    @ManyToOne
-    @MapsId(value = "personalId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "personalId")
     @JoinColumn(name = "personal_id")
     private Personal personal;
     
@@ -80,8 +70,9 @@ public class AsistenteOt implements Serializable  {
         return ot;
     }
 
-    public void setOt(OrdenTrabajo ot) {
+    public void setOt(OrdenTrabajo ot){
         this.ot = ot;
+        this.otId = ot.getId();
     }
 
     public Personal getPersonal() {
@@ -90,6 +81,7 @@ public class AsistenteOt implements Serializable  {
 
     public void setPersonal(Personal personal) {
         this.personal = personal;
+        this.personalId = personal.getRut();
     }
 
     public String getRowKey() {

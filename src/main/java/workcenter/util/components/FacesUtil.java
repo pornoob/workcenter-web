@@ -1,16 +1,15 @@
 package workcenter.util.components;
 
 
-import java.io.IOException;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import org.springframework.webflow.execution.RequestContextHolder;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import org.springframework.webflow.execution.RequestContextHolder;
+import java.io.IOException;
 
 /**
  * @author colivares
@@ -52,6 +51,11 @@ public class FacesUtil {
     
     public static void mostrarMensajeInformativo(String resumen, String detalle) {
         FacesContext.getCurrentInstance().addMessage(null, new FacesMessage(FacesMessage.SEVERITY_INFO, resumen, detalle));
+    }
+
+    public static <T> T getBeanInCurrentFlow(Class<T> cls, String var) {
+        org.springframework.webflow.execution.RequestContext req = RequestContextHolder.getRequestContext();
+        return req.getActiveFlow().getApplicationContext().getBean(var, cls);
     }
 
     public static void redirigir(String url) {

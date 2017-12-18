@@ -1,31 +1,23 @@
 package workcenter.presentacion.ordenes_trabajo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Scope;
+import org.springframework.stereotype.Component;
+import workcenter.entidades.*;
+import workcenter.negocio.equipos.LogicaEquipos;
+import workcenter.negocio.equipos.LogicaMantenciones;
+import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.taller.LogicaOt;
+import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
+import workcenter.util.components.SesionCliente;
+
+import javax.faces.event.AjaxBehaviorEvent;
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.SortedSet;
 import java.util.TreeSet;
-import javax.faces.event.AjaxBehaviorEvent;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Scope;
-import org.springframework.stereotype.Component;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemirremolque;
-import workcenter.entidades.MmeMantencionTracto;
-import workcenter.entidades.MmeTipoMantencion;
-import workcenter.entidades.OrdenTrabajo;
-import workcenter.entidades.Personal;
-import workcenter.entidades.SolicitanteOt;
-import workcenter.entidades.TrazabilidadOt;
-import workcenter.negocio.equipos.LogicaEquipos;
-import workcenter.negocio.equipos.LogicaMantenciones;
-import workcenter.negocio.personal.LogicaPersonal;
-import workcenter.util.components.Constantes;
-import workcenter.util.components.FacesUtil;
-import workcenter.util.components.SesionCliente;
 
 /**
  *

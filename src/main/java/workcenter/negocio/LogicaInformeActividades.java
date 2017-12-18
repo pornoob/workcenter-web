@@ -1,6 +1,5 @@
 package workcenter.negocio;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -14,6 +13,8 @@ import workcenter.entidades.Servicio;
 import workcenter.entidades.TipoActividadDiaria;
 import workcenter.util.dto.Semana;
 import workcenter.util.dto.UsuarioDto;
+
+import java.util.List;
 
 /**
  *

@@ -81,12 +81,12 @@ public class LogicaIncidencias {
     }
 
     @Transactional(readOnly = true)
-    public List<MirIncidencia> obtPorInformador(Integer rut) {
+    public List<MirIncidencia> obtPorInformador(Long rut) {
         return mirIncidenciasDao.obtenerPorInformador(rut);
     }
 
     @Transactional(readOnly = true)
-    public List<MirIncidencia> obtPorApoyo(Integer rut) {
+    public List<MirIncidencia> obtPorApoyo(Long rut) {
         return mirIncidenciasDao.obtenerPorApoyo(rut);
     }
 

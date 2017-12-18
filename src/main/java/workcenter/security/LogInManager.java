@@ -1,8 +1,5 @@
 package workcenter.security;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -17,6 +14,10 @@ import workcenter.entidades.Permiso;
 import workcenter.entidades.Proyecto;
 import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author colivares

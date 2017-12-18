@@ -1,20 +1,18 @@
 package workcenter.dao;
 
-import java.util.List;
-import java.util.logging.Logger;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.FactProducto;
+
+import javax.persistence.*;
+import java.util.List;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Claudio Olivares
  */
 @Repository
-public class StockDao {
+public class StockDao extends MyDao {
     private static final Logger LOG = Logger.getLogger(StockDao.class.getName());
 
     @PersistenceContext
@@ -46,7 +44,7 @@ public class StockDao {
     }
 
     public List<FactProductoBodega> findProductosBodega() {
-        Query q = em.createNamedQuery("FactProductoBodega.findAll", FactProductoBodega.class);
+        Query q = em.createQuery("SELECT fp FROM FactProductoBodega fp LEFT JOIN FETCH fp.producto ");
         return q.getResultList();
     }
 

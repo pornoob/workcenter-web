@@ -152,6 +152,9 @@ public class NumberConverter extends TagSupport implements Converter {
 
         if (Boolean.TRUE.equals(groupingUsed)) {
             String numeroStr = String.valueOf(retorno == null ? BigDecimal.ZERO : retorno);
+            boolean isNegative = numeroStr.charAt(0) == '-';
+            if (isNegative)
+                numeroStr = numeroStr.substring(1);
             int index = numeroStr.indexOf(".");
             String parteDecimal = ""; 
             if (index != -1) {
@@ -167,6 +170,8 @@ public class NumberConverter extends TagSupport implements Converter {
                 cont = (cont + 1) % 3;
             }
             sb.append(parteDecimal).toString();
+            if (isNegative)
+                sb.insert(0, '-');
         } else {
             sb.append(String.valueOf(retorno).replaceAll("\\.", ","));
         }

@@ -1,11 +1,12 @@
 package workcenter.dao;
 
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.MuePermisoUsuario;
 import workcenter.entidades.Permiso;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import java.util.List;
 
 /**
  * @author colivares
@@ -26,7 +27,7 @@ public class PermisosDao {
         return em.find(Permiso.class, id);
     }
 
-    public List<Permiso> obtenerTodos(Integer rut) {
+    public List<Permiso> obtenerTodos(Long rut) {
         return em.createNamedQuery("Permiso.findByRutWithProyecto").setParameter("rut", rut).getResultList();
     }
 

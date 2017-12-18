@@ -43,8 +43,7 @@ public class MirIncidencia implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "rut_informador", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "rut_informador", referencedColumnName = "rut")
     public Personal getRutInformador() {
         return rutInformador;
     }
@@ -53,8 +52,7 @@ public class MirIncidencia implements Serializable {
         this.rutInformador = rutInformador;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_apoyo", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_apoyo", referencedColumnName = "id")
     public MirApoyo getIdApoyo() {
         return idApoyo;
     }
@@ -85,8 +83,7 @@ public class MirIncidencia implements Serializable {
         this.resolucionProgramada = resolucionProgramada;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "severidad", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "severidad", referencedColumnName = "id")
     public MirSeveridad getSeveridad() {
         return severidad;
     }
@@ -95,8 +92,7 @@ public class MirIncidencia implements Serializable {
         this.severidad = severidad;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "prioridad", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "prioridad", referencedColumnName = "id")
     public MirPrioridad getPrioridad() {
         return prioridad;
     }

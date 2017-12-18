@@ -15,9 +15,9 @@ import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.components.FacesUtil;
 
 import java.io.File;
 import java.io.Serializable;

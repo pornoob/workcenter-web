@@ -1,10 +1,5 @@
 package workcenter.presentacion.personal.finiquitos;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import javax.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -15,6 +10,12 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaFiniquito;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.FacesUtil;
+
+import javax.annotation.PostConstruct;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
 
 /**
  *

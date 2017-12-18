@@ -1,16 +1,17 @@
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import org.springframework.util.StringUtils;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-import org.springframework.util.StringUtils;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  *
@@ -67,7 +68,7 @@ public class Personal implements Serializable {
     @Id
     @NotNull
     @Column(name = "rut")
-    private Integer rut;
+    private Long rut;
     @Basic(optional = false)
     @NotNull
     @Column(name = "digitoverificador")
@@ -132,11 +133,11 @@ public class Personal implements Serializable {
     public Personal() {
     }
 
-    public Personal(Integer rut) {
+    public Personal(Long rut) {
         this.rut = rut;
     }
 
-    public Personal(Integer rut, char digitoverificador) {
+    public Personal(Long rut, char digitoverificador) {
         this.rut = rut;
         this.digitoverificador = digitoverificador;
     }
@@ -161,11 +162,11 @@ public class Personal implements Serializable {
         return sb.toString().trim();
     }
 
-    public Integer getRut() {
+    public Long getRut() {
         return rut;
     }
 
-    public void setRut(Integer rut) {
+    public void setRut(Long rut) {
         this.rut = rut;
     }
 

@@ -1,7 +1,5 @@
 package workcenter.negocio.maestro_guias;
 
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -10,6 +8,9 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MaestroDeGuiasDAO;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Vuelta;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by renholders on 23-11-2015.

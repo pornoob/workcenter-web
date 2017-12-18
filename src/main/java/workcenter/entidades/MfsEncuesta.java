@@ -36,8 +36,7 @@ public class MfsEncuesta implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "encuestado", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "encuestado", referencedColumnName = "rut")
     public Personal getEncuestado() {
         return encuestado;
     }
@@ -46,8 +45,7 @@ public class MfsEncuesta implements Serializable {
         this.encuestado = encuestado;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "encargado", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "encargado", referencedColumnName = "rut")
     public Personal getEncargado() {
         return encargado;
     }

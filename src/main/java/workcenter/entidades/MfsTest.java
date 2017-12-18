@@ -31,8 +31,7 @@ public class MfsTest implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_encuesta", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_encuesta", referencedColumnName = "id")
     public MfsEncuesta getIdEncuesta() {
         return idEncuesta;
     }

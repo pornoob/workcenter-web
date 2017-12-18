@@ -23,6 +23,20 @@ public class Formato implements Serializable {
         return sb.toString();
     }
 
+    public String numeroAgrupado(Long numero) {
+        StringBuilder sb = new StringBuilder();
+        String tmp = String.valueOf(numero == null ? 0 : numero);
+        int cont = 1;
+        for (int i = tmp.length() - 1; i >= 0; i--) {
+            sb.insert(0, tmp.charAt(i));
+            if (cont % 3 == 0 && i > 0) {
+                sb.insert(0, '.');
+            }
+            cont = (cont + 1) % 3;
+        }
+        return sb.toString();
+    }
+
     public String numeroAgrupado(Double numero) {
         StringBuilder sb = new StringBuilder();
         String tmp = String.valueOf(numero == null ? 0 : numero).split(".")[0];

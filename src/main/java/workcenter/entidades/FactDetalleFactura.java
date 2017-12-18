@@ -5,22 +5,11 @@
  */
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.persistence.Transient;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -39,11 +28,9 @@ public class FactDetalleFactura implements Serializable {
     @Column(name = "detalle_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long detalleId;
-    @ManyToOne
-    @JoinColumn(name = "factura_id", referencedColumnName = "factura_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "factura_id", referencedColumnName = "factura_id")
     private FactFactura factura;
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "producto_id")
     private FactProducto producto;
     @Column(name = "precio_unitario")
     private Integer precioUnitario;

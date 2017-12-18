@@ -1,10 +1,9 @@
 package workcenter.dao;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Personal;
 import workcenter.entidades.Vuelta;
+import workcenter.entidades.Vuelta_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
@@ -13,8 +12,9 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Vuelta_;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by renholders on 23-11-2015.

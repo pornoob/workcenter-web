@@ -6,26 +6,13 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  *
@@ -42,7 +29,7 @@ public class GestionAlarmaGps implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @JoinColumn(name = "idUsuario", referencedColumnName = "rut")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Usuario idUsuario;
     @Size(max = 1000)
     @Column(name = "detalle")
@@ -53,10 +40,10 @@ public class GestionAlarmaGps implements Serializable {
     @Basic(optional = false)
     @Column(name = "id_gestion")
     private Integer idGestion;
-    @OneToMany(mappedBy = "idGestion")
+    @OneToMany(mappedBy = "idGestion",fetch = FetchType.LAZY)
     private Collection<DocGestionAlarmaGps> docGestionAlarmaGpsCollection;
     @JoinColumn(name = "id_alarma", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private AlarmaGps idAlarma;
 
     public GestionAlarmaGps() {

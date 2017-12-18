@@ -1,26 +1,12 @@
 package workcenter.entidades;
 
+import org.hibernate.annotations.SortNatural;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
 import java.util.SortedSet;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import org.hibernate.annotations.SortNatural;
 
 /**
  *
@@ -53,12 +39,10 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
     @Column(name = "fecha")
     private Date fecha;
 
-    @ManyToOne
-    @JoinColumn(name = "equipo_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "equipo_id")
     private Equipo maquina;
 
-    @ManyToOne
-    @JoinColumn(name = "mecanico_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "mecanico_id")
     private Personal mecanicoResponsable;
 
     @OneToMany(mappedBy = "mantencionMaquina", cascade = CascadeType.ALL)
@@ -167,17 +151,12 @@ public class MmeMantencionMaquina implements Serializable, Comparable<MmeMantenc
             return this.maquina.getPatente().compareTo(o.maquina.getPatente());
         }
         
-        if (this.fecha == null || o.fecha == null) {
-            return -2;
-        }
-        if (this.fecha.before(o.fecha)) {
+        if (this.fecha == null) {
             return 1;
-        } else if (this.fecha.after(o.fecha)) {
+        } else if (o.fecha == null) {
             return -1;
-        } else if (this.fecha.equals(o.fecha)) {
-            return 0;
         } else {
-            return -2;
+            return this.fecha.compareTo(o.fecha) * -1;
         }
     }
 }

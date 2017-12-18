@@ -12,7 +12,6 @@ import workcenter.util.dto.UsuarioDto;
 import workcenter.util.pojo.Md5;
 
 import java.util.List;
-import workcenter.entidades.Usuario;
 
 /**
  * @author colivares
@@ -27,14 +26,14 @@ public class LogicaUsuario {
     @Transactional(readOnly = true)
     public UsuarioDto logIn(String rut, String pass) {
         try {
-            return usuarioDao.obtenerUsuario(Integer.valueOf(rut.split("-")[0]), Md5.hash(pass));
+            return usuarioDao.obtenerUsuario(Long.valueOf(rut.split("-")[0]), Md5.hash(pass));
         } catch(Exception e) {
             return null;
         }
     }
 
     @Transactional(readOnly = true)
-    public List<Proyecto> obtenerPermisos(Integer rut) {
+    public List<Proyecto> obtenerPermisos(Long rut) {
         return usuarioDao.obtenerPermisos(rut);
     }
 
@@ -58,12 +57,12 @@ public class LogicaUsuario {
     }
 
     @Transactional(readOnly = false)
-    public void cambiarClave(Integer rut, String clave) {
+    public void cambiarClave(Long rut, String clave) {
         usuarioDao.cambiarClave(rut, clave);
     }
 
     @Transactional(readOnly = true)
-    public UsuarioDto obtenerUsuario(Integer rut) {
+    public UsuarioDto obtenerUsuario(Long rut) {
         return usuarioDao.obtenerUsuario(rut);
     }
 
@@ -73,7 +72,7 @@ public class LogicaUsuario {
     }
 
     @Transactional(readOnly = true)
-    public Permiso obtenerPermiso(Integer rut, String permiso, Integer nivel) {
+    public Permiso obtenerPermiso(Long rut, String permiso, Integer nivel) {
         return usuarioDao.obtenerPermiso(rut, permiso, nivel);
     }
 

@@ -1,14 +1,12 @@
 package workcenter.dao;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.ValoresCargasFamiliares;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-
-import org.springframework.stereotype.Repository;
-
-import workcenter.entidades.ValoresCargasFamiliares;
+import java.util.List;
 
 @Repository
 public class CargasFamiliaresDao {

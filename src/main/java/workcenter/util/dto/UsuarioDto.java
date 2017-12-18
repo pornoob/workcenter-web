@@ -7,7 +7,7 @@ import java.io.Serializable;
  */
 public class UsuarioDto implements Serializable {
     private boolean externo;
-    private Integer rut;
+    private Long rut;
     private String usuario;
     private String nombres;
     private String apellidos;
@@ -24,11 +24,11 @@ public class UsuarioDto implements Serializable {
         this.externo = externo;
     }
 
-    public Integer getRut() {
+    public Long getRut() {
         return rut;
     }
 
-    public void setRut(Integer rut) {
+    public void setRut(Long rut) {
         this.rut = rut;
     }
 

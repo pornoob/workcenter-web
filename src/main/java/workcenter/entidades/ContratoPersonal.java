@@ -32,7 +32,7 @@ public class ContratoPersonal implements Serializable {
     @Column(name = "numero")
     private Integer numero;
     @JoinColumn(name = "rut", referencedColumnName = "rut")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Personal rut;
     @Basic(optional = false)
     @NotNull
@@ -42,7 +42,7 @@ public class ContratoPersonal implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date vencimiento;
     @JoinColumn(name = "cargo", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Cargo cargo;
     @Column(name = "vigente")
     private Boolean vigente;
@@ -52,7 +52,7 @@ public class ContratoPersonal implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date inicio;
     @JoinColumn(name = "empleador", referencedColumnName = "id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private Empresa empleador;
     @Column(name = "subcontrato")
     private Integer subcontrato;

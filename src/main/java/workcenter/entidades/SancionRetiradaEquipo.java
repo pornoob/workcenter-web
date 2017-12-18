@@ -6,12 +6,12 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -36,13 +36,12 @@ public class SancionRetiradaEquipo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @ManyToOne
-    @JoinColumn(name = "sancionado", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "sancionado", referencedColumnName = "patente")
     private Equipo sancionado;
     @Basic(optional = false)
     @NotNull
     @Column(name = "perdonadopor")
-    private int perdonadopor;
+    private Long perdonadopor;
     @Basic(optional = false)
     @NotNull
     @Column(name = "nivel")
@@ -87,11 +86,11 @@ public class SancionRetiradaEquipo implements Serializable {
         this.sancionado = sancionado;
     }
 
-    public int getPerdonadopor() {
+    public Long getPerdonadopor() {
         return perdonadopor;
     }
 
-    public void setPerdonadopor(int perdonadopor) {
+    public void setPerdonadopor(Long perdonadopor) {
         this.perdonadopor = perdonadopor;
     }
 

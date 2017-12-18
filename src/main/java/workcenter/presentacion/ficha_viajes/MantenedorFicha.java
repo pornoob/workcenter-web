@@ -1,13 +1,8 @@
 package workcenter.presentacion.ficha_viajes;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import workcenter.entidades.Equipo;
 import workcenter.entidades.Personal;
 import workcenter.entidades.ViajesTortola;
@@ -15,6 +10,10 @@ import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.ficha_viajes.LogicaFicha;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.FacesUtil;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 @Component
 @Scope("flow")

@@ -1,17 +1,14 @@
 package workcenter.negocio.taller;
 
-import java.util.List;
-import workcenter.dao.OtDao;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemirremolque;
-import workcenter.entidades.MmeMantencionTracto;
-import workcenter.entidades.OrdenTrabajo;
-import workcenter.entidades.SolicitanteOt;
+import workcenter.dao.OtDao;
+import workcenter.entidades.*;
+
+import java.util.List;
 
 /**
  *
@@ -55,17 +52,17 @@ public class LogicaOt {
     }
 
     @Transactional(readOnly = true)
-    public OrdenTrabajo findById(Integer otId) {
+    public OrdenTrabajo findById(Long otId) {
         return otDao.findById(otId);
     }
 
     @Transactional(readOnly = true)
-    public OrdenTrabajo findByIdAndStatus(Integer id, Integer status) {
+    public OrdenTrabajo findByIdAndStatus(Long id, Integer status) {
         return otDao.findByIdAndStatus(id, status);
     }
 
     @Transactional(readOnly = true)
-    public OrdenTrabajo findWithMantenimientos(Integer id) {
+    public OrdenTrabajo findWithMantenimientos(Long id) {
         return otDao.findWithMantenimientos(id);
     }
 

@@ -1,8 +1,5 @@
 package workcenter.util.components;
 
-import java.io.Serializable;
-import java.util.Collection;
-import javax.servlet.http.HttpServletRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.security.core.Authentication;
@@ -13,6 +10,10 @@ import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.dto.UsuarioDto;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.Serializable;
+import java.util.Collection;
 
 /**
  * @author colivares
@@ -41,8 +42,8 @@ public class SesionCliente implements Serializable {
             usuario = null;
         } else if (!a.getName().equals("anonymousUser")) {
             try {
-                if (usuario == null || !usuario.getRut().equals(Integer.valueOf(a.getName())))
-                    usuario = logicaUsuario.obtenerUsuario(Integer.valueOf(a.getName()));
+                if (usuario == null || !usuario.getRut().equals(Long.valueOf(a.getName())))
+                    usuario = logicaUsuario.obtenerUsuario(Long.valueOf(a.getName()));
             } catch (NumberFormatException nfe) {
                 usuario = logicaUsuario.obtenerUsuario(a.getName());
             }

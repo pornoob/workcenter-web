@@ -5,19 +5,15 @@
  */
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
+import workcenter.util.dto.Mes;
+
 import javax.persistence.*;
-import javax.persistence.metamodel.CollectionAttribute;
-import javax.persistence.metamodel.SingularAttribute;
-import javax.persistence.metamodel.StaticMetamodel;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
-
-import workcenter.util.dto.Mes;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Date;
 
 /**
  * @author colivares
@@ -52,16 +48,16 @@ public class MpaPlanPrograma implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date fecha;
     @JoinColumn(name = "rut_creador", referencedColumnName = "rut")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Personal rutCreador;
     @JoinColumn(name = "rut_responsable", referencedColumnName = "rut")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private Personal rutResponsable;
     @JoinColumn(name = "id_actividad", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private MpaActividad idActividad;
     @JoinColumn(name = "id_programa", referencedColumnName = "id")
-    @ManyToOne(optional = false)
+    @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private MpaPrograma idPrograma;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "idPlan", orphanRemoval = true, fetch = FetchType.EAGER)
     private Collection<MpaValorPlanPrograma> mpaValorPlanProgramaCollection;

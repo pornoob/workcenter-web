@@ -310,7 +310,7 @@ public class MantenedorFatigaSomnolencia implements Serializable {
 
     public void obtenerConductor() {
         rut = rut.replaceAll("[^0-9]", "");
-        conductor = logicaPersonal.obtener(Integer.valueOf(rut));
+        conductor = logicaPersonal.obtener(Long.valueOf(rut));
     }
 
     private void setearFechasSemana(Date fecha) {

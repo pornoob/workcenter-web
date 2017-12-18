@@ -1,13 +1,13 @@
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Collection;
-import java.util.Set;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
+import java.io.Serializable;
+import java.util.Collection;
+import java.util.Set;
 
 /**
  *
@@ -30,7 +30,7 @@ public class Usuario implements Serializable {
     @Id
     @NotNull
     @Column(name = "rut")
-    private Integer rut;
+    private Long rut;
     @Size(max = 45)
     @Column(name = "password")
     private String password;
@@ -46,15 +46,15 @@ public class Usuario implements Serializable {
         habilitado = false;
     }
 
-    public Usuario(Integer rut) {
+    public Usuario(Long rut) {
         this.rut = rut;
     }
 
-    public Integer getRut() {
+    public Long getRut() {
         return rut;
     }
 
-    public void setRut(Integer rut) {
+    public void setRut(Long rut) {
         this.rut = rut;
     }
 

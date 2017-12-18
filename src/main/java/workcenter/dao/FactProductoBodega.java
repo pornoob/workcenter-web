@@ -5,18 +5,12 @@
  */
 package workcenter.dao;
 
-import java.io.Serializable;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import workcenter.entidades.FactProducto;
+
+import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
-import workcenter.entidades.FactProducto;
+import java.io.Serializable;
 
 /**
  *
@@ -32,7 +26,7 @@ public class FactProductoBodega implements Serializable {
     private static final long serialVersionUID = -5173357582492589643L;
     @Id
     @JoinColumn(name = "producto_id")
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     private FactProducto producto;
     @Size(max = 70)
     @Column(name = "proveedores")

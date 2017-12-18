@@ -57,8 +57,7 @@ public class MiaInspeccionAvanzada implements Serializable {
         this.observacion = observacion;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "tracto", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "tracto", referencedColumnName = "patente")
     public Equipo getTracto() {
         return tracto;
     }
@@ -67,8 +66,7 @@ public class MiaInspeccionAvanzada implements Serializable {
         this.tracto = tracto;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "batea", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "batea", referencedColumnName = "patente")
     public Equipo getBatea() {
         return batea;
     }
@@ -77,8 +75,7 @@ public class MiaInspeccionAvanzada implements Serializable {
         this.batea = batea;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "rut_conductor", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "rut_conductor", referencedColumnName = "rut")
     public Personal getConductor() {
         return conductor;
     }
@@ -87,8 +84,7 @@ public class MiaInspeccionAvanzada implements Serializable {
         this.conductor = conductor;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "rut_ejecutor", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "rut_ejecutor", referencedColumnName = "rut")
     public Personal getEjecutor() {
         return ejecutor;
     }

@@ -32,7 +32,7 @@ public class EmpresaDao {
         return em.createNamedQuery("Empresa.findAll").getResultList();
     }
 
-    public Empresa obtenerEmpresa(Integer rut) {
+    public Empresa obtenerEmpresa(Long rut) {
         try {
             return (Empresa) em.createNamedQuery("Empresa.findByRut").setParameter("rut", rut).getSingleResult();
         } catch (Exception e) {

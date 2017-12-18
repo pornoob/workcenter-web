@@ -6,23 +6,10 @@
 
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -45,17 +32,13 @@ public class TramoContrato implements Serializable {
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "contrato", referencedColumnName = "id")
-    @ManyToOne
-    private ContratoEmpresa contrato;
+    @ManyToOne(fetch = FetchType.LAZY)    private ContratoEmpresa contrato;
     @JoinColumn(name = "origen", referencedColumnName = "id")
-    @ManyToOne
-    private OrigenDestino origen;
+    @ManyToOne(fetch = FetchType.LAZY)    private OrigenDestino origen;
     @JoinColumn(name = "destino", referencedColumnName = "id")
-    @ManyToOne
-    private OrigenDestino destino;
+    @ManyToOne(fetch = FetchType.LAZY)    private OrigenDestino destino;
     @JoinColumn(name = "tipoproducto", referencedColumnName = "id")
-    @ManyToOne
-    private TipoProducto tipoProducto;
+    @ManyToOne(fetch = FetchType.LAZY)    private TipoProducto tipoProducto;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tramo", fetch = FetchType.LAZY,orphanRemoval = true)
     private List<TarifaTramo> tarifasTramosList;
 

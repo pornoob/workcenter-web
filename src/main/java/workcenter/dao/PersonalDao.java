@@ -4,16 +4,12 @@ import org.primefaces.model.SortMeta;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.TypedQuery;
+import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
 import java.util.Map;
-import javax.persistence.EntityGraph;
 
 /**
  * @author colivares
@@ -29,7 +25,7 @@ public class PersonalDao extends MyDao {
         return q.getResultList();
     }
 
-    public Personal obtenerConAccesos(Integer rut) {
+    public Personal obtenerConAccesos(Long rut) {
         Query q = em.createNamedQuery("Personal.findByRutWithAccess" );
         q.setParameter("rut", rut);
         return (Personal) q.getSingleResult();
@@ -98,11 +94,11 @@ public class PersonalDao extends MyDao {
         return q.getResultList();
     }
 
-    public Personal obtener(Integer rut) {
+    public Personal obtener(Long rut) {
         return em.find(Personal.class, rut);
     }
     
-    public List<Personal> obtener(List<Integer> rut) {
+    public List<Personal> obtener(List<Long> rut) {
         Query q = em.createNamedQuery("Personal.findByRuts", Personal.class);
         q.setParameter("ruts", rut);
         return q.getResultList();

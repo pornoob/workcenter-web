@@ -8,14 +8,18 @@ import java.util.Date;
  * Created by claudio on 09-09-14.
  */
 @Entity
-@Table(name = "mme_mantenciones_tractos", schema = "")
-@NamedQueries(
+@Table(name = "mme_mantenciones_tractos")
+@NamedQueries({
         @NamedQuery(
                 name = "MmeMantencionTracto.findByTracto",
-                query = "select m from MmeMantencionTracto  m where m.tracto = :tracto order by m.fecha desc"
+                query = "select m from MmeMantencionTracto m where m.tracto = :tracto order by m.fecha desc"
+        ),
+        @NamedQuery(
+                name = "MmeMantencionTracto.findById",
+                query = "select m from MmeMantencionTracto m where m.id = :id"
         )
-)
-public class MmeMantencionTracto implements Serializable {
+})
+public class MmeMantencionTracto implements Serializable, Comparable<MmeMantencionTracto> {
     private Integer id;
     private MmeTipoMantencion tipo;
     private Date fecha;
@@ -24,6 +28,9 @@ public class MmeMantencionTracto implements Serializable {
     private Integer kilometraje;
     private Integer ciclo;
     private OrdenTrabajo ot;
+
+    // read only
+    private String patente;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -36,7 +43,7 @@ public class MmeMantencionTracto implements Serializable {
         this.id = id;
     }
 
-    @OneToOne
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "id_tipo", referencedColumnName = "id")
     public MmeTipoMantencion getTipo() {
         return tipo;
@@ -57,7 +64,7 @@ public class MmeMantencionTracto implements Serializable {
         this.fecha = fecha;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "mecanico_responsable", referencedColumnName = "rut")
     public Personal getMecanicoResponsable() {
         return mecanicoResponsable;
@@ -67,7 +74,7 @@ public class MmeMantencionTracto implements Serializable {
         this.mecanicoResponsable = mecanicoResponsable;
     }
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "equipo", referencedColumnName = "patente")
     public Equipo getTracto() {
         return tracto;
@@ -107,6 +114,16 @@ public class MmeMantencionTracto implements Serializable {
         this.ot = ot;
     }
 
+    @Basic
+    @Column(name = "equipo", updatable = false, insertable = false)
+    public String getPatente() {
+        return patente;
+    }
+
+    public void setPatente(String patente) {
+        this.patente = patente;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -131,5 +148,14 @@ public class MmeMantencionTracto implements Serializable {
         return "workcenter.entidades.MmeMantencionTracto{" +
                 "id=" + id +
                 '}';
+    }
+
+    @Override
+    public int compareTo(MmeMantencionTracto o) {
+        int compare = this.patente.compareTo(o.patente);
+        if (compare != 0) return compare;
+        if (this.fecha == null && o.fecha != null) return 1;
+        else if (this.fecha != null && o.fecha == null) return -1;
+        else return this.fecha.compareTo(o.fecha) * -1; // desc order
     }
 }

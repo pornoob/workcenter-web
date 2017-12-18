@@ -6,17 +6,9 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
+import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 /**
  *
@@ -38,7 +30,7 @@ public class UsuarioServicioRuta implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Column(name = "rut")
-    private Integer rut;
+    private Long rut;
     @Column(name = "id_servicio")
     private Integer idServicio;
 
@@ -57,11 +49,11 @@ public class UsuarioServicioRuta implements Serializable {
         this.id = id;
     }
 
-    public Integer getRut() {
+    public Long getRut() {
         return rut;
     }
 
-    public void setRut(Integer rut) {
+    public void setRut(Long rut) {
         this.rut = rut;
     }
 

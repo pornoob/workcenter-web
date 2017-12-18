@@ -22,7 +22,7 @@
                     <p:column rowspan="2" filterBy="#{mt.tracto.patente}" headerText="Patente"
                               filterFunction="#{dataTableFilter.filtroInsensitivo}">
                         <f:facet name="filter">
-                            <p:inputText styleClass="inputFilter" style="width: 50px" onkeyup="WebCenter.DataTable.keyUpFilter('tblTractos')"/>
+                            <p:inputText styleClass="inputFilter" style="width: 50px" onkeyup="WebCenter.DataTable.keyUpFilter('tTractos')"/>
                         </f:facet>
                     </p:column>
                     <p:column width="240" colspan="3" headerText="Última mantención"/>
@@ -31,7 +31,7 @@
                     <p:column width="100" rowspan="2" headerText="Prox. Control"/>
                     <p:column rowspan="2" headerText="Kms. Faltantes"/>
                     <p:column rowspan="2" headerText="Estado" filterBy="#{mt}"
-                              filterFunction="#{mantenedorMantenciones.filtroEstado}">
+                              filterFunction="#{tabsMantenciones.filtroEstado}">
                         <f:facet name="filter">
                             <p:selectOneMenu onchange="PF('tTractos').filter()">
                                 <f:selectItem itemLabel="-- Todas --" itemValue="#{null}"/>
@@ -75,13 +75,13 @@
             </p:column>
 
             <p:column>
-                <h:outputText value="#{mantenedorMantenciones.obtenerFechaUltimaPanne(mt.tracto)}">
+                <h:outputText value="#{tabsMantenciones.pannes[mt.tracto].fecha}">
                     <f:convertDateTime pattern="dd-MM-yyyy"/>
                 </h:outputText>
             </p:column>
             <p:column>
                 <p:commandLink ajax="false">
-                    <h:outputText value="#{mantenedorMantenciones.obtenerKmUltimaPanne(mt.tracto)}">
+                    <h:outputText value="#{tabsMantenciones.pannes[mt.tracto].kilometraje}">
                         <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                     </h:outputText>
                     <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargablePanne(mt.tracto)}"/>
@@ -89,19 +89,23 @@
             </p:column>
 
             <p:column>
-                <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunGuias(mt.tracto)}">
+                <h:outputText rendered="#{tabsMantenciones.vueltas[mt.tracto].kmFinal gt tabsMantenciones.vueltas[mt.tracto].kmInicial}" value="#{tabsMantenciones.vueltas[mt.tracto].kmFinal}">
+                    <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
+                </h:outputText>
+
+                <h:outputText rendered="#{tabsMantenciones.vueltas[mt.tracto].kmInicial gt tabsMantenciones.vueltas[mt.tracto].kmFinal}" value="#{tabsMantenciones.vueltas[mt.tracto].kmInicial}">
                     <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                 </h:outputText>
             </p:column>
 
             <p:column>
-                <h:outputText value="#{mantenedorMantenciones.obtenerKmSegunProveedor(mt.tracto)}">
+                <h:outputText value="#{tabsMantenciones.rendimientosCopec[mt.tracto].odometro}">
                     <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                 </h:outputText>
             </p:column>
 
             <p:column style="text-align: center">
-                <h:outputText value="#{mantenedorMantenciones.obtenerFechaSiguienteMantencion(mt)}">
+                <h:outputText value="#{tabsMantenciones.obtenerFechaSiguienteMantencion(mt)}">
                     <f:convertDateTime pattern="dd-MM-yyyy"/>
                 </h:outputText><br/>(
                 <h:outputText value="#{mantenedorMantenciones.obtenerKmSiguienteMantencion(mt)}">
@@ -109,19 +113,19 @@
                 </h:outputText> Kms. )
             </p:column>
             <p:column>
-                <h:outputText value="#{mantenedorMantenciones.obtenerKmsFaltante(mt)}">
+                <h:outputText value="#{tabsMantenciones.obtenerKmsFaltante(mt)}">
                     <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
                 </h:outputText>
             </p:column>
             <p:column>
                 <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoRojo(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                    rendered="#{tabsMantenciones.dibujarSemaforoRojo(tabsMantenciones.obtenerKmsFaltante(mt))}"
                     value="/img/icons/luz_roja.png"/>
                 <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoAmarillo(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                    rendered="#{tabsMantenciones.dibujarSemaforoAmarillo(tabsMantenciones.obtenerKmsFaltante(mt))}"
                     value="/img/icons/luz_amarilla.png"/>
                 <h:graphicImage
-                    rendered="#{mantenedorMantenciones.dibujarSemaforoVerde(mantenedorMantenciones.obtenerKmsFaltante(mt))}"
+                    rendered="#{tabsMantenciones.dibujarSemaforoVerde(tabsMantenciones.obtenerKmsFaltante(mt))}"
                     value="/img/icons/luz_verde.png"/>
             </p:column>
         </p:dataTable>

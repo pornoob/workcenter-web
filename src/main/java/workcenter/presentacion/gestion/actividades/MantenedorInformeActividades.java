@@ -1,15 +1,5 @@
 package workcenter.presentacion.gestion.actividades;
 
-import java.io.File;
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
 import org.primefaces.event.FileUploadEvent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -21,11 +11,16 @@ import workcenter.negocio.LogicaProgramaActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Semana;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.components.FacesUtil;
+
+import java.io.File;
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * @author colivares

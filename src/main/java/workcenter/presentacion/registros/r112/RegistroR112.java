@@ -12,9 +12,9 @@ import workcenter.negocio.registros.LogicaRegistroActividades;
 import workcenter.presentacion.includes.FicheroUploader;
 import workcenter.util.WorkcenterFileListener;
 import workcenter.util.components.Constantes;
+import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.components.FacesUtil;
 
 import java.io.File;
 import java.io.Serializable;
@@ -206,7 +206,7 @@ public class RegistroR112 implements Serializable, WorkcenterFileListener {
 
     public void agregarParticipante() {
 //        System.out.println("Rut: " + FacesUtil.obtenerHttpServletRequest().getParameter("formR112:sNuevoParticipante_input"));
-        Integer rut = Integer.valueOf(FacesUtil.obtenerHttpServletRequest().getParameter("formR112:sNuevoParticipante_input"));
+        Long rut = Long.valueOf(FacesUtil.obtenerHttpServletRequest().getParameter("formR112:sNuevoParticipante_input"));
         Personal seleccionado = null;
         for (Personal p : personal) {
             if (rut != null && p.getRut().intValue() == rut.intValue()) {

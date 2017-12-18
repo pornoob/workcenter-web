@@ -14,8 +14,7 @@ public class MpaPlanContrato implements Serializable {
     private MpaContrato idContrato;
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "id_plan", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_plan", referencedColumnName = "id")
     public MpaPlanPrograma getIdPlan() {
         return idPlan;
     }
@@ -25,8 +24,7 @@ public class MpaPlanContrato implements Serializable {
     }
 
     @Id
-    @ManyToOne
-    @JoinColumn(name = "id_contrato", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_contrato", referencedColumnName = "id")
     public MpaContrato getIdContrato() {
         return idContrato;
     }

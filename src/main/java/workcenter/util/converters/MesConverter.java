@@ -1,7 +1,5 @@
 package workcenter.util.converters;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import workcenter.util.components.Constantes;
 import workcenter.util.dto.Mes;
 
 import javax.faces.component.UIComponent;

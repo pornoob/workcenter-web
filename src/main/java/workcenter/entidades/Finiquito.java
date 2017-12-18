@@ -5,24 +5,12 @@
  */
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -61,13 +49,11 @@ public class Finiquito implements Serializable {
     @Column(name = "monto")
     private int monto;
     
-    @OneToOne
-    @NotNull
+    @OneToOne(fetch = FetchType.LAZY)    @NotNull
     @JoinColumn(name = "rut_empleador", referencedColumnName = "rut")
     private Empresa empleador;
     
-    @OneToOne
-    @NotNull
+    @OneToOne(fetch = FetchType.LAZY)    @NotNull
     @JoinColumn(name = "rut_trabajador", referencedColumnName = "rut")
     private Personal trabajador;
 

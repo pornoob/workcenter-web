@@ -1,6 +1,5 @@
 package workcenter.negocio.personal;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -10,6 +9,8 @@ import workcenter.dao.PrevisionDao;
 import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Prevision;
 import workcenter.entidades.PrevisionContrato;
+
+import java.util.List;
 
 /**
  *

@@ -45,8 +45,7 @@ public class MmeMantencionSemirremolque implements Serializable {
         this.fecha = fecha;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "mecanico_responsable", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "mecanico_responsable", referencedColumnName = "rut")
     public Personal getMecanicoResponsable() {
         return mecanicoResponsable;
     }
@@ -65,8 +64,7 @@ public class MmeMantencionSemirremolque implements Serializable {
         this.criterioSiguiente = criterioSiguiente;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "equipo", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "equipo", referencedColumnName = "patente")
     public Equipo getSemiRremolque() {
         return semiRremolque;
     }

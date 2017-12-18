@@ -1,10 +1,11 @@
 package workcenter.util.pojo;
 
+import workcenter.entidades.BonoDescuentoRemuneracion;
+import workcenter.entidades.Remuneracion;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.Remuneracion;
 
 /**
  * @author colivares

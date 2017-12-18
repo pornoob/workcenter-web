@@ -1,10 +1,5 @@
 package workcenter.presentacion.equipos;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.*;
-import javax.faces.component.html.HtmlSelectOneMenu;
-import javax.faces.event.AjaxBehaviorEvent;
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +19,12 @@ import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
 import workcenter.util.pojo.Descargable;
+
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.event.AjaxBehaviorEvent;
+import java.io.File;
+import java.io.Serializable;
+import java.util.*;
 
 /**
  * Created by Claudio Olivares on 08-09-14.
@@ -82,9 +83,10 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     private List<Personal> personal;
     private List<FactProducto> productos;
 
+    private int ciclos;
+
     // caché
     private MmeMantencionTracto panne;
-    private int ciclos;
 
     public void inicio() {
         Date fecha = new Date();
@@ -139,6 +141,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         if (ot.getAsistentes() == null) {
             ot.setAsistentes(new HashSet<AsistenteOt>());
         }
+        asistenteOt.setOt(this.ot);
         ot.getAsistentes().add(asistenteOt);
     }
 
@@ -158,6 +161,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         if (ot.getRepuestos() == null) {
             ot.setRepuestos(new HashSet<RepuestoOt>());
         }
+        repuestoOt.setOt(ot);
         ot.getRepuestos().add(repuestoOt);
     }
 
@@ -182,6 +186,7 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ot = logicaOt.findWithMantenimientos(ot.getId());
         personal = logicaPersonal.obtenerMecanicos();
         productos = logicaStock.findAll();
+        comprobantesMantencion = new HashMap<>();
     }
 
     public void save() {
@@ -230,32 +235,6 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         ultimaMantencionMaquina = logicaMantenciones.obtenerMantencionMaquinaPrevia(mantencion);
     }
 
-    public boolean dibujarSemaforoRojo(Integer valor) {
-        return valor <= 0;
-    }
-
-    public boolean dibujarSemaforoAmarillo(Integer valor) {
-        return valor > 0 && valor <= constantes.getAlarmaProximaMantencion();
-    }
-
-    public boolean dibujarSemaforoVerde(Integer valor) {
-        return valor > constantes.getAlarmaProximaMantencion();
-    }
-
-    public boolean filtroEstado(Object valor, Object filtro, Locale idioma) {
-        if (filtro == null) {
-            return true;
-        }
-        if (filtro.equals("proximas")) {
-            return dibujarSemaforoAmarillo(obtenerKmsFaltante((MmeMantencionTracto) valor));
-        } else if (filtro.equals("lejanas")) {
-            return dibujarSemaforoVerde(obtenerKmsFaltante((MmeMantencionTracto) valor));
-        } else if (filtro.equals("atrasadas")) {
-            return dibujarSemaforoRojo(obtenerKmsFaltante((MmeMantencionTracto) valor));
-        }
-        return false;
-    }
-
     public boolean dibujarSemaforoRojoSemiremolque(MmeMantencionSemirremolque m) {
         Calendar fechaMantencion = Calendar.getInstance();
         fechaMantencion.setTime(m.getFecha());
@@ -300,69 +279,17 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
         return null;
     }
 
-    public Date obtenerFechaUltimaPanne(Equipo e) {
-        panne = logicaMantenciones.obtenerUltimaPanne(e);
-        return panne != null ? panne.getFecha() : null;
-    }
-
-    public Integer obtenerKmUltimaPanne(Equipo e) {
-        return panne != null ? panne.getKilometraje() : null;
-    }
-
-    public Integer obtenerKmSegunGuias(Equipo e) {
-        try {
-            return obtenerKmSegunVueltaGuia(e);
-        } catch (Exception ex) {
-            System.err.println("EX: " + ex.getMessage());
-            return null;
-        }
-    }
-
-    public Integer obtenerKmSegunProveedor(Equipo e) {
-        return logicaProveedorPetroleo.obtenerUltimoOdometro(e);
-    }
-
-    private Integer obtenerKmSegunVueltaGuia(Equipo e) {
-        Vuelta ultimaVuelta = logicaEquipos.obtenerUltimaVuelta(e);
-        if (ultimaVuelta != null) {
-            return ultimaVuelta.getKmFinal() <= 0 ? (ultimaVuelta.getKmInicial() <= 0 ? 0 : ultimaVuelta.getKmInicial())
-                    : ultimaVuelta.getKmFinal();
-        } else {
-            return 0;
-        }
-    }
-
     public Integer obtenerKmSiguienteMantencion(MmeMantencionTracto mt) {
         return mt.getKilometraje() + (mt.getCiclo() == 0 || mt.getCiclo() < ciclos ? tiposMantencion.get(0).getCotaKilometraje() : tiposMantencion.get(1).getCotaKilometraje());
     }
 
-    public Date obtenerFechaSiguienteMantencion(MmeMantencionTracto mt) {
-        Calendar c = Calendar.getInstance();
-        int dias = obtenerKmsFaltante(mt) / 500;
-        c.add(Calendar.DAY_OF_MONTH, dias);
-        return c.getTime();
-    }
+
 
     public Date obtenerFechaSiguienteMantencionSemiremolque(MmeMantencionSemirremolque ms) {
         Calendar c = Calendar.getInstance();
         c.setTime(ms.getFecha());
         c.add(Calendar.DAY_OF_MONTH, 30);
         return c.getTime();
-    }
-
-    public Integer obtenerKmsFaltante(MmeMantencionTracto mt) {
-        Equipo e = mt.getTracto();
-        Integer kmCopec = obtenerKmSegunProveedor(e);
-        Integer kmGuia = obtenerKmSegunVueltaGuia(e);
-        int kms = 0;
-        if (kmCopec != null && kmGuia != null) {
-            kms = kmCopec > kmGuia ? kmCopec : kmGuia;
-        } else if (kmCopec == null && kmGuia != null) {
-            kms = kmGuia;
-        } else if (kmCopec != null && kmGuia == null) {
-            kms = kmCopec;
-        }
-        return obtenerKmSiguienteMantencion(mt) - kms;
     }
 
     public void guardarMantMaquina() {
@@ -586,6 +513,14 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
 
     public void setPersonal(List<Personal> personal) {
         this.personal = personal;
+    }
+
+    public int getCiclos() {
+        return ciclos;
+    }
+
+    public void setCiclos(int ciclos) {
+        this.ciclos = ciclos;
     }
 
     @Override

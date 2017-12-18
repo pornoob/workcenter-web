@@ -6,12 +6,12 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -42,8 +42,7 @@ public class DocumentoEquipo implements Serializable {
     @Size(max = 25)
     @Column(name = "numero")
     private String numero;
-    @ManyToOne
-    @JoinColumn(name = "tipo", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "tipo", referencedColumnName = "id")
     private TipoDocumentoEquipo tipo;
     @Column(name = "vencimiento")
     @Temporal(TemporalType.DATE)

@@ -24,8 +24,7 @@ public class MirTransicionEstado implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_estado_origen", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_estado_origen", referencedColumnName = "id")
     public MirEstadoIncidencia getIdEstadoOrigen() {
         return idEstadoOrigen;
     }
@@ -34,8 +33,7 @@ public class MirTransicionEstado implements Serializable {
         this.idEstadoOrigen = idEstadoOrigen;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_estado_destino", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_estado_destino", referencedColumnName = "id")
     public MirEstadoIncidencia getIdEstadoDestino() {
         return idEstadoDestino;
     }

@@ -72,7 +72,7 @@ public class RenderPdf implements Serializable {
 
         // formateamos rut empleador y empleado
         String rutEmpleado = formato.numeroAgrupado(liquidacion.getIdPersonal().getRut()) + "-" + liquidacion.getIdPersonal().getDigitoverificador();
-        Empresa e = logicaEmpresas.obtenerEmpresa(Integer.parseInt(liquidacion.getRutEmpleador().split("-")[0]));
+        Empresa e = logicaEmpresas.obtenerEmpresa(Long.valueOf(liquidacion.getRutEmpleador().split("-")[0]));
         String rutEmpresa = formato.numeroAgrupado(e.getRut()) + "-" + e.getDigitoverificador();
         ContratoPersonal contrato = logicaPersonal.obtenerContratoActual(liquidacion.getIdPersonal());
         ValorPrevisionPersonal valorSalud = logicaPersonal.obtenerValorPrevisionSaludActual(contrato);

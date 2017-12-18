@@ -44,8 +44,7 @@ public class Dinero implements Serializable {
     @Column(name = "monto")
     private Integer monto;
     @JoinColumn(name = "concepto", referencedColumnName = "id")
-    @ManyToOne
-    private Concepto concepto;
+    @ManyToOne(fetch = FetchType.LAZY)    private Concepto concepto;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechareal")
@@ -60,11 +59,9 @@ public class Dinero implements Serializable {
     @Column(name = "comentario")
     private String comentario;
     @JoinColumn(name = "receptor", referencedColumnName = "rut")
-    @ManyToOne
-    private Personal receptor;
+    @ManyToOne(fetch = FetchType.LAZY)    private Personal receptor;
     
-    @OneToOne
-    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    @OneToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
     private Vuelta ordendecarga;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "motivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Descuento> lstDescuentos;

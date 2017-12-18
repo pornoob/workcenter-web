@@ -44,7 +44,7 @@ public class ImportadorDatosCaja {
             int numRow = 0;
             XSSFRow row;
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Integer rutParteNumerica = 0;
+            Long rutParteNumerica = 0l;
             while ((row = ws.getRow(numRow++)) != null) {
             	try {
             		row.getCell(0).getNumericCellValue();	
@@ -84,10 +84,10 @@ public class ImportadorDatosCaja {
       
     }
     
-    public Integer obtenerRut(String rut){
+    public Long obtenerRut(String rut){
     	String cadena = rut.replace(".", "").replace(",", "").trim();
     	String[] arregloCadena = cadena.split("-");
-    	return Integer.parseInt(arregloCadena[0]);
+    	return Long.valueOf(arregloCadena[0]);
     }
 
     public UploadedFile getArchivo() {

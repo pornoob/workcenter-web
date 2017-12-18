@@ -122,7 +122,7 @@
                                                           noSelectionOption="true"/>
                                             <f:selectItems value="#{mantenedorMantenciones.productos}"
                                                            var="p" 
-                                                           itemLabel="#{p.nombre}"/>
+                                                           itemLabel="[#{p.productoId}] #{p.nombre}"/>
                                         </p:selectOneMenu>
                                     </f:facet>
                                     <f:facet name="output">

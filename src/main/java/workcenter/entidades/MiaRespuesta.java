@@ -71,8 +71,7 @@ public class MiaRespuesta implements Serializable {
         this.miaPreguntasByIdPregunta = miaPreguntasByIdPregunta;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_inspeccion", referencedColumnName = "id", insertable = true, updatable = false)
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_inspeccion", referencedColumnName = "id", insertable = true, updatable = false)
     public MiaInspeccionAvanzada getMiaInspeccionAvanzadaByIdInspeccion() {
         return miaInspeccionAvanzadaByIdInspeccion;
     }

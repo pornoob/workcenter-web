@@ -5,7 +5,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
-
 import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.negocio.LogicaTipoDocPersonal;
@@ -76,7 +75,7 @@ public class CargasMasivas {
         }
 
         DocumentoPersonal existente = null;
-        Personal personal = logicaPersonal.obtener(Integer.parseInt(rut.split("-")[0].replaceAll("\\.", "")));
+        Personal personal = logicaPersonal.obtener(Long.parseLong(rut.split("-")[0].replaceAll("\\.", "")));
         if (personal == null) return "{\"resultado\": \"Personal no encotrado\"}";
         System.out.println(personal);
         // esta condicion la cree ya que existen personal sin documentos asociados y lanzaba excepcion null
@@ -100,7 +99,7 @@ public class CargasMasivas {
 
             HistorialDocumentosPersonal respaldo = new HistorialDocumentosPersonal();
             respaldo.setNumero(existente.getNumero());
-            respaldo.setPersonal(Integer.parseInt(rut.split("-")[0].replaceAll("\\.", "")));
+            respaldo.setPersonal(Long.valueOf(rut.split("-")[0].replaceAll("\\.", "")));
             respaldo.setTipo(tdp.getId());
             respaldo.setVencimiento(existente.getVencimiento());
             logicaPersonal.guardarHistorialDocumento(respaldo);

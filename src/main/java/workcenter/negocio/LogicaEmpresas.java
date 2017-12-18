@@ -31,7 +31,7 @@ public class LogicaEmpresas {
     }
 
     @Transactional(readOnly = true)
-    public Empresa obtenerEmpresa(Integer rut) {
+    public Empresa obtenerEmpresa(Long rut) {
         return empresaDao.obtenerEmpresa(rut);
     }
 }

@@ -1,6 +1,5 @@
 package workcenter.negocio.facturas;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -9,6 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.FactProductoBodega;
 import workcenter.dao.StockDao;
 import workcenter.entidades.FactProducto;
+
+import java.util.List;
 
 /**
  *

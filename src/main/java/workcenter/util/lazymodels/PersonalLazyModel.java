@@ -1,13 +1,14 @@
 package workcenter.util.lazymodels;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
 import org.primefaces.model.LazyDataModel;
 import org.primefaces.model.SortMeta;
 import org.primefaces.model.SortOrder;
 import workcenter.entidades.Personal;
 import workcenter.negocio.personal.LogicaPersonal;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 public class PersonalLazyModel extends LazyDataModel<Personal> {
     private LogicaPersonal logicaPersonal;

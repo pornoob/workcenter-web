@@ -1,9 +1,10 @@
 package workcenter.util.converters;
 
+import org.springframework.util.StringUtils;
+
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import org.springframework.util.StringUtils;
 
 /**
  * @author colivares

@@ -38,8 +38,7 @@ public class MpaContrato implements Serializable {
         this.nombre = nombre;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_servicio", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_servicio", referencedColumnName = "id")
     public Servicio getIdServicio() {
         return idServicio;
     }

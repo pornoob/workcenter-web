@@ -1,10 +1,5 @@
 package workcenter.presentacion.usuarios;
 
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map.Entry;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -18,6 +13,12 @@ import workcenter.negocio.usuarios.LogicaProyecto;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.pojo.Md5;
+
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Map.Entry;
 
 /**
  * @author colivares

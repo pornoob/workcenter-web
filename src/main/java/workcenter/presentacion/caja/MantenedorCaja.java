@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.*;
 import workcenter.negocio.caja.LogicaCaja;
 import workcenter.negocio.concepto.LogicaConceptos;
+import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
@@ -20,8 +21,10 @@ import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.*;
-import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.List;
 
 /**
  * Created by renholders on 09-10-2015.

@@ -1,22 +1,18 @@
 package workcenter.presentacion.personal.reportes_sii;
 
-import java.io.Serializable;
-import java.text.SimpleDateFormat;
-import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.BonoDescuentoRemuneracion;
-import workcenter.entidades.Empresa;
-import workcenter.entidades.FactorActualizacionSII;
-import workcenter.entidades.Finiquito;
-import workcenter.entidades.Personal;
-import workcenter.entidades.Remuneracion;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaFiniquito;
 import workcenter.negocio.personal.LogicaLibroRemuneraciones;
 import workcenter.negocio.registros.reportes_sii.LogicaReportesSII;
 import workcenter.util.dto.ValorActualizadoDTO;
+
+import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.*;
 
 /**
  * Created by Claudio Olivares on 15-02-15.

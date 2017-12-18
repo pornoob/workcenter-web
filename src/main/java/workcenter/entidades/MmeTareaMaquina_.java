@@ -10,6 +10,7 @@ public abstract class MmeTareaMaquina_ {
 
 	public static volatile SingularAttribute<MmeTareaMaquina, Integer> cantHoras;
 	public static volatile SingularAttribute<MmeTareaMaquina, Integer> id;
+	public static volatile SingularAttribute<MmeTareaMaquina, Integer> orden;
 	public static volatile SingularAttribute<MmeTareaMaquina, String> nombre;
 
 }

@@ -2,7 +2,6 @@ package workcenter.util.scopes;
 
 import org.springframework.beans.factory.ObjectFactory;
 import org.springframework.beans.factory.config.Scope;
-import workcenter.util.components.Constantes;
 
 import java.util.HashMap;
 import java.util.Map;

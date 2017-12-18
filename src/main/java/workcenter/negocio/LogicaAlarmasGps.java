@@ -1,7 +1,5 @@
 package workcenter.negocio;
 
-import java.util.Date;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -11,6 +9,9 @@ import workcenter.dao.AlarmasGpsDao;
 import workcenter.entidades.AlarmaGps;
 import workcenter.entidades.GestionAlarmaGps;
 import workcenter.entidades.Servicio;
+
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -49,7 +50,7 @@ public class LogicaAlarmasGps {
     }
     
     @Transactional(readOnly = true)
-    public List<Servicio> obtenerServicios(Integer rut) {
+    public List<Servicio> obtenerServicios(Long rut) {
         return alarmasGpsDao.obtenerServicios(rut);
     }
 

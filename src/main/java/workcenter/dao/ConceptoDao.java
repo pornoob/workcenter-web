@@ -1,13 +1,11 @@
 package workcenter.dao;
 
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.Concepto;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-
-import org.springframework.stereotype.Repository;
-
-import workcenter.entidades.Concepto;
+import java.util.List;
 
 @Repository
 public class ConceptoDao {

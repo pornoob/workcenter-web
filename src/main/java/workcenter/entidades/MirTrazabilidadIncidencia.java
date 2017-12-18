@@ -2,7 +2,6 @@ package workcenter.entidades;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.sql.Timestamp;
 import java.util.Date;
 
 /**
@@ -35,8 +34,7 @@ public class MirTrazabilidadIncidencia implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_incidencia", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_incidencia", referencedColumnName = "id")
     public MirIncidencia getIdIncidencia() {
         return idIncidencia;
     }
@@ -45,8 +43,7 @@ public class MirTrazabilidadIncidencia implements Serializable {
         this.idIncidencia = idIncidencia;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_estado", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_estado", referencedColumnName = "id")
     public MirEstadoIncidencia getIdEstado() {
         return idEstado;
     }
@@ -93,8 +90,7 @@ public class MirTrazabilidadIncidencia implements Serializable {
         return id != null ? id.hashCode() : 0;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "creador", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "creador", referencedColumnName = "rut")
     public Personal getCreador() {
         return creador;
     }

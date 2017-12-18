@@ -1,12 +1,15 @@
 package workcenter.dao;
 
-import javax.persistence.*;
-import javax.persistence.criteria.*;
-
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.Concepto;
+import workcenter.entidades.Dinero;
+import workcenter.entidades.Dinero_;
+import workcenter.entidades.Personal;
 
-import workcenter.entidades.*;
-
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;

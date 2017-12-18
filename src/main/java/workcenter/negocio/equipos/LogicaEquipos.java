@@ -1,6 +1,5 @@
 package workcenter.negocio.equipos;
 
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
@@ -8,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.EquipoDao;
 import workcenter.entidades.*;
+
+import java.util.List;
 
 /**
  * Created by colivares on 19-08-14.
@@ -128,11 +129,6 @@ public class LogicaEquipos {
         equipoDao.guardarFoto(foto);
     }
 
-    @Transactional(readOnly = true)
-    public Vuelta obtenerUltimaVuelta(Equipo e) {
-        return equipoDao.obtenerUltimaVuelta(e);
-    }
-
     @Transactional(readOnly = false)
     public void sancionar(EquipoSancionado e) {
         equipoDao.guardar(e);
@@ -147,5 +143,15 @@ public class LogicaEquipos {
     @Transactional(readOnly = true)
     public List<Equipo> obtenerMaquinasConModelo() {
         return equipoDao.obtenerMaquinasConModelo();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Equipo> obtenerTractosConMantenimientos() {
+        return equipoDao.obtenerTractosConMantenimientos();
+    }
+
+    @Transactional(readOnly = true)
+    public List<Vuelta> obtenerUltimasVueltasTracto() {
+        return equipoDao.obtenerUltimasVueltasTracto();
     }
 }

@@ -6,12 +6,11 @@
 
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.math.BigInteger;
 import java.util.Date;
-import javax.persistence.*;
-import javax.validation.constraints.NotNull;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  * @author claudio
@@ -35,11 +34,9 @@ public class BonoDescuentoPersonal implements Serializable {
     @Column(name = "id")
     private Long id;
     //    @ManyToOne(fetch = FetchType.LAZY)
-    @OneToOne
-    @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
+    @OneToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_bonodescuento", referencedColumnName = "id")
     private BonoDescuento idBonodescuento;
-    @ManyToOne
-    @JoinColumn(name = "id_personal", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_personal", referencedColumnName = "rut")
     private Personal idPersonal;
 
     @Column(name = "fecha")

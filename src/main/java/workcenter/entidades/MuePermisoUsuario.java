@@ -49,8 +49,7 @@ public class MuePermisoUsuario {
         this.usuario = usuario;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_modulo", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_modulo", referencedColumnName = "id")
     public Proyecto getModulo() {
         return modulo;
     }

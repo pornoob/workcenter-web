@@ -1,7 +1,5 @@
 package workcenter.negocio.equipos;
 
-import java.util.List;
-import java.util.Set;
 import org.hibernate.exception.SQLGrammarException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -9,13 +7,11 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.MmeMantencionesDao;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemirremolque;
-import workcenter.entidades.MmeMantencionTracto;
-import workcenter.entidades.MmeTareaMaquina;
-import workcenter.entidades.MmeTipoMantencion;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaDocumentos;
+
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by claudio on 08-09-14.

@@ -1,20 +1,9 @@
 package workcenter.presentacion.consulta_doc_equipo;
 
-import java.io.File;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.concurrent.TimeUnit;
-
 import org.primefaces.model.StreamedContent;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-
 import workcenter.entidades.DocumentoEquipo;
 import workcenter.entidades.Equipo;
 import workcenter.entidades.TipoDocumentoEquipo;
@@ -22,6 +11,11 @@ import workcenter.entidades.TipoEquipo;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.util.components.Constantes;
 import workcenter.util.pojo.Descargable;
+
+import java.io.File;
+import java.io.Serializable;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @Component
 @Scope("flow")

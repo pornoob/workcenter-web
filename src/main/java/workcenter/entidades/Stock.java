@@ -5,20 +5,10 @@
  */
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Basic;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -37,11 +27,9 @@ public class Stock implements Serializable {
     @Column(name = "stock_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long stockId;
-    @ManyToOne
-    @JoinColumn(name = "producto_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "producto_id")
     private FactProducto producto;
-    @ManyToOne
-    @JoinColumn(name = "detalle_id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "detalle_id")
     private FactDetalleFactura detalle;
     @Column(name = "cantidad")
     private Integer cantidad;

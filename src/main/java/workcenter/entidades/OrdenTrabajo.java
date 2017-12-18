@@ -5,28 +5,15 @@
  */
 package workcenter.entidades;
 
+import org.hibernate.annotations.SortNatural;
+
+import javax.persistence.*;
+import javax.validation.constraints.Size;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 import java.util.SortedSet;
-import javax.persistence.Basic;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.NamedQueries;
-import javax.persistence.NamedQuery;
-import javax.persistence.OneToMany;
-import javax.persistence.OneToOne;
-import javax.persistence.Table;
-import javax.validation.constraints.Size;
-import javax.xml.bind.annotation.XmlRootElement;
-import org.hibernate.annotations.SortNatural;
 
 /**
  *
@@ -36,7 +23,7 @@ import org.hibernate.annotations.SortNatural;
 @Table(name = "ordenes_trabajo")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "OrdenTrabajo.findById", query = "SELECT o FROM OrdenTrabajo o WHERE o.id = :id"),
+    @NamedQuery(name = "OrdenTrabajo.findById", query = "SELECT DISTINCT o FROM OrdenTrabajo o WHERE o.id = :id"),
     @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
     @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT DISTINCT ot FROM OrdenTrabajo ot INNER JOIN FETCH ot.solicitante s INNER JOIN FETCH ot.trazabilidad tot LEFT JOIN FETCH tot.ejecutor WHERE EXISTS ( SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status AND ot.id = o.id )"),
     @NamedQuery(name = "OrdenTrabajo.findByIdAndStatus", query = "SELECT DISTINCT ot FROM OrdenTrabajo ot INNER JOIN FETCH ot.solicitante s INNER JOIN FETCH ot.trazabilidad tot LEFT JOIN FETCH tot.ejecutor WHERE EXISTS ( SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status AND ot.id = o.id AND ot.id = :id )")
@@ -48,7 +35,7 @@ public class OrdenTrabajo implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
     @Column(name = "id")
-    private Integer id;
+    private Long id;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "solicitante", referencedColumnName = "id")
     private SolicitanteOt solicitante;
@@ -77,15 +64,15 @@ public class OrdenTrabajo implements Serializable {
     public OrdenTrabajo() {
     }
 
-    public OrdenTrabajo(Integer id) {
+    public OrdenTrabajo(Long id) {
         this.id = id;
     }
 
-    public Integer getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

@@ -1,16 +1,14 @@
 package workcenter.dao;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceException;
-import javax.persistence.Query;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.*;
 import workcenter.util.components.Constantes;
+
+import javax.persistence.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created by colivares on 19-08-14.
@@ -163,15 +161,6 @@ public class EquipoDao extends MyDao{
             em.merge(foto);
     }
 
-    public Vuelta obtenerUltimaVuelta(Equipo e) {
-        String sql = "select * from vueltas where tracto=:equipo and (kmfinal > 0 or kminicial > 0) order by fecha desc limit 1";
-        try {
-            return (Vuelta) em.createNativeQuery(sql, Vuelta.class).setParameter("equipo", e.getPatente()).getSingleResult();
-        } catch (Exception ex) {
-            return null;
-        }
-    }
-
     public void guardarRendimientoDiario(RendimientoCopec rc) throws PersistenceException {
         if (rc.getId() == null)
             em.persist(rc);
@@ -218,8 +207,49 @@ public class EquipoDao extends MyDao{
         q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina()));
         
         EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
-        graph.addAttributeNodes("modelo");
+        graph.addAttributeNodes(Equipo_.modelo);
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return q.getResultList();
+    }
+
+    public List<Equipo> obtenerTractosConMantenimientos() {
+        Query q = em.createNamedQuery("Equipo.findByTipo", Equipo.class);
+        EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
+        Subgraph<MmeMantencionTracto> mantGraph = graph.addSubgraph(Equipo_.mantenimientos.getName());
+        mantGraph.addAttributeNodes(MmeMantencionTracto_.tipo);
+
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+
+        q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto()));
+
+        return q.getResultList();
+    }
+
+    public List<Vuelta> obtenerUltimasVueltasTracto() {
+        StringBuilder sql = new StringBuilder("SELECT v.* FROM vueltas v, (")
+                .append("SELECT GREATEST(max(v2.kminicial), max(v2.kmfinal)) AS kms, v2.tracto ")
+                .append("FROM vueltas v2 ")
+                .append("GROUP BY v2.tracto ")
+                .append("HAVING GREATEST(max(v2.kminicial), max(v2.kmfinal)) > 0")
+                .append(") mv ")
+                .append("WHERE v.tracto = mv.tracto AND GREATEST(v.kmInicial, v.kmFinal) = mv.kms");
+        Query q = em.createNativeQuery(sql.toString(), Vuelta.class);
+        List<Vuelta> vueltasTmp = q.getResultList();
+
+        q = em.createQuery("SELECT v FROM Vuelta v JOIN FETCH v.tracto WHERE v IN :vueltas");
+        q.setParameter("vueltas", vueltasTmp);
+        return q.getResultList();
+    }
+
+    public List<RendimientoCopec> obtenerUltimosRendimientosCopec() {
+        StringBuilder sql = new StringBuilder();
+        sql.append("SELECT r.* FROM rendimientos_copec r, ")
+                .append("( SELECT max(odometro) AS odometro, max(fecha) AS fecha, patente ")
+                .append("FROM rendimientos_copec WHERE odometro > 0 ")
+                .append("GROUP BY patente) rm ")
+                .append("WHERE r.patente = rm.patente AND r.odometro = rm.odometro AND r.fecha = rm.fecha ");
+        Query q = em.createNativeQuery(sql.toString(), RendimientoCopec.class);
+
         return q.getResultList();
     }
 }

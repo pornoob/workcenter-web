@@ -1,14 +1,15 @@
 package workcenter.dao;
 
-import java.util.Date;
-import java.util.List;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.AlarmaGps;
 import workcenter.entidades.GestionAlarmaGps;
 import workcenter.entidades.Servicio;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.Date;
+import java.util.List;
 
 /**
  *
@@ -89,7 +90,7 @@ public class AlarmasGpsDao {
         }
     }
 
-    public List<Servicio> obtenerServicios(Integer rut) {
+    public List<Servicio> obtenerServicios(Long rut) {
         StringBuilder sql = new StringBuilder();
         sql.append("select s.* from servicio s ");
         sql.append("inner join usuario_servicio_ruta usr on (s.id = usr.id_servicio and usr.rut=:rut)");

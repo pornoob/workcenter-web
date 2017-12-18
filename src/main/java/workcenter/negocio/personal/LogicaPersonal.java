@@ -1,7 +1,5 @@
 package workcenter.negocio.personal;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import org.primefaces.model.SortMeta;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -14,6 +12,8 @@ import workcenter.entidades.*;
 import workcenter.util.components.Constantes;
 import workcenter.util.pojo.Md5;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,7 +44,7 @@ public class LogicaPersonal {
     }
 
     @Transactional(readOnly = true)
-    public Personal obtenerConAccesos(Integer rut) {
+    public Personal obtenerConAccesos(Long rut) {
         return personalDao.obtenerConAccesos(rut);
     }
 
@@ -86,12 +86,12 @@ public class LogicaPersonal {
     }
 
     @Transactional(readOnly = true)
-    public Personal obtener(Integer rut) {
+    public Personal obtener(Long rut) {
         return personalDao.obtener(rut);
     }
     
     @Transactional(readOnly = true)
-    public List<Personal> obtener(Integer... rut) {
+    public List<Personal> obtener(Long... rut) {
         return personalDao.obtener(Arrays.asList(rut));
     }
 
@@ -143,12 +143,12 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public List<Personal> obtenerMecanicos() {
         List<Personal> mecanicos = personalDao.obtenerSegunCargo(constantes.getCargoMecanico());
-        List<Integer> rutAnexos = new ArrayList<>();
-        rutAnexos.add(8846226); // Freddy Freire (socio empresa)
-        rutAnexos.add(12223177); // Nildo Saez
-        rutAnexos.add(12895251); // Alejandro Farias
-        rutAnexos.add(12146903); // Manuel Reyes
-        rutAnexos.add(7024796); // Mario Arriagada
+        List<Long> rutAnexos = new ArrayList<>();
+        rutAnexos.add(8846226l); // Freddy Freire (socio empresa)
+        rutAnexos.add(12223177l); // Nildo Saez
+        rutAnexos.add(12895251l); // Alejandro Farias
+        rutAnexos.add(12146903l); // Manuel Reyes
+        rutAnexos.add(7024796l); // Mario Arriagada
 
         mecanicos.addAll(personalDao.obtener(rutAnexos));
         return mecanicos;

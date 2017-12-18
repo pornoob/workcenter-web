@@ -5,7 +5,6 @@ import workcenter.entidades.PrestamoCancelado;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
-import java.util.List;
 
 /**
  * Created by renholders on 07-11-2015.

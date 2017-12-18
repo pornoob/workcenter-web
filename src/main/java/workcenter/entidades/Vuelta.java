@@ -6,14 +6,14 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.List;
-import java.util.Objects;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.List;
+import java.util.Objects;
 
 /**
  *
@@ -49,12 +49,10 @@ public class Vuelta implements Serializable {
     private Date fecha;
     @NotNull
     @Size(min = 1, max = 7)
-    @ManyToOne
-    @JoinColumn(name = "tracto", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "tracto", referencedColumnName = "patente")
     private Equipo tracto;
     @NotNull
-    @ManyToOne
-    @JoinColumn(name = "conductor", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "conductor", referencedColumnName = "rut")
     private Personal conductor;
     @Basic(optional = false)
     @NotNull
@@ -77,8 +75,7 @@ public class Vuelta implements Serializable {
     @Column(name = "dineroentregado")
     private Integer dineroEntregado;
     @Size(max = 7)
-    @ManyToOne
-    @JoinColumn(name = "batea", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "batea", referencedColumnName = "patente")
     private Equipo batea;
     @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
     private List<Producto> productosList;

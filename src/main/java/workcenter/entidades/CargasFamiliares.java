@@ -1,7 +1,7 @@
 package workcenter.entidades;
 
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Date;
 
 
@@ -13,7 +13,7 @@ public class CargasFamiliares implements Serializable {
 
 	@Id
 	@Column(name="rut_carga")
-	private Integer rutCarga;
+	private Long rutCarga;
 	
 	@Column(name="apellidos")
 	private String apellidos;
@@ -27,18 +27,17 @@ public class CargasFamiliares implements Serializable {
 	@Column(name="nombres")
 	private String nombres;
 
-	@ManyToOne
-	@JoinColumn(name="rut_personal" ,referencedColumnName="rut")
+	@ManyToOne(fetch = FetchType.LAZY)	@JoinColumn(name="rut_personal" ,referencedColumnName="rut")
 	private Personal rutPersonal;
 
 	public CargasFamiliares() {
 	}
 
-	public Integer getRutCarga() {
+	public Long getRutCarga() {
 		return this.rutCarga;
 	}
 
-	public void setRutCarga(Integer rutCarga) {
+	public void setRutCarga(Long rutCarga) {
 		this.rutCarga = rutCarga;
 	}
 

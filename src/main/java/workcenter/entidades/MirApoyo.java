@@ -30,8 +30,7 @@ public class MirApoyo implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_socio", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_socio", referencedColumnName = "rut")
     public Personal getIdSocio() {
         return idSocio;
     }

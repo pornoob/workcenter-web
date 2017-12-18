@@ -133,7 +133,7 @@ public class ImportadorDatosLiquidaciones {
 //                    continue;
 //                }
                 Remuneracion remuneracion = new Remuneracion();
-                Empresa e = logicaEmpresas.obtenerEmpresa(Integer.valueOf(rutEmpleador));
+                Empresa e = logicaEmpresas.obtenerEmpresa(Long.valueOf(rutEmpleador));
                 remuneracion.setRutEmpleador(rutEmpleador+"-"+e.getDigitoverificador());
                 remuneracion.setEmpleador(e.getNombre());
                 remuneracion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
@@ -141,7 +141,7 @@ public class ImportadorDatosLiquidaciones {
 //                remuneracion.setFechaLiquidacion(conversorFecha(fecha));
                 remuneracion.setFechaLiquidacion(fecha2);
 
-                Personal personal = logicaPersonal.obtener(Integer.valueOf(row.getCell(numColum++).getStringCellValue().split("-")[0].replaceAll("\\.", "").replaceAll(",", "")));
+                Personal personal = logicaPersonal.obtener(Long.valueOf(row.getCell(numColum++).getStringCellValue().split("-")[0].replaceAll("\\.", "").replaceAll(",", "")));
                 remuneracion.setIdPersonal(personal);
                 ContratoPersonal cp = logicaLiquidaciones.obtenerDatosContrato(remuneracion.getIdPersonal());
 

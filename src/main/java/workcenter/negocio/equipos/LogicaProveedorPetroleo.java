@@ -4,7 +4,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.TransactionSystemException;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.EquipoDao;
 import workcenter.entidades.Equipo;
@@ -12,6 +11,7 @@ import workcenter.entidades.RendimientoCopec;
 
 import javax.persistence.PersistenceException;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by claudio on 23-09-14.
@@ -35,5 +35,10 @@ public class LogicaProveedorPetroleo {
     @Transactional(readOnly = true)
     public Integer obtenerUltimoOdometro(Equipo e) {
         return equipoDao.obtenerUltimoKmProveedor(e);
+    }
+
+    @Transactional(readOnly = true)
+    public List<RendimientoCopec> obtenerUltimosRendimientos() {
+        return equipoDao.obtenerUltimosRendimientosCopec();
     }
 }

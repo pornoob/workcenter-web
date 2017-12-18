@@ -82,8 +82,7 @@ public class MarTipoActividad implements Serializable {
         return this.getClass().getName() + "[ id = "+id+" ]";
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_registro", referencedColumnName = "id", nullable = false)
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_registro", referencedColumnName = "id", nullable = false)
     public MarRegistro getMarRegistrosByIdRegistro() {
         return marRegistrosByIdRegistro;
     }

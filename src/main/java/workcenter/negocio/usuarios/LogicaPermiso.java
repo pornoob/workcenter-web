@@ -26,7 +26,7 @@ public class LogicaPermiso {
     }
 
     @Transactional(readOnly = true)
-    public List<Permiso> obtPermisosUsuarioInterno(Integer rut) {
+    public List<Permiso> obtPermisosUsuarioInterno(Long rut) {
         return permisoDao.obtenerTodos(rut);
     }
 

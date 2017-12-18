@@ -1,22 +1,12 @@
 package workcenter.dao;
 
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.*;
+
+import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 import java.util.TreeSet;
-import javax.persistence.EntityGraph;
-import javax.persistence.EntityManager;
-import javax.persistence.NoResultException;
-import javax.persistence.PersistenceContext;
-import javax.persistence.Query;
-import javax.persistence.Subgraph;
-import org.springframework.stereotype.Repository;
-import workcenter.entidades.Equipo;
-import workcenter.entidades.MmeCheckMaquina;
-import workcenter.entidades.MmeMantencionMaquina;
-import workcenter.entidades.MmeMantencionSemirremolque;
-import workcenter.entidades.MmeMantencionTracto;
-import workcenter.entidades.MmeTareaMaquina;
-import workcenter.entidades.MmeTipoMantencion;
 
 /**
  * Created by claudio on 09-09-14.

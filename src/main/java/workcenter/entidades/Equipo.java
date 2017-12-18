@@ -6,12 +6,15 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.List;
+import org.hibernate.annotations.SortNatural;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.List;
+import java.util.SortedSet;
 
 /**
  *
@@ -21,22 +24,22 @@ import javax.xml.bind.annotation.XmlRootElement;
 @Table(name = "equipos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Equipo.findAll", query = "SELECT e FROM Equipo e"),
-    @NamedQuery(name = "Equipo.findByPatente", query = "SELECT e FROM Equipo e WHERE e.patente = :patente"),
-    @NamedQuery(name = "Equipo.findByDuenio", query = "SELECT e FROM Equipo e WHERE e.duenio = :duenio"),
-    @NamedQuery(name = "Equipo.findByTipo", query = "SELECT e FROM Equipo e WHERE e.tipo = :tipo"),
-    @NamedQuery(name = "Equipo.findBySubtipo", query = "SELECT e FROM Equipo e WHERE e.subtipo = :subtipo"),
-    @NamedQuery(name = "Equipo.findByMarca", query = "SELECT e FROM Equipo e WHERE e.marca = :marca"),
-    @NamedQuery(name = "Equipo.findByModelo", query = "SELECT e FROM Equipo e WHERE e.modelo = :modelo"),
-    @NamedQuery(name = "Equipo.findByAnio", query = "SELECT e FROM Equipo e WHERE e.anio = :anio"),
-    @NamedQuery(name = "Equipo.findByNumero", query = "SELECT e FROM Equipo e WHERE e.numero = :numero"),
-    @NamedQuery(name = "Equipo.findByMotor", query = "SELECT e FROM Equipo e WHERE e.motor = :motor"),
-    @NamedQuery(name = "Equipo.findByChasis", query = "SELECT e FROM Equipo e WHERE e.chasis = :chasis"),
-    @NamedQuery(name = "Equipo.findByColor", query = "SELECT e FROM Equipo e WHERE e.color = :color"),
-    @NamedQuery(name = "Equipo.findByKilometraje", query = "SELECT e FROM Equipo e WHERE e.kilometraje = :kilometraje"),
-    @NamedQuery(name = "Equipo.findByBollo", query = "SELECT e FROM Equipo e WHERE e.bollo = :bollo"),
-    @NamedQuery(name = "Equipo.findByNumeroTipo", query = "SELECT e FROM Equipo e WHERE e.numero = :numero and e.tipo = :tipo")
-    })
+        @NamedQuery(name = "Equipo.findAll", query = "SELECT e FROM Equipo e"),
+        @NamedQuery(name = "Equipo.findByPatente", query = "SELECT e FROM Equipo e WHERE e.patente = :patente"),
+        @NamedQuery(name = "Equipo.findByDuenio", query = "SELECT e FROM Equipo e WHERE e.duenio = :duenio"),
+        @NamedQuery(name = "Equipo.findByTipo", query = "SELECT DISTINCT e FROM Equipo e WHERE e.tipo = :tipo"),
+        @NamedQuery(name = "Equipo.findBySubtipo", query = "SELECT e FROM Equipo e WHERE e.subtipo = :subtipo"),
+        @NamedQuery(name = "Equipo.findByMarca", query = "SELECT e FROM Equipo e WHERE e.marca = :marca"),
+        @NamedQuery(name = "Equipo.findByModelo", query = "SELECT e FROM Equipo e WHERE e.modelo = :modelo"),
+        @NamedQuery(name = "Equipo.findByAnio", query = "SELECT e FROM Equipo e WHERE e.anio = :anio"),
+        @NamedQuery(name = "Equipo.findByNumero", query = "SELECT e FROM Equipo e WHERE e.numero = :numero"),
+        @NamedQuery(name = "Equipo.findByMotor", query = "SELECT e FROM Equipo e WHERE e.motor = :motor"),
+        @NamedQuery(name = "Equipo.findByChasis", query = "SELECT e FROM Equipo e WHERE e.chasis = :chasis"),
+        @NamedQuery(name = "Equipo.findByColor", query = "SELECT e FROM Equipo e WHERE e.color = :color"),
+        @NamedQuery(name = "Equipo.findByKilometraje", query = "SELECT e FROM Equipo e WHERE e.kilometraje = :kilometraje"),
+        @NamedQuery(name = "Equipo.findByBollo", query = "SELECT e FROM Equipo e WHERE e.bollo = :bollo"),
+        @NamedQuery(name = "Equipo.findByNumeroTipo", query = "SELECT e FROM Equipo e WHERE e.numero = :numero and e.tipo = :tipo")
+})
 public class Equipo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -82,10 +85,22 @@ public class Equipo implements Serializable {
             mappedBy = "equipo",
             fetch = FetchType.LAZY,
             cascade = {
-                CascadeType.REMOVE , CascadeType.DETACH, CascadeType.REFRESH
+                    CascadeType.REMOVE , CascadeType.DETACH, CascadeType.REFRESH
             }
     )
     private List<FotoEquipo> fotos;
+    @OneToMany(
+            mappedBy = "tracto",
+            fetch = FetchType.LAZY
+    )
+    @SortNatural
+    private SortedSet<MmeMantencionTracto> mantenimientos;
+    @OneToMany(
+            mappedBy = "maquina",
+            fetch = FetchType.LAZY
+    )
+    @SortNatural
+    private SortedSet<MmeMantencionMaquina> mantenimientosMaquina;
 
     public Equipo() {
     }
@@ -228,4 +243,21 @@ public class Equipo implements Serializable {
     public void setFotos(List<FotoEquipo> fotos) {
         this.fotos = fotos;
     }
+
+    public SortedSet<MmeMantencionTracto> getMantenimientos() {
+        return mantenimientos;
+    }
+
+    public void setMantenimientos(SortedSet<MmeMantencionTracto> mantenimientos) {
+        this.mantenimientos = mantenimientos;
+    }
+
+    public SortedSet<MmeMantencionMaquina> getMantenimientosMaquina() {
+        return mantenimientosMaquina;
+    }
+
+    public void setMantenimientosMaquina(SortedSet<MmeMantencionMaquina> mantenimientosMaquina) {
+        this.mantenimientosMaquina = mantenimientosMaquina;
+    }
 }
+

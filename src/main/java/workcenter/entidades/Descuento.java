@@ -6,12 +6,12 @@
 
 package workcenter.entidades;
 
-import java.io.Serializable;
-import java.util.Date;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
+import java.util.Date;
 
 /**
  *
@@ -38,7 +38,7 @@ public class Descuento implements Serializable {
     @Basic(optional = false)
     @NotNull
     @Column(name = "persona")
-    private int persona;
+    private Long persona;
     @Basic(optional = false)
     @NotNull
     @Column(name = "monto")
@@ -63,7 +63,7 @@ public class Descuento implements Serializable {
         this.id = id;
     }
 
-    public Descuento(Integer id, int persona, int monto) {
+    public Descuento(Integer id, Long persona, int monto) {
         this.id = id;
         this.persona = persona;
         this.monto = monto;
@@ -77,11 +77,11 @@ public class Descuento implements Serializable {
         this.id = id;
     }
 
-    public int getPersona() {
+    public Long getPersona() {
         return persona;
     }
 
-    public void setPersona(int persona) {
+    public void setPersona(Long persona) {
         this.persona = persona;
     }
 

@@ -5,17 +5,10 @@
  */
 package workcenter.entidades;
 
+import javax.persistence.*;
+import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.persistence.Column;
-import javax.persistence.EmbeddedId;
-import javax.persistence.Entity;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.NamedQueries;
-import javax.persistence.Table;
-import javax.xml.bind.annotation.XmlRootElement;
 
 /**
  *
@@ -33,13 +26,11 @@ public class MmeCheckMaquina implements Serializable, Comparable<MmeCheckMaquina
     @EmbeddedId
     private MmeCheckMaquinaPK id;
     
-    @ManyToOne
-    @MapsId("mantencionMaquinaId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId("mantencionMaquinaId")
     @JoinColumn(name = "mantencion_id", referencedColumnName = "id")
     private MmeMantencionMaquina mantencionMaquina;
     
-    @ManyToOne
-    @MapsId("tareaMaquinaId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId("tareaMaquinaId")
     @JoinColumn(name = "tarea_id", referencedColumnName = "id")
     private MmeTareaMaquina tareaMaquina;
     

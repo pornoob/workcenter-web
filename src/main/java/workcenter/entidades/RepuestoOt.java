@@ -1,17 +1,9 @@
 package workcenter.entidades;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.UUID;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.IdClass;
-import javax.persistence.JoinColumn;
-import javax.persistence.ManyToOne;
-import javax.persistence.MapsId;
-import javax.persistence.Table;
-import javax.persistence.Transient;
 
 /**
  *
@@ -26,13 +18,11 @@ public class RepuestoOt implements Serializable {
     @Id
     private Long productoId;
     
-    @ManyToOne
-    @MapsId(value = "otId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "otId")
     @JoinColumn(name = "ot_id")
     private OrdenTrabajo ot;
 
-    @ManyToOne
-    @MapsId(value = "productoId")
+    @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "productoId")
     @JoinColumn(name = "producto_id")
     private FactProducto producto;
     
@@ -74,6 +64,7 @@ public class RepuestoOt implements Serializable {
 
     public void setOt(OrdenTrabajo ot) {
         this.ot = ot;
+        this.otId = ot.getId();
     }
 
     public FactProducto getProducto() {
@@ -82,6 +73,7 @@ public class RepuestoOt implements Serializable {
 
     public void setProducto(FactProducto producto) {
         this.producto = producto;
+        this.productoId = producto.getProductoId();
     }
 
     public Integer getCantidad() {

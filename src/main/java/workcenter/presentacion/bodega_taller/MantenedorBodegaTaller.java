@@ -1,7 +1,5 @@
 package workcenter.presentacion.bodega_taller;
 
-import java.io.Serializable;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -9,6 +7,9 @@ import workcenter.dao.FactProductoBodega;
 import workcenter.entidades.FactProducto;
 import workcenter.negocio.facturas.LogicaStock;
 import workcenter.util.components.FacesUtil;
+
+import java.io.Serializable;
+import java.util.List;
 
 /**
  *

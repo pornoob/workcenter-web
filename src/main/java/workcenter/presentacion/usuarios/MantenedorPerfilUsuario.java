@@ -1,12 +1,10 @@
 package workcenter.presentacion.usuarios;
 
-import org.omg.CORBA.StringValueHelper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
 import workcenter.entidades.MuePermisoUsuario;
 import workcenter.entidades.Permiso;
-import workcenter.entidades.Usuario;
 import workcenter.negocio.usuarios.LogicaPermiso;
 import workcenter.negocio.usuarios.LogicaUsuario;
 import workcenter.util.components.Constantes;
@@ -60,7 +58,7 @@ public class MantenedorPerfilUsuario implements Serializable {
             }
     }
 
-    public char obtenerDv(Integer parteNumerica) {
+    public char obtenerDv(Long parteNumerica) {
         String rut = String.valueOf(parteNumerica);
         int suma = 0, factor = 2;
         for (int i = rut.length() - 1; i >= 0; i--) {

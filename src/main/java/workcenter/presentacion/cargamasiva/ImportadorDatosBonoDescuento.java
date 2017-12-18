@@ -49,7 +49,7 @@ public class ImportadorDatosBonoDescuento {
             XSSFSheet ws = wb.getSheetAt(0);
             int numRow = 0;
             XSSFRow row;
-            Integer rutParteNumerica = 0;
+            Long rutParteNumerica = 0l;
             while ((row = ws.getRow(numRow++)) != null) {
                 try {
                     row.getCell(0).getNumericCellValue();
@@ -89,10 +89,10 @@ public class ImportadorDatosBonoDescuento {
 
     }
 
-    public Integer obtenerRut(String rut) {
+    public Long obtenerRut(String rut) {
         String cadena = rut.replace(".", "").replace(",", "").trim();
         String[] arregloCadena = cadena.split("-");
-        return Integer.parseInt(arregloCadena[0]);
+        return Long.parseLong(arregloCadena[0]);
     }
 
     public UploadedFile getArchivo() {

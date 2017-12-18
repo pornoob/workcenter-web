@@ -4,6 +4,7 @@ import java.util.Date;
 import javax.annotation.Generated;
 import javax.persistence.metamodel.CollectionAttribute;
 import javax.persistence.metamodel.ListAttribute;
+import javax.persistence.metamodel.SetAttribute;
 import javax.persistence.metamodel.SingularAttribute;
 import javax.persistence.metamodel.StaticMetamodel;
 
@@ -15,7 +16,7 @@ public abstract class Personal_ {
 	public static volatile SingularAttribute<Personal, String> mail;
 	public static volatile ListAttribute<Personal, BonoDescuentoPersonal> bonosDescuentos;
 	public static volatile SingularAttribute<Personal, String> contactoe;
-	public static volatile ListAttribute<Personal, CargasFamiliares> lstCargasFamiliares;
+	public static volatile SetAttribute<Personal, CargasFamiliares> lstCargasFamiliares;
 	public static volatile SingularAttribute<Personal, Sancionado> sancion;
 	public static volatile SingularAttribute<Personal, String> nombres;
 	public static volatile SingularAttribute<Personal, String> edomicilio;

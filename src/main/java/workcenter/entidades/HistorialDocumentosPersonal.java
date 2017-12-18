@@ -13,7 +13,7 @@ public class HistorialDocumentosPersonal {
     private String numero;
     private Date vencimiento;
     private int tipo;
-    private int personal;
+    private Long personal;
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,11 +59,11 @@ public class HistorialDocumentosPersonal {
 
     @Basic
     @Column(name = "personal", nullable = false, insertable = true, updatable = true)
-    public int getPersonal() {
+    public Long getPersonal() {
         return personal;
     }
 
-    public void setPersonal(int personal) {
+    public void setPersonal(Long personal) {
         this.personal = personal;
     }
 
@@ -85,11 +85,7 @@ public class HistorialDocumentosPersonal {
 
     @Override
     public int hashCode() {
-        int result = id;
-        result = 31 * result + (numero != null ? numero.hashCode() : 0);
-        result = 31 * result + (vencimiento != null ? vencimiento.hashCode() : 0);
-        result = 31 * result + tipo;
-        result = 31 * result + personal;
+        int result = id * 31;
         return result;
     }
 }

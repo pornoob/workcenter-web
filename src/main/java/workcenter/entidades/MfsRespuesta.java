@@ -31,8 +31,7 @@ public class MfsRespuesta implements Serializable {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "id_pregunta", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "id_pregunta", referencedColumnName = "id")
     public MfsPregunta getIdPregunta() {
         return idPregunta;
     }
@@ -51,8 +50,7 @@ public class MfsRespuesta implements Serializable {
         this.valorRespuesta = valorRespuesta;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "encuesta", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "encuesta", referencedColumnName = "id")
     public MfsEncuesta getEncuesta() {
         return encuesta;
     }

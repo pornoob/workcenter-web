@@ -1,12 +1,13 @@
 package workcenter.dao;
 
-import java.util.ArrayList;
-import java.util.List;
+import org.springframework.stereotype.Repository;
+import workcenter.entidades.BonoDescuento;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
-import org.springframework.stereotype.Repository;
-import workcenter.entidades.BonoDescuento;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *

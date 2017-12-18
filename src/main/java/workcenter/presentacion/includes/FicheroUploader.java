@@ -1,21 +1,20 @@
 package workcenter.presentacion.includes;
 
-import java.io.*;
-import java.util.Date;
-
 import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
-
-import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
-
 import workcenter.entidades.Documento;
 import workcenter.negocio.LogicaDocumentos;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
+
+import java.io.*;
+import java.util.Date;
+
+import static org.springframework.util.FileCopyUtils.BUFFER_SIZE;
 
 /**
  * @author colivares

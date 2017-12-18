@@ -6,7 +6,6 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.ConceptoDao;
-import workcenter.dao.DineroDAO;
 import workcenter.entidades.Concepto;
 
 import java.util.List;

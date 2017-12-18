@@ -3,8 +3,7 @@
                 xmlns:h="http://java.sun.com/jsf/html"
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
-                xmlns:tvp="http://transportesventanas.cl"
-                xmlns:c="http://xmlns.jcp.org/jsp/jstl/core">
+                xmlns:tvp="http://transportesventanas.cl">
 
     <p:tab title="Máquinas">
         <p:fieldset legend="Filtros">
@@ -18,7 +17,7 @@
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
                          action="#{mantenedorMantenciones.irEditarMaquinaria()}"
                          icon="ui-icon-plus"/>
-        <p:commandButton value="Cargar listado" update="tblMaquinas"
+        <p:commandButton value="Cargar calendario" update="tblMaquinas"
                          icon="fa fa-refresh"
                          action="#{tabsMantenciones.cargarMantencionesMaquinas()}"/>
         <p:dataTable emptyMessage="No se han registrado mantenciones"
@@ -30,10 +29,10 @@
                      rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
             <p:column headerText="Patente" width="75">
                 <h:graphicImage
-                    rendered="#{not mantencionesMaquinaView.todosLosCheckRealizados(maquina)}"
+                    rendered="#{not mantencionesMaquinaView.checkeos[maquina]}"
                     value="/img/icons/luz_roja.png"/>
                 <h:graphicImage
-                    rendered="#{mantencionesMaquinaView.todosLosCheckRealizados(maquina)}"
+                    rendered="#{mantencionesMaquinaView.checkeos[maquina]}"
                     value="/img/icons/luz_verde.png"/>
                 <p:commandLink style="white-space: nowrap" action="#{tabsMantenciones.irHistorialMaquina(maquina)}" value="#{maquina.patente}"/>
             </p:column>

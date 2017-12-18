@@ -7,8 +7,6 @@ import workcenter.entidades.BonoDescuentoPersonal;
 import javax.faces.component.UIComponent;
 import javax.faces.context.FacesContext;
 import javax.faces.convert.Converter;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public class PickListConverterBonoDescuentoPersonal implements Converter {
 

@@ -1,10 +1,11 @@
 package workcenter.dao;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.FactFactura;
 import workcenter.entidades.Stock;
+
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 
 /**
  *

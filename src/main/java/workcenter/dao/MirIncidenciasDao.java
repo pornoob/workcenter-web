@@ -112,13 +112,13 @@ public class MirIncidenciasDao {
                 .setParameter("estado", idEstado).getResultList();
     }
 
-    public List<MirIncidencia> obtenerPorInformador(Integer rut) {
+    public List<MirIncidencia> obtenerPorInformador(Long rut) {
         return em.createNamedQuery("MirIncidencia.findByInformador")
                 .setParameter("rut", rut)
                 .getResultList();
     }
 
-    public List<MirIncidencia> obtenerPorApoyo(Integer rut) {
+    public List<MirIncidencia> obtenerPorApoyo(Long rut) {
         return em.createNamedQuery("MirIncidencia.findByApoyo")
                 .setParameter("rut", rut)
                 .getResultList();

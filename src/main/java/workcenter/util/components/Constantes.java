@@ -1,8 +1,5 @@
 package workcenter.util.components;
 
-import java.io.Serializable;
-import java.security.SecureRandom;
-import java.util.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -12,6 +9,10 @@ import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.dto.Horario;
 import workcenter.util.dto.Mes;
 import workcenter.util.dto.TipoDinero;
+
+import java.io.Serializable;
+import java.security.SecureRandom;
+import java.util.*;
 
 /**
  * @author colivares
