@@ -128,7 +128,9 @@ public class PersonalDao extends MyDao {
     }
 
     public List<ContratoPersonal> obtenerContratos(Personal personal) {
-        return em.createNamedQuery("ContratoPersonal.findByRut" ).setParameter("rut", personal).getResultList();
+        Query q = em.createQuery("SELECT cp FROM ContratoPersonal cp INNER JOIN FETCH cp.cargo INNER JOIN FETCH cp.empleador WHERE cp.rut = :personal", ContratoPersonal.class);
+        q.setParameter("personal", personal);
+        return q.getResultList();
     }
 
     public ValorPrevisionPersonal obtenerValorPrevisionAfpActual(ContratoPersonal cp) {
@@ -154,14 +156,18 @@ public class PersonalDao extends MyDao {
 
     public ValorPrevisionPersonal obtenerValorPrevisionSaludActual(ContratoPersonal cp) {
         StringBuilder sb = new StringBuilder();
-        sb.append("select vpp.* from valoresprevisionpersonal vpp " );
-        sb.append("inner join prevision p on (vpp.prevision = p.id and p.tipo='salud') " );
-        sb.append("inner join previsionescontratos pc on (vpp.contrato= pc.contrato and vpp.prevision=pc.prevision) " );
-        sb.append("where vpp.contrato=:contrato and pc.fechatermino is null " );
-        sb.append("order by vpp.fechavigencia desc " );
-        sb.append("limit 1 " );
+        sb.append("select vpp from ValorPrevisionPersonal vpp ")
+                .append("inner join fetch vpp.unidad u ")
+                .append("inner join fetch vpp.prevision p ")
+                .append("inner join fetch vpp.contrato c ")
+                .append("inner join fetch c.previsiones pc ")
+                .append("where c = :contrato and pc.fechatermino is null and p.tipo = 'salud' ")
+                .append("order by vpp.fechaVigencia desc ");
         try {
-            return (ValorPrevisionPersonal) em.createNativeQuery(sb.toString(), ValorPrevisionPersonal.class).setParameter("contrato", cp.getNumero()).getSingleResult();
+            Query q = em.createQuery(sb.toString(), ValorPrevisionPersonal.class);
+            q.setParameter("contrato", cp);
+            q.setMaxResults(1);
+            return (ValorPrevisionPersonal) q.getSingleResult();
         } catch (Exception e) {
             return null;
         }

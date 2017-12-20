@@ -9,6 +9,7 @@ import workcenter.util.components.Constantes;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -39,6 +40,8 @@ public class PrevisionDao {
     }
 
     public List<PrevisionContrato> obtenerPrevisionesContrato(ContratoPersonal cp) {
-        return em.createNamedQuery("PrevisionContrato.findByContrato").setParameter("contrato", cp).getResultList();
+        Query q = em.createQuery("SELECT pc FROM PrevisionContrato pc INNER JOIN FETCH pc.prevision p WHERE pc.contrato = :contrato");
+        q.setParameter("contrato", cp);
+        return q.getResultList();
     }
 }

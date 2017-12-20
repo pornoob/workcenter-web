@@ -21,7 +21,7 @@ import java.util.Set;
 @Table(name = "personal")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Personal.findAll", query = "SELECT p FROM Personal p ORDER BY p.apellidos"),
+    @NamedQuery(name = "Personal.findAll", query = "SELECT DISTINCT p FROM Personal p ORDER BY p.apellidos"),
     @NamedQuery(
             name = "Personal.findAllWithUser", 
             query = "SELECT DISTINCT p FROM Personal p "
