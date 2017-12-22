@@ -3,8 +3,6 @@ package workcenter.presentacion.equipos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.web.context.WebApplicationContext;
-import org.springframework.web.context.support.WebApplicationContextUtils;
 import workcenter.entidades.*;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.equipos.LogicaMantenciones;
@@ -15,7 +13,6 @@ import workcenter.util.dto.Dia;
 import workcenter.util.dto.Mes;
 import workcenter.util.dto.Semana;
 
-import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -45,6 +42,9 @@ public class TabsMantenciones implements Serializable {
     private Integer mes;
     private Integer anio;
 
+    private Boolean isListadoVisible;
+    private Boolean isCalendarioVisible;
+
     @Autowired
     private LogicaMantenciones logicaMantenciones;
 
@@ -59,6 +59,11 @@ public class TabsMantenciones implements Serializable {
 
     public void cargarMantencionesSemiremolques() {
         mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
+    }
+
+    public void cargarCalendarioTracto() {
+        isCalendarioVisible = Boolean.TRUE;
+        isListadoVisible = Boolean.FALSE;
     }
 
     public void cargarMantencionesTracto() {
@@ -89,6 +94,8 @@ public class TabsMantenciones implements Serializable {
         for (RendimientoCopec r : ultimosRendimientos) {
             rendimientosCopec.put(new Equipo(r.getPatente()), r);
         }
+        isListadoVisible = Boolean.TRUE;
+        isCalendarioVisible = Boolean.FALSE;
     }
 
     public void cargarMantencionesMaquinas() throws ParseException {
@@ -293,5 +300,21 @@ public class TabsMantenciones implements Serializable {
 
     public void setRendimientosCopec(Map<Equipo, RendimientoCopec> rendimientosCopec) {
         this.rendimientosCopec = rendimientosCopec;
+    }
+
+    public Boolean getListadoVisible() {
+        return isListadoVisible;
+    }
+
+    public void setListadoVisible(Boolean listadoVisible) {
+        isListadoVisible = listadoVisible;
+    }
+
+    public Boolean getCalendarioVisible() {
+        return isCalendarioVisible;
+    }
+
+    public void setCalendarioVisible(Boolean calendarioVisible) {
+        isCalendarioVisible = calendarioVisible;
     }
 }

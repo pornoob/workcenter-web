@@ -154,8 +154,9 @@ public class MmeMantencionTracto implements Serializable, Comparable<MmeMantenci
     public int compareTo(MmeMantencionTracto o) {
         int compare = this.patente.compareTo(o.patente);
         if (compare != 0) return compare;
-        if (this.fecha == null && o.fecha != null) return 1;
-        else if (this.fecha != null && o.fecha == null) return -1;
+        if (this.fecha == null && o.fecha == null) return -1;
+        else if (this.fecha == null) return 1;
+        else if (o.fecha == null) return -1;
         else return this.fecha.compareTo(o.fecha) * -1; // desc order
     }
 }
