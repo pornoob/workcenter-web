@@ -38,7 +38,7 @@ import java.util.Set;
     ),
     @NamedQuery(
         name = "Personal.findByRutWithLiquidacion",
-        query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos WHERE p = :personal"
+        query = "SELECT p FROM Personal p LEFT JOIN FETCH p.bonosDescuentos bd LEFT JOIN FETCH bd.idBonodescuento WHERE p = :personal"
     ),
     @NamedQuery(
         name = "Personal.findContratoActual",

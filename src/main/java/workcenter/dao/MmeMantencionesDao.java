@@ -105,20 +105,11 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
-        Query q = em.createNamedQuery("MmeMantencionMaquina.findByMesAndAnio", MmeMantencionMaquina.class)
+        String jpql = "SELECT mm FROM MmeMantencionMaquina mm INNER JOIN FETCH mm.maquina m INNER JOIN FETCH m.tipo " +
+                "LEFT JOIN FETCH mm.checkeoRealizado check LEFT JOIN FETCH check.tareaMaquina WHERE YEAR(mm.fecha) = :anio AND MONTH(mm.fecha) = :mes";
+        Query q = em.createQuery(jpql, MmeMantencionMaquina.class)
                 .setParameter("mes", mes)
                 .setParameter("anio", anio);
-        
-        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
-        graph.addAttributeNodes("checkeoRealizado", "maquina");
-
-        Subgraph<Equipo> maquina = graph.addSubgraph("maquina", Equipo.class);
-        maquina.addAttributeNodes("tipo");
-
-        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
-        checkGraph.addAttributeNodes("tareaMaquina");
-        
-        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         return new TreeSet<>(q.getResultList());
     }
 

@@ -43,7 +43,6 @@
         <class>workcenter.entidades.Cargo</class>
         <class>workcenter.entidades.GuiaPetroleo</class>
         <class>workcenter.entidades.MpaPlanContrato</class>
-        <class>workcenter.entidades.Factura</class>
         <class>workcenter.entidades.Cliente</class>
         <class>workcenter.entidades.MarParticipantesAct</class>
         <class>workcenter.entidades.TramoContrato</class>
@@ -102,7 +101,7 @@
         <class>workcenter.entidades.CargasFamiliares</class>
         <class>workcenter.entidades.ClasificacionFactura</class>
         <class>workcenter.entidades.ValorPrevisionPersonal</class>
-        <class>workcenter.entidades.MmeMantencionSemiremolque</class>
+        <class>workcenter.entidades.MmeMantencionSemirremolque</class>
         <class>workcenter.entidades.HoraLibrePersonal</class>
         <class>workcenter.entidades.FactorActualizacionSII</class>
         <class>workcenter.entidades.AsociacionDocumento</class>
@@ -127,12 +126,10 @@
         <class>workcenter.entidades.MmeTipoMantencion</class>
         <class>workcenter.entidades.Consumo</class>
         <class>workcenter.entidades.TarifaTramo</class>
-        <class>workcenter.entidades.FacturaAsociada</class>
         <class>workcenter.entidades.TipoUnidad</class>
         <class>workcenter.entidades.GestionAlerta</class>
         <class>workcenter.entidades.MarRegistro</class>
         <class>workcenter.entidades.ParticipanteActividad</class>
-        <class>workcenter.entidades.DetalleFactura</class>
         <class>workcenter.entidades.Cotizacion</class>
         <class>workcenter.entidades.MantencionEquipo</class>
         <class>workcenter.entidades.ActividadDiaria_</class>
