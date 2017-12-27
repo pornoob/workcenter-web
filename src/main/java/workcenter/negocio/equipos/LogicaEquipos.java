@@ -151,6 +151,11 @@ public class LogicaEquipos {
     }
 
     @Transactional(readOnly = true)
+    public List<Equipo> obtenerTractosConMantenimientos(Integer mes, Integer anio) {
+        return equipoDao.obtenerTractosConMantenimientos(mes, anio);
+    }
+
+    @Transactional(readOnly = true)
     public List<Vuelta> obtenerUltimasVueltasTracto() {
         return equipoDao.obtenerUltimasVueltasTracto();
     }

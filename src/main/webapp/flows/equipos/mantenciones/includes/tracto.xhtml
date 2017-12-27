@@ -4,149 +4,21 @@
                 xmlns:f="http://java.sun.com/jsf/core"
                 xmlns:p="http://primefaces.org/ui"
                 xmlns:tvp="http://transportesventanas.cl">
-    <p:tab title="Tractos">
+    <p:tab title="Tractos" id="tabTractos">
         <p:commandButton value="Cargar listado"
                          action="#{tabsMantenciones.cargarMantencionesTracto()}" icon="fa fa-refresh"
+                         process="tabTractos"
                          update="mantTractosContainer"/>
         <p:commandButton value="Cargar Calendario"
                          action="#{tabsMantenciones.cargarCalendarioTracto()}" icon="fa fa-refresh"
+                         process="tabTractos"
                          update="mantTractosContainer"/>
         <p:commandButton rendered="#{sesionCliente.esEditor(constantes.moduloMantenciones)}" value="Agregar"
+                         process="tabTractos"
                          action="#{mantenedorMantenciones.irEditarTracto()}" icon="fa fa-plus"/>
         <p:outputPanel id="mantTractosContainer">
-            <p:spacer height="30px" rendered="#{tabsMantenciones.calendarioVisible}"/>
-            <p:fieldset legend="Filtros" rendered="#{tabsMantenciones.calendarioVisible}">
-                <h:panelGrid columns="3">
-                    <p:outputLabel value="Mes"/>:
-                    <p:inputText value="#{flowScope.mes}"/>
-                    <p:outputLabel value="Año"/>:
-                    <p:inputText value="#{flowScope.anio}"/>
-                </h:panelGrid>
-            </p:fieldset>
-            <p:dataTable emptyMessage="No se han registrado mantenciones" rendered="#{tabsMantenciones.listadoVisible}" widgetVar="tTractos"
-                         id="tblTractos" tableStyle="table-layout: auto"
-                         value="#{tabsMantenciones.mantencionesTractos}" var="mt"
-                         filterEvent="enter"
-                         rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
-                         paginatorTemplate="#{constantes.paginadorTemplate}"
-                         rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
-                <p:columnGroup type="header">
-                    <p:row>
-                        <p:column rowspan="2" filterBy="#{mt.tracto.patente}" headerText="Patente"
-                                  filterFunction="#{dataTableFilter.filtroInsensitivo}">
-                            <f:facet name="filter">
-                                <p:inputText styleClass="inputFilter" style="width: 50px"
-                                             onkeyup="WebCenter.DataTable.keyUpFilter('tTractos')"/>
-                            </f:facet>
-                        </p:column>
-                        <p:column width="240" colspan="3" headerText="Última mantención"/>
-                        <p:column colspan="2" headerText="Última Panne"/>
-                        <p:column width="100" colspan="2" headerText="Kms. Actuales"/>
-                        <p:column width="100" rowspan="2" headerText="Prox. Control"/>
-                        <p:column rowspan="2" headerText="Kms. Faltantes"/>
-                        <p:column rowspan="2" headerText="Estado" filterBy="#{mt}"
-                                  filterFunction="#{tabsMantenciones.filtroEstado}">
-                            <f:facet name="filter">
-                                <p:selectOneMenu onchange="PF('tTractos').filter()">
-                                    <f:selectItem itemLabel="-- Todas --" itemValue="#{null}"/>
-                                    <f:selectItem itemLabel="Atrasadas" itemValue="atrasadas"/>
-                                    <f:selectItem itemLabel="Próximas" itemValue="proximas"/>
-                                    <f:selectItem itemLabel="Lejanas" itemValue="lejanas"/>
-                                </p:selectOneMenu>
-                            </f:facet>
-                        </p:column>
-                    </p:row>
-                    <p:row>
-                        <p:column headerText="Fecha"/>
-                        <p:column headerText="Tipo"/>
-                        <p:column headerText="KM"/>
-
-                        <p:column headerText="Fecha"/>
-                        <p:column headerText="KM"/>
-
-                        <p:column headerText="Guías"/>
-                        <p:column headerText="Copec"/>
-                    </p:row>
-                </p:columnGroup>
-                <p:column>
-                    <p:commandLink value="#{mt.tracto.patente}" ajax="false"
-                                   action="#{tabsMantenciones.irHistorial(mt.tracto)}"/>
-                </p:column>
-
-                <p:column>
-                    <h:outputText value="#{mt.fecha}">
-                        <f:convertDateTime pattern="dd-MM-yyyy"/>
-                    </h:outputText>
-                </p:column>
-                <p:column>#{mt.tipo.nombre}</p:column>
-                <p:column>
-                    <p:commandLink ajax="false">
-                        <h:outputText value="#{mt.kilometraje}">
-                            <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                        </h:outputText>
-                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableTracto(mt)}"/>
-                    </p:commandLink>
-                </p:column>
-
-                <p:column>
-                    <h:outputText value="#{tabsMantenciones.pannes[mt.tracto].fecha}">
-                        <f:convertDateTime pattern="dd-MM-yyyy"/>
-                    </h:outputText>
-                </p:column>
-                <p:column>
-                    <p:commandLink ajax="false">
-                        <h:outputText value="#{tabsMantenciones.pannes[mt.tracto].kilometraje}">
-                            <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                        </h:outputText>
-                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargablePanne(mt.tracto)}"/>
-                    </p:commandLink>
-                </p:column>
-
-                <p:column>
-                    <h:outputText
-                            rendered="#{tabsMantenciones.vueltas[mt.tracto].kmFinal gt tabsMantenciones.vueltas[mt.tracto].kmInicial}"
-                            value="#{tabsMantenciones.vueltas[mt.tracto].kmFinal}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText>
-
-                    <h:outputText
-                            rendered="#{tabsMantenciones.vueltas[mt.tracto].kmInicial gt tabsMantenciones.vueltas[mt.tracto].kmFinal}"
-                            value="#{tabsMantenciones.vueltas[mt.tracto].kmInicial}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
-
-                <p:column>
-                    <h:outputText value="#{tabsMantenciones.rendimientosCopec[mt.tracto].odometro}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
-
-                <p:column style="text-align: center">
-                    <h:outputText value="#{tabsMantenciones.obtenerFechaSiguienteMantencion(mt)}">
-                        <f:convertDateTime pattern="dd-MM-yyyy"/>
-                    </h:outputText><br/>(
-                    <h:outputText value="#{mantenedorMantenciones.obtenerKmSiguienteMantencion(mt)}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText> Kms. )
-                </p:column>
-                <p:column>
-                    <h:outputText value="#{tabsMantenciones.obtenerKmsFaltante(mt)}">
-                        <tvp:convertNumber currencySymbol="" groupingUsed="true"/>
-                    </h:outputText>
-                </p:column>
-                <p:column>
-                    <h:graphicImage
-                            rendered="#{tabsMantenciones.dibujarSemaforoRojo(tabsMantenciones.obtenerKmsFaltante(mt))}"
-                            value="/img/icons/luz_roja.png"/>
-                    <h:graphicImage
-                            rendered="#{tabsMantenciones.dibujarSemaforoAmarillo(tabsMantenciones.obtenerKmsFaltante(mt))}"
-                            value="/img/icons/luz_amarilla.png"/>
-                    <h:graphicImage
-                            rendered="#{tabsMantenciones.dibujarSemaforoVerde(tabsMantenciones.obtenerKmsFaltante(mt))}"
-                            value="/img/icons/luz_verde.png"/>
-                </p:column>
-            </p:dataTable>
+            <ui:include src="tractos_calendar.xhtml"/>
+            <ui:include src="tractos_table.xhtml"/>
         </p:outputPanel>
     </p:tab>
 

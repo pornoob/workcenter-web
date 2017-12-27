@@ -1,0 +1,68 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl">
+
+    <p:spacer height="30px" rendered="#{tabsMantenciones.calendarioVisible}"/>
+    <p:fieldset legend="Filtros" rendered="#{tabsMantenciones.calendarioVisible}">
+        <h:panelGrid columns="3">
+            <p:outputLabel value="Mes"/>:
+            <p:inputText value="#{flowScope.mes}"/>
+            <p:outputLabel value="Año"/>:
+            <p:inputText value="#{flowScope.anio}"/>
+        </h:panelGrid>
+    </p:fieldset>
+    <p:dataTable emptyMessage="No se han registrado mantenciones"
+                 id="tblCalendarTracto" rendered="#{tabsMantenciones.calendarioVisible}"
+                 value="#{tabsMantenciones.equipos}" var="tracto"
+                 rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
+                 paginatorTemplate="#{constantes.paginadorTemplate}"
+                 filterEvent="enter"
+                 rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}">
+        <p:column headerText="Patente" width="75">
+            <p:commandLink style="white-space: nowrap" action="#{tabsMantenciones.irHistorial(tracto)}" value="#{tracto.patente}"/>
+        </p:column>
+        <p:column headerText="Calendario" style="padding:0; overflow-x: auto">
+            <p:panelGrid>
+                <p:row>
+                    <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
+                        <p:repeat value="#{semana.dias}" var="dia">
+                            <ui:fragment rendered="#{dia.fecha ne null}">
+                                <p:column style="width: 10px">
+                                    <p:outputLabel value="#{dia.fecha}" style="font-size: 7pt">
+                                        <f:convertDateTime pattern="dd"/>
+                                    </p:outputLabel>
+                                </p:column>
+                            </ui:fragment>
+                        </p:repeat>
+                    </p:repeat>
+                </p:row>
+                <p:row>
+                    <p:repeat value="#{tabsMantenciones.mesData.semanas}" var="semana">
+                        <p:repeat value="#{semana.dias}" var="dia">
+                            <ui:fragment rendered="#{dia.fecha ne null}">
+                                <p:column style="text-align: center; height: 17px">
+                                    <p:commandLink ajax="false" process="tabTractos"
+                                                   rendered="#{tabsMantenciones.obtenerMantencion(tracto, dia.fecha) ne null}">
+                                        <h:graphicImage
+                                                rendered="#{tabsMantenciones.dibujarSemaforoRojo(tabsMantenciones.obtenerKmsFaltante(tabsMantenciones.obtenerMantencion(tracto, dia.fecha)))}"
+                                                value="/img/icons/luz_roja.png"/>
+                                        <h:graphicImage
+                                                rendered="#{tabsMantenciones.dibujarSemaforoAmarillo(tabsMantenciones.obtenerKmsFaltante(tabsMantenciones.obtenerMantencion(tracto, dia.fecha)))}"
+                                                value="/img/icons/luz_amarilla.png"/>
+                                        <h:graphicImage
+                                                rendered="#{tabsMantenciones.dibujarSemaforoVerde(tabsMantenciones.obtenerKmsFaltante(tabsMantenciones.obtenerMantencion(tracto, dia.fecha)))}"
+                                                value="/img/icons/luz_verde.png"/>
+                                        <p:fileDownload value="#{mantenedorMantenciones.obtenerDescargableTracto(tabsMantenciones.obtenerMantencion(tracto, dia.fecha))}"/>
+                                    </p:commandLink>
+                                </p:column>
+                            </ui:fragment>
+                        </p:repeat>
+                    </p:repeat>
+                </p:row>
+            </p:panelGrid>
+        </p:column>
+    </p:dataTable>
+</ui:composition>

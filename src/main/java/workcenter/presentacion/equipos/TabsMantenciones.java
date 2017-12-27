@@ -22,7 +22,7 @@ import java.util.*;
  * @author Claudio Olivares
  */
 @Component
-@Scope("view")
+@Scope("flow")
 public class TabsMantenciones implements Serializable {
 
     private static final long serialVersionUID = -8603051539908186924L;
@@ -61,9 +61,21 @@ public class TabsMantenciones implements Serializable {
         mantencionesSemiremolque = logicaMantenciones.obtenerUltimasMantencionesSemiremolques();
     }
 
-    public void cargarCalendarioTracto() {
+    public void cargarCalendarioTracto() throws ParseException {
+        initMesData();
         isCalendarioVisible = Boolean.TRUE;
         isListadoVisible = Boolean.FALSE;
+        equipos = logicaEquipos.obtenerTractosConMantenimientos(mes, anio);
+        rendimientosCopec = new HashMap<>();
+        List<RendimientoCopec> ultimosRendimientos = logicaProveedorPetroleo.obtenerUltimosRendimientos();
+        for (RendimientoCopec r : ultimosRendimientos) {
+            rendimientosCopec.put(new Equipo(r.getPatente()), r);
+        }
+        List<Vuelta> ultimasVueltas = logicaEquipos.obtenerUltimasVueltasTracto();
+        vueltas = new HashMap<>();
+        for (Vuelta v : ultimasVueltas) {
+            vueltas.put(v.getTracto(), v);
+        }
     }
 
     public void cargarMantencionesTracto() {
@@ -148,18 +160,27 @@ public class TabsMantenciones implements Serializable {
         }
     }
 
-    public MmeMantencionMaquina obtenerMantencion(Equipo e, Date dia) throws ParseException {
-        for (MmeMantencionMaquina mantencion : mantencionesMaquina) {
-            if (mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
-                return mantencion;
+    public Object obtenerMantencion(Equipo e, Date dia) {
+        if (e.getTipo().getId().equals(constantes.getEquipoTipoTracto())) {
+            for (MmeMantencionTracto mantenimiento : e.getMantenimientos()) {
+                if (mantenimiento.getFecha().equals(dia)) {
+                    return mantenimiento;
+                }
+            }
+        } else if (e.getTipo().getId().equals(constantes.getEquipoTipoMaquina())) {
+            for (MmeMantencionMaquina mantencion : mantencionesMaquina) {
+                if (mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
+                    return mantencion;
+                }
             }
         }
         return null;
     }
 
-    public boolean dibujarSemaforoMaquina(Equipo e, Date dia) throws ParseException {
+    public boolean dibujarSemaforoMaquina(Equipo e, Date dia) {
+        if (mantencionesMaquina == null) return false;
         for (MmeMantencionMaquina mantencion : mantencionesMaquina) {
-            if (mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
+            if (mantencion.getFecha() != null && mantencion.getFecha().equals(dia) && e.equals(mantencion.getMaquina())) {
                 return true;
             }
         }
@@ -316,5 +337,13 @@ public class TabsMantenciones implements Serializable {
 
     public void setCalendarioVisible(Boolean calendarioVisible) {
         isCalendarioVisible = calendarioVisible;
+    }
+
+    public List<Equipo> getEquipos() {
+        return equipos;
+    }
+
+    public void setEquipos(List<Equipo> equipos) {
+        this.equipos = equipos;
     }
 }
