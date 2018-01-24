@@ -78,7 +78,11 @@ public class ImportadorDatosBonoDescuento {
                 }
             }
 
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
+            if (numRow > 1) {
+                FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
+            } else {
+                FacesUtil.mostrarMensajeError("Operación fallida", "Carga masiva no presenta datos");
+            }
         } catch (IOException e) {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
