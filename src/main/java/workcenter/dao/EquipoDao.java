@@ -109,16 +109,16 @@ public class EquipoDao extends MyDao{
     }
 
     public List<DocumentoEquipo> obtenerDocumentosActualizados(Equipo e) {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select * from ( ");
-        sql.append("select d.* from tiposdocumentosequipos tde ");
-        sql.append("inner join documentosequipo d on (tde.id=d.tipo) ");
-        sql.append("inner join (select max(vencimiento) as fecha, tipo from documentosequipo where patente=:patente group by tipo) d2 ");
-        sql.append("on (d.tipo=d2.tipo and (d.vencimiento=d2.fecha or d2.fecha is null)) ");
-        sql.append("where d.patente=:patente ");
-        sql.append("group by d.tipo order by d.id desc ");
-        sql.append(") d group by d.tipo order by d.tipo ");
-        return em.createNativeQuery(sql.toString(), DocumentoEquipo.class)
+        StringBuilder jpql = new StringBuilder();
+
+        jpql.append("SELECT de FROM DocumentoEquipo de INNER JOIN FETCH de.tipo ")
+                .append("WHERE de.patente = :patente AND EXISTS (")
+                .append("    SELECT MAX(deMax.vencimiento), deMax.tipo FROM DocumentoEquipo deMax ")
+                .append("    WHERE deMax.tipo = de.tipo AND deMax.patente = de.patente ")
+                .append("    GROUP BY de.tipo ")
+                .append("    HAVING (de.vencimiento = MAX(deMax.vencimiento) OR MAX(deMax.vencimiento) IS NULL)")
+                .append(") ORDER BY de.tipo DESC ");
+        return em.createQuery(jpql.toString(), DocumentoEquipo.class)
                 .setParameter("patente", e.getPatente())
                 .getResultList();
     }
