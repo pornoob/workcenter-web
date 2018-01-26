@@ -3,7 +3,6 @@ package workcenter.util.components;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Transactional;
 import workcenter.entidades.TipoUnidad;
 import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.dto.Horario;
@@ -68,9 +67,9 @@ public class Constantes implements Serializable {
     private List<TipoUnidad> tiposUnidad;
 
     // Zona equipos
-    private static final int equipoTipoTracto = 1;
-    private static final int equipoTipoBatea = 2;
-    private static final int equipoTipoMaquina = 4;
+    private static final Integer equipoTipoTracto = 1;
+    private static final Integer equipoTipoBatea = 2;
+    private static final Integer equipoTipoMaquina = 4;
     private static final int alarmaProximaMantencion = 2000;
     
     // Zona OT
@@ -355,7 +354,6 @@ public class Constantes implements Serializable {
         iniciaConstantes();
     }
 
-    @Transactional(readOnly = true)
     private void iniciaConstantes() {
         tiposUnidad = null;
     }
@@ -474,11 +472,11 @@ public class Constantes implements Serializable {
         return pathArchivos;
     }
 
-    public int getEquipoTipoTracto() {
+    public Integer getEquipoTipoTracto() {
         return equipoTipoTracto;
     }
 
-    public int getEquipoTipoBatea() {
+    public Integer getEquipoTipoBatea() {
         return equipoTipoBatea;
     }
 
@@ -642,7 +640,7 @@ public class Constantes implements Serializable {
         return fonasaId;
     }
 
-    public int getEquipoTipoMaquina() {
+    public Integer getEquipoTipoMaquina() {
         return equipoTipoMaquina;
     }
 

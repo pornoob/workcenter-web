@@ -27,13 +27,11 @@ public class LiquidacionDao {
     private Constantes c;
 
     public ContratoPersonal obtenerDatosContrato(Personal p) {
-        StringBuilder sb = new StringBuilder();
-        sb.append("select cp.* from contratospersonal cp ");
-        sb.append("where rut=:rut ");
-        sb.append("ORDER BY fecha DESC ,numero DESC ");
-        sb.append("LIMIT 1");
-        Query q = em.createNativeQuery(sb.toString(), ContratoPersonal.class);
-        q.setParameter("rut", p.getRut());
+        String jpql = "SELECT cp FROM ContratoPersonal cp INNER JOIN cp.rut p INNER JOIN FETCH cp.empleador WHERE p = :personal ORDER BY cp.fecha DESC, cp.numero DESC";
+
+        Query q = em.createQuery(jpql, ContratoPersonal.class);
+        q.setMaxResults(1);
+        q.setParameter("personal", p);
         try {
             return (ContratoPersonal) q.getSingleResult();
         } catch (Exception e) {

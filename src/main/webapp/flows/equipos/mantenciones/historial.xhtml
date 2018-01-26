@@ -8,9 +8,9 @@
 
     <ui:define name="contenido">
 
-        <h2>Historial de Mantenciones #{mantenedorMantencionesView.equipo.patente}</h2>
+        <h2>Historial de Mantenciones #{tabsMantenciones.equipo.patente}</h2>
         <h:form id="formMantenciones">
-            <p:dataTable rendered="#{mantenedorMantencionesView.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
+            <p:dataTable rendered="#{tabsMantenciones.equipo.tipo.id.intValue() != constantes.equipoTipoBatea}"
                          value="#{tabsMantenciones.mantencionesTractos}" var="m"
                          rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                          paginatorTemplate="#{constantes.paginadorTemplate}"
@@ -39,7 +39,7 @@
                     #{m.mecanicoResponsable.nombreCompleto}
                 </p:column>
             </p:dataTable>
-            <p:dataTable rendered="#{mantenedorMantencionesView.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
+            <p:dataTable rendered="#{tabsMantenciones.equipo.tipo.id.intValue() == constantes.equipoTipoBatea}"
                          value="#{tabsMantenciones.mantencionesSemiremolque}" var="m"
                          rows="#{constantes.cantidadFilasTablas}" paginator="true" paginatorPosition="both"
                          paginatorTemplate="#{constantes.paginadorTemplate}"

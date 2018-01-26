@@ -91,7 +91,13 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public List<MmeMantencionTracto> obtenerMantenciones(Equipo e) {
-        return em.createNamedQuery("MmeMantencionTracto.findByTracto").setParameter("tracto", e).getResultList();
+        Query q = em.createNamedQuery("MmeMantencionTracto.findByTracto");
+        EntityGraph<MmeMantencionTracto> graph = em.createEntityGraph(MmeMantencionTracto.class);
+        graph.addSubgraph(MmeMantencionTracto_.tipo);
+        graph.addSubgraph(MmeMantencionTracto_.mecanicoResponsable);
+        q.setParameter("tracto", e);
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return q.getResultList();
     }
 
     public List<MmeMantencionSemirremolque> obtenerMantencionesSemiremolques(Equipo e) {
@@ -99,17 +105,11 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
-        Query q = em.createNamedQuery("MmeMantencionMaquina.findByMesAndAnio", MmeMantencionMaquina.class)
+        String jpql = "SELECT mm FROM MmeMantencionMaquina mm INNER JOIN FETCH mm.maquina m INNER JOIN FETCH m.tipo " +
+                "LEFT JOIN FETCH mm.checkeoRealizado check LEFT JOIN FETCH check.tareaMaquina WHERE YEAR(mm.fecha) = :anio AND MONTH(mm.fecha) = :mes";
+        Query q = em.createQuery(jpql, MmeMantencionMaquina.class)
                 .setParameter("mes", mes)
                 .setParameter("anio", anio);
-        
-        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
-        graph.addAttributeNodes("checkeoRealizado", "maquina");
-        
-        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
-        checkGraph.addAttributeNodes("tareaMaquina");
-        
-        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         return new TreeSet<>(q.getResultList());
     }
 
@@ -143,16 +143,17 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public Set<MmeMantencionMaquina> obtenerMantencionesMaquina(Equipo maquina) {
-        Query q = em.createNamedQuery("MmeMantencionMaquina.findLastByMaquina", MmeMantencionMaquina.class);
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT m FROM MmeMantencionMaquina m ")
+                .append("LEFT JOIN FETCH m.mecanicoResponsable ")
+                .append("LEFT JOIN FETCH m.checkeoRealizado check ")
+                .append("LEFT JOIN FETCH check.tareaMaquina tm ")
+                .append("LEFT JOIN FETCH m.maquina maq ")
+                .append("LEFT JOIN FETCH maq.modelo ")
+                .append("WHERE maq = :maquina ORDER BY m.fecha DESC");
+        Query q = em.createQuery(jpql.toString(), MmeMantencionMaquina.class);
         q.setParameter("maquina", maquina);
-        
-        EntityGraph<MmeMantencionMaquina> graph = em.createEntityGraph(MmeMantencionMaquina.class);
-        graph.addAttributeNodes("checkeoRealizado", "maquina");
-        
-        Subgraph<MmeCheckMaquina> checkGraph = graph.addSubgraph("checkeoRealizado", MmeCheckMaquina.class);
-        checkGraph.addAttributeNodes("tareaMaquina");
-        
-        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+
         return new TreeSet<>(q.getResultList());
     }
 

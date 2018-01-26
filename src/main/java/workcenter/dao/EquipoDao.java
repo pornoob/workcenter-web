@@ -22,7 +22,7 @@ public class EquipoDao extends MyDao{
     Constantes constantes;
 
     public List<Equipo> obtenerTodos() {
-        return em.createNamedQuery("Equipo.findAll").getResultList();
+        return em.createNamedQuery("Equipo.findAll", Equipo.class).getResultList();
     }
     
     public List<Equipo> obtenerTodosParaMantenedor() {
@@ -42,17 +42,17 @@ public class EquipoDao extends MyDao{
     }
 
     public List<Equipo> obtenerTractos() {
-        return em.createNamedQuery("Equipo.findByTipo")
+        return em.createNamedQuery("Equipo.findByTipo", Equipo.class)
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto())).getResultList();
     }
     
     public List<Equipo> obtenerMaquinas() {
-        return em.createNamedQuery("Equipo.findByTipo")
+        return em.createNamedQuery("Equipo.findByTipo", Equipo.class)
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina())).getResultList();
     }
 
     public List<Equipo> obtenerBateas() {
-        return em.createNamedQuery("Equipo.findByTipo")
+        return em.createNamedQuery("Equipo.findByTipo", Equipo.class)
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoBatea())).getResultList();
     }
 
@@ -65,23 +65,23 @@ public class EquipoDao extends MyDao{
     }
 
     public List<TipoEquipo> obtenerTipos() {
-        return em.createNamedQuery("TipoEquipo.findAll").getResultList();
+        return em.createNamedQuery("TipoEquipo.findAll", TipoEquipo.class).getResultList();
     }
 
     public List<SubtipoEquipo> obtenerSubtiposEquipos() {
-        return em.createNamedQuery("SubtipoEquipo.findAll").getResultList();
+        return em.createNamedQuery("SubtipoEquipo.findAll", SubtipoEquipo.class).getResultList();
     }
 
     public List<MarcaEquipo> obtenerMarcas() {
-        return em.createNamedQuery("MarcaEquipo.findAll").getResultList();
+        return em.createNamedQuery("MarcaEquipo.findAll", MarcaEquipo.class).getResultList();
     }
 
     public List<ModeloEquipo> obtenerModelos() {
-        return em.createNamedQuery("ModeloEquipo.findAll").getResultList();
+        return em.createNamedQuery("ModeloEquipo.findAll", ModeloEquipo.class).getResultList();
     }
 
     public List<FotoEquipo> obtenerFotos(Equipo e) {
-        return em.createNamedQuery("FotoEquipo.findByEquipo").setParameter("equipo", e).getResultList();
+        return em.createNamedQuery("FotoEquipo.findByEquipo", FotoEquipo.class).setParameter("equipo", e).getResultList();
     }
 
     public SeguroEquipo obtenerUltimoSeguro(Equipo equipo) {
@@ -96,7 +96,7 @@ public class EquipoDao extends MyDao{
     }
 
     public List<SeguroEquipo> obtenerSeguros(Equipo equipo) {
-        return em.createNamedQuery("SeguroEquipo.findByEquipo").setParameter("equipo", equipo).getResultList();
+        return em.createNamedQuery("SeguroEquipo.findByEquipo", SeguroEquipo.class).setParameter("equipo", equipo).getResultList();
     }
 
     public Equipo obtenerEquipo(Equipo e) {
@@ -220,6 +220,21 @@ public class EquipoDao extends MyDao{
 
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
 
+        q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto()));
+
+        return q.getResultList();
+    }
+
+    public List<Equipo> obtenerTractosConMantenimientos(Integer mes, Integer anio) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT e FROM Equipo e ")
+                .append("INNER JOIN FETCH e.tipo te ")
+                .append("LEFT JOIN FETCH e.mantenimientos m ")
+                .append("LEFT JOIN FETCH m.tipo ")
+                .append("WHERE e.tipo = :tipo AND YEAR(m.fecha) = :anio AND MONTH(m.fecha) = :mes ");
+        Query q = em.createQuery(jpql.toString(), Equipo.class);
+        q.setParameter("anio", anio);
+        q.setParameter("mes", mes);
         q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto()));
 
         return q.getResultList();
