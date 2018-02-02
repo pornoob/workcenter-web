@@ -8,6 +8,8 @@ import javax.persistence.*;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 
@@ -340,7 +342,30 @@ public class PersonalDao extends MyDao {
         EntityGraph<Personal> personalGraph = em.createEntityGraph(Personal.class);
         personalGraph.addAttributeNodes("servicios");
         personalGraph.addAttributeNodes("lstCargasFamiliares");
+        personalGraph.addAttributeNodes("sancion");
+        personalGraph.addAttributeNodes("contratos");
+
+        Subgraph<Object> contratoGraph = personalGraph.addSubgraph("contratos");
+        contratoGraph.addAttributeNodes("empleador");
+
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, personalGraph);
+        return q.getResultList();
+    }
+
+    public List<Personal> obtenerConductoresConSanciones() {
+        Date currentDate = Calendar.getInstance().getTime();
+
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT c FROM Personal c LEFT JOIN FETCH c.sancion ")
+                .append("WHERE EXISTS (")
+                .append("    SELECT MAX(cp.fecha), cp.rut FROM ContratoPersonal cp ")
+                .append("    WHERE (cp.vencimiento is null or cp.vencimiento >= :currentDate) AND ")
+                .append("    cp.rut = c ")
+                .append("    GROUP BY cp.rut ")
+                .append(")");
+
+        Query q = em.createQuery(jpql.toString(), Personal.class);
+        q.setParameter("currentDate", currentDate);
         return q.getResultList();
     }
 }

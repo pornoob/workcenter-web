@@ -213,7 +213,13 @@ public class LogicaPersonal {
         return personalDao.obtenerConteoLazy(filters);
     }
 
+    @Transactional(readOnly = true)
     public List<ValorPrevisionPersonal> obtenerValoresPrevisionContrato(ContratoPersonal contrato) {
         return personalDao.obtenerValoresPrevisionContrato(contrato);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Personal> obtenerConductoresConSanciones() {
+        return personalDao.obtenerConductoresConSanciones();
     }
 }

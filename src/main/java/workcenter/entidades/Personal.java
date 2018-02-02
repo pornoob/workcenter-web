@@ -1,5 +1,6 @@
 package workcenter.entidades;
 
+import org.hibernate.annotations.SortNatural;
 import org.springframework.util.StringUtils;
 
 import javax.persistence.*;
@@ -8,10 +9,7 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import javax.xml.bind.annotation.XmlTransient;
 import java.io.Serializable;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  *
@@ -43,7 +41,7 @@ import java.util.Set;
     @NamedQuery(
         name = "Personal.findContratoActual",
         query = "SELECT cp FROM Personal p "
-        + "INNER JOIN p.contratospersonalCollection cp "
+        + "INNER JOIN p.contratos cp "
         + "INNER JOIN FETCH cp.previsiones "
         + "WHERE p = :personal "
         + "ORDER BY cp.fecha DESC, cp.numero DESC"
@@ -111,7 +109,8 @@ public class Personal implements Serializable {
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "personal", cascade = CascadeType.ALL)
     private Usuario usuario;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "rut")
-    private List<ContratoPersonal> contratospersonalCollection;
+    @SortNatural
+    private SortedSet<ContratoPersonal> contratos;
     @OneToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "usuario_servicio_ruta",
@@ -307,12 +306,12 @@ public class Personal implements Serializable {
         this.usuario = usuario;
     }
 
-    public List<ContratoPersonal> getContratospersonalCollection() {
-        return contratospersonalCollection;
+    public SortedSet<ContratoPersonal> getContratos() {
+        return contratos;
     }
 
-    public void setContratospersonalCollection(List<ContratoPersonal> contratospersonalCollection) {
-        this.contratospersonalCollection = contratospersonalCollection;
+    public void setContratos(SortedSet<ContratoPersonal> contratos) {
+        this.contratos = contratos;
     }
 
     @XmlTransient

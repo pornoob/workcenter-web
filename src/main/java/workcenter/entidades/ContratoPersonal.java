@@ -9,6 +9,7 @@ import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.List;
 
@@ -24,7 +25,7 @@ import java.util.List;
         @NamedQuery(name = "ContratoPersonal.findByNumero", query = "SELECT c FROM ContratoPersonal c WHERE c.numero = :numero"),
         @NamedQuery(name = "ContratoPersonal.findByRut", query = "SELECT c FROM ContratoPersonal c WHERE c.rut = :rut"),
 })
-public class ContratoPersonal implements Serializable {
+public class ContratoPersonal implements Serializable, Comparable<ContratoPersonal> {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -204,6 +205,22 @@ public class ContratoPersonal implements Serializable {
         this.sinTope = sinTope;
     }
 
+    public List<PrevisionContrato> getPrevisiones() {
+        return previsiones;
+    }
+
+    public void setPrevisiones(List<PrevisionContrato> previsiones) {
+        this.previsiones = previsiones;
+    }
+
+    public List<ValorPrevisionPersonal> getValoresPrevisiones() {
+        return valoresPrevisiones;
+    }
+
+    public void setValoresPrevisiones(List<ValorPrevisionPersonal> valoresPrevisiones) {
+        this.valoresPrevisiones = valoresPrevisiones;
+    }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -226,23 +243,14 @@ public class ContratoPersonal implements Serializable {
     }
 
     @Override
+    public int compareTo(ContratoPersonal o) {
+        int diff = this.fecha.compareTo(o.fecha);
+        if (diff == 0) diff = this.numero.compareTo(o.numero);
+        return diff * -1; // desc order
+    }
+
+    @Override
     public String toString() {
         return "workcenter.entities.ContratoPersonal[ numero=" + numero + " ]";
-    }
-
-    public List<PrevisionContrato> getPrevisiones() {
-        return previsiones;
-    }
-
-    public void setPrevisiones(List<PrevisionContrato> previsiones) {
-        this.previsiones = previsiones;
-    }
-
-    public List<ValorPrevisionPersonal> getValoresPrevisiones() {
-        return valoresPrevisiones;
-    }
-
-    public void setValoresPrevisiones(List<ValorPrevisionPersonal> valoresPrevisiones) {
-        this.valoresPrevisiones = valoresPrevisiones;
     }
 }

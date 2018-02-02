@@ -161,7 +161,7 @@ public class MantenedorPersonal implements Serializable {
         if (valor == null) {
             return false;
         }
-        Empresa e = logicaPersonal.obtenerEmpleador((Personal) valor);
+        Empresa e = ((Personal) valor).getContratos().first().getEmpleador();
         if (e == null) {
             return false;
         }
@@ -332,7 +332,7 @@ public class MantenedorPersonal implements Serializable {
 
     public String irContratosPersonal(Personal p) {
         personalSeleccionado = p;
-        personalSeleccionado.setContratospersonalCollection(logicaPersonal.obtenerContratos(personalSeleccionado));
+        personalSeleccionado.setContratos(new TreeSet<>(logicaPersonal.obtenerContratos(personalSeleccionado)));
         paginaPrevia = "flowListarPersonal";
         return "flowVerContratos";
     }
@@ -591,7 +591,6 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public boolean estaBloqueado(Personal p) {
-        p.setSancion(logicaPersonal.obtenerSancion(p));
         if (p.getSancion() == null) {
             return false;
         } else {

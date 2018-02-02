@@ -29,7 +29,7 @@ public abstract class Personal_ {
 	public static volatile SingularAttribute<Personal, String> telefono;
 	public static volatile SingularAttribute<Personal, String> apellidos;
 	public static volatile SingularAttribute<Personal, Character> digitoverificador;
-	public static volatile ListAttribute<Personal, ContratoPersonal> contratospersonalCollection;
+	public static volatile ListAttribute<Personal, ContratoPersonal> contratos;
 	public static volatile SingularAttribute<Personal, Date> nacimiento;
 	public static volatile ListAttribute<Personal, Servicio> servicios;
 	public static volatile ListAttribute<Personal, SancionRetiradaPersonal> sancionesRetiradas;

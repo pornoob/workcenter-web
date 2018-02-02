@@ -27,9 +27,9 @@ import java.util.logging.Logger;
  */
 @Component
 @Scope("flow")
-public class MantenedorMaestroGuias implements Serializable{
+public class MantenedorMaestroGuias implements Serializable {
     private static final Logger LOG = Logger.getLogger(MantenedorMaestroGuias.class.getName());
-    
+
     private Integer ordenConsulta;
     private Vuelta ordenDeCarga;
     private List<Equipo> lstEquipos;
@@ -49,7 +49,7 @@ public class MantenedorMaestroGuias implements Serializable{
     private Personal conductor;
     private List<Personal> conductores;
     private List<Vuelta> ordenesCarga;
-    
+
     @Autowired
     private LogicaMaestroGuias logicaMaestroGuias;
     @Autowired
@@ -63,67 +63,66 @@ public class MantenedorMaestroGuias implements Serializable{
     @Autowired
     private LogicaGuiaDePetroleo logicaGuiaDePetroleo;
 
-    public void inicio(){
+    public void inicio() {
         ordenDeCarga = new Vuelta();
         lstEquipos = logicaEquipos.obtenerTractos();
-        lstConductores = logicaPersonal.obtenerConductores();
+        lstConductores = logicaPersonal.obtenerConductoresConSanciones();
         lstBateas = logicaEquipos.obtenerBateas();
-        lstEmpresas = logicaContratoEmpresa.obtenerContratoEmpresas();
+        lstEmpresas = logicaContratoEmpresa.obtenerContratoEmpresasConEmpresa();
     }
-    
+
     public void buscarGuias() {
         ordenesCarga = logicaMaestroGuias.buscar(fechaDesde, fechaHasta, conductor);
     }
 
-    public void consultarOrdenDeCarga(){
+    public void consultarOrdenDeCarga() {
         ordenDeCarga = logicaMaestroGuias.obtenerOrdendeCarga(ordenConsulta);
     }
 
     public boolean estaBloqueado() {
-        if (ordenDeCarga.getConductor() != null){
-        ordenDeCarga.getConductor().setSancion(logicaPersonal.obtenerSancion(ordenDeCarga.getConductor()));
+        if (ordenDeCarga.getConductor() != null) {
             return ordenDeCarga.getConductor().getSancion() != null;
         }
         return false;
     }
 
-    public boolean estaBloqueadoTracto(){
+    public boolean estaBloqueadoTracto() {
         if (ordenDeCarga.getTracto() == null) return false;
         //terminar metodo
         return false;
     }
 
-    public void buscarTramoContrato(){
+    public void buscarTramoContrato() {
         lstTipoDeProductos = new ArrayList<>();
         lstTramoContrato = logicaTramoContrato.obtenerTramoPorContrato(empresaSeleccionada);
     }
 
-    public void irGuardarProducto(){
+    public void irGuardarProducto() {
         producto = new Producto();
     }
-    
+
     public void irEditarProducto(Producto p) {
         producto = p;
     }
-    
+
     public void irEliminarProducto(Producto p) {
         ordenDeCarga.getProductosList().remove(p);
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
-    public void irGuiasDePretrolio(){
+    public void irGuiasDePretrolio() {
         if (ordenDeCarga == null) return;
         System.err.println("se obtiene lstEstacionServicio, guia de pretroleo se instancea");
         lstEstacionServicio = logicaGuiaDePetroleo.obtenerEstacionesDeServicio();
         guiaPetroleo = new GuiaPetroleo();
     }
-    
+
     public void irEditarGuiaPetroleo(GuiaPetroleo gp) {
         if (ordenDeCarga == null) return;
         lstEstacionServicio = logicaGuiaDePetroleo.obtenerEstacionesDeServicio();
         guiaPetroleo = gp;
     }
-    
+
     public void irEliminarGuiaPetroleo(GuiaPetroleo gp) {
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
@@ -137,48 +136,48 @@ public class MantenedorMaestroGuias implements Serializable{
         guiaPetroleo = new GuiaPetroleo();
     }
 
-    public Integer calcularTotalRendicion(GuiaPetroleo guiaPetroleo){
+    public Integer calcularTotalRendicion(GuiaPetroleo guiaPetroleo) {
         if (guiaPetroleo == null) return 0;
-        return (int)(guiaPetroleo.getLitros() * guiaPetroleo.getPreciolitro());
+        return (int) (guiaPetroleo.getLitros() * guiaPetroleo.getPreciolitro());
     }
 
-    public void guardarGuiaDePetrolio(){
+    public void guardarGuiaDePetrolio() {
         System.err.println(guiaPetroleo);
         guiaPetroleo.setOrdendecarga(ordenDeCarga);
         ordenDeCarga.getGuiasPetroleo().add(guiaPetroleo);
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
-        guiaPetroleo  = new GuiaPetroleo();
+        guiaPetroleo = new GuiaPetroleo();
     }
 
-    public void guardarProducto(){
+    public void guardarProducto() {
         producto.setOrdencarga(ordenDeCarga);
         producto.setTramo(tramoContratoSeleccionado);
         ordenDeCarga.getProductosList().add(producto);
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
-    public String irConsulta(){
+    public String irConsulta() {
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
         String fechaDesdeTmp = sdf.format(new Date());
         String fechaHastaTmp = sdf.format(new Date());
-        try{
+        try {
             fechaDesdeTmp = fechaDesdeTmp.concat("-01");
-            int anio= Integer.parseInt(fechaDesdeTmp.split("-")[0]);
-            int mes=Integer.parseInt(fechaDesdeTmp.split("-")[1]);
-            Calendar calendario =Calendar.getInstance();
-            calendario.set(anio,mes-1,1);
-            int ultimoDiaMes=calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
+            int anio = Integer.parseInt(fechaDesdeTmp.split("-")[0]);
+            int mes = Integer.parseInt(fechaDesdeTmp.split("-")[1]);
+            Calendar calendario = Calendar.getInstance();
+            calendario.set(anio, mes - 1, 1);
+            int ultimoDiaMes = calendario.getActualMaximum(Calendar.DAY_OF_MONTH);
             fechaHastaTmp = fechaHastaTmp.concat("-".concat(String.valueOf(ultimoDiaMes)));
             SimpleDateFormat sdfParse = new SimpleDateFormat("yyyy-MM-dd");
             fechaDesde = sdfParse.parse(fechaDesdeTmp);
             fechaHasta = sdfParse.parse(fechaHastaTmp);
             conductores = logicaPersonal.obtenerConductores();
-        }catch (NumberFormatException | ParseException ex){
+        } catch (NumberFormatException | ParseException ex) {
             LOG.info(ex.getMessage());
         }
         return "flowConsulta";
     }
-    
+
     public void guardarOrdenDeCarga() {
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }

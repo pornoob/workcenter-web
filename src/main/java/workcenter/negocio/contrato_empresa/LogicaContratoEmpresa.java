@@ -20,9 +20,14 @@ public class LogicaContratoEmpresa {
     @Autowired
     ContratoEmpresaDao contratoEmpresaDao;
 
-    @Transactional
+    @Transactional(readOnly = true)
     public List<ContratoEmpresa> obtenerContratoEmpresas(){
         return contratoEmpresaDao.obtenerContratoEmpresas();
+    }
+
+    @Transactional(readOnly = true)
+    public List<ContratoEmpresa> obtenerContratoEmpresasConEmpresa(){
+        return contratoEmpresaDao.obtenerContratoEmpresasConEmpresas();
     }
 }
 
