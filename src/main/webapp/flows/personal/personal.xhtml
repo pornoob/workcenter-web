@@ -40,7 +40,7 @@
                 </p:column>
 
                 <p:column filterBy="#{personal}" headerText="Empleador" filterFunction="#{mantenedorPersonal.filtroEmpleador}">
-                    <h:outputText value="#{mantenedorPersonal.obtenerEmpleador(personal).nombre}"/>
+                    <h:outputText rendered="#{not empty personal.contratos}" value="#{personal.contratos.first().empleador.nombre}"/>
                 </p:column>
 
                 <p:column filterBy="#{personal}" headerText="Faena" filterFunction="#{mantenedorPersonal.filtroFaena}">
