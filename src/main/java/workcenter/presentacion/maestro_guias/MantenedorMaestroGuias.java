@@ -124,6 +124,8 @@ public class MantenedorMaestroGuias implements Serializable {
     }
 
     public void irEliminarGuiaPetroleo(GuiaPetroleo gp) {
+        if (ordenDeCarga == null) return;
+        ordenDeCarga.getGuiasPetroleo().remove(gp);
         logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
