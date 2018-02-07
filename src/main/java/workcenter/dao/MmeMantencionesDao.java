@@ -82,11 +82,17 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public List<MmeMantencionSemirremolque> obtenerUltimasMantencionesSemiremolques() {
-        StringBuilder sql = new StringBuilder();
-        sql.append("select m.id, m.criterio_siguiente, m.equipo, max(m.fecha) as fecha, m.mecanico_responsable, m.ot_id ");
-        sql.append("from mme_mantenciones_semiremolque m ");
-        sql.append("group by m.equipo order by fecha desc ");
-        return em.createNativeQuery(sql.toString(), MmeMantencionSemirremolque.class)
+        StringBuilder jpql = new StringBuilder();
+
+        jpql.append("SELECT  ms FROM MmeMantencionSemirremolque ms ")
+                .append("INNER JOIN FETCH ms.semiRremolque e WHERE EXISTS (")
+                .append("    SELECT msMax.semiRremolque, max(msMax.fecha) FROM MmeMantencionSemirremolque msMax ")
+                .append("    WHERE msMax.semiRremolque = ms.semiRremolque")
+                .append("    GROUP BY msMax.semiRremolque ")
+                .append("    HAVING max(msMax.fecha) = ms.fecha")
+                .append(")");
+
+        return em.createQuery(jpql.toString(), MmeMantencionSemirremolque.class)
                 .getResultList();
     }
 
