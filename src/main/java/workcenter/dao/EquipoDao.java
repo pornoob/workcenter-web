@@ -216,6 +216,7 @@ public class EquipoDao extends MyDao{
         Query q = em.createNamedQuery("Equipo.findByTipo", Equipo.class);
         EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
         Subgraph<MmeMantencionTracto> mantGraph = graph.addSubgraph(Equipo_.mantenimientos.getName());
+        graph.addSubgraph(Equipo_.tipo.getName());
         mantGraph.addAttributeNodes(MmeMantencionTracto_.tipo);
 
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
