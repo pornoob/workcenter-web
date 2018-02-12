@@ -205,7 +205,7 @@ public class MantenedorOT implements Serializable {
     }
 
     public String prepareToAssign(OrdenTrabajo ot) {
-        this.ot = ot;
+        this.ot = logicaOt.findWithMantenimientos(ot.getId());
         Boolean isSelling = Boolean.FALSE;
         for (String tipoTrabajo : this.ot.getTipoTrabajo().split(",")) {
             if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(tipoTrabajo)) {

@@ -53,6 +53,7 @@ public class OtDao extends MyDao {
     public OrdenTrabajo findWithMantenimientos(Long id) {
         StringBuilder jpql = new StringBuilder();
         jpql.append("SELECT ot FROM OrdenTrabajo ot ")
+                .append("LEFT JOIN FETCH ot.solicitante ")
                 .append("LEFT JOIN FETCH ot.repuestos ")
                 .append("LEFT JOIN FETCH ot.asistentes ")
                 .append("LEFT JOIN FETCH ot.trazabilidad ")
@@ -60,6 +61,7 @@ public class OtDao extends MyDao {
                 .append("LEFT JOIN FETCH ot.mantencionMaquina mm ")
                 .append("LEFT JOIN FETCH ot.mantencionSemirremolque ms ")
                 .append("LEFT JOIN FETCH mt.tracto t ")
+                .append("LEFT JOIN FETCH mt.tipo ")
                 .append("LEFT JOIN FETCH mt.mecanicoResponsable ")
                 .append("LEFT JOIN FETCH mm.maquina m ")
                 .append("LEFT JOIN FETCH mm.mecanicoResponsable ")
