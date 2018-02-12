@@ -85,7 +85,9 @@ public class MmeMantencionesDao extends MyDao {
         StringBuilder jpql = new StringBuilder();
 
         jpql.append("SELECT  ms FROM MmeMantencionSemirremolque ms ")
-                .append("INNER JOIN FETCH ms.semiRremolque e WHERE EXISTS (")
+                .append("INNER JOIN FETCH ms.semiRremolque e ")
+                .append("INNER JOIN FETCH e.tipo ")
+                .append("WHERE EXISTS (")
                 .append("    SELECT msMax.semiRremolque, max(msMax.fecha) FROM MmeMantencionSemirremolque msMax ")
                 .append("    WHERE msMax.semiRremolque = ms.semiRremolque")
                 .append("    GROUP BY msMax.semiRremolque ")
@@ -107,7 +109,14 @@ public class MmeMantencionesDao extends MyDao {
     }
 
     public List<MmeMantencionSemirremolque> obtenerMantencionesSemiremolques(Equipo e) {
-        return em.createNamedQuery("MmeMantencionSemirremolque.findBySemiremolque").setParameter("semiremolque", e).getResultList();
+        Query q = em.createNamedQuery("MmeMantencionSemirremolque.findBySemiremolque");
+        EntityGraph<MmeMantencionSemirremolque> graph = em.createEntityGraph(MmeMantencionSemirremolque.class);
+        graph.addSubgraph(MmeMantencionSemirremolque_.mecanicoResponsable);
+        graph.addSubgraph(MmeMantencionSemirremolque_.semiRremolque);
+
+        q.setParameter("semiremolque", e);
+        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        return q.getResultList();
     }
 
     public Set<MmeMantencionMaquina> obtenerUltimasMantencionesMaquina(Integer mes, Integer anio) {
