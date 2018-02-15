@@ -213,16 +213,16 @@ public class EquipoDao extends MyDao{
     }
 
     public List<Equipo> obtenerTractosConMantenimientos() {
-        Query q = em.createNamedQuery("Equipo.findByTipo", Equipo.class);
-        EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
-        Subgraph<MmeMantencionTracto> mantGraph = graph.addSubgraph(Equipo_.mantenimientos.getName());
-        graph.addSubgraph(Equipo_.tipo.getName());
-        mantGraph.addAttributeNodes(MmeMantencionTracto_.tipo);
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT e FROM Equipo e ")
+                .append("LEFT JOIN FETCH e.tipo ")
+                .append("LEFT JOIN FETCH e.mantenimientos m ")
+                .append("LEFT JOIN FETCH m.tipo ")
+                .append("WHERE e.tipo = :tipo");
 
-        q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
+        Query q = em.createQuery(jpql.toString(), Equipo.class);
 
         q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto()));
-
         return q.getResultList();
     }
 
