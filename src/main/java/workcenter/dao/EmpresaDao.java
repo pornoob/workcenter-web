@@ -4,6 +4,7 @@ import org.springframework.stereotype.Repository;
 import workcenter.entidades.Empresa;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
@@ -36,6 +37,21 @@ public class EmpresaDao {
         try {
             return (Empresa) em.createNamedQuery("Empresa.findByRut").setParameter("rut", rut).getSingleResult();
         } catch (Exception e) {
+            return null;
+        }
+    }
+
+    public Empresa obtenerEmpresaConContactos(Integer id) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT e FROM Empresa e ")
+                .append("LEFT JOIN FETCH e.contactos ce ")
+                .append("LEFT JOIN FETCH ce.contacto ")
+                .append("WHERE e.id = :id ");
+        Query q = em.createQuery(jpql.toString(), Empresa.class);
+        q.setParameter("id", id);
+        try {
+            return (Empresa) q.getSingleResult();
+        } catch (NoResultException e) {
             return null;
         }
     }

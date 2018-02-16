@@ -34,4 +34,8 @@ public class LogicaEmpresas {
     public Empresa obtenerEmpresa(Long rut) {
         return empresaDao.obtenerEmpresa(rut);
     }
+
+    public Empresa obtenerEmpresaConContactos(Integer id) {
+        return empresaDao.obtenerEmpresaConContactos(id);
+    }
 }

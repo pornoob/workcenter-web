@@ -34,22 +34,15 @@ public class ContactoEmpresa implements Serializable {
     @NotNull
     @Column(name = "empresa")
     private int empresa;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "contacto")
-    private int contacto;
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "contacto", referencedColumnName = "id")
+    private Contacto contacto;
 
     public ContactoEmpresa() {
     }
 
     public ContactoEmpresa(Integer id) {
         this.id = id;
-    }
-
-    public ContactoEmpresa(Integer id, int empresa, int contacto) {
-        this.id = id;
-        this.empresa = empresa;
-        this.contacto = contacto;
     }
 
     public Integer getId() {
@@ -68,11 +61,11 @@ public class ContactoEmpresa implements Serializable {
         this.empresa = empresa;
     }
 
-    public int getContacto() {
+    public Contacto getContacto() {
         return contacto;
     }
 
-    public void setContacto(int contacto) {
+    public void setContacto(Contacto contacto) {
         this.contacto = contacto;
     }
 

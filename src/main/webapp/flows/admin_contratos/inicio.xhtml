@@ -1,0 +1,49 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:tvp="http://transportesventanas.cl"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Admin Contratos</h2>
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmAdmContratos">
+            <p:panel header="Listado Empresas">
+                <p:dataTable value="#{listaEmpresasView.empresas}" var="e"
+                             filterEvent="enter"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="#{constantes.cantidadFilasTablas}">
+                    <p:column headerText="ID" filterBy="#{e.id}" width="80">
+                        #{e.id}
+                    </p:column>
+                    <p:column headerText="Rut" filterBy="#{e.rut}" width="100">
+                        <h:outputText value="#{e.rut}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                        <h:outputText value="-#{e.digitoverificador}" rendered="#{e.digitoverificador ne null}"/>
+                    </p:column>
+                    <p:column headerText="Nombre" filterBy="#{e.nombre}">
+                        #{e.nombre}
+                    </p:column>
+                    <p:column headerText="Teléfono" filterBy="#{e.telefono}" width="150">
+                        #{e.telefono}
+                    </p:column>
+                    <p:column headerText="Giro" filterBy="#{e.giro}">
+                        #{e.giro}
+                    </p:column>
+                    <p:column headerText="Dirección" filterBy="#{e.direccion}">
+                        #{e.direccion}
+                    </p:column>
+                    <p:column headerText="Acciones" styleClass="text-center">
+                        <p:commandButton icon="fa fa-edit" action="#{adminContratosFlow.irEditarEmpresa(e)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

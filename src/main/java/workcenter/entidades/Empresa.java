@@ -4,6 +4,7 @@ import javax.persistence.*;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Set;
 
 /**
  *
@@ -47,6 +48,9 @@ public class Empresa implements Serializable {
     @Size(max = 400)
     @Column(name = "logo")
     private String logo;
+    @OneToMany
+    @JoinColumn(name = "empresa", referencedColumnName = "id")
+    private Set<ContactoEmpresa> contactos;
 
     public Empresa() {
     }
@@ -117,6 +121,14 @@ public class Empresa implements Serializable {
 
     public void setLogo(String logo) {
         this.logo = logo;
+    }
+
+    public Set<ContactoEmpresa> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(Set<ContactoEmpresa> contactos) {
+        this.contactos = contactos;
     }
 
     @Override

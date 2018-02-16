@@ -447,3 +447,8 @@ table.ui-panelgrid.no-border-grid {
 table.ui-panelgrid.no-border-grid td, table.no-border-grid tr {
     border:0;
 }
+
+/*** Estilos para formulario ***/
+form.tvp-responsive-form .ui-inputfield {
+    width: 100%;
+}

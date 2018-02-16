@@ -1,0 +1,67 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Admin Contratos - Editar Empresa</h2>
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
+            <p:panel header="Empresa">
+                <p:panelGrid columns="2" styleClass="no-border-grid">
+                    <p:outputLabel value="Nombre"/>
+                    <p:inputText value="#{adminContratosFlow.empresa.nombre}"/>
+
+                    <p:outputLabel value="Rut"/>
+                    <p:outputPanel styleClass="ui-g">
+                        <p:outputPanel styleClass="ui-g-2 ui-sm-4 ui-g-nopad">
+                            <p:inputText value="#{adminContratosFlow.empresa.rut}"/>
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="ui-g-1 ui-sm-2 ui-g-nopad">
+                        </p:outputPanel>
+                        <p:outputPanel styleClass="ui-g-1 ui-sm-2 ui-g-nopad">
+                            <p:inputText value="#{adminContratosFlow.empresa.digitoverificador}"/>
+                        </p:outputPanel>
+                    </p:outputPanel>
+
+                    <p:outputLabel value="Teléfono"/>
+                    <p:inputText value="#{adminContratosFlow.empresa.telefono}"/>
+
+                    <p:outputLabel value="Giro"/>
+                    <p:inputText value="#{adminContratosFlow.empresa.giro}"/>
+
+                    <p:outputLabel value="Dirección"/>
+                    <p:inputText value="#{adminContratosFlow.empresa.direccion}"/>
+                </p:panelGrid>
+
+                <h2>Contactos</h2>
+
+                <p:commandButton value="Agregar Contacto" icon="fa fa-plus"/>
+                <p:dataTable value="#{adminContratosFlow.empresa.contactos}" var="ce"
+                             emptyMessage="No se han agregado contactos">
+                    <p:column headerText="Cargo">
+                        #{ce.contacto.cargo}
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        #{ce.contacto.nombres} #{ce.contacto.apellidos}
+                    </p:column>
+                    <p:column headerText="Teléfono">
+                        #{ce.contacto.telefono}
+                    </p:column>
+                    <p:column headerText="Email">
+                        #{ce.contacto.mail}
+                    </p:column>
+
+                    <p:column headerText="Acciones" styleClass="text-center">
+                        <p:commandButton icon="fa fa-edit"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Volver" action="listar" icon="fa fa-arrow-left"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>
