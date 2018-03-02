@@ -55,4 +55,22 @@ public class EmpresaDao {
             return null;
         }
     }
+
+    public void save(Empresa empresa) {
+        em.merge(empresa);
+    }
+
+    public Empresa obtenerEmpresaConContratos(Integer id) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT e FROM Empresa e ")
+                .append("LEFT JOIN FETCH e.contratos ce ")
+                .append("WHERE e.id = :id ");
+        Query q = em.createQuery(jpql.toString(), Empresa.class);
+        q.setParameter("id", id);
+        try {
+            return (Empresa) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
 }

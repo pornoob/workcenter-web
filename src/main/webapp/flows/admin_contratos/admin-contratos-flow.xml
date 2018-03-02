@@ -10,6 +10,11 @@
 
     <view-state id="editar">
         <transition on="listar" to="inicio"/>
+        <transition on="editarContacto" to="editarContacto"/>
+    </view-state>
+
+    <view-state id="editarContacto">
+        <transition on="listar" to="editar"/>
     </view-state>
 
 </flow>

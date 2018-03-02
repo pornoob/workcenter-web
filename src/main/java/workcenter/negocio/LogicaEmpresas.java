@@ -35,7 +35,18 @@ public class LogicaEmpresas {
         return empresaDao.obtenerEmpresa(rut);
     }
 
+    @Transactional(readOnly = true)
     public Empresa obtenerEmpresaConContactos(Integer id) {
         return empresaDao.obtenerEmpresaConContactos(id);
+    }
+
+    @Transactional(readOnly = false)
+    public void save(Empresa empresa) {
+        empresaDao.save(empresa);
+    }
+
+    @Transactional(readOnly = true)
+    public Empresa obtenerEmpresaConContratos(Integer id) {
+        return empresaDao.obtenerEmpresaConContratos(id);
     }
 }

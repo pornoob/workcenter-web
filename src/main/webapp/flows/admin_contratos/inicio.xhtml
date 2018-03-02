@@ -10,6 +10,8 @@
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmAdmContratos">
             <p:panel header="Listado Empresas">
+                <p:commandButton value="Agregar Empresa" icon="fa fa-plus"
+                                 action="#{adminContratosFlow.irCrearEmpresa()}"/>
                 <p:dataTable value="#{listaEmpresasView.empresas}" var="e"
                              filterEvent="enter"
                              paginator="true"
@@ -40,7 +42,10 @@
                         #{e.direccion}
                     </p:column>
                     <p:column headerText="Acciones" styleClass="text-center">
-                        <p:commandButton icon="fa fa-edit" action="#{adminContratosFlow.irEditarEmpresa(e)}"/>
+                        <p:commandButton icon="fa fa-file-o" title="Editar Contratos"
+                                         action="#{adminContratosFlow.irEditarContratos(e)}"/>
+                        <p:commandButton icon="fa fa-edit" title="Editar Empresa"
+                                         action="#{adminContratosFlow.irEditarEmpresa(e)}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>

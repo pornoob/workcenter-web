@@ -5,7 +5,12 @@
                 xmlns:p="http://primefaces.org/ui"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
-        <h2>Admin Contratos - Editar Empresa</h2>
+        <ui:fragment rendered="#{adminContratosFlow.empresa.id ne null}">
+            <h2>Admin Contratos - Editar Empresa</h2>
+        </ui:fragment>
+        <ui:fragment rendered="#{adminContratosFlow.empresa.id eq null}">
+            <h2>Admin Contratos - Crear Empresa</h2>
+        </ui:fragment>
         <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
             <p:panel header="Empresa">
@@ -37,7 +42,8 @@
 
                 <h2>Contactos</h2>
 
-                <p:commandButton value="Agregar Contacto" icon="fa fa-plus"/>
+                <p:commandButton value="Agregar Contacto" icon="fa fa-plus"
+                                 action="#{adminContratosFlow.irCrearContacto()}"/>
                 <p:dataTable value="#{adminContratosFlow.empresa.contactos}" var="ce"
                              emptyMessage="No se han agregado contactos">
                     <p:column headerText="Cargo">
@@ -54,12 +60,14 @@
                     </p:column>
 
                     <p:column headerText="Acciones" styleClass="text-center">
-                        <p:commandButton icon="fa fa-edit"/>
+                        <p:commandButton icon="fa fa-edit" action="#{adminContratosFlow.irEditarContacto(ce)}"/>
                     </p:column>
                 </p:dataTable>
             </p:panel>
 
             <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Guardar" icon="fa fa-save"
+                                 action="#{adminContratosFlow.guardarEmpresa()}"/>
                 <p:commandButton value="Volver" action="listar" icon="fa fa-arrow-left"/>
             </p:outputPanel>
         </h:form>

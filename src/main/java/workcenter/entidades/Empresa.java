@@ -48,9 +48,10 @@ public class Empresa implements Serializable {
     @Size(max = 400)
     @Column(name = "logo")
     private String logo;
-    @OneToMany
-    @JoinColumn(name = "empresa", referencedColumnName = "id")
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "empresa")
     private Set<ContactoEmpresa> contactos;
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true, mappedBy = "empresa")
+    private Set<ContratoEmpresa> contratos;
 
     public Empresa() {
     }
@@ -129,6 +130,14 @@ public class Empresa implements Serializable {
 
     public void setContactos(Set<ContactoEmpresa> contactos) {
         this.contactos = contactos;
+    }
+
+    public Set<ContratoEmpresa> getContratos() {
+        return contratos;
+    }
+
+    public void setContratos(Set<ContratoEmpresa> contratos) {
+        this.contratos = contratos;
     }
 
     @Override
