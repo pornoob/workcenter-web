@@ -1,0 +1,104 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:tvp="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Admin Contratos - Editar Contrato [Empresa: #{adminContratosFlow.empresa.nombre}]</h2>
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
+            <p:panel header="Contrato">
+                <p:panelGrid columns="3" styleClass="no-border-grid">
+                    <p:outputLabel value="Número de contrato"/>:
+                    <p:inputText value="#{adminContratosFlow.contratoEmpresa.numerocontrato}"/>
+
+                    <p:outputLabel value="Nombre de contrato"/>:
+                    <p:inputText value="#{adminContratosFlow.contratoEmpresa.nombrecontrato}"/>
+
+                    <p:outputLabel value="Fecha Inicio"/>:
+                    <p:calendar locale="es" value="#{adminContratosFlow.contratoEmpresa.fechainicio}"/>
+
+                    <p:outputLabel value="Fecha Término"/>:
+                    <p:calendar locale="es" value="#{adminContratosFlow.contratoEmpresa.fechatermino}"/>
+
+                    <p:outputLabel value="¿Es Cliente?"/>:
+                    <p:selectBooleanCheckbox value="#{adminContratosFlow.contratoEmpresa.escliente}"/>
+
+                    <p:outputLabel value="¿Es Contrato Indefinido?"/>:
+                    <p:selectBooleanCheckbox value="#{adminContratosFlow.contratoEmpresa.indefinido}"/>
+                </p:panelGrid>
+
+                <h2>Tramos</h2>
+                <p:commandButton icon="fa fa-plus" value="Agregar Tramo"/>
+                <p:dataTable value="#{adminContratosFlow.contratoEmpresa.tramos}" var="t"
+                             emptyMessage="No se han registrado tramos"
+                             filterEvent="enter"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="#{constantes.cantidadFilasTablas}">
+                    <p:column headerText="Producto/Tramo">
+                        #{t.tipoProducto.etiqueta} - #{t.origen.nombre} / #{t.destino.nombre}
+                    </p:column>
+                    <p:column headerText="Vigencia">
+                        #{t.tarifas.first().fechavigencia}
+                    </p:column>
+                    <p:column headerText="Tarifa Cobro">
+                        <h:outputText value="#{t.tarifas.first().tarifacobro}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Tarifa Pago">
+                        <h:outputText value="#{t.tarifas.first().tarifapago}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+
+                    <p:column headerText="Acciones" width="90" styleClass="text-center">
+                        <ui:remove>
+                        <p:commandButton icon="fa fa-edit"
+                                         action="#{adminContratosFlow.irEditarTramo(t)}"/>
+                        </ui:remove>
+                    </p:column>
+                </p:dataTable>
+
+                <h2>Contactos</h2>
+                <p:commandButton icon="fa fa-plus" value="Agregar Contacto"/>
+                <p:dataTable value="#{adminContratosFlow.contratoEmpresa.contactos}" var="c"
+                             emptyMessage="No se han registrado contactos"
+                             filterEvent="enter"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="#{constantes.cantidadFilasTablas}">
+                    <p:column headerText="Cargo">
+                        #{c.cargo}
+                    </p:column>
+                    <p:column headerText="Nombre">
+                        #{c.apellidos} #{c.nombres}
+                    </p:column>
+                    <p:column headerText="Teléfono">
+                        #{c.telefono}
+                    </p:column>
+                    <p:column headerText="Email">
+                        #{c.mail}
+                    </p:column>
+
+                    <p:column headerText="Acciones" width="90" styleClass="text-center">
+                        <p:commandButton icon="fa fa-edit"
+                                         action="#{adminContratosFlow.irEditarContacto(c)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Volver" action="listar" icon="fa fa-arrow-left"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -3,9 +3,7 @@ package workcenter.presentacion.admin_contratos;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import workcenter.entidades.Contacto;
-import workcenter.entidades.ContactoEmpresa;
-import workcenter.entidades.Empresa;
+import workcenter.entidades.*;
 import workcenter.negocio.LogicaEmpresas;
 import workcenter.util.components.FacesUtil;
 
@@ -17,6 +15,10 @@ import java.util.HashSet;
 public class AdminContratosFlow implements Serializable {
     private Empresa empresa;
     private ContactoEmpresa contactoEmpresa;
+    private ContratoEmpresa contratoEmpresa;
+    private TramoContrato tramoContrato;
+
+    private Boolean contactViewfromContrato;
 
     @Autowired
     private LogicaEmpresas logicaEmpresas;
@@ -29,6 +31,7 @@ public class AdminContratosFlow implements Serializable {
 
     public String irEditarEmpresa(Empresa e) {
         empresa = logicaEmpresas.obtenerEmpresaConContactos(e.getId());
+        contactViewfromContrato = Boolean.FALSE;
         return "editarEmpresa";
     }
 
@@ -43,23 +46,43 @@ public class AdminContratosFlow implements Serializable {
         return "editarContacto";
     }
 
+    public String irEditarContacto(Contacto c) {
+        contactoEmpresa = c.getContactoEmpresa();
+        return "editarContacto";
+    }
+
     public String irEditarContacto(ContactoEmpresa ce) {
         contactoEmpresa = ce;
         return "editarContacto";
     }
 
+    public String irEditarContrato(ContratoEmpresa ce) {
+        contratoEmpresa = ce;
+        return "editarContrato";
+    }
+
+    public String irEditarTramo(TramoContrato tc) {
+        return "editarTramo";
+    }
+
     public String guardarContacto() {
+        contactoEmpresa.setEmpresa(empresa);
+        if (Boolean.TRUE.equals(contactViewfromContrato)
+                && !contratoEmpresa.getContactos().contains(contactoEmpresa.getContacto())) {
+            contratoEmpresa.getContactos().add(contactoEmpresa.getContacto());
+        }
         if (!empresa.getContactos().contains(contactoEmpresa)) {
             empresa.getContactos().add(contactoEmpresa);
         }
         logicaEmpresas.save(empresa);
         FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Datos Contacto guardados correctamente");
-        return "listar";
+        return "backContacto";
     }
 
-    public String irEditarContratos(Empresa e) {
-        empresa = logicaEmpresas.obtenerEmpresaConContratos(e.getId());;
-        return "editarContratos";
+    public String irListarContratos(Empresa e) {
+        empresa = logicaEmpresas.obtenerEmpresaConContratos(e.getId());
+        contactViewfromContrato = Boolean.TRUE;
+        return "listarContratos";
     }
 
     public Empresa getEmpresa() {
@@ -76,5 +99,29 @@ public class AdminContratosFlow implements Serializable {
 
     public void setContactoEmpresa(ContactoEmpresa contactoEmpresa) {
         this.contactoEmpresa = contactoEmpresa;
+    }
+
+    public ContratoEmpresa getContratoEmpresa() {
+        return contratoEmpresa;
+    }
+
+    public void setContratoEmpresa(ContratoEmpresa contratoEmpresa) {
+        this.contratoEmpresa = contratoEmpresa;
+    }
+
+    public Boolean getContactViewfromContrato() {
+        return contactViewfromContrato;
+    }
+
+    public void setContactViewfromContrato(Boolean contactViewfromContrato) {
+        this.contactViewfromContrato = contactViewfromContrato;
+    }
+
+    public TramoContrato getTramoContrato() {
+        return tramoContrato;
+    }
+
+    public void setTramoContrato(TramoContrato tramoContrato) {
+        this.tramoContrato = tramoContrato;
     }
 }

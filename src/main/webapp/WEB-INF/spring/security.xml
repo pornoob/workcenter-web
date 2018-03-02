@@ -36,6 +36,7 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                                 access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
 
         <security:intercept-url pattern="/m/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/admin_empresas" access="hasAnyRole('GESTOR_DE_EMPRESAS', 'ADMINISTRADOR_DE_CONTRATOS')"/>
         <security:intercept-url pattern="/m/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/equipos/mantenciones" access="hasRole('MODULO_MANTENCIONES')"/>

@@ -49,10 +49,12 @@ public class Vuelta implements Serializable {
     private Date fecha;
     @NotNull
     @Size(min = 1, max = 7)
-    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "tracto", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "tracto", referencedColumnName = "patente")
     private Equipo tracto;
     @NotNull
-    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "conductor", referencedColumnName = "rut")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "conductor", referencedColumnName = "rut")
     private Personal conductor;
     @Basic(optional = false)
     @NotNull

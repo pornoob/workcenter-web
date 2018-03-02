@@ -432,6 +432,10 @@ li[class^="ui-block"] > a[class*=" ui-icon-m"] {
     text-align: right;
 }
 
+.text-nowrap {
+    white-space: nowrap;
+}
+
 .fa-ot:before {
     content: 'ot';
     font-family: Arial;

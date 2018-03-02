@@ -64,6 +64,13 @@ public class EmpresaDao {
         StringBuilder jpql = new StringBuilder();
         jpql.append("SELECT DISTINCT e FROM Empresa e ")
                 .append("LEFT JOIN FETCH e.contratos ce ")
+                .append("LEFT JOIN FETCH ce.contactos c ")
+                .append("LEFT JOIN FETCH c.contactoEmpresa ")
+                .append("LEFT JOIN FETCH ce.tramos t ")
+                .append("LEFT JOIN FETCH t.origen ")
+                .append("LEFT JOIN FETCH t.destino ")
+                .append("LEFT JOIN FETCH t.tarifas ")
+                .append("LEFT JOIN FETCH t.tipoProducto ")
                 .append("WHERE e.id = :id ");
         Query q = em.createQuery(jpql.toString(), Empresa.class);
         q.setParameter("id", id);

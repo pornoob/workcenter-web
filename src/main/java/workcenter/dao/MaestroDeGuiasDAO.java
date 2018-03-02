@@ -7,6 +7,7 @@ import workcenter.entidades.Vuelta_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
@@ -26,9 +27,19 @@ public class MaestroDeGuiasDAO {
     private EntityManager em;
 
     public Vuelta obtenerOrdendeCarga(Integer ordenConsulta) {
-        return (Vuelta) em.createNamedQuery("Vuelta.findByOrdenDeCarga")
-                .setParameter("ordenDeCarga", ordenConsulta)
-                .getSingleResult();
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT v FROM Vuelta v ")
+                .append("INNER JOIN FETCH v.conductor ")
+                .append("INNER JOIN FETCH v.tracto t ")
+                .append("INNER JOIN FETCH t.duenio ")
+                .append("INNER JOIN FETCH v.batea ")
+                .append("INNER JOIN FETCH v.productosList pl ")
+                .append("INNER JOIN FETCH pl.tramo tp ")
+                .append("INNER JOIN FETCH tp.tipoProducto tp ")
+                .append("WHERE v.id = :ordenDeCarga");
+        Query q = em.createQuery(jpql.toString(), Vuelta.class);
+        q.setParameter("ordenDeCarga", ordenConsulta);
+        return (Vuelta) q.getSingleResult();
     }
 
     public void guardarOrdenDeCarga(Vuelta ordenDeCarga) {

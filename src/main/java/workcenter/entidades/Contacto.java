@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -28,7 +29,7 @@ import java.io.Serializable;
     @NamedQuery(name = "Contacto.findByTelefono", query = "SELECT c FROM Contacto c WHERE c.telefono = :telefono"),
     @NamedQuery(name = "Contacto.findByCelular", query = "SELECT c FROM Contacto c WHERE c.celular = :celular"),
     @NamedQuery(name = "Contacto.findByMail", query = "SELECT c FROM Contacto c WHERE c.mail = :mail")})
-public class Contacto implements Serializable {
+public class Contacto implements Serializable, Comparable<Contacto> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -57,6 +58,9 @@ public class Contacto implements Serializable {
     @Size(max = 100)
     @Column(name = "mail")
     private String mail;
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "contacto")
+    private ContactoEmpresa contactoEmpresa;
+
 
     public Contacto() {
     }
@@ -127,24 +131,36 @@ public class Contacto implements Serializable {
         this.mail = mail;
     }
 
+    public ContactoEmpresa getContactoEmpresa() {
+        return contactoEmpresa;
+    }
+
+    public void setContactoEmpresa(ContactoEmpresa contactoEmpresa) {
+        this.contactoEmpresa = contactoEmpresa;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
+        int hash = 9021378;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Contacto)) {
-            return false;
-        }
-        Contacto other = (Contacto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Contacto that = (Contacto) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
+    public int compareTo(Contacto contacto) {
+        int diff = this.getApellidos().compareTo(contacto.getApellidos());
+        diff = diff != 0 ? diff : this.getNombres().compareTo(contacto.getNombres());
+        diff = diff != 0 ? diff : this.getId().compareTo(contacto.getId());
+        return diff;
     }
 
     @Override

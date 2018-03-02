@@ -72,6 +72,14 @@ public class ContratoEmpresa implements Serializable {
     @SortNatural
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato",fetch = FetchType.LAZY)
     private SortedSet<TramoContrato> tramos;
+    @JoinTable(name = "contactoscontratos", joinColumns = {
+            @JoinColumn(name = "contrato", referencedColumnName = "id")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "contacto", referencedColumnName = "id")
+    })
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @SortNatural
+    private SortedSet<Contacto> contactos;
 
     public ContratoEmpresa() {
     }
@@ -165,6 +173,14 @@ public class ContratoEmpresa implements Serializable {
 
     public void setTramos(SortedSet<TramoContrato> tramosporcontratos) {
         this.tramos = tramosporcontratos;
+    }
+
+    public SortedSet<Contacto> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(SortedSet<Contacto> contactos) {
+        this.contactos = contactos;
     }
 
     @Override

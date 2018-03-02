@@ -6,11 +6,14 @@
 
 package workcenter.entidades;
 
+import org.hibernate.annotations.SortNatural;
+
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.List;
 import java.util.Objects;
+import java.util.SortedSet;
 
 /**
  *
@@ -40,8 +43,9 @@ public class TramoContrato implements Serializable, Comparable<TramoContrato> {
     @ManyToOne(fetch = FetchType.LAZY)    private OrigenDestino destino;
     @JoinColumn(name = "tipoproducto", referencedColumnName = "id")
     @ManyToOne(fetch = FetchType.LAZY)    private TipoProducto tipoProducto;
+    @SortNatural
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tramo", fetch = FetchType.LAZY,orphanRemoval = true)
-    private List<TarifaTramo> tarifas;
+    private SortedSet<TarifaTramo> tarifas;
 
     public TramoContrato() {
     }
@@ -66,11 +70,11 @@ public class TramoContrato implements Serializable, Comparable<TramoContrato> {
         this.tipoProducto = tipoProducto;
     }
 
-    public List<TarifaTramo> getTarifas() {
+    public SortedSet<TarifaTramo> getTarifas() {
         return tarifas;
     }
 
-    public void setTarifas(List<TarifaTramo> tarifasTramosList) {
+    public void setTarifas(SortedSet<TarifaTramo> tarifasTramosList) {
         this.tarifas = tarifasTramosList;
     }
 

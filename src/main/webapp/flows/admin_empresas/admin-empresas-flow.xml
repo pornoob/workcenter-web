@@ -6,6 +6,7 @@
 
     <view-state id="inicio">
         <transition on="editarEmpresa" to="editar"/>
+        <transition on="listarContratos" to="contratos"/>
     </view-state>
 
     <view-state id="editar">
@@ -14,7 +15,21 @@
     </view-state>
 
     <view-state id="editarContacto">
-        <transition on="listar" to="editar"/>
+        <transition on="backContacto" to="backContacto"/>
+    </view-state>
+    
+    <decision-state id="backContacto">
+        <if test="adminContratosFlow.contactViewfromContrato" then="editarContrato" else="editar"/>
+    </decision-state>
+
+    <view-state id="contratos">
+        <transition on="listar" to="inicio"/>
+        <transition on="editarContrato" to="editarContrato"/>
+    </view-state>
+
+    <view-state id="editarContrato">
+        <transition on="listar" to="contratos"/>
+        <transition on="editarContacto" to="editarContacto"/>
     </view-state>
 
 </flow>
