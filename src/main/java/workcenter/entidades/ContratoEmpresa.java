@@ -15,8 +15,8 @@ import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Objects;
-import java.util.Set;
 import java.util.SortedSet;
+import java.util.UUID;
 
 /**
  *
@@ -81,12 +81,13 @@ public class ContratoEmpresa implements Serializable {
     @SortNatural
     private SortedSet<Contacto> contactos;
 
+    @Transient
+    private String rowKey;
+
     public ContratoEmpresa() {
+        this.rowKey = "RK" + UUID.randomUUID();
     }
 
-    public ContratoEmpresa(Integer id) {
-        this.id = id;
-    }
     public Integer getId() {
         return id;
     }
@@ -195,8 +196,7 @@ public class ContratoEmpresa implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContratoEmpresa that = (ContratoEmpresa) o;
-        if (this.id == null || that.id == null) return false;
-        return Objects.equals(id, that.id);
+        return Objects.equals(rowKey, that.rowKey);
     }
 
     @Override

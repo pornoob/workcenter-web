@@ -11,7 +11,6 @@ import org.hibernate.annotations.SortNatural;
 import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
-import java.util.List;
 import java.util.Objects;
 import java.util.SortedSet;
 
@@ -46,6 +45,14 @@ public class TramoContrato implements Serializable, Comparable<TramoContrato> {
     @SortNatural
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "tramo", fetch = FetchType.LAZY,orphanRemoval = true)
     private SortedSet<TarifaTramo> tarifas;
+
+    // read only
+    @Column(name = "origen", insertable = false, updatable = false)
+    private Integer origenId;
+    @Column(name = "destino", insertable = false, updatable = false)
+    private Integer destinoId;
+    @Column(name = "tipoproducto", insertable = false, updatable = false)
+    private Integer productoId;
 
     public TramoContrato() {
     }
@@ -104,7 +111,11 @@ public class TramoContrato implements Serializable, Comparable<TramoContrato> {
 
     @Override
     public int compareTo(TramoContrato o) {
-        return 0;
+        int diff = origenId.compareTo(o.origenId);
+        diff = diff == 0 ? destinoId.compareTo(o.destinoId) : diff;
+        diff = diff == 0 ? productoId.compareTo(o.productoId) : diff;
+        diff = diff == 0 ? id.compareTo(o.id) : diff;
+        return diff;
     }
 
     @Override

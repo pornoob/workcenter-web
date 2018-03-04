@@ -34,7 +34,8 @@
             <p:outputPanel styleClass="text-center">
                 <p:commandButton value="Guardar" icon="fa fa-save"
                                  action="#{adminContratosFlow.guardarContacto()}"/>
-                <p:commandButton value="Volver" action="backContacto" icon="fa fa-arrow-left"/>
+                <p:commandButton value="Volver" action="backContacto"
+                                 immediate="true" icon="fa fa-arrow-left"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

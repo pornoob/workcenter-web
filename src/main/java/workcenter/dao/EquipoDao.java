@@ -8,7 +8,6 @@ import workcenter.util.components.Constantes;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Set;
 
 /**
  * Created by colivares on 19-08-14.

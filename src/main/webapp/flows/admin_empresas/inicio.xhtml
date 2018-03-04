@@ -7,12 +7,13 @@
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Admin Empresas</h2>
-        <p:messages autoUpdate="true" closable="true"/>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmAdmContratos">
             <p:panel header="Listado Empresas">
                 <p:commandButton value="Agregar Empresa" icon="fa fa-plus"
                                  action="#{adminContratosFlow.irCrearEmpresa()}"/>
                 <p:dataTable value="#{listaEmpresasView.empresas}" var="e"
+                             sortBy="#{e.nombre}"
                              filterEvent="enter"
                              paginator="true"
                              paginatorAlwaysVisible="true"
@@ -41,13 +42,18 @@
                     <p:column headerText="Dirección" filterBy="#{e.direccion}">
                         #{e.direccion}
                     </p:column>
-                    <p:column headerText="Acciones" styleClass="text-center">
+                    <p:column headerText="Acciones" styleClass="text-center" width="120">
                         <p:commandButton icon="fa fa-file-o" title="Editar Contratos"
                                          rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_CONTRATOS')}"
                                          action="#{adminContratosFlow.irListarContratos(e)}"/>
                         <p:commandButton icon="fa fa-edit" title="Editar Empresa"
                                          rendered="#{sesionCliente.tienePermiso('GESTOR_DE_EMPRESAS')}"
                                          action="#{adminContratosFlow.irEditarEmpresa(e)}"/>
+                        <p:commandButton icon="fa fa-remove" title="Eliminar Empresa"
+                                         rendered="#{sesionCliente.tienePermiso('GESTOR_DE_EMPRESAS')}"
+                                         action="#{listaEmpresasView.eliminarEmpresa(e)}">
+                            <p:confirm header="Workcenter" message="¿Está seguro que desea eliminar la empresa?"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
             </p:panel>

@@ -9,7 +9,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(SancionRetiradaEquipo.class)
 public abstract class SancionRetiradaEquipo_ {
 
-	public static volatile SingularAttribute<SancionRetiradaEquipo, Integer> perdonadopor;
+	public static volatile SingularAttribute<SancionRetiradaEquipo, Long> perdonadopor;
 	public static volatile SingularAttribute<SancionRetiradaEquipo, String> motivoretirosancion;
 	public static volatile SingularAttribute<SancionRetiradaEquipo, Date> fecha;
 	public static volatile SingularAttribute<SancionRetiradaEquipo, String> motivo;

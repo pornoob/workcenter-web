@@ -12,7 +12,7 @@ public abstract class HistorialDocumentosPersonal_ {
 	public static volatile SingularAttribute<HistorialDocumentosPersonal, Date> vencimiento;
 	public static volatile SingularAttribute<HistorialDocumentosPersonal, Integer> tipo;
 	public static volatile SingularAttribute<HistorialDocumentosPersonal, String> numero;
-	public static volatile SingularAttribute<HistorialDocumentosPersonal, Integer> personal;
+	public static volatile SingularAttribute<HistorialDocumentosPersonal, Long> personal;
 	public static volatile SingularAttribute<HistorialDocumentosPersonal, Integer> id;
 
 }

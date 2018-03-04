@@ -30,6 +30,16 @@
     <view-state id="editarContrato">
         <transition on="listar" to="contratos"/>
         <transition on="editarContacto" to="editarContacto"/>
+        <transition on="editarTramo" to="editarTramo"/>
+    </view-state>
+
+    <view-state id="editarTramo">
+        <transition on="listar" to="editarContrato"/>
+        <transition on="editarTarifa" to="editarTarifa"/>
+    </view-state>
+
+    <view-state id="editarTarifa">
+        <transition on="back" to="editarTramo"/>
     </view-state>
 
 </flow>

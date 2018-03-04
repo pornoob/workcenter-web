@@ -10,7 +10,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class CargasFamiliares_ {
 
 	public static volatile SingularAttribute<CargasFamiliares, String> apellidos;
-	public static volatile SingularAttribute<CargasFamiliares, Integer> rutCarga;
+	public static volatile SingularAttribute<CargasFamiliares, Long> rutCarga;
 	public static volatile SingularAttribute<CargasFamiliares, String> dvVerificadorCarga;
 	public static volatile SingularAttribute<CargasFamiliares, Personal> rutPersonal;
 	public static volatile SingularAttribute<CargasFamiliares, Date> nacimiento;

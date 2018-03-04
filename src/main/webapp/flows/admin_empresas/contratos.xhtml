@@ -6,7 +6,7 @@
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Admin Contratos - Listado Contratos [Empresa: #{adminContratosFlow.empresa.nombre}]</h2>
-        <p:messages autoUpdate="true" closable="true"/>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
             <p:panel header="Contratos">
                 <p:dataTable value="#{adminContratosFlow.empresa.contratos}" var="c"
@@ -27,14 +27,15 @@
                     </p:column>
                     <p:column headerText="Nombre">
                         #{c.nombrecontrato}
+
                     </p:column>
                     <p:column headerText="Inicio/Término" styleClass="text-nowrap text-center">
                         <h:outputText value="#{c.fechainicio}">
                             <f:convertDateTime pattern="yyyy-MM-dd"/>
                         </h:outputText>
-                        <ui:fragment rendered="#{c.fechainicio ne null}">
-                            <h:outputText value="/"/>
-                            <h:outputText value="#{c.fechainicio}">
+                        <ui:fragment rendered="#{c.fechatermino ne null}">
+                            <h:outputText value=" / "/>
+                            <h:outputText value="#{c.fechatermino}">
                                 <f:convertDateTime pattern="yyyy-MM-dd"/>
                             </h:outputText>
                         </ui:fragment>
@@ -47,14 +48,14 @@
                     <p:column headerText="Vigencia" width="90">
                         <ui:fragment rendered="#{not c.tramos.isEmpty()}">
                             <ui:fragment rendered="#{not c.tramos.first().tarifas.isEmpty()}">
-                                #{c.tramos.first().tarifas.first().fechavigencia}
+                                #{c.tramos.first().tarifas.first().fechaVigencia}
                             </ui:fragment>
                         </ui:fragment>
                     </p:column>
                     <p:column headerText="Tarifa Cobro" width="70">
                         <ui:fragment rendered="#{not c.tramos.isEmpty()}">
                             <ui:fragment rendered="#{not c.tramos.first().tarifas.isEmpty()}">
-                                <h:outputText value="#{c.tramos.first().tarifas.first().tarifacobro}">
+                                <h:outputText value="#{c.tramos.first().tarifas.first().tarifaCobro}">
                                     <tvp:convertNumber groupingUsed="true"/>
                                 </h:outputText>
                             </ui:fragment>
@@ -63,7 +64,7 @@
                     <p:column headerText="Tarifa Pago" width="70">
                         <ui:fragment rendered="#{not c.tramos.isEmpty()}">
                             <ui:fragment rendered="#{not c.tramos.first().tarifas.isEmpty()}">
-                                <h:outputText value="#{c.tramos.first().tarifas.first().tarifapago}">
+                                <h:outputText value="#{c.tramos.first().tarifas.first().tarifaPago}">
                                     <tvp:convertNumber groupingUsed="true"/>
                                 </h:outputText>
                             </ui:fragment>
@@ -72,6 +73,11 @@
                     <p:column headerText="Acciones" styleClass="text-center" width="90">
                         <p:commandButton icon="fa fa-edit"
                                          action="#{adminContratosFlow.irEditarContrato(c)}"/>
+                        <p:commandButton icon="fa fa-remove"
+                                         update=":frmAdmContratos"
+                                         action="#{adminContratosFlow.eliminarContrato(c)}">
+                            <p:confirm header="Workcenter" message="¿Está seguro que desea eliminar este contrato?"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
             </p:panel>

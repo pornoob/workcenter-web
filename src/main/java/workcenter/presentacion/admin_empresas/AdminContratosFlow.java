@@ -1,4 +1,4 @@
-package workcenter.presentacion.admin_contratos;
+package workcenter.presentacion.admin_empresas;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -17,6 +17,7 @@ public class AdminContratosFlow implements Serializable {
     private ContactoEmpresa contactoEmpresa;
     private ContratoEmpresa contratoEmpresa;
     private TramoContrato tramoContrato;
+    private TarifaTramo tarifaTramo;
 
     private Boolean contactViewfromContrato;
 
@@ -46,6 +47,16 @@ public class AdminContratosFlow implements Serializable {
         return "editarContacto";
     }
 
+    public String irCrearTarifa() {
+        tarifaTramo = new TarifaTramo();
+        return "editarTarifa";
+    }
+
+    public String irCrearTramo() {
+        tramoContrato = new TramoContrato();
+        return "editarContrato";
+    }
+
     public String irEditarContacto(Contacto c) {
         contactoEmpresa = c.getContactoEmpresa();
         return "editarContacto";
@@ -57,12 +68,51 @@ public class AdminContratosFlow implements Serializable {
     }
 
     public String irEditarContrato(ContratoEmpresa ce) {
-        contratoEmpresa = ce;
+        contratoEmpresa = logicaEmpresas.obtenerContratosParaEdicion(ce.getId());
         return "editarContrato";
     }
 
     public String irEditarTramo(TramoContrato tc) {
+        tramoContrato = logicaEmpresas.obtenerTramoParaEdicion(tc.getId());
         return "editarTramo";
+    }
+
+    public String irEditarTarifa(TarifaTramo tt) {
+        tarifaTramo = tt;
+        return "editarTarifa";
+    }
+
+    public void eliminarTramo(TramoContrato tc) {
+        contratoEmpresa.getTramos().remove(tc);
+        logicaEmpresas.saveContrato(contratoEmpresa);
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Tramo eliminado exitosamente");
+    }
+
+    public void eliminarTarifa(TarifaTramo tt) {
+        tramoContrato.getTarifas().remove(tt);
+        logicaEmpresas.saveTramo(tramoContrato);
+        tramoContrato = logicaEmpresas.obtenerTramoParaEdicion(tramoContrato.getId());
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Tarifa eliminada exitosamente");
+    }
+
+    public void guardarContrato() {
+        logicaEmpresas.saveContrato(contratoEmpresa);
+        empresa = logicaEmpresas.obtenerEmpresaConContratos(empresa.getId());
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Contrato editado exitosamente");
+    }
+
+    public void guardarTramo() {
+        tramoContrato.setContrato(contratoEmpresa);
+        logicaEmpresas.saveTramo(tramoContrato);
+        contratoEmpresa = logicaEmpresas.obtenerContratosParaEdicion(contactoEmpresa.getId());
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Contrato editado exitosamente");
+    }
+
+    public void guardarTarifa() {
+        tarifaTramo.setTramo(tramoContrato);
+        logicaEmpresas.saveTarifa(tarifaTramo);
+        tramoContrato = logicaEmpresas.obtenerTramoParaEdicion(tramoContrato.getId());
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Tarifa creada exitosamente");
     }
 
     public String guardarContacto() {
@@ -83,6 +133,13 @@ public class AdminContratosFlow implements Serializable {
         empresa = logicaEmpresas.obtenerEmpresaConContratos(e.getId());
         contactViewfromContrato = Boolean.TRUE;
         return "listarContratos";
+    }
+
+    public void eliminarContrato(ContratoEmpresa ce) {
+        empresa.getContratos().remove(ce);
+        logicaEmpresas.save(empresa);
+        empresa = logicaEmpresas.obtenerEmpresaConContratos(empresa.getId());
+        FacesUtil.mostrarMensajeInformativo("Operación Exitosa", "Contrato eliminado de manera exitosa");
     }
 
     public Empresa getEmpresa() {
@@ -123,5 +180,13 @@ public class AdminContratosFlow implements Serializable {
 
     public void setTramoContrato(TramoContrato tramoContrato) {
         this.tramoContrato = tramoContrato;
+    }
+
+    public TarifaTramo getTarifaTramo() {
+        return tarifaTramo;
+    }
+
+    public void setTarifaTramo(TarifaTramo tarifaTramo) {
+        this.tarifaTramo = tarifaTramo;
     }
 }

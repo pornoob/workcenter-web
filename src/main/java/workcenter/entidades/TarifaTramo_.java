@@ -10,11 +10,11 @@ import javax.persistence.metamodel.StaticMetamodel;
 public abstract class TarifaTramo_ {
 
 	public static volatile SingularAttribute<TarifaTramo, TipoTarifa> tipoTarifa;
+	public static volatile SingularAttribute<TarifaTramo, Date> fechaVigencia;
 	public static volatile SingularAttribute<TarifaTramo, TramoContrato> tramo;
-	public static volatile SingularAttribute<TarifaTramo, Date> fechavigencia;
-	public static volatile SingularAttribute<TarifaTramo, Integer> tarifacobro;
 	public static volatile SingularAttribute<TarifaTramo, Integer> id;
-	public static volatile SingularAttribute<TarifaTramo, Integer> tarifapago;
+	public static volatile SingularAttribute<TarifaTramo, Integer> tarifaCobro;
+	public static volatile SingularAttribute<TarifaTramo, Integer> tarifaPago;
 
 }
 

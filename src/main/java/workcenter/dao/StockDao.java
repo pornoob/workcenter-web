@@ -3,7 +3,10 @@ package workcenter.dao;
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.FactProducto;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 import java.util.logging.Logger;
 

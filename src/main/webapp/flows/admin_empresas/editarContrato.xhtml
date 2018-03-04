@@ -1,12 +1,11 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
                 xmlns:ui="http://java.sun.com/jsf/facelets"
                 xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:f="http://java.sun.com/jsf/core"
-                xmlns:p="http://primefaces.org/ui" xmlns:tvp="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:tvp="http://transportesventanas.cl"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
         <h2>Admin Contratos - Editar Contrato [Empresa: #{adminContratosFlow.empresa.nombre}]</h2>
-        <p:messages autoUpdate="true" closable="true"/>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
             <p:panel header="Contrato">
                 <p:panelGrid columns="3" styleClass="no-border-grid">
@@ -17,10 +16,12 @@
                     <p:inputText value="#{adminContratosFlow.contratoEmpresa.nombrecontrato}"/>
 
                     <p:outputLabel value="Fecha Inicio"/>:
-                    <p:calendar locale="es" value="#{adminContratosFlow.contratoEmpresa.fechainicio}"/>
+                    <p:calendar locale="es" pattern="yyyy-MM-dd"
+                                value="#{adminContratosFlow.contratoEmpresa.fechainicio}"/>
 
                     <p:outputLabel value="Fecha Término"/>:
-                    <p:calendar locale="es" value="#{adminContratosFlow.contratoEmpresa.fechatermino}"/>
+                    <p:calendar locale="es" pattern="yyyy-MM-dd"
+                                value="#{adminContratosFlow.contratoEmpresa.fechatermino}"/>
 
                     <p:outputLabel value="¿Es Cliente?"/>:
                     <p:selectBooleanCheckbox value="#{adminContratosFlow.contratoEmpresa.escliente}"/>
@@ -29,8 +30,9 @@
                     <p:selectBooleanCheckbox value="#{adminContratosFlow.contratoEmpresa.indefinido}"/>
                 </p:panelGrid>
 
-                <h2>Tramos</h2>
-                <p:commandButton icon="fa fa-plus" value="Agregar Tramo"/>
+                <h3>Tramos</h3>
+                <p:commandButton icon="fa fa-plus" value="Agregar Tramo"
+                                 action="#{adminContratosFlow.irCrearTramo()}"/>
                 <p:dataTable value="#{adminContratosFlow.contratoEmpresa.tramos}" var="t"
                              emptyMessage="No se han registrado tramos"
                              filterEvent="enter"
@@ -44,29 +46,33 @@
                         #{t.tipoProducto.etiqueta} - #{t.origen.nombre} / #{t.destino.nombre}
                     </p:column>
                     <p:column headerText="Vigencia">
-                        #{t.tarifas.first().fechavigencia}
+                        #{t.tarifas.first().fechaVigencia}
                     </p:column>
                     <p:column headerText="Tarifa Cobro">
-                        <h:outputText value="#{t.tarifas.first().tarifacobro}">
+                        <h:outputText value="#{t.tarifas.first().tarifaCobro}">
                             <tvp:convertNumber groupingUsed="true"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Tarifa Pago">
-                        <h:outputText value="#{t.tarifas.first().tarifapago}">
+                        <h:outputText value="#{t.tarifas.first().tarifaPago}">
                             <tvp:convertNumber groupingUsed="true"/>
                         </h:outputText>
                     </p:column>
 
                     <p:column headerText="Acciones" width="90" styleClass="text-center">
-                        <ui:remove>
                         <p:commandButton icon="fa fa-edit"
                                          action="#{adminContratosFlow.irEditarTramo(t)}"/>
-                        </ui:remove>
+                        <p:commandButton icon="fa fa-remove"
+                                         update=":frmAdmContratos"
+                                         action="#{adminContratosFlow.eliminarTramo(t)}">
+                            <p:confirm header="Workcenter" message="¿Está seguro que desea eliminar el tramo seleccionado?"/>
+                        </p:commandButton>
                     </p:column>
                 </p:dataTable>
 
-                <h2>Contactos</h2>
-                <p:commandButton icon="fa fa-plus" value="Agregar Contacto"/>
+                <h3>Contactos</h3>
+                <p:commandButton icon="fa fa-plus" value="Agregar Contacto"
+                                 action="#{adminContratosFlow.irCrearContacto()}"/>
                 <p:dataTable value="#{adminContratosFlow.contratoEmpresa.contactos}" var="c"
                              emptyMessage="No se han registrado contactos"
                              filterEvent="enter"
@@ -97,7 +103,10 @@
             </p:panel>
 
             <p:outputPanel styleClass="text-center">
-                <p:commandButton value="Volver" action="listar" icon="fa fa-arrow-left"/>
+                <p:commandButton value="Guardar" icon="fa fa-save"
+                                 action="#{adminContratosFlow.guardarContrato()}"/>
+                <p:commandButton value="Volver" action="listar"
+                                 immediate="true" icon="fa fa-arrow-left"/>
             </p:outputPanel>
         </h:form>
     </ui:define>

@@ -12,7 +12,7 @@ public abstract class Descuento_ {
 	public static volatile SingularAttribute<Descuento, String> descripcion;
 	public static volatile SingularAttribute<Descuento, Date> fecha;
 	public static volatile SingularAttribute<Descuento, Dinero> motivo;
-	public static volatile SingularAttribute<Descuento, Integer> persona;
+	public static volatile SingularAttribute<Descuento, Long> persona;
 	public static volatile SingularAttribute<Descuento, Integer> monto;
 	public static volatile SingularAttribute<Descuento, Integer> id;
 	public static volatile SingularAttribute<Descuento, String> nombre;
