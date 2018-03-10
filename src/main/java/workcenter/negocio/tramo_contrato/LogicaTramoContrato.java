@@ -20,7 +20,7 @@ public class LogicaTramoContrato {
     @Autowired
     TramoContratoDao tramoContratoDao;
 
-    public List<TramoContrato> obtenerTramoPorContrato(ContratoEmpresa contratoEmpresa){
-        return tramoContratoDao.obtenerTramoPorContrato(contratoEmpresa);
+    public List<TramoContrato> obtenerTramoPorContratoParaGuias(ContratoEmpresa contratoEmpresa){
+        return tramoContratoDao.obtenerTramoPorContratoParaGuias(contratoEmpresa);
     }
 }

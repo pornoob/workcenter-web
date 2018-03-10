@@ -10,29 +10,29 @@ import javax.persistence.*;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
- *
  * @author claudio
  */
 @Entity
 @Table(name = "productos")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
-    @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.id = :id"),
-    @NamedQuery(name = "Producto.findByOrdencarga", query = "SELECT p FROM Producto p WHERE p.ordencarga = :ordencarga"),
-    @NamedQuery(name = "Producto.findByNumeroguia", query = "SELECT p FROM Producto p WHERE p.numeroguia = :numeroguia"),
-    @NamedQuery(name = "Producto.findByFechacarga", query = "SELECT p FROM Producto p WHERE p.fechacarga = :fechacarga"),
-    @NamedQuery(name = "Producto.findByFechadescarga", query = "SELECT p FROM Producto p WHERE p.fechadescarga = :fechadescarga"),
-    @NamedQuery(name = "Producto.findByTonsalida", query = "SELECT p FROM Producto p WHERE p.tonsalida = :tonsalida"),
-    @NamedQuery(name = "Producto.findByTonentrega", query = "SELECT p FROM Producto p WHERE p.tonentrega = :tonentrega"),
-    @NamedQuery(name = "Producto.findByTramo", query = "SELECT p FROM Producto p WHERE p.tramo = :tramo")})
+        @NamedQuery(name = "Producto.findAll", query = "SELECT p FROM Producto p"),
+        @NamedQuery(name = "Producto.findById", query = "SELECT p FROM Producto p WHERE p.id = :id"),
+        @NamedQuery(name = "Producto.findByOrdencarga", query = "SELECT p FROM Producto p WHERE p.ordencarga = :ordencarga"),
+        @NamedQuery(name = "Producto.findByNumeroguia", query = "SELECT p FROM Producto p WHERE p.numeroguia = :numeroguia"),
+        @NamedQuery(name = "Producto.findByFechacarga", query = "SELECT p FROM Producto p WHERE p.fechacarga = :fechacarga"),
+        @NamedQuery(name = "Producto.findByFechadescarga", query = "SELECT p FROM Producto p WHERE p.fechadescarga = :fechadescarga"),
+        @NamedQuery(name = "Producto.findByTonsalida", query = "SELECT p FROM Producto p WHERE p.tonsalida = :tonsalida"),
+        @NamedQuery(name = "Producto.findByTonentrega", query = "SELECT p FROM Producto p WHERE p.tonentrega = :tonentrega"),
+        @NamedQuery(name = "Producto.findByTramo", query = "SELECT p FROM Producto p WHERE p.tramo = :tramo")})
 public class Producto implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @JoinColumn(name = "ordencarga", referencedColumnName = "ordendecarga")
@@ -52,9 +52,14 @@ public class Producto implements Serializable {
     @Column(name = "tonentrega")
     private Double tonentrega;
     @JoinColumn(name = "tramo", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)    private TramoContrato tramo;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private TramoContrato tramo;
+
+    @Transient
+    private String rowKey;
 
     public Producto() {
+        rowKey = "RK" + UUID.randomUUID();
     }
 
     public Producto(Integer id) {
@@ -127,27 +132,23 @@ public class Producto implements Serializable {
 
     @Override
     public int hashCode() {
-        int hash = 0;
+        int hash = 123125;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Producto)) {
-            return false;
-        }
-        Producto other = (Producto) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        Producto that = (Producto) o;
+        if (id == null || that.id == null) return Objects.equals(rowKey, that.rowKey);
+        return Objects.equals(id, that.getId());
     }
 
     @Override
     public String toString() {
         return "workcenter.entities.Producto[ id=" + id + " ]";
     }
-    
+
 }

@@ -196,7 +196,7 @@ public class ContratoEmpresa implements Serializable {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         ContratoEmpresa that = (ContratoEmpresa) o;
-        return Objects.equals(rowKey, that.rowKey);
+        return Objects.equals(id, that.getId()) || Objects.equals(rowKey, that.rowKey);
     }
 
     @Override
