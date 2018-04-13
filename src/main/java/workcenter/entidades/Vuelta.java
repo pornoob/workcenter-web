@@ -16,28 +16,27 @@ import java.util.List;
 import java.util.Objects;
 
 /**
- *
  * @author claudio
  */
 @Entity
 @Table(name = "vueltas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "Vuelta.findAll", query = "SELECT v FROM Vuelta v"),
-    @NamedQuery(name = "Vuelta.findByOrdenDeCarga", query = "SELECT v FROM Vuelta v WHERE v.id = :ordenDeCarga"),
-    @NamedQuery(name = "Vuelta.findByFecha", query = "SELECT v FROM Vuelta v WHERE v.fecha = :fecha"),
-    @NamedQuery(name = "Vuelta.findByTracto", query = "SELECT v FROM Vuelta v WHERE v.tracto = :tracto"),
-    @NamedQuery(name = "Vuelta.findByConductor", query = "SELECT v FROM Vuelta v WHERE v.conductor = :conductor"),
-    @NamedQuery(name = "Vuelta.findByIngresadoPor", query = "SELECT v FROM Vuelta v WHERE v.ingresadoPor = :ingresadoPor"),
-    @NamedQuery(name = "Vuelta.findByPeaje", query = "SELECT v FROM Vuelta v WHERE v.peaje = :peaje"),
-    @NamedQuery(name = "Vuelta.findByViatico", query = "SELECT v FROM Vuelta v WHERE v.viatico = :viatico"),
-    @NamedQuery(name = "Vuelta.findByOtrosGastos", query = "SELECT v FROM Vuelta v WHERE v.otrosGastos = :otrosGastos"),
-    @NamedQuery(name = "Vuelta.findByTotalCombustible", query = "SELECT v FROM Vuelta v WHERE v.totalCombustible = :totalCombustible"),
-    @NamedQuery(name = "Vuelta.findByTotalLitros", query = "SELECT v FROM Vuelta v WHERE v.totalLitros = :totalLitros"),
-    @NamedQuery(name = "Vuelta.findByKmInicial", query = "SELECT v FROM Vuelta v WHERE v.kmInicial = :kmInicial"),
-    @NamedQuery(name = "Vuelta.findByKmFinal", query = "SELECT v FROM Vuelta v WHERE v.kmFinal = :kmFinal"),
-    @NamedQuery(name = "Vuelta.findByDineroEntregado", query = "SELECT v FROM Vuelta v WHERE v.dineroEntregado = :dineroEntregado"),
-    @NamedQuery(name = "Vuelta.findByBatea", query = "SELECT v FROM Vuelta v WHERE v.batea = :batea")})
+        @NamedQuery(name = "Vuelta.findAll", query = "SELECT v FROM Vuelta v"),
+        @NamedQuery(name = "Vuelta.findByOrdenDeCarga", query = "SELECT v FROM Vuelta v WHERE v.id = :ordenDeCarga"),
+        @NamedQuery(name = "Vuelta.findByFecha", query = "SELECT v FROM Vuelta v WHERE v.fecha = :fecha"),
+        @NamedQuery(name = "Vuelta.findByTracto", query = "SELECT v FROM Vuelta v WHERE v.tracto = :tracto"),
+        @NamedQuery(name = "Vuelta.findByConductor", query = "SELECT v FROM Vuelta v WHERE v.conductor = :conductor"),
+        @NamedQuery(name = "Vuelta.findByIngresadoPor", query = "SELECT v FROM Vuelta v WHERE v.ingresadoPor = :ingresadoPor"),
+        @NamedQuery(name = "Vuelta.findByPeaje", query = "SELECT v FROM Vuelta v WHERE v.peaje = :peaje"),
+        @NamedQuery(name = "Vuelta.findByViatico", query = "SELECT v FROM Vuelta v WHERE v.viatico = :viatico"),
+        @NamedQuery(name = "Vuelta.findByOtrosGastos", query = "SELECT v FROM Vuelta v WHERE v.otrosGastos = :otrosGastos"),
+        @NamedQuery(name = "Vuelta.findByTotalCombustible", query = "SELECT v FROM Vuelta v WHERE v.totalCombustible = :totalCombustible"),
+        @NamedQuery(name = "Vuelta.findByTotalLitros", query = "SELECT v FROM Vuelta v WHERE v.totalLitros = :totalLitros"),
+        @NamedQuery(name = "Vuelta.findByKmInicial", query = "SELECT v FROM Vuelta v WHERE v.kmInicial = :kmInicial"),
+        @NamedQuery(name = "Vuelta.findByKmFinal", query = "SELECT v FROM Vuelta v WHERE v.kmFinal = :kmFinal"),
+        @NamedQuery(name = "Vuelta.findByDineroEntregado", query = "SELECT v FROM Vuelta v WHERE v.dineroEntregado = :dineroEntregado"),
+        @NamedQuery(name = "Vuelta.findByBatea", query = "SELECT v FROM Vuelta v WHERE v.batea = :batea")})
 public class Vuelta implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
@@ -77,12 +76,13 @@ public class Vuelta implements Serializable {
     @Column(name = "dineroentregado")
     private Integer dineroEntregado;
     @Size(max = 7)
-    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "batea", referencedColumnName = "patente")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "batea", referencedColumnName = "patente")
     private Equipo batea;
-    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
+    @OneToMany(mappedBy = "ordencarga", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<Producto> productosList;
-    
-    @OneToMany(mappedBy = "ordendecarga", fetch = FetchType.EAGER, cascade = { CascadeType.ALL }, orphanRemoval = true)
+
+    @OneToMany(mappedBy = "ordendecarga", fetch = FetchType.EAGER, cascade = {CascadeType.ALL}, orphanRemoval = true)
     private List<GuiaPetroleo> guiasPetroleo;
 
     public Vuelta() {
@@ -249,5 +249,5 @@ public class Vuelta implements Serializable {
     public String toString() {
         return "workcenter.entities.Vuelta[ ordendecarga=" + id + " ]";
     }
-    
+
 }
