@@ -1,0 +1,19 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:tvp="http://transportesventanas.cl"
+                template="/templates/default.xhtml"
+                >
+    <ui:define name="contenido">
+
+        <h2>Detalle Guías</h2>
+
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frmLiquidaciones">
+            <p:panel header="Gastos Totales Por Orden De Carga"></p:panel>
+            <p:panel header="Resumen Guías"></p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>
