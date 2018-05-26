@@ -12,8 +12,29 @@
 
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmLiquidaciones">
-            <p:panel header="Gastos Totales Por Orden De Carga"></p:panel>
-            <p:panel header="Resumen Guías"></p:panel>
+            <p:panel header="Gastos Totales Por Orden De Carga">
+                <p:dataTable>
+                    <p:column headerText="Fecha"></p:column>
+                    <p:column headerText="Nº Orden"></p:column>
+                    <p:column headerText="Viajes"></p:column>
+                    <p:column headerText="Peajes"></p:column>
+                    <p:column headerText="Viáticos"></p:column>
+                    <p:column headerText="Otros Gastos"></p:column>
+                    <p:column headerText="Total Gastos"></p:column>
+                    <p:column headerText="Dinero Entregado"></p:column>
+                    <p:column headerText="Saldo Viaje"></p:column>
+                </p:dataTable>
+            </p:panel>
+            <p:panel header="Resumen Guías">
+                <p:dataTable>
+                    <p:column headerText="Nº Guía"></p:column>
+                    <p:column headerText="Fecha Carga"></p:column>
+                    <p:column headerText="Material"></p:column>
+                    <p:column headerText="Origen"></p:column>
+                    <p:column headerText="Destino"></p:column>
+                    <p:column headerText="Toneladas"></p:column>
+                </p:dataTable>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>
