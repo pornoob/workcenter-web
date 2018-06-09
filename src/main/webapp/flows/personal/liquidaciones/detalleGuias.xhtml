@@ -13,16 +13,40 @@
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmLiquidaciones">
             <p:panel header="Gastos Totales Por Orden De Carga">
-                <p:dataTable>
-                    <p:column headerText="Fecha"></p:column>
-                    <p:column headerText="Nº Orden"></p:column>
-                    <p:column headerText="Viajes"></p:column>
-                    <p:column headerText="Peajes"></p:column>
-                    <p:column headerText="Viáticos"></p:column>
-                    <p:column headerText="Otros Gastos"></p:column>
-                    <p:column headerText="Total Gastos"></p:column>
-                    <p:column headerText="Dinero Entregado"></p:column>
-                    <p:column headerText="Saldo Viaje"></p:column>
+                <p:dataTable value="#{detalleGuiaView.vueltas}" var="vuelta"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="#{constantes.cantidadFilasTablas}">
+                    <p:column headerText="Fecha">
+                        <h:outputText value="#{vuelta.fecha}">
+                            <f:convertDateTime pattern="dd-MM-yyyy"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Nº Orden">
+                        #{vuelta.id}
+                    </p:column>
+                    <p:column headerText="Viajes">
+                        #{vuelta.productosList.size()}
+                    </p:column>
+                    <p:column headerText="Peajes">
+                        #{vuelta.peaje}
+                    </p:column>
+                    <p:column headerText="Viáticos">
+                        #{vuelta.viatico}
+                    </p:column>
+                    <p:column headerText="Otros Gastos">
+                        #{vuelta.otrosGastos}
+                    </p:column>
+                    <p:column headerText="Total Gastos">
+                    </p:column>
+                    <p:column headerText="Dinero Entregado">
+                        #{vuelta.dineroEntregado}
+                    </p:column>
+                    <p:column headerText="Saldo Viaje">
+                    </p:column>
                 </p:dataTable>
             </p:panel>
             <p:panel header="Resumen Guías">
