@@ -54,7 +54,7 @@ public class AdminContratosFlow implements Serializable {
 
     public String irCrearTramo() {
         tramoContrato = new TramoContrato();
-        return "editarContrato";
+        return "editarTramo";
     }
 
     public String irEditarContacto(Contacto c) {

@@ -6,7 +6,13 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Vuelta;
 import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
+import workcenter.util.others.DetalleGuiaPdf;
 
+import javax.faces.context.ExternalContext;
+import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -21,30 +27,40 @@ public class DetalleGuiaView implements Serializable {
     private List<Vuelta> vueltas;
 
     @Autowired
-    LogicaMaestroGuias logicaMaestroGuias;
+    private LogicaMaestroGuias logicaMaestroGuias;
 
-    public void init(Personal persona, Date fecha) throws ParseException {
+    @Autowired
+    private DetalleGuiaPdf detalleGuiaPdf;
+
+    public void init(Personal persona, Date fecha) throws ParseException, IOException {
         this.persona = persona;
 
         SimpleDateFormat sdf = new SimpleDateFormat("dd-MM-yyyy");
-        StringBuilder fechaInicio = new StringBuilder("01-");
-
         Calendar c = Calendar.getInstance();
         c.setTime(fecha);
-        if (c.get(Calendar.MONTH) < 10)
-            fechaInicio.append('0');
-        fechaInicio.append(c.get(Calendar.MONTH)+1)
-                .append('-')
-                .append(c.get(Calendar.YEAR));
 
-        this.vueltas = logicaMaestroGuias.buscar(sdf.parse(fechaInicio.toString()), fecha, this.persona);
-    }
+        StringBuilder fechaStr = new StringBuilder("01-");
 
-    public List<Vuelta> getVueltas() {
-        return vueltas;
-    }
+        if (c.get(Calendar.MONTH)+1 < 10)
+            fechaStr.append('0');
 
-    public void setVueltas(List<Vuelta> vueltas) {
-        this.vueltas = vueltas;
+        fechaStr.append(c.get(Calendar.MONTH)+1).append(c.get(Calendar.YEAR));
+
+        this.vueltas = logicaMaestroGuias.buscarConProductos(sdf.parse(fechaStr.toString()), fecha, persona);
+
+        FacesContext facesContext = FacesContext.getCurrentInstance();
+        ExternalContext externalContext = facesContext.getExternalContext();
+        HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();
+        response.reset();
+        response.setContentType("application/pdf");
+
+        response.setHeader("Content-disposition", "filename=" + "DetalleGuia-"
+                + fechaStr.substring(3) + "-" + persona.getRut() + ".pdf");
+
+        OutputStream output = response.getOutputStream();
+        output.write(detalleGuiaPdf.render(persona, vueltas));
+        output.close();
+
+        facesContext.responseComplete();
     }
 }

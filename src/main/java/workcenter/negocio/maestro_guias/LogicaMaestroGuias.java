@@ -33,6 +33,7 @@ public class LogicaMaestroGuias {
     public List<Vuelta> buscar(Date fechaDesde, Date fechaHasta, Personal conductor) {
         return maestroDeGuiasDAO.buscar(fechaDesde, fechaHasta, conductor);
     }
+
     @Transactional(readOnly = true)
     public List<Vuelta> buscarConProductos(Date fechaDesde, Date fechaHasta, Personal conductor) {
         return maestroDeGuiasDAO.buscarConProductos(fechaDesde, fechaHasta, conductor);

@@ -46,15 +46,18 @@
                         #{t.tipoProducto.etiqueta} - #{t.origen.nombre} / #{t.destino.nombre}
                     </p:column>
                     <p:column headerText="Vigencia">
-                        #{t.tarifas.first().fechaVigencia}
+                        <h:outputText rendered="#{not t.tarifas.isEmpty()}"
+                                      value="#{t.tarifas.first().fechaVigencia}"/>
                     </p:column>
                     <p:column headerText="Tarifa Cobro">
-                        <h:outputText value="#{t.tarifas.first().tarifaCobro}">
+                        <h:outputText rendered="#{not t.tarifas.isEmpty()}"
+                                      value="#{t.tarifas.first().tarifaCobro}">
                             <tvp:convertNumber groupingUsed="true"/>
                         </h:outputText>
                     </p:column>
                     <p:column headerText="Tarifa Pago">
-                        <h:outputText value="#{t.tarifas.first().tarifaPago}">
+                        <h:outputText rendered="#{not t.tarifas.isEmpty()}"
+                                      value="#{t.tarifas.first().tarifaPago}">
                             <tvp:convertNumber groupingUsed="true"/>
                         </h:outputText>
                     </p:column>

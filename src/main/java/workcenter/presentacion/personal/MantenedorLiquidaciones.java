@@ -12,7 +12,7 @@ import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.Mes;
-import workcenter.util.others.RenderPdf;
+import workcenter.util.others.LiquidacionPdf;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -77,7 +77,7 @@ public class MantenedorLiquidaciones implements Serializable {
     private LogicaVariables logicaVariables;
 
     @Autowired
-    private RenderPdf renderPdf;
+    private LiquidacionPdf liquidacionPdf;
 
     private Remuneracion liquidacion;
     private Remuneracion ingresoPrevio;
@@ -309,7 +309,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
-        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+        liquidacionPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
 
         String retorno = null;
         if (Boolean.TRUE.equals(sobreescribir)) {
@@ -440,7 +440,7 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
-        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+        liquidacionPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();

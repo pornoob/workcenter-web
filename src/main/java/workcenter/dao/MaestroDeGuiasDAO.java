@@ -47,29 +47,6 @@ public class MaestroDeGuiasDAO {
         }
     }
 
-    public List<Vuelta> buscar(Date fechaDesde, Date fechaHasta, Personal conductor) {
-        CriteriaBuilder cb = em.getCriteriaBuilder();
-        CriteriaQuery cq = cb.createQuery(Vuelta.class);
-        Root<Vuelta> vuelta = cq.from(Vuelta.class);
-
-        List<Predicate> condiciones = new ArrayList<>();
-
-        if (fechaDesde != null) {
-            condiciones.add(cb.greaterThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaDesde));
-        }
-        if (fechaHasta != null) {
-            condiciones.add(cb.lessThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaHasta));
-        }
-        if (conductor != null) {
-            condiciones.add(cb.equal(vuelta.get(Vuelta_.conductor), conductor));
-        }
-        if (!condiciones.isEmpty()) {
-            cq.where(condiciones.toArray(new Predicate[condiciones.size()]));
-        }
-        TypedQuery<Vuelta> query = em.createQuery(cq);
-        return query.getResultList();
-    }
-
     public List<Vuelta> buscarConProductos(Date fechaDesde, Date fechaHasta, Personal conductor) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery(Vuelta.class);
@@ -91,6 +68,29 @@ public class MaestroDeGuiasDAO {
             cq.where(condiciones.toArray(new Predicate[condiciones.size()]));
         }
         cq.distinct(true);
+        TypedQuery<Vuelta> query = em.createQuery(cq);
+        return query.getResultList();
+    }
+
+    public List<Vuelta> buscar(Date fechaDesde, Date fechaHasta, Personal conductor) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery(Vuelta.class);
+        Root<Vuelta> vuelta = cq.from(Vuelta.class);
+
+        List<Predicate> condiciones = new ArrayList<>();
+
+        if (fechaDesde != null) {
+            condiciones.add(cb.greaterThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaDesde));
+        }
+        if (fechaHasta != null) {
+            condiciones.add(cb.lessThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaHasta));
+        }
+        if (conductor != null) {
+            condiciones.add(cb.equal(vuelta.get(Vuelta_.conductor), conductor));
+        }
+        if (!condiciones.isEmpty()) {
+            cq.where(condiciones.toArray(new Predicate[condiciones.size()]));
+        }
         TypedQuery<Vuelta> query = em.createQuery(cq);
         return query.getResultList();
     }
