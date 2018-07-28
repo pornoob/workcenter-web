@@ -106,6 +106,7 @@ public class MantenedorRemuneraciones implements Serializable {
         } else {
             remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleadorSeleccionado, mesSeleccionado, anioIngresado);
         }
+        logicaLibroRemuneraciones.obtenerContratos(remuneraciones, mesSeleccionado, anioIngresado);
         bonosTablaRemuneracion = new BonosTablaRemuneracion(remuneraciones);
         descuentosTablaRemuneracion = new DescuentosTablaRemuneracion(remuneraciones);
     }

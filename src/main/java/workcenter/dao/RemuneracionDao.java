@@ -1,6 +1,7 @@
 package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
+import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Empresa;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
@@ -9,6 +10,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.persistence.Query;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author colivares
@@ -79,5 +81,9 @@ public class RemuneracionDao {
 
     public List<Remuneracion> obtenerTodas() {
         return em.createNamedQuery("Remuneracion.findAll").getResultList();
+    }
+
+    public Map<Integer, ContratoPersonal> obtenerContratos(List<Remuneracion> remuneraciones, Integer mesSeleccionado, Integer anioIngresado) {
+        return null;
     }
 }
