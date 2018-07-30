@@ -100,13 +100,22 @@ public class MantenedorRemuneraciones implements Serializable {
         return null;
     }
 
+    public int getViatico(Remuneracion r) {
+        int viatico = 0;
+        if (r.getViatico() != null) viatico+=r.getViatico();
+        if (r.getContrato() != null) {
+            viatico+=r.getContrato().getColacion();
+            viatico+=r.getContrato().getLocomocion();
+        }
+        return viatico;
+    }
+
     public void filtrarRemuneraciones() {
         if (criterio == constantes.getFiltroConductor()) {
             remuneraciones = logicaLibroRemuneraciones.obtenerSegunConductor(conductorSeleccionado, mesSeleccionado, anioIngresado);
         } else {
             remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleadorSeleccionado, mesSeleccionado, anioIngresado);
         }
-        logicaLibroRemuneraciones.obtenerContratos(remuneraciones, mesSeleccionado, anioIngresado);
         bonosTablaRemuneracion = new BonosTablaRemuneracion(remuneraciones);
         descuentosTablaRemuneracion = new DescuentosTablaRemuneracion(remuneraciones);
     }

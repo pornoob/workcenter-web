@@ -235,7 +235,7 @@
 </p:column>
 <p:column>
     <f:facet name="header">Viáticos</f:facet>
-    <h:outputText value="#{r.viatico}">
+    <h:outputText value="#{mantenedorRemuneraciones.getViatico(r)}">
         <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">

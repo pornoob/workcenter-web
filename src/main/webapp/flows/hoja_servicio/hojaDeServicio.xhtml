@@ -1,8 +1,9 @@
 <ui:composition xmlns="http://www.w3.org/1999/xhtml"
-                xmlns:ui="http://java.sun.com/jsf/facelets"
-                xmlns:h="http://java.sun.com/jsf/html"
-                xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
-                template="/templates/default.xhtml">
+				xmlns:ui="http://java.sun.com/jsf/facelets"
+				xmlns:h="http://java.sun.com/jsf/html"
+				xmlns:p="http://primefaces.org/ui" xmlns:f="http://java.sun.com/jsf/core"
+				xmlns:tvp="http://java.sun.com/jsf/core"
+				template="/templates/default.xhtml">
 
     <ui:define name="contenido">
         <h3>Hoja de Servicios</h3>
@@ -22,11 +23,15 @@
                                 </div>
                     </f:facet>
 	                <p:column headerText="Desde">
-                        <h:outputText value="#{c.desde}" />
+                        <h:outputText value="#{c.desde}">
+							<tvp:convertNumber groupingUsed="true"/>
+						</h:outputText>
                     </p:column>
  
 				    <p:column headerText="Hasta">
-				        <h:outputText value="#{c.hasta}" />
+				        <h:outputText value="#{c.hasta}">
+							<tvp:convertNumber groupingUsed="true"/>
+						</h:outputText>
 				    </p:column>
 				 
 				    <p:column headerText="Fecha">
@@ -34,7 +39,9 @@
 				    </p:column>
  
 				    <p:column headerText="Monto">
-				        <h:outputText value="#{c.monto}" />
+				        <h:outputText value="#{c.monto}">
+							<tvp:convertNumber groupingUsed="true"/>
+						</h:outputText>
 				    </p:column>
 				    
 				    <p:column headerText="Acción">

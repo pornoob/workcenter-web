@@ -237,6 +237,9 @@ public class Remuneracion implements Serializable {
     @JoinColumn(name = "idPersonal", referencedColumnName = "rut")
     @ManyToOne(optional = false, cascade = {CascadeType.MERGE, CascadeType.REFRESH})
     private Personal idPersonal;
+    @JoinColumn(name = "contrato_id",  referencedColumnName = "numero")
+    @ManyToOne(optional = false)
+    private ContratoPersonal contrato;
     @Basic
     @Column(name = "generica")
     private Boolean esGenerica;
@@ -809,6 +812,14 @@ public class Remuneracion implements Serializable {
 
     public void setOtrosBeneficiosNoImp(Integer otrosBeneficiosNoImp) {
         this.otrosBeneficiosNoImp = otrosBeneficiosNoImp;
+    }
+
+    public ContratoPersonal getContrato() {
+        return contrato;
+    }
+
+    public void setContrato(ContratoPersonal contrato) {
+        this.contrato = contrato;
     }
 
     @Override

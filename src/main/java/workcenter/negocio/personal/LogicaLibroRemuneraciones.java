@@ -58,9 +58,4 @@ public class LogicaLibroRemuneraciones {
         }
         return false;
     }
-
-    @Transactional(readOnly = true)
-    public Map<Integer,ContratoPersonal> obtenerContratos(List<Remuneracion> remuneraciones, Integer mesSeleccionado, Integer anioIngresado) {
-        return remuneracionDao.obtenerContratos(remuneraciones, mesSeleccionado, anioIngresado);
-    }
 }

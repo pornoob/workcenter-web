@@ -162,6 +162,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString() + "-" + cp.getEmpleador().getDigitoverificador());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
+        liquidacion.setContrato(cp);
 
         if (liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()) {
             double sBase = (double) ((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
