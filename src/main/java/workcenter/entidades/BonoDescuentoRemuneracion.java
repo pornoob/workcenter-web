@@ -123,7 +123,7 @@ public class BonoDescuentoRemuneracion implements Serializable {
 
     @Override
     public String toString() {
-        return "workcenter.entities.BonoDescuentoRemuneracion[ idBonoDescuento=" + idBonoDescuento + " ]";
+        return "workcenter.entities.BonoDescuentoTablaRemuneracion[ idBonoDescuento=" + idBonoDescuento + " ]";
     }
     
 }

@@ -80,7 +80,7 @@
         <p:column width="60" rendered="#{mantenedorRemuneraciones.bonosTablaRemuneracion.cantidadColumnas eq 0}"
                   rowspan="3" headerText="Bonos"/>
         <p:column width="100" rowspan="3" headerText="Total remuneraciones imponible"/>
-        <p:column width="140" colspan="2" headerText="Otros beneficios no imponibles"/>
+        <p:column width="330" colspan="#{2 + mantenedorRemuneraciones.bonosNoImponiblesTablaRemuneracion.cantidadColumnas}" headerText="Otros beneficios no imponibles"/>
         <p:column width="80" rowspan="3" headerText="Total haberes"/>
         <p:column width="#{(8 + mantenedorRemuneraciones.descuentosTablaRemuneracion.cantidadColumnas)*90}"
                   colspan="#{8 + mantenedorRemuneraciones.descuentosTablaRemuneracion.cantidadColumnas}"
@@ -100,6 +100,10 @@
         <p:column rowspan="2" headerText="Total viajes/Hrs. extra"/>
 
         <c:forEach items="#{mantenedorRemuneraciones.bonosTablaRemuneracion.tipos}" var="btr">
+            <p:column rowspan="2" headerText="#{btr}"/>
+        </c:forEach>
+
+        <c:forEach items="#{mantenedorRemuneraciones.bonosNoImponiblesTablaRemuneracion.tipos}" var="btr">
             <p:column rowspan="2" headerText="#{btr}"/>
         </c:forEach>
 
@@ -209,14 +213,14 @@
         </h:outputText>
     </f:facet>
 </p:column>
-<c:forEach items="#{mantenedorRemuneraciones.obtenerBonos(r)}" var="b">
+<c:forEach items="#{mantenedorRemuneraciones.obtenerBonosImponibles(r)}" var="b">
     <p:column>
         <f:facet name="header"><h:outputText value="#{b.descripcion}"/></f:facet>
         <h:outputText value="#{b.monto}">
             <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
         </h:outputText>
         <f:facet name="footer">
-            <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalBono(b.descripcion)}">
+            <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalBonoImponible(b.descripcion)}">
                 <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
             </h:outputText>
         </f:facet>
@@ -233,9 +237,22 @@
         </h:outputText>
     </f:facet>
 </p:column>
+<c:forEach items="#{mantenedorRemuneraciones.obtenerBonosNoImponibles(r)}" var="b">
+    <p:column>
+        <f:facet name="header"><h:outputText value="#{b.descripcion}"/></f:facet>
+        <h:outputText value="#{b.monto}">
+            <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+        </h:outputText>
+        <f:facet name="footer">
+            <h:outputText value="#{mantenedorRemuneraciones.obtenerTotalBonoNoImponible(b.descripcion)}">
+                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+            </h:outputText>
+        </f:facet>
+    </p:column>
+</c:forEach>
 <p:column>
     <f:facet name="header">Viáticos</f:facet>
-    <h:outputText value="#{mantenedorRemuneraciones.getViatico(r)}">
+    <h:outputText value="#{r.viatico}">
         <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
     </h:outputText>
     <f:facet name="footer">

@@ -7,17 +7,21 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author colivares
- */
-public class BonosTablaRemuneracion implements Serializable {
+public class BonoDescuentoTablaRemuneracion implements Serializable {
+    private Boolean esDescuento;
+    private Boolean esImponible;
     private List<String> tipos;
 
-    public BonosTablaRemuneracion(List<Remuneracion> remuneraciones) {
+    public BonoDescuentoTablaRemuneracion(Boolean esDescuento, Boolean esImponible) {
+        this.esDescuento = esDescuento;
+        this.esImponible = esImponible;
+    }
+
+    public void init(List<Remuneracion> remuneraciones) {
         tipos = new ArrayList<>();
         for (Remuneracion r : remuneraciones) {
             for (BonoDescuentoRemuneracion b : r.getRemuneracionBonoDescuentoList()) {
-                if (Boolean.TRUE.equals(b.getImponible()) && Boolean.TRUE.equals(b.getBono()) && !tipos.contains(b.getDescripcion())) {
+                if (esImponible.equals(b.getImponible()) && !esDescuento.equals(b.getBono()) && !tipos.contains(b.getDescripcion())) {
                     tipos.add(b.getDescripcion());
                 }
             }
@@ -27,7 +31,7 @@ public class BonosTablaRemuneracion implements Serializable {
             System.out.println(s);
         }
     }
-    
+
     public int getCantidadColumnas() {
         return this.tipos.size();
     }
@@ -39,5 +43,4 @@ public class BonosTablaRemuneracion implements Serializable {
     public void setTipos(List<String> tipos) {
         this.tipos = tipos;
     }
-    
 }
