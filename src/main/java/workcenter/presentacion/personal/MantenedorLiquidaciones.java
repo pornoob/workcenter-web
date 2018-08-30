@@ -374,6 +374,7 @@ public class MantenedorLiquidaciones implements Serializable {
             if (vCF.getDesde() == null) {
                 if (liquidacion.getTotalImponible() <= vCF.getHasta()) {
                     montoCarga = vCF.getMonto();
+                    break;
                 }
             } else if (vCF.getHasta() == null) {
                 if (liquidacion.getTotalImponible() >= vCF.getDesde()) {

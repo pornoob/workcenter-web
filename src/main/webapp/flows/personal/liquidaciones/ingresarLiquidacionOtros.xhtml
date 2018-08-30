@@ -133,7 +133,9 @@
                             <p:spinner value="#{mantenedorLiquidaciones.cantidadCargasFamiliares}" min="0">
                                 <p:ajax update="frmLiquidaciones" process="@this" listener="#{mantenedorLiquidaciones.cargasFamiliares()}"/>
                             </p:spinner>
-                            <h:outputText value="#{mantenedorLiquidaciones.asignacionFamiliarMonto}" style="padding-left: 10px" />
+                            <h:outputText value="#{mantenedorLiquidaciones.asignacionFamiliarMonto}" style="padding-left: 10px">
+                                <tvp:convertNumber groupingUsed="true"/>
+                            </h:outputText>
                         </p:outputPanel>
                     </td>
 
