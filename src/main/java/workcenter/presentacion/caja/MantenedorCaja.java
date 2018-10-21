@@ -108,12 +108,11 @@ public class MantenedorCaja implements Serializable {
                 return;
             }
             dinero.setOrdendecarga(v);
+        } else {
+            dinero.setOrdendecarga(null);
         }
         if (logicaCaja.guardarEntradas(dinero)) {
-            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", dinero.getId().toString()
-                    + " " + dinero.getConcepto().getEtiqueta()
-                    + " " + dinero.getReceptor().getNombreCompleto()
-                    + " " + dinero.getMonto());
+            FacesUtil.mostrarMensajeInformativo(dinero.getConcepto().getEtiqueta(), "Datos guardados correctamente");
             //imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
         } else {
             FacesUtil.mostrarMensajeError("Ingreso Fallido",
@@ -136,6 +135,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irIngresoCaja(int tipoConcepto) {
+        lstPersonal = logicaPersonal.findAll();
         asignarConcepto(tipoConcepto);
         inicializarDinero();
         return "flowIngresaCaja";
@@ -181,6 +181,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irConsultaCaja() {
+        lstPersonal = logicaPersonal.findAll();
         saldo = 0;
         // Obtener Mes actual
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
