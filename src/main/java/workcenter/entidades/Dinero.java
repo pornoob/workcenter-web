@@ -31,7 +31,7 @@ import java.util.Objects;
     @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga"),
     @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "
     		+ "WHERE MONTH(d.fechaactivo) = :mes and YEAR(d.fechaactivo) = :anio and d.receptor = :receptor"),
-    @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d "
+    @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d INNER JOIN FETCH d.receptor "
             + "INNER JOIN FETCH d.lstDescuentos des WHERE des.monto > 0 ORDER BY d.id DESC")})
 public class Dinero implements Serializable {
     private static final long serialVersionUID = 1L;

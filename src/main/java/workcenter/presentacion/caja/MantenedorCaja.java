@@ -234,6 +234,7 @@ public class MantenedorCaja implements Serializable {
 
     public String irSueldoCaja() {
         inicializarDinero();
+        lstPersonal = logicaPersonal.findAll();
         lstConpcetosFiltrada = new ArrayList<Concepto>();
         for (Concepto c : lstConceptos) {
             if (c.getId() == constantes.getANTICIPO()

@@ -37,6 +37,9 @@
                 <p:column headerText="Id">
                     <h:outputText value="#{p.producto.productoId}"/>
                 </p:column>
+                <p:column headerText="Código">
+                    <h:outputText value="#{p.producto.codigo}"/>
+                </p:column>
                 <p:column headerText="Nombre" filterBy="#{p.producto.nombre}" filterMatchMode="contains">
                     <h:outputText value="#{p.producto.nombre}"/>
                 </p:column>

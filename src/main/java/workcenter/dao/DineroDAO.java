@@ -44,6 +44,7 @@ public class DineroDAO {
         Root<Dinero> dinero = cqDinero.from(Dinero.class);
         dinero.fetch(Dinero_.receptor);
         dinero.fetch(Dinero_.concepto);
+        dinero.fetch(Dinero_.ordendecarga, JoinType.LEFT);
 
         List<Predicate> predicates = new ArrayList<Predicate>();
         if (personal != null) {
@@ -75,6 +76,7 @@ public class DineroDAO {
         sb.append("select ");
         sb.append("d.* ");
         sb.append("from dineros d ");
+        sb.append("inner join personal r on r.rut = d.receptor ");
         sb.append("left join prestamoscancelados p on d.id = p.prestamo ");
         sb.append("where ");
         sb.append("concepto =:concepto and p.id is null");

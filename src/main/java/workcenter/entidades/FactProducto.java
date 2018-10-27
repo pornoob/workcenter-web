@@ -30,6 +30,9 @@ public class FactProducto implements Serializable {
     @Column(name = "producto_id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long productoId;
+    @Basic(optional = false)
+    @Column(name = "codigo")
+    private Long codigo;
     @Size(max = 200)
     @Column(name = "nombre")
     private String nombre;
@@ -55,6 +58,14 @@ public class FactProducto implements Serializable {
 
     public void setNombre(String nombre) {
         this.nombre = nombre;
+    }
+
+    public Long getCodigo() {
+        return codigo;
+    }
+
+    public void setCodigo(Long codigo) {
+        this.codigo = codigo;
     }
     
     @Override
@@ -86,5 +97,4 @@ public class FactProducto implements Serializable {
     public String toString() {
         return "workcenter.entidades.FactProducto[ productoId=" + productoId + " ]";
     }
-    
 }
