@@ -59,7 +59,7 @@ public class MantenedorCaja implements Serializable {
     private Dinero dinero;
     private Concepto concepto;
     private Date fechaCuotaInicial;
-    
+
     @Autowired
     private LogicaCaja logicaCaja;
     @Autowired
@@ -310,7 +310,7 @@ public class MantenedorCaja implements Serializable {
     public String irPrestamosTemporales(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         limpiarVariablesPestamos();
-        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(new Concepto(constantes.getPRESTAMO_TEMPORAL()));
         return "flowDevolucionPrestamos";
     }
 
@@ -380,7 +380,7 @@ public class MantenedorCaja implements Serializable {
                 System.err.println(dinero.getComentario());
                 break;
         }
-        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(new Concepto(constantes.getPRESTAMO_TEMPORAL()));
     }
 
     public void limpiarVariablesPestamos() {

@@ -29,9 +29,13 @@ public class MantenedorBodegaTaller implements Serializable {
 
     public void init() {
         productos = logicaStock.findProductosBodega();
-        producto = new FactProducto();
     }
-    
+
+    public String prepareAddProducto () {
+        producto = new FactProducto();
+        return "add";
+    }
+
     public void addProducto() {
         FactProducto previous = logicaStock.findByName(producto.getNombre());
         if (previous != null) {

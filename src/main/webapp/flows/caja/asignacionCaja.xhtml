@@ -16,14 +16,8 @@
                                      converter="entityConverter">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                       itemLabel="#{p.nombreCompleto}"
+                                       itemLabel="(#{p.rut}) #{p.nombreCompleto}"
                                        itemValue="#{p}"/>
-                        <p:column>
-                            <h:outputText value="#{t.rut}"/>
-                        </p:column>
-                        <p:column>
-                            <h:outputText value="#{t.nombreCompleto}"/>
-                        </p:column>
                         <p:ajax event="change" listener="#{mantenedorCaja.inicializarDinero}"/>
                     </p:selectOneMenu>
                     <p:outputLabel value="MONTO: (*)"/>

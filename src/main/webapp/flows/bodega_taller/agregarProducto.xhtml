@@ -1,0 +1,25 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <p:messages autoUpdate="true" showDetail="true" closable="true"/>
+        <h:form id="formProducto">
+
+            <h2>Agregar Producto Bodega Taller</h2>
+
+            <h:panelGrid columns="2">
+                <h:outputText value="Código"/>
+                <p:inputText value="#{mantenedorBodegaTaller.producto.codigo}"/>
+
+                <h:outputText value="Nombre:"/>
+                <p:inputText value="#{mantenedorBodegaTaller.producto.nombre}"/>
+            </h:panelGrid>
+            <p:commandButton value="Guardar" action="#{mantenedorBodegaTaller.addProducto()}"
+                             icon="fa fa-save"/>
+            <p:commandButton value="Volver" action="back" icon="fa fa-arrow-left"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

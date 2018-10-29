@@ -14,17 +14,11 @@
 
             <p:outputPanel styleClass="ui-g">
                 <p:outputPanel styleClass="ui-g-6">
-                    <p:outputLabel value="Nombre producto" styleClass="ui-g-6"/>
-                    <p:outputPanel styleClass="ui-g-6">
-                        <p:inputText value="#{mantenedorBodegaTaller.producto.nombre}"
-                                     required="true" requiredMessage="Debes indicar el nombre producto"/>
-                    </p:outputPanel>
                 </p:outputPanel>
                 <p:outputPanel styleClass="ui-g-6 text-right">
                     <p:commandButton icon="fa fa-plus"
                                      value="Agregar producto"
-                                     action="#{mantenedorBodegaTaller.addProducto()}"
-                                     update="formBodegaTaller"/>
+                                     action="#{mantenedorBodegaTaller.prepareAddProducto()}"/>
                     <p:commandButton icon="fa fa-arrow-left"
                                      rendered="#{isChildFlow}"
                                      action="back"

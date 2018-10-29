@@ -37,7 +37,7 @@ public class LogicaCaja {
     }
 
     @Transactional(readOnly = true)
-    public List<Dinero> obtenerDinerosNoCancelados(int conceptoParam){
+    public List<Dinero> obtenerDinerosNoCancelados(Concepto conceptoParam){
         return dineroDao.obtenerDinerosNoCancelados(conceptoParam);
     }
 }

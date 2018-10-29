@@ -1,13 +1,11 @@
 package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.Concepto;
-import workcenter.entidades.Dinero;
-import workcenter.entidades.Dinero_;
-import workcenter.entidades.Personal;
+import workcenter.entidades.*;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.*;
 import java.util.ArrayList;
@@ -70,17 +68,15 @@ public class DineroDAO {
         return tq.getResultList();
     }
 
-    public List<Dinero> obtenerDinerosNoCancelados(int conceptoParam) {
-
-        StringBuilder sb = new StringBuilder();
-        sb.append("select ");
-        sb.append("d.* ");
-        sb.append("from dineros d ");
-        sb.append("inner join personal r on r.rut = d.receptor ");
-        sb.append("left join prestamoscancelados p on d.id = p.prestamo ");
-        sb.append("where ");
-        sb.append("concepto =:concepto and p.id is null");
-
-        return em.createNativeQuery(sb.toString(), Dinero.class).setParameter("concepto", conceptoParam).getResultList();
+    public List<Dinero> obtenerDinerosNoCancelados(Concepto conceptoParam) {
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT d FROM Dinero d ")
+                .append("INNER JOIN FETCH d.receptor ")
+                .append("WHERE NOT EXISTS ")
+                .append("(SELECT p FROM PrestamoCancelado p WHERE p.prestamo = d.id) ")
+                .append("AND d.concepto = :concepto ");
+        Query query = em.createQuery(jpql.toString(), Dinero.class);
+        query.setParameter("concepto", conceptoParam);
+        return query.getResultList();
     }
 }
