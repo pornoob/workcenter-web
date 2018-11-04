@@ -72,7 +72,6 @@ public class OtDao extends MyDao {
                 .append("LEFT JOIN FETCH ot.asistentes ")
                 .append("LEFT JOIN FETCH ot.trazabilidad ")
                 .append("LEFT JOIN FETCH ot.mantencionTracto mt ")
-                .append("LEFT JOIN FETCH mt.tipo ")
                 .append("LEFT JOIN FETCH ot.mantencionMaquina mm ")
                 .append("LEFT JOIN FETCH ot.mantencionSemirremolque ms ")
                 .append("LEFT JOIN FETCH mt.tracto t ")

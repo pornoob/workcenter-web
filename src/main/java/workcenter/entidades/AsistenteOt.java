@@ -36,12 +36,6 @@ public class AsistenteOt implements Serializable  {
         this.rowKey = "RK" + UUID.randomUUID();
     }
 
-    public AsistenteOt(OrdenTrabajo ot, Personal personal) {
-        this.ot = ot;
-        this.personal = personal;
-        this.rowKey = "RK" + UUID.randomUUID();
-    }
-
     public Long getOtId() {
         return otId;
     }

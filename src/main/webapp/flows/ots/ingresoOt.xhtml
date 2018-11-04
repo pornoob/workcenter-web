@@ -145,12 +145,21 @@
                     <p:column headerText="OT">
                         <p:outputLabel value="#{ot.id}"/>
                     </p:column>
-                    <p:column headerText="Fecha Ingreso"/>
-                    <p:column headerText="Fecha Finalizacion"/>
+                    <p:column headerText="Fecha Ingreso">
+                        <p:outputLabel value="#{ot.trazabilidad.last().fecha}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
+                    <p:column headerText="Fecha Finalizacion">
+                        <p:outputLabel value="#{ot.trazabilidad.first().fecha}">
+                            <f:convertDateTime pattern="yyyy-MM-dd HH:mm:ss"/>
+                        </p:outputLabel>
+                    </p:column>
                     <p:column headerText="Solicitante">
                         <p:outputLabel value="#{ot.solicitante.nombre}"/>
                     </p:column>
                     <p:column headerText="Tipo Trabajo">
+                        <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
                     </p:column>
                 </p:dataTable>
             </p:outputPanel>
