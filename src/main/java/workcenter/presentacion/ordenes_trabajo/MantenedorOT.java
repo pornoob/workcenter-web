@@ -72,6 +72,7 @@ public class MantenedorOT implements Serializable {
         mantencionMaquina = null;
         mantencionSemirremolque = null;
         mantencionTracto = null;
+        currentDate = new Date();
     }
 
     private String listTipoTrabajoToString() {
@@ -126,10 +127,10 @@ public class MantenedorOT implements Serializable {
                 tractos = logicaEquipos.obtenerTractos();
                 mantencionTracto = new MmeMantencionTracto();
                 mantencionSemirremolque = new MmeMantencionSemirremolque();
-                
+
                 mantencionTracto.setOt(ot);
                 mantencionSemirremolque.setOt(ot);
-                
+
                 ot.setMantencionTracto(mantencionTracto);
                 ot.setMantencionSemirremolque(mantencionSemirremolque);
             } else {
@@ -174,14 +175,14 @@ public class MantenedorOT implements Serializable {
                 int cicloActual = (logicaMantenciones.obtenerUltimoCiclo(mantencionTracto.getTracto()) + 2) % ciclos;
                 mantencionTracto.setCiclo(cicloActual);
                 mantencionSemirremolque.setCriterioSiguiente(30);
-                
+
                 mantencionSemirremolque.setOt(ot);
                 mantencionTracto.setOt(ot);
-                
+
                 ot.setMantencionSemirremolque(mantencionSemirremolque);
                 ot.setMantencionTracto(mantencionTracto);
                 ot.setMantencionMaquina(null);
-                
+
                 logicaOt.create(ot, mantencionTracto, mantencionSemirremolque);
             } else if (mantencionTracto.getTracto() != null) {
                 int ciclos = (tiposMantencion.get(1).getCotaKilometraje() / tiposMantencion.get(0).getCotaKilometraje()) - 1;
@@ -229,7 +230,7 @@ public class MantenedorOT implements Serializable {
         state.setEjecutor(ejecutor);
         state.setFecha(currentDate);
         state.setEstadoId(constantes.getESTADO_OT_ASIGNADA());
-        
+
         Boolean isSelling = Boolean.FALSE;
         for (String tipoTrabajo : this.ot.getTipoTrabajo().split(",")) {
             if (constantes.getPAUTA_VENTA_REPUESTO() == Integer.valueOf(tipoTrabajo)) {
@@ -248,7 +249,7 @@ public class MantenedorOT implements Serializable {
                 ot.getMantencionMaquina().setMecanicoResponsable(ejecutor);
             }
         }
-        
+
         this.ot.getTrazabilidad().add(state);
         logicaOt.updateOt(this.ot);
         OrdenTrabajo selected = this.ot;

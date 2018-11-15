@@ -28,10 +28,10 @@
             </p:outputPanel>
             <p:dataTable value="#{mantenedorBodegaTaller.productos}" var="p"
                          filterEvent="enter" id="tblBodega">
-                <p:column headerText="Id">
+                <p:column headerText="Id" filterBy="#{p.producto.productoId}" filterMatchMode="contains" rendered="false">
                     <h:outputText value="#{p.producto.productoId}"/>
                 </p:column>
-                <p:column headerText="Código">
+                <p:column headerText="Código" filterBy="#{p.producto.codigo}" filterMatchMode="contains">
                     <h:outputText value="#{p.producto.codigo}"/>
                 </p:column>
                 <p:column headerText="Nombre" filterBy="#{p.producto.nombre}" filterMatchMode="contains">

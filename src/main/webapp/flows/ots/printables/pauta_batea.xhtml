@@ -44,7 +44,11 @@
                 <td>
                     <b>Patente:</b>
                 </td>
-                <td></td>
+                <td>
+                    <ui:fragment rendered="#{mantenedorOT.ot.mantencionSemirremolque ne null and mantenedorOT.ot.mantencionSemirremolque.semiRremolque ne null}">
+                        #{mantenedorOT.ot.mantencionSemirremolque.semiRremolque.patente}
+                    </ui:fragment>
+                </td>
                 <td>
                     <b>Kilometraje:</b>
                 </td>
