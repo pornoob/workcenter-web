@@ -161,7 +161,11 @@ public class MantenedorPersonal implements Serializable {
         if (valor == null) {
             return false;
         }
-        Empresa e = ((Personal) valor).getContratos().first().getEmpleador();
+        SortedSet<ContratoPersonal> contratos = ((Personal) valor).getContratos();
+        Empresa e = null;
+        if (contratos != null && !contratos.isEmpty())
+            e = contratos.first().getEmpleador();
+
         if (e == null) {
             return false;
         }
