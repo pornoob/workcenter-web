@@ -4,8 +4,8 @@
        xmlns:context="http://www.springframework.org/schema/context"
        xmlns:p="http://www.springframework.org/schema/p"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd    
-http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd   
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
 http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd">
 
     <security:http pattern="/templates/**" security="none"/>
@@ -36,20 +36,23 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
                                 access="hasRole('ADMINISTRADOR_DE_REGISTROS')"/>
 
         <security:intercept-url pattern="/m/equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
+        <security:intercept-url pattern="/m/admin_empresas" access="hasAnyRole('GESTOR_DE_EMPRESAS', 'ADMINISTRADOR_DE_CONTRATOS')"/>
         <security:intercept-url pattern="/m/documentos_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/polizas_equipos" access="hasRole('MANTENEDOR_TRACTOS')"/>
         <security:intercept-url pattern="/m/equipos/mantenciones" access="hasRole('MODULO_MANTENCIONES')"/>
         <security:intercept-url pattern="/m/taller" access="hasAnyRole('MODULO_MANTENCIONES', 'BODEGA_TALLER', 'GESTION_OT')"/>
         <security:intercept-url pattern="/m/ots" access="hasAnyRole('GESTION_OT')"/>
-        
+        <security:intercept-url pattern="/m/bodega_taller" access="hasAnyRole('GESTION_OT')"/>
+        <security:intercept-url pattern="/m/facturas" access="hasAnyRole('GESTION_OT')"/>
+
         <security:intercept-url pattern="/m/ficha_viajes" access="hasRole('MODULO_ALARMAS_GPS')"/>
         <security:intercept-url pattern="/m/hoja_servicio" access="hasRole('MODULO_MANTENCIONES')"/>
         <security:intercept-url pattern="/m/carga_masiva" access="hasRole('MODULO_CARGA_MASIVA')"/>
-		
+
         <security:intercept-url pattern="/m/consulta_doc_equipo" access="hasRole('CONSULTA_DOCUMENTOS')"/>
         <security:intercept-url pattern="/m/caja" access="hasRole('CAJA')"/>
         <security:intercept-url pattern="/m/maestro_guias" access="hasRole('MAESTRO_DE_GUIAS')"/>
-		 
+
         <security:logout invalidate-session="true"
                          delete-cookies="jsessionid"
                          logout-success-url="/inicio.jsf"

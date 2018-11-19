@@ -19,7 +19,7 @@ import workcenter.negocio.personal.LogicaLiquidaciones;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
-import workcenter.util.others.RenderPdf;
+import workcenter.util.others.LiquidacionPdf;
 
 import javax.annotation.PostConstruct;
 import java.io.IOException;
@@ -71,7 +71,7 @@ public class ImportadorDatosLiquidaciones {
     @Autowired
     private Constantes constantes;
     @Autowired
-    private RenderPdf renderPdf;
+    private LiquidacionPdf liquidacionPdf;
     @Autowired
     private LogicaPersonal logicaPersonal;
     @Autowired
@@ -300,7 +300,7 @@ public class ImportadorDatosLiquidaciones {
                 remuneracion.setLiqPagar((int) row.getCell(numColum++).getNumericCellValue());
 
                 remuneracion.setFechaIngreso(new Date());
-                renderPdf.generarLiquidacion(remuneracion, cargas);
+                liquidacionPdf.generarLiquidacion(remuneracion, cargas);
                 remuneraciones.add(remuneracion);
 
             }

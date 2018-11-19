@@ -6,11 +6,13 @@ import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import workcenter.dao.RemuneracionDao;
+import workcenter.entidades.ContratoPersonal;
 import workcenter.entidades.Empresa;
 import workcenter.entidades.Personal;
 import workcenter.entidades.Remuneracion;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author colivares

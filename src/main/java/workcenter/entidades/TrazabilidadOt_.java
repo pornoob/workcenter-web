@@ -14,7 +14,7 @@ public abstract class TrazabilidadOt_ {
 	public static volatile SingularAttribute<TrazabilidadOt, Integer> estadoId;
 	public static volatile SingularAttribute<TrazabilidadOt, Integer> id;
 	public static volatile SingularAttribute<TrazabilidadOt, Personal> ejecutor;
-	public static volatile SingularAttribute<TrazabilidadOt, Integer> autor;
+	public static volatile SingularAttribute<TrazabilidadOt, Long> autor;
 
 }
 

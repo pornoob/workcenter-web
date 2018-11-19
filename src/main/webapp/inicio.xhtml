@@ -24,9 +24,10 @@
                         <h:outputLabel value="Mantenedor de Equipos"/>
                     </h:commandLink>
 
-                    <h:commandLink rendered="false" action="#{facesUtil.redirigir('/m/empresas')}"
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('GESTOR_DE_EMPRESAS')}"
+                                   action="#{facesUtil.redirigir('/m/admin_empresas')}"
                                    class="menuWorkcenter">
-                        <h:graphicImage value="/img/icons/64/m_empresas.png"/>
+                        <i class="fa fa-industry fa-5x"></i>
                         <h:outputLabel value="Mantenedor de Empresas"/>
                     </h:commandLink>
 

@@ -2,6 +2,8 @@ package workcenter.entidades;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -33,12 +35,6 @@ public class RepuestoOt implements Serializable {
     private String rowKey;
 
     public RepuestoOt() {
-        this.rowKey = "RK" + UUID.randomUUID();
-    }
-
-    public RepuestoOt(OrdenTrabajo ot, FactProducto producto) {
-        this.ot = ot;
-        this.producto = producto;
         this.rowKey = "RK" + UUID.randomUUID();
     }
 
@@ -112,6 +108,7 @@ public class RepuestoOt implements Serializable {
             return false;
         }
         final RepuestoOt other = (RepuestoOt) obj;
+
         if (!Objects.equals(this.ot, other.ot)) {
             return false;
         }

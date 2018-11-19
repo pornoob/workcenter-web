@@ -12,11 +12,11 @@
                 <h:panelGrid columns="2" cellpadding="10">
                     <p:outputLabel value="ASIGNADO A: (*)"/>
                     <p:selectOneMenu filterMatchMode="contains" filter="true"
-                                     value="#{mantenedorCaja.dinero.receptor}"
+                                     value="#{mantenedorCaja.dinero.receptor}" var="t"
                                      converter="entityConverter">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                       itemLabel="#{p.nombreCompleto}"
+                                       itemLabel="(#{p.rut}) #{p.nombreCompleto}"
                                        itemValue="#{p}"/>
                         <p:ajax event="change" listener="#{mantenedorCaja.inicializarDinero}"/>
                     </p:selectOneMenu>

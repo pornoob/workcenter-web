@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<flow xmlns="http://www.springframework.org/schema/webflow"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.4.xsd"
+      start-state="inicio">
+
+    <view-state id="inicio">
+        <transition on="editarEmpresa" to="editar"/>
+        <transition on="listarContratos" to="contratos"/>
+    </view-state>
+
+    <view-state id="editar">
+        <transition on="listar" to="inicio"/>
+        <transition on="editarContacto" to="editarContacto"/>
+    </view-state>
+
+    <view-state id="editarContacto">
+        <transition on="backContacto" to="backContacto"/>
+    </view-state>
+    
+    <decision-state id="backContacto">
+        <if test="adminContratosFlow.contactViewfromContrato" then="editarContrato" else="editar"/>
+    </decision-state>
+
+    <view-state id="contratos">
+        <transition on="listar" to="inicio"/>
+        <transition on="editarContrato" to="editarContrato"/>
+    </view-state>
+
+    <view-state id="editarContrato">
+        <transition on="listar" to="contratos"/>
+        <transition on="editarContacto" to="editarContacto"/>
+        <transition on="editarTramo" to="editarTramo"/>
+    </view-state>
+
+    <view-state id="editarTramo">
+        <transition on="listar" to="editarContrato"/>
+        <transition on="editarTarifa" to="editarTarifa"/>
+    </view-state>
+
+    <view-state id="editarTarifa">
+        <transition on="back" to="editarTramo"/>
+    </view-state>
+
+</flow>

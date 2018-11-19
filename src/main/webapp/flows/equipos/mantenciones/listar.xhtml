@@ -68,13 +68,16 @@
                                       rendered="#{mantenedorMantenciones.ot.mantencionSemirremolque eq null}"/>
 
                         <h:outputLabel for="iEncargado" value="Encargado"/>:
-                        <h:outputText value="#{mantenedorMantenciones.ot.mantencionTracto.mecanicoResponsable.nombreCompleto}" id="iEncargado"/>
+                        <h:outputText value="#{mantenedorMantenciones.ot.mantencionTracto.mecanicoResponsable.nombreCompleto}" id="iEncargado"
+                                      rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"/>
 
                         <h:outputLabel for="iKm" value="Kilometraje"/>:
-                        <p:inputText value="#{mantenedorMantenciones.ot.mantencionTracto.kilometraje}" id="iKm"/>
+                        <p:inputText value="#{mantenedorMantenciones.ot.mantencionTracto.kilometraje}" id="iKm"
+                                     rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"/>
 
                         <h:outputLabel for="iFechaMantenimiento" value="Fecha"/>:
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
+                                    rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"
                                     id="iFechaMantenimiento" pattern="dd-MM-yyyy"/>
                     </h:panelGrid>
 
@@ -90,6 +93,7 @@
 
                         <h:outputLabel for="iFechaMantenimientoM" value="Fecha"/>:
                         <p:calendar value="#{mantenedorMantenciones.ot.mantencionTracto.fecha}"
+                                    rendered="#{mantenedorMantenciones.ot.mantencionTracto ne null}"
                                     id="iFechaMantenimientoM" pattern="dd-MM-yyyy"/>
                     </h:panelGrid>
                     <p:fieldset legend="Repuestos Utilizados"

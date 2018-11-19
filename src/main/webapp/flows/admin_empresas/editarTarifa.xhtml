@@ -1,0 +1,44 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:tvp="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Admin Contratos - Editar Tarifa</h2>
+        <h2>[Empresa: #{adminContratosFlow.empresa.nombre} Tramo: #{adminContratosFlow.tramoContrato.origen.nombre} / #{adminContratosFlow.tramoContrato.destino.nombre}]</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
+            <p:panel header="Tarifa">
+                <p:panelGrid columns="3" styleClass="no-border-grid">
+                    <p:outputLabel value="Fecha Vigencia"/>:
+                    <p:calendar locale="es" pattern="yyyy-MM-dd"
+                                required="true"
+                                value="#{adminContratosFlow.tarifaTramo.fechaVigencia}"/>
+
+                    <p:outputLabel value="Tipo Tarifa"/>:
+                    <p:selectOneMenu required="true" converter="entityConverter"
+                                     filter="true"
+                                     value="#{adminContratosFlow.tarifaTramo.tipoTarifa}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                        <f:selectItems value="#{editarTarifaView.tipoTarifaList}" var="t"
+                                       itemLabel="#{t.etiqueta}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Tarifa Cobro"/>:
+                    <p:inputText required="true" value="#{adminContratosFlow.tarifaTramo.tarifaCobro}"/>
+
+                    <p:outputLabel value="Tarifa Pago"/>:
+                    <p:inputText required="true" value="#{adminContratosFlow.tarifaTramo.tarifaPago}"/>
+                </p:panelGrid>
+            </p:panel>
+
+            <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Guardar" icon="fa fa-save"
+                                 action="#{adminContratosFlow.guardarTarifa()}"/>
+                <p:commandButton value="Volver" action="back"
+                                 icon="fa fa-arrow-left" immediate="true"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

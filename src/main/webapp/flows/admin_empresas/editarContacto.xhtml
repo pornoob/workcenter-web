@@ -1,0 +1,42 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <ui:fragment rendered="#{adminContratosFlow.contactoEmpresa.id ne null}">
+            <h2>Admin Contratos - Editar Contacto [Empresa: #{adminContratosFlow.empresa.nombre}]</h2>
+        </ui:fragment>
+        <ui:fragment rendered="#{adminContratosFlow.contactoEmpresa.id eq null}">
+            <h2>Admin Contratos - Crear Contacto [Empresa: #{adminContratosFlow.empresa.nombre}]</h2>
+        </ui:fragment>
+
+        <p:messages autoUpdate="true" closable="true"/>
+        <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
+            <p:panel header="Contacto Empresa">
+                <p:panelGrid columns="2" styleClass="no-border-grid">
+                    <p:outputLabel value="Nombres"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.nombres}"/>
+                    <p:outputLabel value="Apellidos"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.apellidos}"/>
+                    <p:outputLabel value="Cargo"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.cargo}"/>
+                    <p:outputLabel value="Teléfono"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.telefono}"/>
+                    <p:outputLabel value="Email"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.mail}"/>
+                    <p:outputLabel value="Celular"/>
+                    <p:inputText value="#{adminContratosFlow.contactoEmpresa.contacto.celular}"/>
+                </p:panelGrid>
+            </p:panel>
+
+            <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Guardar" icon="fa fa-save"
+                                 action="#{adminContratosFlow.guardarContacto()}"/>
+                <p:commandButton value="Volver" action="backContacto"
+                                 immediate="true" icon="fa fa-arrow-left"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

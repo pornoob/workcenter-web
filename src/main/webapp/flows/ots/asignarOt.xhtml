@@ -25,12 +25,14 @@
                 <p:outputLabel value="Encargado"/>:
                 <p:selectOneMenu filter="true" filterMatchMode="contains"
                                  converter="entityConverter" value="#{mantenedorOT.ejecutor}">
+                    <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
                     <f:selectItems value="#{mantenedorOT.encargados}" var="m"
                                    itemLabel="#{m.nombreCompleto}"/>
                 </p:selectOneMenu>
             </p:panelGrid>
             <p:commandButton value="Asignar" icon="fa fa-check"
                              action="#{mantenedorOT.toAssign()}"
+                             process="@form"
                              update="print-area"
                              oncomplete="$('button[id$=mant-printer]').click()"/>
             <p:commandButton id="mant-printer" value="Print" style="display: none" type="button">

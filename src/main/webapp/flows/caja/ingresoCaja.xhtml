@@ -5,45 +5,48 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
-        <p:messages autoUpdate="true" closable="true"  />
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="frmIngresoCaja">
-         <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
-        <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}" footer="(*) campos obligatorios" style="margin-bottom:20px">
-        <h:panelGrid columns="2" cellpadding="10">
-            <p:outputLabel value="Entregado Por: (*) " />
-            <p:selectOneMenu filterMatchMode="contains" filter="true"
+            <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
+            <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}"
+                     footer="(*) campos obligatorios" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="Entregado Por: (*) "/>
+                    <p:selectOneMenu filterMatchMode="contains" filter="true"
                                      value="#{mantenedorCaja.dinero.receptor}"
                                      converter="entityConverter"
                                      required="true"
                                      requiredMessage="Personal Requerido">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                       itemLabel="#{p.nombreCompleto}"
-                                       itemValue="#{p}"/>
+                                       itemLabel="(#{p.rut}) #{p.nombreCompleto}"/>
+
                         <p:ajax event="change" listener="#{mantenedorCaja.inicializarDinero}"/>
-            </p:selectOneMenu>
-            
-            <p:outputLabel value="Monto: (*)" />
-            <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true" requiredMessage="Monto Requerido"/>
-            <p:outputLabel value="Fecha: (*) " />
-            <p:calendar locale="es"
-                        navigator="true"
-                        pattern="yyyy-MM-dd"
-                        required="true"
-                        requiredMessage="Fecha Requerida"
-                        value="#{mantenedorCaja.dinero.fechaactivo}" />
-            <p:outputLabel value="Orden Carga:(*) " rendered="#{mantenedorCaja.concepto.id eq 4}"/>
-            <p:inputText value="#{mantenedorCaja.dinero.ordendecarga.id}"
-                         rendered="#{mantenedorCaja.concepto.id eq 4}"
-                         required="true"
-                         requiredMessage="Orden Carga Requerida"/>
-            <p:outputLabel value="Comentario: " />
-            <p:inputTextarea autoResize="false" value="#{mantenedorCaja.dinero.comentario}" style="width: 50%"/>
-            
-            <p:commandButton value="Guardar" icon="fa fa-floppy-o" action="#{mantenedorCaja.guardarDatosCaja()}" update="frmIngresoCaja"/>
-            <p:commandButton value="Regresar" icon="fa fa-undo" action="flowMenu" immediate="true"/>
-        </h:panelGrid>
-        </p:panel>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Monto: (*)"/>
+                    <p:inputText id="Monto" value="#{mantenedorCaja.dinero.monto}" required="true"
+                                 requiredMessage="Monto Requerido"/>
+                    <p:outputLabel value="Fecha: (*) "/>
+                    <p:calendar locale="es"
+                                navigator="true"
+                                pattern="yyyy-MM-dd"
+                                required="true"
+                                requiredMessage="Fecha Requerida"
+                                value="#{mantenedorCaja.dinero.fechaactivo}"/>
+                    <p:outputLabel value="Orden Carga:(*) " rendered="#{mantenedorCaja.concepto.id eq 4}"/>
+                    <p:inputText value="#{mantenedorCaja.dinero.ordendecarga.id}"
+                                 rendered="#{mantenedorCaja.concepto.id eq 4}"
+                                 required="true"
+                                 requiredMessage="Orden Carga Requerida"/>
+                    <p:outputLabel value="Comentario: "/>
+                    <p:inputTextarea autoResize="false" value="#{mantenedorCaja.dinero.comentario}" style="width: 50%"/>
+
+                    <p:commandButton value="Guardar" icon="fa fa-floppy-o" action="#{mantenedorCaja.guardarDatosCaja()}"
+                                     update="frmIngresoCaja"/>
+                    <p:commandButton value="Regresar" icon="fa fa-undo" action="flowMenu" immediate="true"/>
+                </h:panelGrid>
+            </p:panel>
         </h:form>
     </ui:define>
 </ui:composition>

@@ -10,6 +10,7 @@ public abstract class FactProducto_ {
 
 	public static volatile SingularAttribute<FactProducto, Long> productoId;
 	public static volatile SingularAttribute<FactProducto, String> nombre;
+	public static volatile SingularAttribute<FactProducto, Long> codigo;
 
 }
 

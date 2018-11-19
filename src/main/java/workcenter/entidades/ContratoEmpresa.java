@@ -6,13 +6,17 @@
 
 package workcenter.entidades;
 
+import org.hibernate.annotations.SortNatural;
+
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
-import java.util.List;
+import java.util.Objects;
+import java.util.SortedSet;
+import java.util.UUID;
 
 /**
  *
@@ -56,25 +60,34 @@ public class ContratoEmpresa implements Serializable {
     @Temporal(TemporalType.DATE)
     private Date fechatermino;
     @Lob
-    @Size(max = 2147483647)
     @Column(name = "detalle")
     private String detalle;
     @NotNull
     @Column(name = "escliente")
-    private boolean escliente;
+    private Boolean escliente;
     @Column(name = "indefinido")
     private Boolean indefinido;
     @Column(name = "ordendecompra")
     private Integer ordendecompra;
+    @SortNatural
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "contrato",fetch = FetchType.LAZY)
-    private List<TramoContrato> tramosporcontratos;
+    private SortedSet<TramoContrato> tramos;
+    @JoinTable(name = "contactoscontratos", joinColumns = {
+            @JoinColumn(name = "contrato", referencedColumnName = "id")
+    }, inverseJoinColumns = {
+            @JoinColumn(name = "contacto", referencedColumnName = "id")
+    })
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @SortNatural
+    private SortedSet<Contacto> contactos;
+
+    @Transient
+    private String rowKey;
 
     public ContratoEmpresa() {
+        this.rowKey = "RK" + UUID.randomUUID();
     }
 
-    public ContratoEmpresa(Integer id) {
-        this.id = id;
-    }
     public Integer getId() {
         return id;
     }
@@ -131,11 +144,11 @@ public class ContratoEmpresa implements Serializable {
         this.detalle = detalle;
     }
 
-    public boolean getEscliente() {
+    public Boolean getEscliente() {
         return escliente;
     }
 
-    public void setEscliente(boolean escliente) {
+    public void setEscliente(Boolean escliente) {
         this.escliente = escliente;
     }
 
@@ -155,32 +168,35 @@ public class ContratoEmpresa implements Serializable {
         this.ordendecompra = ordendecompra;
     }
 
-    public List<TramoContrato> getTramosporcontratos() {
-        return tramosporcontratos;
+    public SortedSet<TramoContrato> getTramos() {
+        return tramos;
     }
 
-    public void setTramosporcontratos(List<TramoContrato> tramosporcontratos) {
-        this.tramosporcontratos = tramosporcontratos;
+    public void setTramos(SortedSet<TramoContrato> tramosporcontratos) {
+        this.tramos = tramosporcontratos;
+    }
+
+    public SortedSet<Contacto> getContactos() {
+        return contactos;
+    }
+
+    public void setContactos(SortedSet<Contacto> contactos) {
+        this.contactos = contactos;
     }
 
     @Override
     public int hashCode() {
-        int hash = 0;
+        int hash = 21312;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContratoEmpresa)) {
-            return false;
-        }
-        ContratoEmpresa other = (ContratoEmpresa) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContratoEmpresa that = (ContratoEmpresa) o;
+        return Objects.equals(id, that.getId()) || Objects.equals(rowKey, that.rowKey);
     }
 
     @Override

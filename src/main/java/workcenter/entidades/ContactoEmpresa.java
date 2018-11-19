@@ -7,9 +7,9 @@
 package workcenter.entidades;
 
 import javax.persistence.*;
-import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  *
@@ -30,11 +30,10 @@ public class ContactoEmpresa implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @NotNull
-    @Column(name = "empresa")
-    private int empresa;
-    @OneToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "empresa", referencedColumnName = "id")
+    private Empresa empresa;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "contacto", referencedColumnName = "id")
     private Contacto contacto;
 
@@ -53,11 +52,11 @@ public class ContactoEmpresa implements Serializable {
         this.id = id;
     }
 
-    public int getEmpresa() {
+    public Empresa getEmpresa() {
         return empresa;
     }
 
-    public void setEmpresa(int empresa) {
+    public void setEmpresa(Empresa empresa) {
         this.empresa = empresa;
     }
 
@@ -70,23 +69,19 @@ public class ContactoEmpresa implements Serializable {
     }
 
     @Override
-    public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
-        return hash;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        ContactoEmpresa that = (ContactoEmpresa) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(id, that.id);
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof ContactoEmpresa)) {
-            return false;
-        }
-        ContactoEmpresa other = (ContactoEmpresa) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public int hashCode() {
+        int hash = 123;
+        hash += (id != null ? id.hashCode() : 0);
+        return hash;
     }
 
     @Override

@@ -11,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
 
 /**
  *
@@ -22,31 +23,30 @@ import java.util.Date;
 @NamedQueries({
     @NamedQuery(name = "TarifaTramo.findAll", query = "SELECT t FROM TarifaTramo t"),
     @NamedQuery(name = "TarifaTramo.findById", query = "SELECT t FROM TarifaTramo t WHERE t.id = :id"),
-    @NamedQuery(name = "TarifaTramo.findByTarifapago", query = "SELECT t FROM TarifaTramo t WHERE t.tarifapago = :tarifapago"),
-    @NamedQuery(name = "TarifaTramo.findByTarifacobro", query = "SELECT t FROM TarifaTramo t WHERE t.tarifacobro = :tarifacobro"),
-    @NamedQuery(name = "TarifaTramo.findByFechavigencia", query = "SELECT t FROM TarifaTramo t WHERE t.fechavigencia = :fechavigencia"),
+    @NamedQuery(name = "TarifaTramo.findByTarifapago", query = "SELECT t FROM TarifaTramo t WHERE t.tarifaPago = :tarifapago"),
+    @NamedQuery(name = "TarifaTramo.findByTarifacobro", query = "SELECT t FROM TarifaTramo t WHERE t.tarifaCobro = :tarifacobro"),
+    @NamedQuery(name = "TarifaTramo.findByFechavigencia", query = "SELECT t FROM TarifaTramo t WHERE t.fechaVigencia = :fechavigencia"),
     @NamedQuery(name = "TarifaTramo.findByTipotarifa", query = "SELECT t FROM TarifaTramo t WHERE t.tipoTarifa = :tipoTarifa"),
     @NamedQuery(name = "TarifaTramo.findByTramo", query = "SELECT t FROM TarifaTramo t WHERE t.tramo = :tramo")})
-public class TarifaTramo implements Serializable {
+public class TarifaTramo implements Serializable,Comparable<TarifaTramo> {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
     @NotNull
     @Column(name = "tarifapago")
-    private int tarifapago;
+    private int tarifaPago;
     @Basic(optional = false)
     @NotNull
     @Column(name = "tarifacobro")
-    private int tarifacobro;
+    private int tarifaCobro;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechavigencia")
     @Temporal(TemporalType.DATE)
-    private Date fechavigencia;
+    private Date fechaVigencia;
     @JoinColumn(name = "tipoTarifa", referencedColumnName = "id")
     @ManyToOne(optional = false, fetch = FetchType.LAZY)
     private TipoTarifa tipoTarifa;
@@ -58,10 +58,6 @@ public class TarifaTramo implements Serializable {
     public TarifaTramo() {
     }
 
-    public TarifaTramo(Integer id) {
-        this.id = id;
-    }
-
     public Integer getId() {
         return id;
     }
@@ -70,28 +66,28 @@ public class TarifaTramo implements Serializable {
         this.id = id;
     }
 
-    public int getTarifapago() {
-        return tarifapago;
+    public int getTarifaPago() {
+        return tarifaPago;
     }
 
-    public void setTarifapago(int tarifapago) {
-        this.tarifapago = tarifapago;
+    public void setTarifaPago(int tarifapago) {
+        this.tarifaPago = tarifapago;
     }
 
-    public int getTarifacobro() {
-        return tarifacobro;
+    public int getTarifaCobro() {
+        return tarifaCobro;
     }
 
-    public void setTarifacobro(int tarifacobro) {
-        this.tarifacobro = tarifacobro;
+    public void setTarifaCobro(int tarifacobro) {
+        this.tarifaCobro = tarifacobro;
     }
 
-    public Date getFechavigencia() {
-        return fechavigencia;
+    public Date getFechaVigencia() {
+        return fechaVigencia;
     }
 
-    public void setFechavigencia(Date fechavigencia) {
-        this.fechavigencia = fechavigencia;
+    public void setFechaVigencia(Date fechavigencia) {
+        this.fechaVigencia = fechavigencia;
     }
 
     public TipoTarifa getTipoTarifa() {
@@ -111,23 +107,24 @@ public class TarifaTramo implements Serializable {
     }
 
     @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        TarifaTramo that = (TarifaTramo) o;
+        if (this.id == null || that.id == null) return false;
+        return Objects.equals(id, that.id);
+    }
+
+    @Override
     public int hashCode() {
-        int hash = 0;
-        hash += (id != null ? id.hashCode() : 0);
+        int hash = 218937719;
+        hash += id != null ? Objects.hash(id) : 0;
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof TarifaTramo)) {
-            return false;
-        }
-        TarifaTramo other = (TarifaTramo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public int compareTo(TarifaTramo tarifaTramo) {
+        return this.fechaVigencia.compareTo(tarifaTramo.fechaVigencia) * -1;
     }
 
     @Override

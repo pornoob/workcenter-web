@@ -12,7 +12,7 @@ public abstract class ActividadDiaria_ {
 	public static volatile SingularAttribute<ActividadDiaria, Date> fecha;
 	public static volatile SingularAttribute<ActividadDiaria, Personal> persona;
 	public static volatile SingularAttribute<ActividadDiaria, Integer> hora;
-	public static volatile SingularAttribute<ActividadDiaria, Integer> idUsuario;
+	public static volatile SingularAttribute<ActividadDiaria, Long> idUsuario;
 	public static volatile SingularAttribute<ActividadDiaria, TipoActividadDiaria> idTipoActividad;
 	public static volatile SingularAttribute<ActividadDiaria, MpaContrato> contrato;
 	public static volatile SingularAttribute<ActividadDiaria, Servicio> idServicio;

@@ -8,7 +8,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Cliente.class)
 public abstract class Cliente_ {
 
-	public static volatile SingularAttribute<Cliente, Integer> rut;
+	public static volatile SingularAttribute<Cliente, Long> rut;
 	public static volatile SingularAttribute<Cliente, String> direccion;
 	public static volatile SingularAttribute<Cliente, Integer> id;
 	public static volatile SingularAttribute<Cliente, Character> digitoverificador;

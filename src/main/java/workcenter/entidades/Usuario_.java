@@ -10,7 +10,7 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(Usuario.class)
 public abstract class Usuario_ {
 
-	public static volatile SingularAttribute<Usuario, Integer> rut;
+	public static volatile SingularAttribute<Usuario, Long> rut;
 	public static volatile SingularAttribute<Usuario, String> password;
 	public static volatile CollectionAttribute<Usuario, GestionAlarmaGps> gestionAlarmaGpsCollection;
 	public static volatile SingularAttribute<Usuario, Personal> personal;

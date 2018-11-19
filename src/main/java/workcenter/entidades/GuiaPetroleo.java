@@ -12,6 +12,8 @@ import javax.validation.constraints.Size;
 import javax.xml.bind.annotation.XmlRootElement;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  *
@@ -35,7 +37,6 @@ public class GuiaPetroleo implements Serializable {
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
     @Basic(optional = false)
@@ -59,23 +60,18 @@ public class GuiaPetroleo implements Serializable {
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
-    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
     private Vuelta ordendecarga;
-    @ManyToOne(fetch = FetchType.LAZY)    @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name="estaciondeservicio", referencedColumnName = "id")
     private EstacionServicio estaciondeservicio;
 
+    @Transient
+    private String rowKey;
+
     public GuiaPetroleo() {
-    }
-
-    public GuiaPetroleo(Integer id) {
-        this.id = id;
-    }
-
-    public GuiaPetroleo(Integer id, int numeroguia, int conductor, String equipo) {
-        this.id = id;
-        this.numeroguia = numeroguia;
-        this.conductor = conductor;
-        this.equipo = equipo;
+        rowKey = "RK" + UUID.randomUUID();
     }
 
     public Integer getId() {
@@ -150,24 +146,28 @@ public class GuiaPetroleo implements Serializable {
         this.estaciondeservicio = estaciondeservicio;
     }
 
+    public String getRowKey() {
+        return rowKey;
+    }
+
+    public void setRowKey(String rowKey) {
+        this.rowKey = rowKey;
+    }
+
     @Override
     public int hashCode() {
-        int hash = 0;
+        int hash = 143030;
         hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
-    public boolean equals(Object object) {
-        // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof GuiaPetroleo)) {
-            return false;
-        }
-        GuiaPetroleo other = (GuiaPetroleo) object;
-        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
-            return false;
-        }
-        return true;
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        GuiaPetroleo that = (GuiaPetroleo) o;
+        if (id == null || that.id == null) return Objects.equals(rowKey, that.rowKey);
+        return Objects.equals(id, that.getId());
     }
 
     @Override

@@ -12,6 +12,7 @@ public abstract class Contacto_ {
 	public static volatile SingularAttribute<Contacto, String> mail;
 	public static volatile SingularAttribute<Contacto, String> celular;
 	public static volatile SingularAttribute<Contacto, Integer> id;
+	public static volatile SingularAttribute<Contacto, ContactoEmpresa> contactoEmpresa;
 	public static volatile SingularAttribute<Contacto, String> cargo;
 	public static volatile SingularAttribute<Contacto, String> telefono;
 	public static volatile SingularAttribute<Contacto, String> nombres;

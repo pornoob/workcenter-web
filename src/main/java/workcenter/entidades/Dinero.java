@@ -31,7 +31,7 @@ import java.util.Objects;
     @NamedQuery(name = "Dinero.findByOrdendecarga", query = "SELECT d FROM Dinero d WHERE d.ordendecarga = :ordendecarga"),
     @NamedQuery(name = "Dinero.findByConceptoFecha", query = "SELECT d FROM Dinero d "
     		+ "WHERE MONTH(d.fechaactivo) = :mes and YEAR(d.fechaactivo) = :anio and d.receptor = :receptor"),
-    @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d "
+    @NamedQuery(name = "Dinero.findDineroWithDescuento", query = "SELECT d FROM Dinero d INNER JOIN FETCH d.receptor "
             + "INNER JOIN FETCH d.lstDescuentos des WHERE des.monto > 0 ORDER BY d.id DESC")})
 public class Dinero implements Serializable {
     private static final long serialVersionUID = 1L;
@@ -44,7 +44,8 @@ public class Dinero implements Serializable {
     @Column(name = "monto")
     private Integer monto;
     @JoinColumn(name = "concepto", referencedColumnName = "id")
-    @ManyToOne(fetch = FetchType.LAZY)    private Concepto concepto;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Concepto concepto;
     @Basic(optional = false)
     @NotNull
     @Column(name = "fechareal")
@@ -59,9 +60,11 @@ public class Dinero implements Serializable {
     @Column(name = "comentario")
     private String comentario;
     @JoinColumn(name = "receptor", referencedColumnName = "rut")
-    @ManyToOne(fetch = FetchType.LAZY)    private Personal receptor;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Personal receptor;
     
-    @OneToOne(fetch = FetchType.LAZY)    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
+    @OneToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "ordendecarga", referencedColumnName = "ordendecarga")
     private Vuelta ordendecarga;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "motivo", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Descuento> lstDescuentos;

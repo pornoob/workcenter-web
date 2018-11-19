@@ -1,9 +1,12 @@
 package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
-import workcenter.entidades.*;
+import workcenter.entidades.OrdenTrabajo;
+import workcenter.entidades.SolicitanteOt;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import java.util.List;
 
 /**
@@ -25,7 +28,18 @@ public class OtDao extends MyDao {
     }
 
     public List<OrdenTrabajo> findByStatus(Integer status) {
-        Query q = em.createNamedQuery("OrdenTrabajo.findByStatus", OrdenTrabajo.class);
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT ot FROM OrdenTrabajo ot ")
+                .append("INNER JOIN FETCH ot.solicitante s ")
+                .append("INNER JOIN FETCH ot.trazabilidad tot ")
+                .append("LEFT JOIN FETCH tot.ejecutor ")
+                .append("WHERE EXISTS ( ")
+                .append("    SELECT o FROM OrdenTrabajo o ")
+                .append("    INNER JOIN o.trazabilidad to ")
+                .append("    WHERE to.fecha = ")
+                .append("    (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) ")
+                .append("    AND to.estadoId = :status AND ot.id = o.id )");
+        Query q = em.createQuery(jpql.toString(), OrdenTrabajo.class);
         q.setParameter("status", status);
         return q.getResultList();
     }

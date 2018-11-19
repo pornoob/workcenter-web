@@ -71,6 +71,7 @@ public abstract class Remuneracion_ {
 	public static volatile SingularAttribute<Remuneracion, Double> aportePorcEmpresa;
 	public static volatile SingularAttribute<Remuneracion, Integer> otrosDescuentosTemp;
 	public static volatile SingularAttribute<Remuneracion, Personal> idPersonal;
+	public static volatile SingularAttribute<Remuneracion, ContratoPersonal> contrato;
 	public static volatile SingularAttribute<Remuneracion, Integer> totalDctos;
 	public static volatile SingularAttribute<Remuneracion, Integer> totalViaticos;
 	public static volatile SingularAttribute<Remuneracion, Integer> difCaja;

@@ -59,7 +59,7 @@ public class MantenedorCaja implements Serializable {
     private Dinero dinero;
     private Concepto concepto;
     private Date fechaCuotaInicial;
-    
+
     @Autowired
     private LogicaCaja logicaCaja;
     @Autowired
@@ -108,12 +108,11 @@ public class MantenedorCaja implements Serializable {
                 return;
             }
             dinero.setOrdendecarga(v);
+        } else {
+            dinero.setOrdendecarga(null);
         }
         if (logicaCaja.guardarEntradas(dinero)) {
-            FacesUtil.mostrarMensajeInformativo("Ingreso Exitoso", dinero.getId().toString()
-                    + " " + dinero.getConcepto().getEtiqueta()
-                    + " " + dinero.getReceptor().getNombreCompleto()
-                    + " " + dinero.getMonto());
+            FacesUtil.mostrarMensajeInformativo(dinero.getConcepto().getEtiqueta(), "Datos guardados correctamente");
             //imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
         } else {
             FacesUtil.mostrarMensajeError("Ingreso Fallido",
@@ -136,6 +135,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irIngresoCaja(int tipoConcepto) {
+        lstPersonal = logicaPersonal.findAll();
         asignarConcepto(tipoConcepto);
         inicializarDinero();
         return "flowIngresaCaja";
@@ -181,6 +181,7 @@ public class MantenedorCaja implements Serializable {
     }
 
     public String irConsultaCaja() {
+        lstPersonal = logicaPersonal.findAll();
         saldo = 0;
         // Obtener Mes actual
         SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM");
@@ -233,6 +234,7 @@ public class MantenedorCaja implements Serializable {
 
     public String irSueldoCaja() {
         inicializarDinero();
+        lstPersonal = logicaPersonal.findAll();
         lstConpcetosFiltrada = new ArrayList<Concepto>();
         for (Concepto c : lstConceptos) {
             if (c.getId() == constantes.getANTICIPO()
@@ -308,7 +310,7 @@ public class MantenedorCaja implements Serializable {
     public String irPrestamosTemporales(int tipoConcepto) {
         asignarConcepto(tipoConcepto);
         limpiarVariablesPestamos();
-        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(new Concepto(constantes.getPRESTAMO_TEMPORAL()));
         return "flowDevolucionPrestamos";
     }
 
@@ -378,7 +380,7 @@ public class MantenedorCaja implements Serializable {
                 System.err.println(dinero.getComentario());
                 break;
         }
-        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(constantes.getPRESTAMO_TEMPORAL());
+        lstDinerosConsultaFiltro = logicaCaja.obtenerDinerosNoCancelados(new Concepto(constantes.getPRESTAMO_TEMPORAL()));
     }
 
     public void limpiarVariablesPestamos() {

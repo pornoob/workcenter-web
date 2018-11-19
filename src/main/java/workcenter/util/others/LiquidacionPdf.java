@@ -23,7 +23,7 @@ import java.text.SimpleDateFormat;
  */
 @Component
 @Scope("application")
-public class RenderPdf implements Serializable {
+public class LiquidacionPdf implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 

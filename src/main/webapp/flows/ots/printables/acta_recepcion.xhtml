@@ -16,7 +16,9 @@
                 <td class="text-center">
                     <b>CONTROL DE DOCUMENTOS</b>
                 </td>
-                <td></td>
+                <td class="text-right">
+                    Nº #{mantenedorOT.ot.mantencionTracto.tracto.numero}
+                </td>
             </tr>
             <tr>
                 <td style="text-align: center">
@@ -57,6 +59,34 @@
             </tr>
         </tbody>
     </table>
+    <br/>
+    <table>
+        <tr>
+            <td>
+                <b>Patente Camión</b>
+            </td>
+            <td>#{mantenedorOT.ot.mantencionTracto.tracto.patente}</td>
+            <td>
+                <b>Patente Batea</b>
+            </td>
+            <td>
+                <ui:fragment rendered="#{mantenedorOT.ot.mantencionSemirremolque ne null and mantenedorOT.ot.mantencionSemirremolque.semiRremolque ne null}">
+                    #{mantenedorOT.ot.mantencionSemirremolque.semiRremolque.patente}
+                </ui:fragment>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <b>Encargado</b>
+            </td>
+            <td>#{mantenedorOT.ejecutor.nombreCompleto}</td>
+            <td>
+                <b>Kilometraje</b>
+            </td>
+            <td></td>
+        </tr>
+    </table>
+    <br/>
     <br/><br/>
     <table class="table-bordered" style="page-break-after: always">
         <thead>
@@ -81,24 +111,16 @@
                 <td>Conos</td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Cartola Tracto</td><td></td><td></td><td></td>
                 <td>Extintor</td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-                <td>Cartolas Batea</td><td></td><td></td><td></td>
                 <td>Barrote</td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Llaves Combinadas</td><td></td><td></td><td></td>
-                <td>Linterna/Lampara</td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-                <td>Relojes Marcador</td><td></td><td></td><td></td>
                 <td>Cuñas</td><td></td><td></td><td></td>
+                <td>Tarjeta Combustible </td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Tarjeta Combustible </td><td></td><td></td><td></td>
-                <td>Gata</td><td></td><td></td><td></td>
+                <td>Tarjeta Mantenimiento</td><td></td><td></td><td></td>
+                <td>Luces </td><td></td><td></td><td></td>
             </tr>
             <tr>
                 <td>Parabrisas </td><td></td><td></td><td></td>
@@ -106,11 +128,7 @@
             </tr>
             <tr>
                 <td>Bocina</td><td></td><td></td><td></td>
-                <td>Quinta Rueda</td><td></td><td></td><td></td>
-            </tr>
-            <tr>
                 <td>Limpia Parabrisas</td><td></td><td></td><td></td>
-                <td>Manual de Mantencion</td><td></td><td></td><td></td>
             </tr>
             <tr>
                 <td>Espejos Exteriores</td><td></td><td></td><td></td>
@@ -121,24 +139,16 @@
                 <td>Tapa Baterias</td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Cenicero</td><td></td><td></td><td></td>
                 <td>Tapas Combustible</td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-                <td>Encendedor</td><td></td><td></td><td></td>
                 <td>Manguera de Acople</td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Celular</td><td></td><td></td><td></td>
+                <td>Radio transmisor</td><td></td><td></td><td></td>
                 <td>Neumatico de Repuesto</td><td></td><td></td><td></td>
             </tr>
             <tr>
-                <td>Cargador Telefonico</td><td></td><td></td><td></td>
+                <td>Radio Musical</td><td></td><td></td><td></td>
                 <td>Alarma de Retroceso </td><td></td><td></td><td></td>
-            </tr>
-            <tr>
-                <td>Radio/Parlantes</td><td></td><td></td><td></td>
-                <td>Luces </td><td></td><td></td><td></td>
             </tr>
             <tr>
                 <td>Tacografo</td><td></td><td></td><td></td>

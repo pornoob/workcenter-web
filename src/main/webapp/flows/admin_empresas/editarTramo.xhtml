@@ -1,0 +1,93 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:tvp="http://java.sun.com/jsf/core"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Admin Contratos - Editar Tramo</h2>
+        <h2>[Empresa: #{adminContratosFlow.empresa.nombre} Contrato: #{adminContratosFlow.contratoEmpresa.nombrecontrato}]</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frmAdmContratos" styleClass="tvp-responsive-form">
+            <p:panel header="Tramo">
+                <p:panelGrid columns="3" styleClass="no-border-grid">
+                    <p:outputLabel value="Producto"/>:
+                    <p:selectOneMenu required="true" converter="entityConverter"
+                                     filter="true"
+                                     value="#{adminContratosFlow.tramoContrato.tipoProducto}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                        <f:selectItems value="#{editarTramoView.productoList}" var="p"
+                                       itemLabel="#{p.etiqueta}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Origen"/>:
+                    <p:selectOneMenu required="true" converter="entityConverter"
+                                     filter="true"
+                                     value="#{adminContratosFlow.tramoContrato.origen}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                        <f:selectItems value="#{editarTramoView.origenDestinoList}" var="t"
+                                       itemLabel="#{t.nombre}"/>
+                    </p:selectOneMenu>
+
+                    <p:outputLabel value="Destino"/>:
+                    <p:selectOneMenu required="true" converter="entityConverter"
+                                     filter="true"
+                                     value="#{adminContratosFlow.tramoContrato.destino}">
+                        <f:selectItem itemLabel="-- Seleccione --" noSelectionOption="true"/>
+                        <f:selectItems value="#{editarTramoView.origenDestinoList}" var="t"
+                                       itemLabel="#{t.nombre}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+
+                <h3>Tarifas</h3>
+                <p:commandButton value="Agregar Tarifa" icon="fa fa-plus"
+                                 action="#{adminContratosFlow.irCrearTarifa()}"/>
+                <p:dataTable value="#{adminContratosFlow.tramoContrato.tarifas}" var="t"
+                             emptyMessage="No se han registrado tarifas"
+                             filterEvent="enter"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             rows="#{constantes.cantidadFilasTablas}">
+                    <p:column headerText="Id" width="40">
+                        #{t.id}
+                    </p:column>
+                    <p:column headerText="Vigencia" width="120" styleClass="text-center">
+                        #{t.fechaVigencia}
+                    </p:column>
+                    <p:column headerText="Tipo Tarifa">
+                        #{t.tipoTarifa.etiqueta}
+                    </p:column>
+                    <p:column headerText="Tarifa Cobro" width="120">
+                        <h:outputText value="#{t.tarifaCobro}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Tarifa Pago" width="120">
+                        <h:outputText value="#{t.tarifaPago}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Acciones" width="90" styleClass="text-center">
+                        <p:commandButton icon="fa fa-edit"
+                                         action="#{adminContratosFlow.irEditarTarifa(t)}"/>
+                        <p:commandButton icon="fa fa-remove"
+                                         update=":frmAdmContratos"
+                                         action="#{adminContratosFlow.eliminarTarifa(t)}">
+                            <p:confirm header="Workcenter" message="¿Está seguro que desea eliminar la tarifa seleccionada?"/>
+                        </p:commandButton>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+
+            <p:outputPanel styleClass="text-center">
+                <p:commandButton value="Guardar" icon="fa fa-save"
+                                 action="#{adminContratosFlow.guardarTramo()}"/>
+                <p:commandButton value="Volver" action="listar"
+                                 icon="fa fa-arrow-left" immediate="true"/>
+            </p:outputPanel>
+        </h:form>
+    </ui:define>
+</ui:composition>

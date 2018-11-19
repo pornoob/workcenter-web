@@ -79,6 +79,9 @@
             <p:column headerText="CONCEPTO">
                 <h:outputText value="#{dinero.concepto.etiqueta}" />
             </p:column>
+            <p:column headerText="OC">
+                <h:outputText rendered="#{dinero.ordendecarga ne null}" value="#{dinero.ordendecarga.id}" />
+            </p:column>
             <p:column headerText="RUT">
                 <h:outputText value="#{dinero.receptor.rut}-#{dinero.receptor.digitoverificador}" converter="rutConverter"/>
             </p:column>

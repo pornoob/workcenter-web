@@ -12,7 +12,7 @@ import workcenter.negocio.personal.LogicaVariables;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.dto.Mes;
-import workcenter.util.others.RenderPdf;
+import workcenter.util.others.LiquidacionPdf;
 
 import javax.faces.context.ExternalContext;
 import javax.faces.context.FacesContext;
@@ -77,7 +77,7 @@ public class MantenedorLiquidaciones implements Serializable {
     private LogicaVariables logicaVariables;
 
     @Autowired
-    private RenderPdf renderPdf;
+    private LiquidacionPdf liquidacionPdf;
 
     private Remuneracion liquidacion;
     private Remuneracion ingresoPrevio;
@@ -162,6 +162,7 @@ public class MantenedorLiquidaciones implements Serializable {
         liquidacion.setRutEmpleador(cp.getEmpleador().getRut().toString() + "-" + cp.getEmpleador().getDigitoverificador());
         liquidacion.setAnticipoSueldo(logicaLiquidaciones.obtenerAnticipoSueldo(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setSueldoBase(cp.getSueldoBase());
+        liquidacion.setContrato(cp);
 
         if (liquidacion.getDiasTrabajados() < constantes.getDiasTrabajados()) {
             double sBase = (double) ((cp.getSueldoBase() * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados()));
@@ -309,7 +310,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
-        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+        liquidacionPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
 
         String retorno = null;
         if (Boolean.TRUE.equals(sobreescribir)) {
@@ -373,6 +374,7 @@ public class MantenedorLiquidaciones implements Serializable {
             if (vCF.getDesde() == null) {
                 if (liquidacion.getTotalImponible() <= vCF.getHasta()) {
                     montoCarga = vCF.getMonto();
+                    break;
                 }
             } else if (vCF.getHasta() == null) {
                 if (liquidacion.getTotalImponible() >= vCF.getDesde()) {
@@ -440,7 +442,7 @@ public class MantenedorLiquidaciones implements Serializable {
         }
         liquidacion.setRemuneracionBonoDescuentoList(new ArrayList<BonoDescuentoRemuneracion>());
         unirBonosRemuneracion();
-        renderPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
+        liquidacionPdf.generarLiquidacion(liquidacion, asignacionFamiliarMonto);
         FacesContext facesContext = FacesContext.getCurrentInstance();
         ExternalContext externalContext = facesContext.getExternalContext();
         HttpServletResponse response = (HttpServletResponse) externalContext.getResponse();

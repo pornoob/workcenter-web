@@ -25,7 +25,6 @@ import java.util.SortedSet;
 @NamedQueries({
     @NamedQuery(name = "OrdenTrabajo.findById", query = "SELECT DISTINCT o FROM OrdenTrabajo o WHERE o.id = :id"),
     @NamedQuery(name = "OrdenTrabajo.findAll", query = "SELECT o FROM OrdenTrabajo o"),
-    @NamedQuery(name = "OrdenTrabajo.findByStatus", query = "SELECT DISTINCT ot FROM OrdenTrabajo ot INNER JOIN FETCH ot.solicitante s INNER JOIN FETCH ot.trazabilidad tot LEFT JOIN FETCH tot.ejecutor WHERE EXISTS ( SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status AND ot.id = o.id )"),
     @NamedQuery(name = "OrdenTrabajo.findByIdAndStatus", query = "SELECT DISTINCT ot FROM OrdenTrabajo ot INNER JOIN FETCH ot.solicitante s INNER JOIN FETCH ot.trazabilidad tot LEFT JOIN FETCH tot.ejecutor WHERE EXISTS ( SELECT o FROM OrdenTrabajo o INNER JOIN o.trazabilidad to WHERE to.fecha = (SELECT MAX(tmo.fecha) FROM TrazabilidadOt tmo WHERE tmo.ot = o) AND to.estadoId = :status AND ot.id = o.id AND ot.id = :id )")
 })
 public class OrdenTrabajo implements Serializable {
@@ -47,15 +46,15 @@ public class OrdenTrabajo implements Serializable {
     @OneToMany(mappedBy = "ot", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @SortNatural
     private SortedSet<TrazabilidadOt> trazabilidad;
-    
+
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionTracto mantencionTracto;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionSemirremolque mantencionSemirremolque;
     @OneToOne(fetch = FetchType.LAZY, mappedBy = "ot", cascade = { CascadeType.PERSIST, CascadeType.MERGE })
     private MmeMantencionMaquina mantencionMaquina;
-    
-    
+
+
     @OneToMany(mappedBy = "ot", cascade = CascadeType.ALL)
     private Set<AsistenteOt> asistentes;
     @OneToMany(mappedBy = "ot", cascade = CascadeType.ALL)
@@ -177,5 +176,5 @@ public class OrdenTrabajo implements Serializable {
     public String toString() {
         return "workcenter.entidades.OrdenTrabajo[ id=" + id + " ]";
     }
-    
+
 }

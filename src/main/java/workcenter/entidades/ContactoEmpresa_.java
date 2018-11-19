@@ -8,9 +8,9 @@ import javax.persistence.metamodel.StaticMetamodel;
 @StaticMetamodel(ContactoEmpresa.class)
 public abstract class ContactoEmpresa_ {
 
-	public static volatile SingularAttribute<ContactoEmpresa, Integer> contacto;
+	public static volatile SingularAttribute<ContactoEmpresa, Contacto> contacto;
 	public static volatile SingularAttribute<ContactoEmpresa, Integer> id;
-	public static volatile SingularAttribute<ContactoEmpresa, Integer> empresa;
+	public static volatile SingularAttribute<ContactoEmpresa, Empresa> empresa;
 
 }
 

@@ -13,6 +13,8 @@ import workcenter.negocio.maestro_guias.LogicaMaestroGuias;
 import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.negocio.tramo_contrato.LogicaTramoContrato;
 
+import javax.faces.component.html.HtmlSelectOneMenu;
+import javax.faces.event.AjaxBehaviorEvent;
 import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -43,6 +45,7 @@ public class MantenedorMaestroGuias implements Serializable {
     private List<TipoProducto> lstTipoDeProductos;
     private Producto producto;
     private GuiaPetroleo guiaPetroleo;
+    private GuiaPetroleo guiaPetroleoToEdit;
     private List<EstacionServicio> lstEstacionServicio;
     private Date fechaDesde;
     private Date fechaHasta;
@@ -65,6 +68,8 @@ public class MantenedorMaestroGuias implements Serializable {
 
     public void inicio() {
         ordenDeCarga = new Vuelta();
+        ordenDeCarga.setGuiasPetroleo(new ArrayList<GuiaPetroleo>());
+        ordenDeCarga.setProductosList(new ArrayList<Producto>());
         lstEquipos = logicaEquipos.obtenerTractos();
         lstConductores = logicaPersonal.obtenerConductoresConSanciones();
         lstBateas = logicaEquipos.obtenerBateas();
@@ -92,9 +97,10 @@ public class MantenedorMaestroGuias implements Serializable {
         return false;
     }
 
-    public void buscarTramoContrato() {
+    public void buscarTramoContrato(AjaxBehaviorEvent event) {
+        empresaSeleccionada = (ContratoEmpresa) ((HtmlSelectOneMenu) event.getSource()).getValue();
         lstTipoDeProductos = new ArrayList<>();
-        lstTramoContrato = logicaTramoContrato.obtenerTramoPorContrato(empresaSeleccionada);
+        lstTramoContrato = logicaTramoContrato.obtenerTramoPorContratoParaGuias(empresaSeleccionada);
     }
 
     public void irGuardarProducto() {
@@ -107,7 +113,6 @@ public class MantenedorMaestroGuias implements Serializable {
 
     public void irEliminarProducto(Producto p) {
         ordenDeCarga.getProductosList().remove(p);
-        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public void irGuiasDePretrolio() {
@@ -126,11 +131,10 @@ public class MantenedorMaestroGuias implements Serializable {
     public void irEliminarGuiaPetroleo(GuiaPetroleo gp) {
         if (ordenDeCarga == null) return;
         ordenDeCarga.getGuiasPetroleo().remove(gp);
-        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
     }
 
     public void onRowSelect(SelectEvent event) {
-        guiaPetroleo = ((GuiaPetroleo) event.getObject());
+        guiaPetroleo = guiaPetroleoToEdit;
     }
 
     public void onRowUnselect(UnselectEvent event) {
@@ -144,18 +148,16 @@ public class MantenedorMaestroGuias implements Serializable {
     }
 
     public void guardarGuiaDePetrolio() {
-        System.err.println(guiaPetroleo);
         guiaPetroleo.setOrdendecarga(ordenDeCarga);
-        ordenDeCarga.getGuiasPetroleo().add(guiaPetroleo);
-        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
+        if (!ordenDeCarga.getGuiasPetroleo().contains(guiaPetroleo)) ordenDeCarga.getGuiasPetroleo().add(guiaPetroleo);
         guiaPetroleo = new GuiaPetroleo();
     }
 
     public void guardarProducto() {
         producto.setOrdencarga(ordenDeCarga);
         producto.setTramo(tramoContratoSeleccionado);
-        ordenDeCarga.getProductosList().add(producto);
-        logicaMaestroGuias.guardarOrdenDeCarga(ordenDeCarga);
+        if (!ordenDeCarga.getProductosList().contains(producto)) ordenDeCarga.getProductosList().add(producto);
+        producto = new Producto();
     }
 
     public String irConsulta() {
@@ -334,5 +336,13 @@ public class MantenedorMaestroGuias implements Serializable {
 
     public void setOrdenesCarga(List<Vuelta> ordenesCarga) {
         this.ordenesCarga = ordenesCarga;
+    }
+
+    public GuiaPetroleo getGuiaPetroleoToEdit() {
+        return guiaPetroleoToEdit;
+    }
+
+    public void setGuiaPetroleoToEdit(GuiaPetroleo guiaPetroleoToEdit) {
+        this.guiaPetroleoToEdit = guiaPetroleoToEdit;
     }
 }

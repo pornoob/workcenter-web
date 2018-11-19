@@ -8,7 +8,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 import workcenter.entidades.BonoDescuentoRemuneracion;
 import workcenter.entidades.Remuneracion;
 import workcenter.negocio.personal.LogicaLiquidaciones;
-import workcenter.util.others.RenderPdf;
+import workcenter.util.others.LiquidacionPdf;
 
 import java.math.BigInteger;
 
@@ -18,7 +18,7 @@ import java.math.BigInteger;
 @RunWith(SpringJUnit4ClassRunner.class)
 public class ActualizarPdf extends InitialContext {
     @Autowired
-    private RenderPdf renderPdf;
+    private LiquidacionPdf liquidacionPdf;
 
     @Autowired
     private LogicaLiquidaciones logicaLiquidaciones;
@@ -61,7 +61,7 @@ public class ActualizarPdf extends InitialContext {
             }
 
             int cargas = 0;
-            renderPdf.generarLiquidacion(remuneracion, cargas);
+            liquidacionPdf.generarLiquidacion(remuneracion, cargas);
             logicaLiquidaciones.guardarDatosLiquidacion(remuneracion);
         }
     }

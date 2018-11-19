@@ -7,11 +7,9 @@ import workcenter.entidades.Vuelta_;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
 import javax.persistence.TypedQuery;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Predicate;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -26,9 +24,19 @@ public class MaestroDeGuiasDAO {
     private EntityManager em;
 
     public Vuelta obtenerOrdendeCarga(Integer ordenConsulta) {
-        return (Vuelta) em.createNamedQuery("Vuelta.findByOrdenDeCarga")
-                .setParameter("ordenDeCarga", ordenConsulta)
-                .getSingleResult();
+        StringBuilder jpql = new StringBuilder();
+        jpql.append("SELECT DISTINCT v FROM Vuelta v ")
+                .append("INNER JOIN FETCH v.conductor ")
+                .append("INNER JOIN FETCH v.tracto t ")
+                .append("INNER JOIN FETCH t.duenio ")
+                .append("INNER JOIN FETCH v.batea ")
+                .append("INNER JOIN FETCH v.productosList pl ")
+                .append("INNER JOIN FETCH pl.tramo tp ")
+                .append("INNER JOIN FETCH tp.tipoProducto tp ")
+                .append("WHERE v.id = :ordenDeCarga");
+        Query q = em.createQuery(jpql.toString(), Vuelta.class);
+        q.setParameter("ordenDeCarga", ordenConsulta);
+        return (Vuelta) q.getSingleResult();
     }
 
     public void guardarOrdenDeCarga(Vuelta ordenDeCarga) {
@@ -37,6 +45,31 @@ public class MaestroDeGuiasDAO {
         } else {
             em.merge(ordenDeCarga);
         }
+    }
+
+    public List<Vuelta> buscarConProductos(Date fechaDesde, Date fechaHasta, Personal conductor) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery(Vuelta.class);
+        Root<Vuelta> vuelta = cq.from(Vuelta.class);
+        vuelta.fetch(Vuelta_.productosList, JoinType.LEFT);
+
+        List<Predicate> condiciones = new ArrayList<>();
+
+        if (fechaDesde != null) {
+            condiciones.add(cb.greaterThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaDesde));
+        }
+        if (fechaHasta != null) {
+            condiciones.add(cb.lessThanOrEqualTo(vuelta.get(Vuelta_.fecha), fechaHasta));
+        }
+        if (conductor != null) {
+            condiciones.add(cb.equal(vuelta.get(Vuelta_.conductor), conductor));
+        }
+        if (!condiciones.isEmpty()) {
+            cq.where(condiciones.toArray(new Predicate[condiciones.size()]));
+        }
+        cq.distinct(true);
+        TypedQuery<Vuelta> query = em.createQuery(cq);
+        return query.getResultList();
     }
 
     public List<Vuelta> buscar(Date fechaDesde, Date fechaHasta, Personal conductor) {

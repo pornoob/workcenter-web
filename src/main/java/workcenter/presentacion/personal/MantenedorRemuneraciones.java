@@ -14,9 +14,8 @@ import workcenter.negocio.personal.LogicaPersonal;
 import workcenter.util.components.Constantes;
 import workcenter.util.components.FacesUtil;
 import workcenter.util.components.SesionCliente;
-import workcenter.util.pojo.BonosTablaRemuneracion;
+import workcenter.util.pojo.BonoDescuentoTablaRemuneracion;
 import workcenter.util.pojo.Descargable;
-import workcenter.util.pojo.DescuentosTablaRemuneracion;
 
 import java.io.*;
 import java.math.BigInteger;
@@ -58,8 +57,9 @@ public class MantenedorRemuneraciones implements Serializable {
     private List<Remuneracion> remuneraciones;
     private Integer mesSeleccionado;
     private Integer anioIngresado;
-    private BonosTablaRemuneracion bonosTablaRemuneracion;
-    private DescuentosTablaRemuneracion descuentosTablaRemuneracion;
+    private BonoDescuentoTablaRemuneracion bonosImponiblesTablaRemuneracion;
+    private BonoDescuentoTablaRemuneracion descuentosTablaRemuneracion;
+    private BonoDescuentoTablaRemuneracion bonosNoImponiblesTablaRemuneracion;
     private Remuneracion remuneracionSeleccionada;
 
     public String inicio() {
@@ -106,8 +106,12 @@ public class MantenedorRemuneraciones implements Serializable {
         } else {
             remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleadorSeleccionado, mesSeleccionado, anioIngresado);
         }
-        bonosTablaRemuneracion = new BonosTablaRemuneracion(remuneraciones);
-        descuentosTablaRemuneracion = new DescuentosTablaRemuneracion(remuneraciones);
+        bonosImponiblesTablaRemuneracion = new BonoDescuentoTablaRemuneracion(false, true);
+        bonosImponiblesTablaRemuneracion.init(remuneraciones);
+        bonosNoImponiblesTablaRemuneracion = new BonoDescuentoTablaRemuneracion(false, false);
+        bonosNoImponiblesTablaRemuneracion.init(remuneraciones);
+        descuentosTablaRemuneracion = new BonoDescuentoTablaRemuneracion(true, false);
+        descuentosTablaRemuneracion.init(remuneraciones);
     }
 
     public Integer getTotalBase() {
@@ -155,11 +159,24 @@ public class MantenedorRemuneraciones implements Serializable {
         return total;
     }
 
-    public Integer obtenerTotalBono(String nombreBono) {
+    public Integer obtenerTotalBonoImponible(String nombreBono) {
         int total = 0;
         if (remuneraciones == null) return total;
         for (Remuneracion r : remuneraciones) {
-            for (BonoDescuentoRemuneracion b : obtenerBonos(r)) {
+            for (BonoDescuentoRemuneracion b : obtenerBonosDescuentos(r, bonosImponiblesTablaRemuneracion)) {
+                if (b.getDescripcion().equals(nombreBono)) {
+                    total += b.getMonto().intValue();
+                }
+            }
+        }
+        return total;
+    }
+
+    public Integer obtenerTotalBonoNoImponible(String nombreBono) {
+        int total = 0;
+        if (remuneraciones == null) return total;
+        for (Remuneracion r : remuneraciones) {
+            for (BonoDescuentoRemuneracion b : obtenerBonosDescuentos(r, bonosNoImponiblesTablaRemuneracion)) {
                 if (b.getDescripcion().equals(nombreBono)) {
                     total += b.getMonto().intValue();
                 }
@@ -308,12 +325,12 @@ public class MantenedorRemuneraciones implements Serializable {
         return total;
     }
 
-    public List<BonoDescuentoRemuneracion> obtenerBonos(Remuneracion r) {
+    public List<BonoDescuentoRemuneracion> obtenerBonosDescuentos(Remuneracion r, BonoDescuentoTablaRemuneracion filtro) {
         List<BonoDescuentoRemuneracion> retorno = new ArrayList<BonoDescuentoRemuneracion>();
-        if (bonosTablaRemuneracion == null) {
+        if (filtro == null) {
             return retorno;
         }
-        for (String s : bonosTablaRemuneracion.getTipos()) {
+        for (String s : filtro.getTipos()) {
             boolean encontrado = false;
             if (r != null && r.getRemuneracionBonoDescuentoList() != null) {
                 for (BonoDescuentoRemuneracion b : r.getRemuneracionBonoDescuentoList()) {
@@ -334,30 +351,16 @@ public class MantenedorRemuneraciones implements Serializable {
         return retorno;
     }
 
+    public List<BonoDescuentoRemuneracion> obtenerBonosImponibles(Remuneracion r) {
+        return obtenerBonosDescuentos(r, bonosImponiblesTablaRemuneracion);
+    }
+
+    public List<BonoDescuentoRemuneracion> obtenerBonosNoImponibles(Remuneracion r) {
+        return obtenerBonosDescuentos(r, bonosNoImponiblesTablaRemuneracion);
+    }
+
     public List<BonoDescuentoRemuneracion> obtenerDescuentos(Remuneracion r) {
-        List<BonoDescuentoRemuneracion> retorno = new ArrayList<BonoDescuentoRemuneracion>();
-        if (descuentosTablaRemuneracion == null) {
-            return retorno;
-        }
-        for (String s : descuentosTablaRemuneracion.getTipos()) {
-            boolean encontrado = false;
-            if (r != null && r.getRemuneracionBonoDescuentoList() != null) {
-                for (BonoDescuentoRemuneracion d : r.getRemuneracionBonoDescuentoList()) {
-                    if (d.getDescripcion().equals(s)) {
-                        encontrado = true;
-                        retorno.add(d);
-                        break;
-                    }
-                }
-            }
-            if (!encontrado) {
-                BonoDescuentoRemuneracion d = new BonoDescuentoRemuneracion();
-                d.setDescripcion(s);
-                d.setMonto(BigInteger.ZERO);
-                retorno.add(d);
-            }
-        }
-        return retorno;
+        return obtenerBonosDescuentos(r, descuentosTablaRemuneracion);
     }
 
     public List<Personal> obtenerConductores() {
@@ -440,19 +443,19 @@ public class MantenedorRemuneraciones implements Serializable {
         this.anioIngresado = anioIngresado;
     }
 
-    public BonosTablaRemuneracion getBonosTablaRemuneracion() {
-        return bonosTablaRemuneracion;
+    public BonoDescuentoTablaRemuneracion getBonosTablaRemuneracion() {
+        return bonosImponiblesTablaRemuneracion;
     }
 
-    public void setBonosTablaRemuneracion(BonosTablaRemuneracion bonosTablaRemuneracion) {
-        this.bonosTablaRemuneracion = bonosTablaRemuneracion;
+    public void setBonosTablaRemuneracion(BonoDescuentoTablaRemuneracion bonosTablaRemuneracion) {
+        this.bonosImponiblesTablaRemuneracion = bonosTablaRemuneracion;
     }
 
-    public DescuentosTablaRemuneracion getDescuentosTablaRemuneracion() {
+    public BonoDescuentoTablaRemuneracion getDescuentosTablaRemuneracion() {
         return descuentosTablaRemuneracion;
     }
 
-    public void setDescuentosTablaRemuneracion(DescuentosTablaRemuneracion descuentosTablaRemuneracion) {
+    public void setDescuentosTablaRemuneracion(BonoDescuentoTablaRemuneracion descuentosTablaRemuneracion) {
         this.descuentosTablaRemuneracion = descuentosTablaRemuneracion;
     }
 
@@ -462,5 +465,13 @@ public class MantenedorRemuneraciones implements Serializable {
 
     public void setRemuneracionSeleccionada(Remuneracion remuneracionSeleccionada) {
         this.remuneracionSeleccionada = remuneracionSeleccionada;
+    }
+
+    public BonoDescuentoTablaRemuneracion getBonosNoImponiblesTablaRemuneracion() {
+        return bonosNoImponiblesTablaRemuneracion;
+    }
+
+    public void setBonosNoImponiblesTablaRemuneracion(BonoDescuentoTablaRemuneracion bonosNoImponiblesTablaRemuneracion) {
+        this.bonosNoImponiblesTablaRemuneracion = bonosNoImponiblesTablaRemuneracion;
     }
 }

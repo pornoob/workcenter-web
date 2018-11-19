@@ -8,6 +8,7 @@
             <p:tooltip for="mPersonal" value="Personal"
                        rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"/>
             <p:tooltip for="mEquipos" value="Equipos" rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"/>
+            <p:tooltip for="mEmpresas" value="Empresas" rendered="#{sesionCliente.tienePermiso('GESTOR_DE_EMPRESAS')}"/>
             <p:tooltip for="mUsuarios" value="Usuarios" rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"/>
             <p:tooltip for="mRegistros" value="Registros"
                        rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"/>
@@ -46,6 +47,8 @@
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_PERSONAL_APP')}"/>
             <p:menuitem id="mEquipos" styleClass="fa fa-truck fa-1x" style="color: black; font-size: 1.26em" url="/m/equipos" ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MANTENEDOR_TRACTOS')}"/>
+            <p:menuitem id="mEmpresas" styleClass="fa fa-industry fa-1x" style="color: black; font-size: 1.26em" url="/m/admin_empresas" ajax="false"
+                        rendered="#{sesionCliente.tienePermiso('GESTOR_DE_EMPRESAS')}"/>
             <p:menuitem id="mTaller" styleClass="fa fa-wrench fa-1x" style="color: black; font-size: 1.26em" url="/m/taller"
                         ajax="false"
                         rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES') or sesionCliente.tienePermiso('BODEGA_TALLER') or sesionCliente.tienePermiso('GESTION_OT')}"/>

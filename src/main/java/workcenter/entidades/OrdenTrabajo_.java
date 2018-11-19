@@ -14,7 +14,7 @@ public abstract class OrdenTrabajo_ {
 	public static volatile SetAttribute<OrdenTrabajo, RepuestoOt> repuestos;
 	public static volatile SingularAttribute<OrdenTrabajo, MmeMantencionMaquina> mantencionMaquina;
 	public static volatile SingularAttribute<OrdenTrabajo, SolicitanteOt> solicitante;
-	public static volatile SingularAttribute<OrdenTrabajo, Integer> id;
+	public static volatile SingularAttribute<OrdenTrabajo, Long> id;
 	public static volatile SingularAttribute<OrdenTrabajo, MmeMantencionTracto> mantencionTracto;
 	public static volatile SingularAttribute<OrdenTrabajo, String> tipoTrabajo;
 	public static volatile SingularAttribute<OrdenTrabajo, MmeMantencionSemirremolque> mantencionSemirremolque;
