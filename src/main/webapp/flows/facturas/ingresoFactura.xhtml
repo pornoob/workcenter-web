@@ -88,8 +88,8 @@
                                 <f:selectItem itemLabel="-- Seleccione --"
                                               noSelectionOption="true"/>
                                 <f:selectItems value="#{mantenedorFacturas.productos}"
-                                               var="p" 
-                                               itemLabel="#{p.nombre}"/>
+                                               var="p"
+                                               itemLabel="[#{p.codigo}] #{p.nombre}"/>
                             </p:selectOneMenu>
                         </f:facet>
                         <f:facet name="output">

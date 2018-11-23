@@ -190,16 +190,16 @@ public class MantenedorMantenciones implements Serializable, WorkcenterFileListe
     }
 
     public void save() {
+        if (comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")==null) {
+            FacesUtil.mostrarMensajeError("Operación erronea", "Debes adjuntar al menos un archivo");
+            return;
+        }
         TrazabilidadOt state = new TrazabilidadOt();
         state.setAutor(sesionCliente.getUsuario().getRut());
         state.setOtId(this.ot);
         state.setFecha(new Date());
         state.setEstadoId(constantes.getESTADO_OT_FINALIZADA());
         this.ot.getTrazabilidad().add(state);
-        if (comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")==null) {
-            FacesUtil.mostrarMensajeError("Operación erronea", "Debes adjuntar al menos un archivo");
-            return;
-        }
         logicaOt.updateOt(this.ot);
         for (Documento d : comprobantesMantencion.get(sesionCliente.getUsuario().getRut() + "|mantencion")) {
             logicaDocumentos.asociarDocumento(d, ot);

@@ -5,53 +5,54 @@
                 xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
                 template="/templates/default.xhtml">
     <ui:define name="contenido">
-        <p:messages autoUpdate="true" closable="true"  />
+        <p:messages autoUpdate="true" closable="true"/>
         <h:form id="frmPrestamoCuotas">
             <h2><p:outputLabel>#{mantenedorCaja.concepto.etiqueta}</p:outputLabel></h2>
-            <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}" footer="(*) campos obligatorios" style="margin-bottom:20px">
-            <h:panelGrid columns="2" cellpadding="10">
-            <p:outputLabel value="Fecha: (*) " />
-            <p:calendar locale="es"
-                        navigator="true"
-                        pattern="yyyy-MM-dd"
-                        required="true"
-                        requiredMessage="Fecha Requerida"
-                        value="#{mantenedorCaja.dinero.fechaactivo}" />
-                <p:outputLabel value="Entregado a: (*) " />
-                <p:selectOneMenu filterMatchMode="contains" filter="true"
-                                 value="#{mantenedorCaja.dinero.receptor}"
-                                 converter="entityConverter"
-                                 required="true"
-                                 requiredMessage="Personal Requerido">
-                    <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                    <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                   itemLabel="#{p.nombreCompleto}"
-                                   itemValue="#{p}"/>
-                    <p:ajax event="change" listener="#{mantenedorCaja.calcularCuotas}"/>
-                </p:selectOneMenu>
-                <p:outputLabel value="Monto: (*) " />
-                <p:inputText value="#{mantenedorCaja.dinero.monto}">
-                    <p:ajax event="blur" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
-                </p:inputText>
-                <p:outputLabel value="N° Cuotas: " />
-                <p:selectOneMenu value="#{mantenedorCaja.numeroCuotas}">
-                    <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
-                    <f:selectItems value="#{constantes.lstCuotas}"
-                                   var="c"
-                                   itemLabel="#{c}"
-                                   itemValue="#{c}"/>
-                    <p:ajax event="change" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
-                </p:selectOneMenu>
-                <p:outputLabel value="Fecha Primera Cuota: (*) " />
-                <p:calendar locale="es"
-                            navigator="true"
-                            pattern="yyyy-MM-dd"
-                            required="true"
-                            requiredMessage="Fecha Requerida"
-                            value="#{mantenedorCaja.fechaCuotaInicial}"
-                            >
-                    <p:ajax event="dateSelect" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
-                </p:calendar>
+            <p:panel id="entrada" header="#{mantenedorCaja.concepto.salida ?'Salida' : 'Entrada'}"
+                     footer="(*) campos obligatorios" style="margin-bottom:20px">
+                <h:panelGrid columns="2" cellpadding="10">
+                    <p:outputLabel value="Fecha: (*) "/>
+                    <p:calendar locale="es"
+                                navigator="true"
+                                pattern="yyyy-MM-dd"
+                                required="true"
+                                requiredMessage="Fecha Requerida"
+                                value="#{mantenedorCaja.dinero.fechaactivo}"/>
+                    <p:outputLabel value="Entregado a: (*) "/>
+                    <p:selectOneMenu filterMatchMode="contains" filter="true"
+                                     value="#{mantenedorCaja.dinero.receptor}"
+                                     converter="entityConverter"
+                                     required="true"
+                                     requiredMessage="Personal Requerido">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
+                                       itemLabel="(#{p.rut}) #{p.nombreCompleto}"
+                                       itemValue="#{p}"/>
+                        <p:ajax event="change" listener="#{mantenedorCaja.calcularCuotas}"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Monto: (*) "/>
+                    <p:inputText value="#{mantenedorCaja.dinero.monto}">
+                        <p:ajax event="blur" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
+                    </p:inputText>
+                    <p:outputLabel value="N° Cuotas: "/>
+                    <p:selectOneMenu value="#{mantenedorCaja.numeroCuotas}">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
+                        <f:selectItems value="#{constantes.lstCuotas}"
+                                       var="c"
+                                       itemLabel="#{c}"
+                                       itemValue="#{c}"/>
+                        <p:ajax event="change" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
+                    </p:selectOneMenu>
+                    <p:outputLabel value="Fecha Primera Cuota: (*) "/>
+                    <p:calendar locale="es"
+                                navigator="true"
+                                pattern="yyyy-MM-dd"
+                                required="true"
+                                requiredMessage="Fecha Requerida"
+                                value="#{mantenedorCaja.fechaCuotaInicial}"
+                    >
+                        <p:ajax event="dateSelect" listener="#{mantenedorCaja.calcularCuotas}" update="dtCalendario"/>
+                    </p:calendar>
                 </h:panelGrid>
             </p:panel>
         </h:form>
@@ -62,7 +63,7 @@
                         <h:outputText value="#{d.fecha}"/>
                     </p:column>
                     <p:column headerText="MONTO">
-                        <h:outputText value="#{d.monto}" />
+                        <h:outputText value="#{d.monto}"/>
                     </p:column>
                 </p:dataTable>
             </h:panelGrid>

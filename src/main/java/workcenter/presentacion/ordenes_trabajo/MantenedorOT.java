@@ -1,5 +1,6 @@
 package workcenter.presentacion.ordenes_trabajo;
 
+import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
@@ -258,7 +259,15 @@ public class MantenedorOT implements Serializable {
         this.ot = ots_ejecutando.get(ots_ejecutando.indexOf(selected));
     }
 
-    public void toCancel(OrdenTrabajo ot) {
+    public String toPrint(OrdenTrabajo ot) {
+        currentDate = new Date();
+        this.ot = logicaOt.findWithMantenimientos(ot.getId());
+        return "print";
+    }
+
+    public String toCheck(OrdenTrabajo ot) {
+        this.ot = logicaOt.findWithMantenimientos(ot.getId());
+        return "check";
     }
 
     // getters and setters

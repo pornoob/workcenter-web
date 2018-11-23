@@ -23,7 +23,7 @@
                                      requiredMessage="Personal Requerido">
                         <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --" itemValue="#{null}"/>
                         <f:selectItems value="#{mantenedorCaja.lstPersonal}" var="p"
-                                       itemLabel="#{p.nombreCompleto}"
+                                       itemLabel="(#{p.rut}) #{p.nombreCompleto}"
                                        itemValue="#{p}"/>
                         </p:selectOneMenu>
                     <p:outputLabel value="Concepto: (*) " />

@@ -125,8 +125,8 @@
                                             <f:selectItem itemLabel="-- Seleccione --"
                                                           noSelectionOption="true"/>
                                             <f:selectItems value="#{mantenedorMantenciones.productos}"
-                                                           var="p" 
-                                                           itemLabel="[#{p.productoId}] #{p.nombre}"/>
+                                                           var="p"
+                                                           itemLabel="[#{p.codigo}] #{p.nombre}"/>
                                         </p:selectOneMenu>
                                     </f:facet>
                                     <f:facet name="output">
@@ -182,7 +182,7 @@
                                             <f:selectItem itemLabel="-- Seleccione --"
                                                           noSelectionOption="true"/>
                                             <f:selectItems value="#{mantenedorMantenciones.personal}"
-                                                           var="p" 
+                                                           var="p"
                                                            itemLabel="#{p.nombreCompleto}"/>
                                         </p:selectOneMenu>
                                     </f:facet>

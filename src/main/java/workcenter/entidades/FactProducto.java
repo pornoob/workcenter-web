@@ -61,13 +61,13 @@ public class FactProducto implements Serializable {
     }
 
     public Long getCodigo() {
-        return codigo;
+        return codigo != null ? codigo : 0;
     }
 
     public void setCodigo(Long codigo) {
         this.codigo = codigo;
     }
-    
+
     @Override
     public int hashCode() {
         int hash = 7;

@@ -2,19 +2,29 @@
 <flow xmlns="http://www.springframework.org/schema/webflow"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
       xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-    
+
     <on-start>
         <evaluate expression="mantenedorOT.init()"/>
     </on-start>
-    
+
     <view-state id="ingresoOt">
         <transition on="assign" to="asignarOt"/>
+        <transition on="check" to="revisarOt"/>
+        <transition on="print" to="imprimir"/>
         <transition on="back" to="end_flow"/>
     </view-state>
-    
+
+    <view-state id="imprimir">
+        <transition on="back" to="ingresoOt"/>
+    </view-state>
+
     <view-state id="asignarOt">
         <transition on="back" to="ingresoOt"/>
     </view-state>
-    
+
+    <view-state id="revisarOt">
+        <transition on="back" to="ingresoOt"/>
+    </view-state>
+
     <end-state id="end_flow"/>
 </flow>

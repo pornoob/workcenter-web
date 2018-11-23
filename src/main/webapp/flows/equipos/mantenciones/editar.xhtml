@@ -20,7 +20,7 @@
                     <f:selectItem noSelectionOption="true" itemValue="#{null}" itemLabel="Mantención Panne"/>
                     <f:selectItems value="#{mantenedorMantenciones.tiposMantencion}" var="t" itemLabel="#{t.nombre}"/>
                 </p:selectOneMenu>
-                <h:outputLabel for="iTracto" value="Camión"/>:
+                <h:outputLabel for="iMaquina" value="Camión"/>:
                 <p:selectOneMenu value="#{mantenedorMantenciones.mantencionTracto.tracto}" id="iMaquina"
                                  converter="entityConverter" filter="true" filterMatchMode="contains">
                     <f:selectItem itemLabel="No vincular" itemValue="#{null}"/>
