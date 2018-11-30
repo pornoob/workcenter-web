@@ -84,9 +84,9 @@ public class MantenedorCaja implements Serializable {
         dinero.setOrdendecarga(new Vuelta());
     }
 
-    public void guardarDatosCaja() throws IOException {
+    public String guardarDatosCaja() throws IOException {
         if (dinero.getReceptor() == null) {
-            return;
+            return null;
         }
         dinero.setConcepto(concepto);
         dinero.setFechareal(dinero.getFechaactivo());
@@ -105,13 +105,15 @@ public class MantenedorCaja implements Serializable {
             Vuelta v = logicaMaestroGuias.obtenerOrdendeCarga(dinero.getOrdendecarga().getId());
             if (!dinero.getReceptor().equals(v.getConductor())) {
                 FacesUtil.mostrarMensajeError("Error", "El número de guía pertenece a: "+v.getConductor().getNombreCompleto());
-                return;
+                return null;
             }
             dinero.setOrdendecarga(v);
         } else {
             dinero.setOrdendecarga(null);
         }
-        if (logicaCaja.guardarEntradas(dinero)) {
+        Dinero result = logicaCaja.guardarEntradas(dinero);
+        if (result != null) {
+            dinero.setId(result.getId());
             FacesUtil.mostrarMensajeInformativo(dinero.getConcepto().getEtiqueta(), "Datos guardados correctamente");
             //imprimirPdf(renderPdfCaja.generarImpresionCaja(dinero));
         } else {
@@ -120,9 +122,11 @@ public class MantenedorCaja implements Serializable {
                     + " " + dinero.getConcepto().getEtiqueta()
                     + "" + dinero.getReceptor().getNombreCompleto()
                     + " " + dinero.getMonto());
+            return null;
         }
-        inicializarDinero();
+        // inicializarDinero();
         lstDineros = logicaCaja.obtenerDinerosConDescuentos();
+        return "flowVoucher";
     }
 
     public void asignarConcepto(int t) {
@@ -132,6 +136,11 @@ public class MantenedorCaja implements Serializable {
                 break;
             }
         }
+    }
+
+    public String irCaja() {
+        inicializarDinero();
+        return "back";
     }
 
     public String irIngresoCaja(int tipoConcepto) {

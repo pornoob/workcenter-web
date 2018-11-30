@@ -33,7 +33,13 @@
 
     <view-state id="asignacionCaja">
         <transition on="flowMenu" to="menu"/>
+        <transition on="flowVoucher" to="comprobanteCaja"/>
     </view-state>
+
+    <view-state id="comprobanteCaja">
+        <transition on="back" to="menu"/>
+    </view-state>
+
     <view-state id="sueldoCaja">
         <transition on="flowMenu" to="menu"/>
     </view-state>

@@ -17,13 +17,12 @@ public class DineroDAO {
     @PersistenceContext
     EntityManager em;
 
-    public Boolean guardarDatosDineros(Dinero d) {
+    public Dinero guardarDatosDineros(Dinero d) {
         try {
-            em.merge(d);
-            return true;
+            return em.merge(d);
         } catch (Exception ex) {
             ex.printStackTrace();
-            return false;
+            return null;
         }
 
     }

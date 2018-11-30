@@ -29,7 +29,7 @@ public class LogicaCaja {
     public List<Dinero> obtenerDinerosConDescuentos() {return dineroDao.obtenerDinerosConDescuentos();}
 
     @Transactional(readOnly = false)
-    public Boolean guardarEntradas(Dinero dinero){return dineroDao.guardarDatosDineros(dinero);}
+    public Dinero guardarEntradas(Dinero dinero){return dineroDao.guardarDatosDineros(dinero);}
 
     @Transactional(readOnly = true)
     public List<Dinero> obtenerDinerosFiltros(Personal personal, Concepto concepto, Date fechaDesde, Date fechaHasta) {
