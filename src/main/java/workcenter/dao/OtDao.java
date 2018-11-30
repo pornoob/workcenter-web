@@ -20,11 +20,7 @@ public class OtDao extends MyDao {
     private EntityManager em;
 
     public void save(OrdenTrabajo ot) {
-        if (ot.getId() == null) {
-            em.persist(ot);
-        } else {
-            em.merge(ot);
-        }
+        em.merge(ot);
     }
 
     public List<OrdenTrabajo> findByStatus(Integer status) {
