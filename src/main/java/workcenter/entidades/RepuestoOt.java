@@ -19,7 +19,7 @@ public class RepuestoOt implements Serializable {
     private Long otId;
     @Id
     private Long productoId;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "otId")
     @JoinColumn(name = "ot_id")
     private OrdenTrabajo ot;
@@ -27,10 +27,10 @@ public class RepuestoOt implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "productoId")
     @JoinColumn(name = "producto_id")
     private FactProducto producto;
-    
+
     @Column(name = "cantidad")
     private Integer cantidad;
-    
+
     @Transient
     private String rowKey;
 
@@ -112,6 +112,6 @@ public class RepuestoOt implements Serializable {
         if (!Objects.equals(this.ot, other.ot)) {
             return false;
         }
-        return Objects.equals(this.producto, other.producto);
+        return Objects.equals(this.producto, other.producto) || this.rowKey.equals(other.rowKey);
     }
 }

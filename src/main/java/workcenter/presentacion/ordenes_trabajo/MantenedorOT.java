@@ -1,9 +1,10 @@
 package workcenter.presentacion.ordenes_trabajo;
 
-import org.primefaces.context.RequestContext;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.webflow.execution.RequestContext;
+import org.springframework.webflow.execution.RequestContextHolder;
 import workcenter.entidades.*;
 import workcenter.negocio.equipos.LogicaEquipos;
 import workcenter.negocio.equipos.LogicaMantenciones;
@@ -162,6 +163,8 @@ public class MantenedorOT implements Serializable {
         history.add(state);
         ot.setTipoTrabajo(listTipoTrabajoToString());
         ot.setTrazabilidad(history);
+        ot.setAsistentes(new TreeSet<AsistenteOt>());
+        ot.setRepuestos(new TreeSet<RepuestoOt>());
         if (Boolean.TRUE.equals(renderMaquinaria)) {
             mantencionMaquina.setOt(ot);
             logicaOt.create(ot, mantencionMaquina);
@@ -268,9 +271,11 @@ public class MantenedorOT implements Serializable {
         return "print";
     }
 
-    public String toCheck(OrdenTrabajo ot) {
+    public String toEdit(OrdenTrabajo ot) {
         this.ot = logicaOt.findWithMantenimientos(ot.getId());
-        return "check";
+        RequestContext requestContext = RequestContextHolder.getRequestContext();
+        requestContext.getFlowScope().put("ordenTrabajo", this.ot);
+        return "supplies";
     }
 
     // getters and setters

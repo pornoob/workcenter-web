@@ -15,7 +15,7 @@
                         <i class="fa fa-wrench fa-5x"></i>
                         <h:outputLabel value="Módulo de Mantenciones"/>
                     </h:commandLink>
-                    
+
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('BODEGA_TALLER')}"
                                    action="#{facesUtil.redirigir('/m/facturas')}" class="menuWorkcenter">
                         <i class="fa fa-usd fa-5x"></i>
@@ -28,7 +28,7 @@
                         <i class="fa fa-lock fa-5x"></i>
                         <h:outputLabel value="Bodega Taller" style="margin-top: 10px"/>
                     </h:commandLink>
-                    
+
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('GESTION_OT')}"
                                    action="#{facesUtil.redirigir('/m/ots')}"
                                    class="menuWorkcenter" style="display: block">

@@ -1,0 +1,128 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui"
+                template="/templates/default.xhtml">
+
+    <ui:define name="contenido">
+        <p:messages autoUpdate="true" showDetail="true"/>
+        <h:form id="formOt">
+            <h2>Asignación de recursos para OT ##{recursosOT.ordenTrabajo.id}</h2>
+
+            <p:fieldset legend="Repuestos Utilizados">
+                <p:dataTable value="#{recursosOT.repuestoOtList}" var="item"
+                             id="tblRepOt" widgetVar="tblRepOt"
+                             emptyMessage="No se han asociado repuestos"
+                             rowIndexVar="#{row}" editMode="cell" editable="true"
+                             rowKey="#{item.rowKey}">
+                    <f:facet name="header">
+                        <p:outputPanel styleClass="ui-g">
+                            <p:outputPanel styleClass="ui-g-12 text-right">
+                                <p:commandButton icon="fa fa-plus"
+                                                 update="tblRepOt"
+                                                 action="#{recursosOT.initRepuesto()}"
+                                                 value="Agregar Repuesto"/>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Ítem">
+                        <p:cellEditor>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{recursosOT.repuestoOt.producto}"
+                                                 converter="entityConverter"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
+                                                 autoWidth="false">
+                                    <f:selectItem itemLabel="-- Seleccione --"
+                                                  noSelectionOption="true"/>
+                                    <f:selectItems value="#{recursosOT.productos}"
+                                                   var="p"
+                                                   itemLabel="[#{p.codigo}] #{p.nombre}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{item.producto.nombre}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="Cantidad">
+                        <p:cellEditor>
+                            <f:facet name="input">
+                                <p:spinner min="0" value="#{recursosOT.repuestoOt.cantidad}"/>
+                            </f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{item.cantidad}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="fa fa-remove"
+                                         update="tblRepOt"
+                                         action="#{recursosOT.removeRepuesto(item)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+
+            <p:fieldset legend="Asistentes de OT">
+                <p:dataTable value="#{recursosOT.asistenteOtList}" var="item"
+                             id="tblAsisOt" widgetVar="tblAsisOt"
+                             emptyMessage="No se han asociado asistentes"
+                             rowIndexVar="#{row}" editMode="cell" editable="true"
+                             rowKey="#{item.rowKey}">
+                    <f:facet name="header">
+                        <p:outputPanel styleClass="ui-g">
+                            <p:outputPanel styleClass="ui-g-12 text-right">
+                                <p:commandButton icon="fa fa-plus"
+                                                 update="tblAsisOt"
+                                                 action="#{recursosOT.initAsistente()}"
+                                                 value="Agregar Asistente"/>
+                            </p:outputPanel>
+                        </p:outputPanel>
+                    </f:facet>
+
+                    <p:column headerText="Asistente">
+                        <p:cellEditor>
+                            <f:facet name="input">
+                                <p:selectOneMenu value="#{recursosOT.asistenteOt.personal}"
+                                                 converter="entityConverter"
+                                                 filter="true"
+                                                 filterMatchMode="contains"
+                                                 autoWidth="false">
+                                    <f:selectItem itemLabel="-- Seleccione --"
+                                                  noSelectionOption="true"/>
+                                    <f:selectItems value="#{recursosOT.personal}"
+                                                   var="p"
+                                                   itemLabel="#{p.nombreCompleto}"/>
+                                </p:selectOneMenu>
+                            </f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{item.personal.nombreCompleto}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+
+                    <p:column headerText="H.H.">
+                        <p:cellEditor>
+                            <f:facet name="input">
+                                <p:spinner min="0" value="#{recursosOT.asistenteOt.horasHombre}"/>
+                            </f:facet>
+                            <f:facet name="output">
+                                <h:outputText value="#{item.horasHombre}"/>
+                            </f:facet>
+                        </p:cellEditor>
+                    </p:column>
+                    <p:column headerText="Acciones">
+                        <p:commandButton icon="fa fa-remove"
+                                         update="tblAsisOt"
+                                         action="#{recursosOT.removeAsistente(item)}"/>
+                    </p:column>
+                </p:dataTable>
+            </p:fieldset>
+            <p:commandButton value="Guardar" action="#{recursosOT.save()}"/>
+            <p:commandButton value="Volver" action="back"/>
+        </h:form>
+    </ui:define>
+</ui:composition>

@@ -132,8 +132,8 @@
                     </p:column>
 
                     <p:column headerText="Acciones">
-                        <!--<p:commandButton icon="fa fa-search" title="Revisar" action="#{mantenedorOT.toCheck(ot)}" immediate="true"/>-->
                         <p:commandButton icon="fa fa-print" title="Imprimir" action="#{mantenedorOT.toPrint(ot)}" immediate="true"/>
+                        <p:commandButton icon="fa fa-edit" title="Asignar Recursos" action="#{mantenedorOT.toEdit(ot)}" immediate="true"/>
                     </p:column>
                 </p:dataTable>
 
@@ -162,7 +162,6 @@
                         <p:outputLabel value="#{mantenedorOT.tipoTrabajoToPrettyName(ot.tipoTrabajo)}"/>
                     </p:column>
                     <p:column>
-                        <!--<p:commandButton icon="fa fa-search" title="Revisar" action="#{mantenedorOT.toCheck(ot)}" immediate="true"/>-->
                     </p:column>
                 </p:dataTable>
             </p:outputPanel>

@@ -9,7 +9,7 @@
 
     <view-state id="ingresoOt">
         <transition on="assign" to="asignarOt"/>
-        <transition on="check" to="revisarOt"/>
+        <transition on="supplies" to="recursosOt"/>
         <transition on="print" to="imprimir"/>
         <transition on="back" to="end_flow"/>
     </view-state>
@@ -22,8 +22,10 @@
         <transition on="back" to="ingresoOt"/>
     </view-state>
 
-    <view-state id="revisarOt">
-        <transition on="back" to="ingresoOt"/>
+    <view-state id="recursosOt">
+        <transition on="back" to="ingresoOt">
+            <evaluate expression="mantenedorOT.init()"/>
+        </transition>
     </view-state>
 
     <end-state id="end_flow"/>

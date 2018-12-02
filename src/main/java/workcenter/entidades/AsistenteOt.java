@@ -17,7 +17,7 @@ public class AsistenteOt implements Serializable  {
     private Long otId;
     @Id
     private Long personalId;
-    
+
     @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "otId")
     @JoinColumn(name = "ot_id")
     private OrdenTrabajo ot;
@@ -25,10 +25,10 @@ public class AsistenteOt implements Serializable  {
     @ManyToOne(fetch = FetchType.LAZY)    @MapsId(value = "personalId")
     @JoinColumn(name = "personal_id")
     private Personal personal;
-    
+
     @Column(name = "hh")
     private Float horasHombre;
-    
+
     @Transient
     private String rowKey;
 
@@ -109,6 +109,6 @@ public class AsistenteOt implements Serializable  {
         if (!Objects.equals(this.ot, other.ot)) {
             return false;
         }
-        return Objects.equals(this.personal, other.personal);
+        return Objects.equals(this.personal, other.personal) || this.rowKey.equals(other.rowKey);
     }
 }
