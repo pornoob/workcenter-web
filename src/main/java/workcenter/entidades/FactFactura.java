@@ -32,6 +32,8 @@ public class FactFactura implements Serializable {
     private Long facturaId;
     @Column(name = "numero")
     private Integer numero;
+    @Column(name = "descuento")
+    private Float descuento;
     @Column(name = "fecha")
     @Temporal(TemporalType.DATE)
     private Date fecha;
@@ -96,10 +98,18 @@ public class FactFactura implements Serializable {
     public void setItems(Set<FactDetalleFactura> items) {
         this.items = items;
     }
-    
+
+    public Float getDescuento() {
+        return descuento;
+    }
+
+    public void setDescuento(Float descuento) {
+        this.descuento = descuento;
+    }
+
     /**
      * Agrega un detalle a la factura
-     * 
+     *
      * @param item item que se desea agregar
      * @return boolean, true en caso de haber agregado el producto y false
      * en caso contrario.
@@ -110,10 +120,10 @@ public class FactFactura implements Serializable {
         }
         return this.items.add(item);
     }
-    
+
     /**
      * Quita un detalle a la factura.
-     * 
+     *
      * @param item que se desea quitar
      * @return boolean, true en caso de eliminar, false
      * en caso contrario.
@@ -154,5 +164,5 @@ public class FactFactura implements Serializable {
     public String toString() {
         return "workcenter.entidades.FactFactura[ facturaId=" + facturaId + " ]";
     }
-    
+
 }

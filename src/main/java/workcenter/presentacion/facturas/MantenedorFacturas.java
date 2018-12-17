@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.Set;
 
 /**
- *
  * @author Claudio Olivares
  */
 @Component
@@ -27,14 +26,14 @@ import java.util.Set;
 public class MantenedorFacturas implements Serializable {
 
     private static final long serialVersionUID = -5016398205437195408L;
-    
+
     private FactFactura factura;
     private Integer totalNetoCalculado;
     private Integer totalNeto;
-    
+
     private List<Empresa> empresas;
     private List<FactProducto> productos;
-    
+
     @Autowired
     private LogicaEmpresas logicaEmpresas;
     @Autowired
@@ -44,15 +43,15 @@ public class MantenedorFacturas implements Serializable {
 
     public void init() {
         empresas = logicaEmpresas.obtenerEmpresas();
-        productos =logicaStock.findAll();
+        productos = logicaStock.findAll();
         factura = new FactFactura();
         totalNetoCalculado = 0;
     }
-    
+
     public void reloadProducts() {
-        productos =logicaStock.findAll();
+        productos = logicaStock.findAll();
     }
-    
+
     public void addItem() {
         FactDetalleFactura detalleFactura = new FactDetalleFactura();
         detalleFactura.setFactura(factura);
@@ -61,7 +60,7 @@ public class MantenedorFacturas implements Serializable {
         detalleFactura.setProducto(null);
         factura.addItem(detalleFactura);
     }
-    
+
     public void updateNeto() {
         totalNetoCalculado = 0;
         Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
@@ -69,8 +68,10 @@ public class MantenedorFacturas implements Serializable {
             FactDetalleFactura current = iterator.next();
             totalNetoCalculado += current.getCantidad() * current.getPrecioUnitario();
         }
+        if (factura.getDescuento() != null && factura.getDescuento() != 0)
+            totalNetoCalculado = (int) (totalNetoCalculado - totalNetoCalculado * factura.getDescuento()/100);
     }
-    
+
     public void removeItem(FactDetalleFactura item) {
         Set<FactDetalleFactura> oldItems = factura.getItems();
         Set<FactDetalleFactura> newItems = new HashSet<>();
@@ -82,10 +83,10 @@ public class MantenedorFacturas implements Serializable {
         factura.setItems(newItems);
         updateNeto();
     }
-    
+
     public void save() {
         Iterator<FactDetalleFactura> iterator = factura.getItems().iterator();
-        while(iterator.hasNext()) {
+        while (iterator.hasNext()) {
             FactDetalleFactura item = iterator.next();
             if (item.getCantidad() == null || item.getCantidad() == 0 ||
                     item.getPrecioUnitario() == null ||

@@ -43,6 +43,10 @@
                 <p:outputLabel value=":"/>
                 <p:calendar value="#{mantenedorFacturas.factura.fecha}"
                             pattern="dd-MM-yyyy" navigator="true"/>
+
+                <p:outputLabel value="Descuento Proveedor [0-100%]"/>
+                <p:outputLabel value=":"/>
+                <p:inputText value="#{mantenedorFacturas.factura.descuento}"/>
             </p:panelGrid>
 
             <h3>Ítems</h3>
@@ -93,7 +97,7 @@
                             </p:selectOneMenu>
                         </f:facet>
                         <f:facet name="output">
-                            <h:outputText value="#{item.producto.nombre}"/>
+                            <h:outputText value="[#{item.producto.codigo}] #{item.producto.nombre}"/>
                         </f:facet>
                     </p:cellEditor>
                 </p:column>
