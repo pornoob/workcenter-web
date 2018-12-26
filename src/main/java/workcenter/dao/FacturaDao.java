@@ -6,6 +6,8 @@ import workcenter.entidades.Stock;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import java.util.List;
 
 /**
  *
@@ -30,5 +32,10 @@ public class FacturaDao {
         } else {
             em.merge(s);
         }
+    }
+
+    public List<FactFactura> findAll() {
+        Query query = em.createNamedQuery("FactFactura.findAllWithFactory", FactFactura.class);
+        return query.getResultList();
     }
 }

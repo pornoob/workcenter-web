@@ -10,7 +10,17 @@
         <h2>Listado Facturas</h2>
         <p:messages autoUpdate="true" showDetail="true" closable="true"/>
         <h:form id="formFactura">
-            <p:dataTable value=""></p:dataTable>
+            <p:commandButton value="Volver" icon="fa fa-arrow-left" action="back"/>
+            <p:dataTable value="#{listadoFacturas.facturaList}" var="factura" filterEvent="enter">
+                <p:column headerText="Número" filterMatchMode="startsWith" filterBy="#{factura.numero}">
+                    <h:outputText value="#{factura.numero}">
+                        <tvp:convertNumber groupingUsed="true"/>
+                    </h:outputText>
+                </p:column>
+                <p:column headerText="Emisor" filterMatchMode="contains" filterBy="#{factura.emisor.nombre}">
+                    #{factura.emisor.nombre}
+                </p:column>
+            </p:dataTable>
         </h:form>
     </ui:define>
 </ui:composition>

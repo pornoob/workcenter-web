@@ -21,7 +21,9 @@ import java.util.Set;
 @Table(name = "fact_facturas")
 @XmlRootElement
 @NamedQueries({
-    @NamedQuery(name = "FactFactura.findAll", query = "SELECT f FROM FactFactura f")})
+    @NamedQuery(name = "FactFactura.findAll", query = "SELECT f FROM FactFactura f"),
+    @NamedQuery(name = "FactFactura.findAllWithFactory", query = "SELECT f FROM FactFactura f INNER JOIN FETCH f.emisor"),
+})
 public class FactFactura implements Serializable {
 
     private static final long serialVersionUID = 1L;

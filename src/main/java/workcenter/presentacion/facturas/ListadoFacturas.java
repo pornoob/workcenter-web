@@ -19,5 +19,15 @@ public class ListadoFacturas implements Serializable {
     private FacturaDao facturaDao;
 
     @PostConstruct
-    public void init() {}
+    public void init() {
+        facturaList = facturaDao.findAll();
+    }
+
+    public List<FactFactura> getFacturaList() {
+        return facturaList;
+    }
+
+    public void setFacturaList(List<FactFactura> facturaList) {
+        this.facturaList = facturaList;
+    }
 }

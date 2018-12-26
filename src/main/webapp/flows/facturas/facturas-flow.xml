@@ -1,16 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <flow xmlns="http://www.springframework.org/schema/webflow"
       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd">
-    
-    <on-start>
-        <evaluate expression="mantenedorFacturas.init()"/>
-    </on-start>
-    
-    <view-state id="ingresoFactura">
-        <transition on="addProduct" to="bodega_taller"/>
+      xsi:schemaLocation="http://www.springframework.org/schema/webflow http://www.springframework.org/schema/webflow/spring-webflow-2.0.xsd"
+    start-state="menuFacturas">
+
+    <!--<on-start>-->
+        <!--<evaluate expression="mantenedorFacturas.init()"/>-->
+    <!--</on-start>-->
+
+    <view-state id="menuFacturas">
+        <transition on="add" to="ingresoFactura"/>
+        <transition on="list" to="listadoFacturas"/>
     </view-state>
-    
+
+    <view-state id="listadoFacturas">
+        <transition on="back" to="menuFacturas"/>
+    </view-state>
+
+    <view-state id="ingresoFactura">
+        <on-entry>
+            <evaluate expression="mantenedorFacturas.init()"/>
+        </on-entry>
+        <transition on="addProduct" to="bodega_taller"/>
+        <transition on="back" to="menuFacturas"/>
+    </view-state>
+
     <subflow-state id="bodega_taller" subflow="bodega_taller">
         <input name="isChildFlow" value="true"/>
         <transition on="end_flow" to="ingresoFactura">
