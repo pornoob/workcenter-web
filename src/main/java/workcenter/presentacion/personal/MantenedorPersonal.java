@@ -433,45 +433,45 @@ public class MantenedorPersonal implements Serializable {
         } else {
             cp.setPrevisiones(new ArrayList<PrevisionContrato>());
         }
+        isapreSeleccionada = null;
+        afpSeleccionada = null;
         for (PrevisionContrato pc : cp.getPrevisiones()) {
-            if (pc.getPrevision().getTipo().equals("salud")) {
+            if (isapreSeleccionada == null && pc.getPrevision().getTipo().equals("salud")) {
                 isapreSeleccionada = pc.getPrevision();
                 if (isapreSeleccionada.getNombre().equalsIgnoreCase("fonasa")) {
                     tipoSalud = constantes.getFonasa();
                 } else {
                     tipoSalud = constantes.getIsapre();
                 }
-            } else {
+            } else if (afpSeleccionada == null && pc.getPrevision().getTipo().equals("afp")) {
                 afpSeleccionada = pc.getPrevision();
             }
+            if (isapreSeleccionada != null && afpSeleccionada != null) break;
         }
         valorSalud = logicaPersonal.obtenerValorPrevisionSaludActual(cp);
         if (valorSalud == null) {
-            valorSalud = new ValorPrevisionPersonal();
-            valorSalud.setContrato(cp);
-            valorSalud.setValor((double) 0);
-            for (TipoUnidad tu : constantes.getTiposUnidad()) {
-                if (tu.getId().intValue() == constantes.getUnidadPesos()) {
-                    valorSalud.setUnidad(tu);
-                    break;
-                }
-            }
+            valorSalud = setValorPrevisionPorDefecto(cp);
         }
 
         valorAfp = logicaPersonal.obtenerValorPrevisionAfpActual(cp);
         if (valorAfp == null) {
-            valorAfp = new ValorPrevisionPersonal();
-            valorAfp.setContrato(cp);
-            valorAfp.setValor((double) 0);
-            for (TipoUnidad tu : constantes.getTiposUnidad()) {
-                if (tu.getId().intValue() == constantes.getUnidadPesos()) {
-                    valorAfp.setUnidad(tu);
-                    break;
-                }
-            }
+            valorAfp = setValorPrevisionPorDefecto(cp);
         }
 
         return "flowEditarContrato";
+    }
+
+    private ValorPrevisionPersonal setValorPrevisionPorDefecto(ContratoPersonal cp) {
+        ValorPrevisionPersonal valor = new ValorPrevisionPersonal();
+        valor.setContrato(cp);
+        valor.setValor((double) 0);
+        for (TipoUnidad tu : constantes.getTiposUnidad()) {
+            if (tu.getId().intValue() == constantes.getUnidadPesos()) {
+                valor.setUnidad(tu);
+                break;
+            }
+        }
+        return valor;
     }
 
     public void guardarContrato() {

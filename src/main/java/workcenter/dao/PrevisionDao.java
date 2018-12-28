@@ -40,7 +40,7 @@ public class PrevisionDao {
     }
 
     public List<PrevisionContrato> obtenerPrevisionesContrato(ContratoPersonal cp) {
-        Query q = em.createQuery("SELECT pc FROM PrevisionContrato pc INNER JOIN FETCH pc.prevision p WHERE pc.contrato = :contrato");
+        Query q = em.createQuery("SELECT pc FROM PrevisionContrato pc INNER JOIN FETCH pc.prevision p WHERE pc.contrato = :contrato ORDER BY pc.fechainicio DESC ");
         q.setParameter("contrato", cp);
         return q.getResultList();
     }
