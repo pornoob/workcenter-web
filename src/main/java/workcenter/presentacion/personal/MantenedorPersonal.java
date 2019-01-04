@@ -270,16 +270,6 @@ public class MantenedorPersonal implements Serializable {
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
         documentos = new ArrayList<DocumentoPersonal>(personalSeleccionado.getDocumentos());
         tiposDocumentos = logicaPersonal.obtenerTiposDocPersonal();
-//        for (TipoDocPersonal tdp : logicaPersonal.obtenerTiposDocPersonal()) {
-//            boolean encontrado = false;
-//            for (DocumentoPersonal dp : documentos) {
-//                if (dp.getTipo().equals(tdp)) {
-//                    encontrado = true;
-//                    break;
-//                }
-//            }
-//            if (!encontrado) tiposDocumentos.add(tdp);
-//        }
         rutIngresado = p.getRut() + "-" + p.getDigitoverificador();
         return "flowMostrarFicha";
     }
@@ -347,70 +337,81 @@ public class MantenedorPersonal implements Serializable {
         return retorno;
     }
 
+    public void eliminarDocPersonal(DocumentoPersonal doc) {
+        tiposDocumentos.add(doc.getTipo());
+        personalSeleccionado.getDocumentos().remove(doc);
+        logicaPersonal.eliminarDocPersonal(doc);
+    }
+
     public void subirArchivo() {
         String path = constantes.getPathArchivos() + "Documentos/personal/"
                 + formato.numeroAgrupado(personalSeleccionado.getRut())
                 + "-" + personalSeleccionado.getDigitoverificador() + "/";
-        new File(path).mkdirs();
-        path += docSeleccionado.getTipo().getEtiqueta() + archivo.getFileName().substring(archivo.getFileName().lastIndexOf('.'));
-        if (docSeleccionado.getId() == null) {
-            docSeleccionado.setPersonal(personalSeleccionado);
-            personalSeleccionado.getDocumentos().add(docSeleccionado);
-        }
-        DocumentoPersonal existente = null;
-        if (operacion == TipoOperacion.ACTUALIZAR) {
-            // respaldamos existente antes de subir
-            for (DocumentoPersonal de : documentos) {
-                if (de.getTipo().equals(docSeleccionado.getTipo())) {
-                    existente = de;
-                    break;
-                }
+        if (archivo != null) {
+            new File(path).mkdirs();
+            path += docSeleccionado.getTipo().getEtiqueta() + archivo.getFileName().substring(archivo.getFileName().lastIndexOf('.'));
+            if (docSeleccionado.getId() == null) {
+                docSeleccionado.setPersonal(personalSeleccionado);
+                personalSeleccionado.getDocumentos().add(docSeleccionado);
             }
-            Documento d = new Documento();
-            d.setFecha(new Date());
-            System.err.println("EXISTENTE: " + existente);
-            d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
-            logicaDocumentos.guardarDocumento(d);
+            DocumentoPersonal existente = null;
+            if (operacion == TipoOperacion.ACTUALIZAR) {
+                // respaldamos existente antes de subir
+                for (DocumentoPersonal de : documentos) {
+                    if (de.getTipo().equals(docSeleccionado.getTipo())) {
+                        existente = de;
+                        break;
+                    }
+                }
+                Documento d = new Documento();
+                d.setFecha(new Date());
+                System.err.println("EXISTENTE: " + existente);
+                d.setNombreOriginal(existente.getArchivo().substring(existente.getArchivo().lastIndexOf('/') + 1));
+                logicaDocumentos.guardarDocumento(d);
 
-            HistorialDocumentosPersonal respaldo = new HistorialDocumentosPersonal();
-            respaldo.setNumero(existente.getNumero());
-            respaldo.setPersonal(personalSeleccionado.getRut());
-            respaldo.setTipo(docSeleccionado.getTipo().getId());
-            respaldo.setVencimiento(existente.getVencimiento());
-            logicaPersonal.guardarHistorialDocumento(respaldo);
+                HistorialDocumentosPersonal respaldo = new HistorialDocumentosPersonal();
+                respaldo.setNumero(existente.getNumero());
+                respaldo.setPersonal(personalSeleccionado.getRut());
+                respaldo.setTipo(docSeleccionado.getTipo().getId());
+                respaldo.setVencimiento(existente.getVencimiento());
+                logicaPersonal.guardarHistorialDocumento(respaldo);
 
-            File result = new File(constantes.getPathArchivos());
-            result.mkdirs();
+                File result = new File(constantes.getPathArchivos());
+                result.mkdirs();
+                try {
+                    Files.move(Paths.get(constantes.getPathArchivos() + existente.getArchivo()), Paths.get(constantes.getPathArchivos() + d.getId()));
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                logicaDocumentos.asociarDocumento(d, respaldo);
+            } else if (operacion == TipoOperacion.INGRESAR) {
+                tiposDocumentos.remove(docSeleccionado.getTipo());
+            }
+            docSeleccionado.setArchivo(path.substring(constantes.getPathArchivos().length()));
+            logicaPersonal.guardarDocumento(docSeleccionado);
             try {
-                Files.move(Paths.get(constantes.getPathArchivos() + existente.getArchivo()), Paths.get(constantes.getPathArchivos() + d.getId()));
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            logicaDocumentos.asociarDocumento(d, respaldo);
-        } else if (operacion == TipoOperacion.INGRESAR) {
-            tiposDocumentos.remove(docSeleccionado.getTipo());
-        }
-        docSeleccionado.setArchivo(path.substring(constantes.getPathArchivos().length()));
-        logicaPersonal.guardarDocumento(docSeleccionado);
-        try {
-            new File(path).createNewFile();
-            FileOutputStream fileOutputStream = new FileOutputStream(path);
-            byte[] buffer = new byte[BUFFER_SIZE];
-            int bulk;
-            InputStream inputStream = archivo.getInputstream();
-            while (true) {
-                bulk = inputStream.read(buffer);
-                if (bulk < 0) {
-                    break;
+                new File(path).createNewFile();
+                FileOutputStream fileOutputStream = new FileOutputStream(path);
+                byte[] buffer = new byte[BUFFER_SIZE];
+                int bulk;
+                InputStream inputStream = archivo.getInputstream();
+                while (true) {
+                    bulk = inputStream.read(buffer);
+                    if (bulk < 0) {
+                        break;
+                    }
+                    fileOutputStream.write(buffer, 0, bulk);
+                    fileOutputStream.flush();
                 }
-                fileOutputStream.write(buffer, 0, bulk);
-                fileOutputStream.flush();
+                fileOutputStream.close();
+                inputStream.close();
+                FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha agregado la nueva imagen");
+            } catch (Exception e) {
+                FacesUtil.mostrarMensajeInformativo("Operación fallida", "Ha ocurrido un error interno");
             }
-            fileOutputStream.close();
-            inputStream.close();
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se ha agregado la nueva imagen");
-        } catch (Exception e) {
-            FacesUtil.mostrarMensajeInformativo("Operación fallida", "Ha ocurrido un error interno");
+        } else if (docSeleccionado.getId() != null) {
+            logicaPersonal.guardarDocumento(docSeleccionado);
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Se han guardado los cambios");
         }
     }
 
