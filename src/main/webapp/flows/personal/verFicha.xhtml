@@ -117,7 +117,7 @@
                 <p:commandButton icon="ui-icon-plus"
                                  rendered="#{!mantenedorPersonal.tiposDocumentos.isEmpty() and (sesionCliente.esEditor(constantes.moduloPersonal) or sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal))}"
                                  value="Agregar documento" action="#{mantenedorPersonal.irIngresarDocCarpeta()}"/>
-                <p:dataTable value="#{mantenedorPersonal.obtenerDocumentosActualizados()}" var="doc">
+                <p:dataTable value="#{mantenedorPersonal.obtenerDocumentosActualizados()}" var="doc" id="dtDocs">
                     <p:column headerText="Nombre">
                         #{doc.tipo.etiqueta}
                     </p:column>
@@ -136,20 +136,27 @@
 
                     <p:column headerText="Acciones">
                         <h:panelGroup class="opcionesFila">
-                            <p:commandLink title="Descargar"
+                            <p:commandLink title="Descargar" style="text-decoration: none"
                                            rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
-                                           styleClass="ui-icon ui-icon-arrowthickstop-1-s"
+                                           styleClass="fa fa-download"
                                            ajax="false">
                                 <p:fileDownload value="#{mantenedorPersonal.generaDescargable(doc)}"/>
                             </p:commandLink>
-                            <p:commandLink
+                            <p:commandLink style="text-decoration: none"
                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                     title="Actualizar" action="#{mantenedorPersonal.irActualizarDocCarpeta(doc)}"
-                                    styleClass="ui-icon ui-icon-arrowthickstop-1-n"/>
-                            <p:commandLink
+                                    styleClass="fa fa-upload"/>
+                            <p:commandLink style="text-decoration: none"
                                     rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
                                     title="Editar" action="#{mantenedorPersonal.irEditarDocCarpeta(doc)}"
-                                    styleClass="ui-icon ui-icon-pencil"/>
+                                    styleClass="fa fa-pencil"/>
+                            <p:commandLink styleClass="fa fa-trash" title="Eliminar"
+                                           style="text-decoration: none"
+                                           action="#{mantenedorPersonal.eliminarDocPersonal(doc)}"
+                                           rendered="#{sesionCliente.esEditor(constantes.moduloPersonal) || sesionCliente.tieneAccesoEspecial(constantes.moduloPersonal)}"
+                                           update="dtDocs">
+                                <p:confirm header="Workcenter" message="¿Está seguro que desea eliminar este documento [#{doc.tipo.etiqueta}]?"/>
+                            </p:commandLink>
                         </h:panelGroup>
                     </p:column>
 

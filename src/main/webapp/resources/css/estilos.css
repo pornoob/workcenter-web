@@ -133,6 +133,8 @@ ul.navBar li {
 
 .opcionesFila a {
     float: left;
+    margin-right: 0.2rem;
+    padding: 0;
 }
 
 .sinBordes {

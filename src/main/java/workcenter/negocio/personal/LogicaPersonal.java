@@ -131,13 +131,25 @@ public class LogicaPersonal {
     }
 
     @Transactional(readOnly = true)
-    public Sancionado obtenerSancion(Personal p) {
-        return personalDao.obtenerSancion(p);
-    }
-
-    @Transactional(readOnly = true)
     public List<DocumentoPersonal> obtenerDocumentosActualizados(Personal p) {
-        return personalDao.obtenerDocumentosActualizados(p);
+        List<DocumentoPersonal> documentoPersonalList = personalDao.obtenerDocumentos(p);
+        List<TipoDocPersonal> tipoDocPersonalList = personalDao.obtenerTiposDocPersonal();
+        List<DocumentoPersonal> docs = new ArrayList<>();
+        DocumentoPersonal updated;
+        for (TipoDocPersonal tdp : tipoDocPersonalList) {
+            updated = null;
+            for (DocumentoPersonal dp : documentoPersonalList) {
+                if (!dp.getTipo().equals(tdp)) continue;
+                if (updated == null) {
+                    updated = dp;
+                } else if (dp.getId() > updated.getId()) {
+                    updated = dp;
+                }
+            }
+            if (updated != null)
+                docs.add(updated);
+        }
+        return docs;
     }
 
     @Transactional(readOnly = true)
@@ -221,5 +233,10 @@ public class LogicaPersonal {
     @Transactional(readOnly = true)
     public List<Personal> obtenerConductoresConSanciones() {
         return personalDao.obtenerConductoresConSanciones();
+    }
+
+    @Transactional(readOnly = false)
+    public void eliminarDocPersonal(DocumentoPersonal doc) {
+        personalDao.eliminarDocPersonal(doc);
     }
 }
