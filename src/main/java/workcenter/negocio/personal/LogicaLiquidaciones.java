@@ -96,8 +96,14 @@ public class LogicaLiquidaciones {
         }
     }
 
+    @Transactional(readOnly = true)
     public Remuneracion obtenerLiquidacion(Long id) {
         return liquidacionDao.obtenerLiquidacion(id);
+    }
+
+    @Transactional(readOnly = true)
+    public Remuneracion obtenerLiquidacion(Integer anio, Integer mes, Long rut) {
+        return liquidacionDao.obtenerLiquidacion(anio, mes, rut);
     }
 
     @Transactional(readOnly = true)

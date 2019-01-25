@@ -9,15 +9,21 @@
         <p:messages autoUpdate="true" closable="true" showDetail="true"/>
         <h:form id="formCargaMasiva" enctype="multipart/form-data">
             <p:panel>
+                <p:outputPanel rendered="#{importadorDatosLiquidaciones.isConfigured}">
+                    <h3>Preparado para cargar liquidaciones en #{importadorDatosLiquidaciones.anio}/#{importadorDatosLiquidaciones.mes}</h3>
+                </p:outputPanel>
                 <h:panelGrid columns="4">
-                    <h:outputLabel for="iRutEmpleador" value="Rut Empleador"/>
-                    <p:inputText id="iRutEmpleador" value="#{importadorDatosLiquidaciones.rutEmpleador}"/>
-                    <h:outputLabel for="iArchivo" value="Cargar Nuevos Datos"/>
-                    <p:fileUpload id="iArchivo" mode="simple" value="#{importadorDatosLiquidaciones.archivo}"/>
+                    <h:outputLabel for="iAnioLiquidaciones" value="Año"/>
+                    <p:inputText id="iAnioLiquidaciones" value="#{importadorDatosLiquidaciones.anio}"/>
+                    <h:outputLabel for="iMesLiquidaciones" value="Mes"/>
+                    <p:inputText id="iMesLiquidaciones" value="#{importadorDatosLiquidaciones.mes}"/>
                 </h:panelGrid>
-                <p:commandButton ajax="false" icon="ui-icon-arrowthickstop-1-n"
-                                 value="Subir" action="#{importadorDatosLiquidaciones.subir}"/>
-                <p:commandButton action="salir" ajax="false" icon="ui-icon-arrowreturnthick-1-w"
+                <p:fileUpload id="iArchivos" fileUploadListener="#{importadorDatosLiquidaciones.subir}" immediate="true"
+                              process="@form" rendered="#{importadorDatosLiquidaciones.isConfigured}"
+                              auto="false" multiple="true" uploadLabel="Subir" cancelLabel="Cancelar"/>
+                <p:commandButton actionListener="#{importadorDatosLiquidaciones.configurar}"
+                                 ajax="false" icon="fa fa-save" value="Configura"/>
+                <p:commandButton action="salir" ajax="false" icon="fa fa-times"
                                  value="Volver" immediate="true"/>
             </p:panel>
         </h:form>

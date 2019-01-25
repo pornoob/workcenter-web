@@ -159,15 +159,28 @@ public class LiquidacionDao {
         return em.find(Remuneracion.class, id);
     }
 
+    public Remuneracion obtenerLiquidacion(Integer anio, Integer mes, Long rut) {
+        String jpql = "SELECT m FROM Remuneracion m WHERE YEAR(m.fechaLiquidacion)=:anio AND MONTH(m.fechaLiquidacion) = :mes AND m.idPersonal.rut = :rut";
+        Query q = em.createQuery(jpql, Remuneracion.class);
+        q.setParameter("anio", anio);
+        q.setParameter("mes", mes);
+        q.setParameter("rut", rut);
+        try {
+            return (Remuneracion) q.getSingleResult();
+        } catch (NoResultException e) {
+            return null;
+        }
+    }
+
     public Remuneracion obtenerIngresoPrevio(Remuneracion liquidacion) {
         try {
             StringBuilder jql = new StringBuilder();
             jql.append("SELECT m FROM Remuneracion m WHERE m.fechaLiquidacion = :fecha and m.idPersonal = :personal ORDER BY m.idMaestro DESC");
             Query q = em.createQuery(jql.toString());
-            
+
             q.setParameter("fecha", liquidacion.getFechaLiquidacion());
             q.setParameter("personal", liquidacion.getIdPersonal());
-            
+
             return (Remuneracion) q.setMaxResults(1).getSingleResult();
         } catch (NoResultException e) {
             return null;
