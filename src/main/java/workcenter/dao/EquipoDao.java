@@ -23,11 +23,11 @@ public class EquipoDao extends MyDao{
     public List<Equipo> obtenerTodos() {
         return em.createNamedQuery("Equipo.findAll", Equipo.class).getResultList();
     }
-    
+
     public List<Equipo> obtenerTodosParaMantenedor() {
         Query q = em.createNamedQuery("Equipo.findAll");
         EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
-        
+
         graph.addAttributeNodes(
                 "tipo",
                 "subtipo",
@@ -35,7 +35,7 @@ public class EquipoDao extends MyDao{
                 "marca",
                 "modelo"
         );
-        
+
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         return q.getResultList();
     }
@@ -44,7 +44,7 @@ public class EquipoDao extends MyDao{
         return em.createNamedQuery("Equipo.findByTipo", Equipo.class)
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoTracto())).getResultList();
     }
-    
+
     public List<Equipo> obtenerMaquinas() {
         return em.createNamedQuery("Equipo.findByTipo", Equipo.class)
                 .setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina())).getResultList();
@@ -204,9 +204,10 @@ public class EquipoDao extends MyDao{
     public List<Equipo> obtenerMaquinasConModelo() {
         Query q = em.createNamedQuery("Equipo.findByTipo");
         q.setParameter("tipo", new TipoEquipo(constantes.getEquipoTipoMaquina()));
-        
+
         EntityGraph<Equipo> graph = em.createEntityGraph(Equipo.class);
         graph.addAttributeNodes(Equipo_.modelo);
+        graph.addAttributeNodes(Equipo_.tipo);
         q.setHint(ENTITY_GRAPH_OVERRIDE_HINT, graph);
         return q.getResultList();
     }
