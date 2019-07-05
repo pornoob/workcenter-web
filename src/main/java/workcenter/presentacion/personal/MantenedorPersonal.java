@@ -268,7 +268,7 @@ public class MantenedorPersonal implements Serializable {
     public String irVerFicha(Personal p) {
         personalSeleccionado = p;
         personalSeleccionado.setDocumentos(logicaPersonal.obtenerDocumentos(personalSeleccionado));
-        documentos = new ArrayList<DocumentoPersonal>(personalSeleccionado.getDocumentos());
+        documentos = new ArrayList<>(personalSeleccionado.getDocumentos());
         tiposDocumentos = logicaPersonal.obtenerTiposDocPersonal();
         rutIngresado = p.getRut() + "-" + p.getDigitoverificador();
         return "flowMostrarFicha";

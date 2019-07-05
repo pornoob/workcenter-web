@@ -23,6 +23,7 @@ import java.io.Serializable;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -170,8 +171,58 @@ public class MantenedorLiquidaciones implements Serializable {
         }
 
         Double gratificacion;
-
-        if (Boolean.TRUE.equals(cp.getSinTope())) {
+        List<Long> ruts = Arrays.asList(new Long[]{
+                14418988l,
+                13753968l,
+                8714720l,
+                12227772l,
+                10288116l,
+                13365917l,
+                9042457l,
+                11433373l,
+                13187114l,
+                13886019l,
+                7819688l,
+                12121693l,
+                5516309l,
+                15851251l,
+                11732880l,
+                14408086l,
+                11421734l,
+                16402084l,
+                16890214l,
+                16552927l,
+                7064941l,
+                15090719l,
+                11398067l,
+                14276760l,
+                16402235l,
+                10736144l,
+                11731667l,
+                13754394l,
+                11277513l,
+                13365885l,
+                8436573l,
+                13184221l,
+                15525124l,
+                17273543l,
+                8331612l,
+                10678233l,
+                6791424l,
+                11519651l,
+                12879450l,
+                8163879l,
+                7770423l,
+                17108464l,
+                9510838l,
+                10145838l,
+                12391967l,
+                9506489l,
+                16400389l
+        });
+        if (ruts.contains(liquidacion.getIdPersonal().getRut())) {
+            gratificacion = (4.75 * Integer.parseInt(variable.getValor())) / 12;
+        } else if (Boolean.TRUE.equals(cp.getSinTope())) {
             gratificacion = liquidacion.getSueldoBase() * 0.25;
         } else {
             gratificacion = (double) (liquidacion.getSueldoBase() / 4 < ((int) ((4.75 * Integer.parseInt(variable.getValor())) / 12))
@@ -233,7 +284,7 @@ public class MantenedorLiquidaciones implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        totalDescuentos += (int)Math.floor(liquidacion.getImpUnico());
+        totalDescuentos += (int) Math.floor(liquidacion.getImpUnico());
         liquidacion.setAnticipoViatico(logicaLiquidaciones.obtenerAnticipoViatico(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - liquidacion.getTotalDctos());
