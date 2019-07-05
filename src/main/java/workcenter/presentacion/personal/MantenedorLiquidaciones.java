@@ -218,7 +218,8 @@ public class MantenedorLiquidaciones implements Serializable {
                 10145838l,
                 12391967l,
                 9506489l,
-                16400389l
+                16400389l,
+                16552707l
         });
         if (ruts.contains(liquidacion.getIdPersonal().getRut())) {
             gratificacion = (4.75 * Integer.parseInt(variable.getValor())) / 12;
