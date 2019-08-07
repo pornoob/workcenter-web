@@ -172,6 +172,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
         List<Long> ruts = Arrays.asList(new Long[]{
+                13328079l,
                 14418988l,
                 13753968l,
                 8714720l,
@@ -222,7 +223,10 @@ public class MantenedorLiquidaciones implements Serializable {
                 16552707l
         });
         if (ruts.contains(liquidacion.getIdPersonal().getRut())) {
-            gratificacion = (4.75 * Integer.parseInt(variable.getValor())) / 12;
+            if (liquidacion.getDiasTrabajados() == 0)
+                gratificacion = 0d;
+            else
+                gratificacion = (4.75 * Integer.parseInt(variable.getValor())) / 12;
         } else if (Boolean.TRUE.equals(cp.getSinTope())) {
             gratificacion = liquidacion.getSueldoBase() * 0.25;
         } else {
