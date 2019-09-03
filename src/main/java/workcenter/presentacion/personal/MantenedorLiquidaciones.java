@@ -172,7 +172,6 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
         List<Long> ruts = Arrays.asList(new Long[]{
-                13328079l,
                 14418988l,
                 13753968l,
                 8714720l,
@@ -220,7 +219,14 @@ public class MantenedorLiquidaciones implements Serializable {
                 12391967l,
                 9506489l,
                 16400389l,
-                16552707l
+                16552707l,
+                14613181l,
+                6390120l,
+                10592733l,
+                11388484l,
+                8091435l,
+                14241403l,
+                14570467l
         });
         if (ruts.contains(liquidacion.getIdPersonal().getRut())) {
             if (liquidacion.getDiasTrabajados() == 0)
@@ -289,7 +295,7 @@ public class MantenedorLiquidaciones implements Serializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
-        totalDescuentos += (int)Math.floor(liquidacion.getImpUnico());
+        totalDescuentos += (int) Math.floor(liquidacion.getImpUnico());
         liquidacion.setAnticipoViatico(logicaLiquidaciones.obtenerAnticipoViatico(liquidacion.getIdPersonal(), mes, anio));
         liquidacion.setTotalDctos((liquidacion.getTotalImponible() - liquidacion.getRentaAfecta()) + totalDescuentos);
         liquidacion.setAlcanceLiquido(liquidacion.getTotalHaberes() - liquidacion.getTotalDctos());

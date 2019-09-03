@@ -569,7 +569,7 @@ public class MantenedorPersonal implements Serializable {
     }
 
     public boolean esFonasa() {
-        return tipoSalud != null && tipoSalud.intValue() == constantes.getFonasa();
+        return tipoSalud != null && tipoSalud.intValue() == constantes.getFonasaId();
     }
 
     private void setearValoresCalculados() {

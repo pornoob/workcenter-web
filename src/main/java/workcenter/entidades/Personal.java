@@ -21,7 +21,7 @@ import java.util.*;
 @NamedQueries({
     @NamedQuery(name = "Personal.findAll", query = "SELECT DISTINCT p FROM Personal p ORDER BY p.apellidos"),
     @NamedQuery(
-            name = "Personal.findAllWithUser", 
+            name = "Personal.findAllWithUser",
             query = "SELECT DISTINCT p FROM Personal p "
             + "LEFT JOIN FETCH p.usuario u "
     ),
