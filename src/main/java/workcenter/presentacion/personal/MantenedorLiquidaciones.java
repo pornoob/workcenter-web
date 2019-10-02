@@ -172,6 +172,7 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
         List<Long> ruts = Arrays.asList(new Long[]{
+                13328079l,
                 14418988l,
                 13753968l,
                 8714720l,
