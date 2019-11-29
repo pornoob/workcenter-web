@@ -73,8 +73,8 @@ public class ImportadorDatosBonoDescuento {
                     d.setFecha(new Date());
                     logicaCargaMasiva.guardarBonoDescuento(d);
                 } catch (Exception e) {
-                    System.err.println("row " + numRow + " : " + row);
-                    e.printStackTrace();
+                    System.err.println("row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
+                    //e.printStackTrace();
                 }
             }
 
