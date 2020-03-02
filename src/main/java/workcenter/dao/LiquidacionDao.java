@@ -209,7 +209,7 @@ public class LiquidacionDao {
         }
     }
 
-    public List<Long> obtenerGratificadosConTope() {
+    public List<BigInteger> obtenerGratificadosConTope() {
         String nsql = "SELECT rut FROM gratificacion_contope";
         Query q = em.createNativeQuery(nsql);
         return q.getResultList();

@@ -9,6 +9,7 @@ import workcenter.dao.LiquidacionDao;
 import workcenter.dao.PersonalDao;
 import workcenter.entidades.*;
 
+import java.math.BigInteger;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -116,7 +117,7 @@ public class LogicaLiquidaciones {
     }
 
     @Transactional(readOnly = true)
-    public List<Long> obtenerGratificadosConTope() {
+    public List<BigInteger> obtenerGratificadosConTope() {
         return liquidacionDao.obtenerGratificadosConTope();
     }
 }

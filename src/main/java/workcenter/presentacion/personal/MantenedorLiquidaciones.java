@@ -20,6 +20,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.io.Serializable;
+import java.math.BigInteger;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -172,8 +173,8 @@ public class MantenedorLiquidaciones implements Serializable {
 
         Double gratificacion;
 
-        List<Long> ruts = logicaLiquidaciones.obtenerGratificadosConTope();
-        if (ruts.contains(liquidacion.getIdPersonal().getRut())) {
+        List<BigInteger> ruts = logicaLiquidaciones.obtenerGratificadosConTope();
+        if (ruts.contains(new BigInteger(String.valueOf(liquidacion.getIdPersonal().getRut())))) {
             if (liquidacion.getDiasTrabajados() == 0)
                 gratificacion = 0d;
             else
