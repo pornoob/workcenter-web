@@ -208,4 +208,10 @@ public class LiquidacionDao {
             return new ArrayList<>();
         }
     }
+
+    public List<Long> obtenerGratificadosConTope() {
+        String nsql = "SELECT rut FROM gratificacion_contope";
+        Query q = em.createNativeQuery(nsql);
+        return q.getResultList();
+    }
 }

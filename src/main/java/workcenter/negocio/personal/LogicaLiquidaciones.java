@@ -114,4 +114,9 @@ public class LogicaLiquidaciones {
     public List<Remuneracion> obtRemuDesdeMesAnterior() {
         return liquidacionDao.obtRemuDesdeMesAnterior();
     }
+
+    @Transactional(readOnly = true)
+    public List<Long> obtenerGratificadosConTope() {
+        return liquidacionDao.obtenerGratificadosConTope();
+    }
 }
