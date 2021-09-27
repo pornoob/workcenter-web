@@ -9,6 +9,7 @@ import workcenter.dao.DineroDAO;
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
 import workcenter.entidades.Personal;
+import workcenter.entidades.Vuelta;
 
 import java.util.Date;
 import java.util.List;
@@ -39,5 +40,10 @@ public class LogicaCaja {
     @Transactional(readOnly = true)
     public List<Dinero> obtenerDinerosNoCancelados(Concepto conceptoParam){
         return dineroDao.obtenerDinerosNoCancelados(conceptoParam);
+    }
+
+    @Transactional(readOnly = true)
+    public List<Dinero> obtenerDinerosSegunVueltas(List<Vuelta> vueltas) {
+        return dineroDao.obtenerDineros(vueltas);
     }
 }

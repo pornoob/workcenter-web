@@ -1,0 +1,101 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:p="http://primefaces.org/ui" xmlns:c="http://java.sun.com/jsp/jstl/core"
+                xmlns:tvp="http://transportesventanas.cl"
+                template="/templates/default.xhtml">
+    <ui:define name="contenido">
+        <h2>Reporte Libretas</h2>
+        <p:messages autoUpdate="true" closable="true" showDetail="true"/>
+        <h:form id="frm">
+            <p:panel header="Filtros">
+                <p:panelGrid columns="4" styleClass="no-border-grid">
+                    <h:outputLabel for="iFecha" value="Fecha Inicio :"/>
+                    <p:calendar locale="es" id="iFecha" value="#{inicioReporteLibretas.fechaInicio}" pattern="yyyy-MM-dd"
+                                navigator="true">
+                    </p:calendar>
+                    <h:outputLabel for="tFecha" value="Fecha Término :"/>
+                    <p:calendar locale="es" id="tFecha" value="#{inicioReporteLibretas.fechaTermino}" pattern="yyyy-MM-dd"
+                                navigator="true">
+                    </p:calendar>
+                    <h:outputLabel for="iConductor" value="Conductor :"/>
+                    <p:selectOneMenu value="#{inicioReporteLibretas.conductorSeleccionado}" filter="true"
+                                     filterMatchMode="contains" converter="entityConverter" id="iConductor">
+                        <f:selectItem noSelectionOption="true" itemLabel="-- Seleccione --"/>
+                        <f:selectItems value="#{inicioReporteLibretas.conductores}" var="c" itemLabel="#{c.nombreCompleto}"
+                                       itemValue="#{c}"/>
+                    </p:selectOneMenu>
+                </p:panelGrid>
+                <p:commandButton value="Refrescar Datos" action="#{inicioReporteLibretas.buscar()}"
+                                 update="tabla" />
+            </p:panel>
+            <p:panel header="Resultados">
+                <p:dataTable value="#{inicioReporteLibretas.vueltas}" var="v"
+                             id="tabla"
+                             sortBy="#{v.fecha}"
+                             filterEvent="enter"
+                             paginator="true"
+                             paginatorAlwaysVisible="true"
+                             paginatorTemplate="#{constantes.paginadorTemplate}"
+                             paginatorPosition="both"
+                             rowsPerPageTemplate="#{constantes.filasPorPaginaTemplate}"
+                             emptyMessage="No se han encontrado resultados"
+                             rows="#{constantes.cantidadFilasTablas}">
+
+                    <f:facet name="header">
+                        <h:commandButton image="/img/icons/excel.png" title="Exportar a Excel" >
+                            <p:dataExporter target="tabla" type="xls" fileName="Reporte_Libretas">
+                            </p:dataExporter>
+                        </h:commandButton>
+                    </f:facet>
+                    <p:column headerText="ID" filterBy="#{v.id}" width="80">
+                        <h:outputText value="#{v.id}" />
+                    </p:column>
+                    <p:column headerText="Fecha" filterBy="#{v.id}">
+                        <h:outputText value="#{v.fecha}" />
+                    </p:column>
+                    <p:column headerText="Rut" filterBy="#{v.conductor.rut}" width="100">
+                        <h:outputText value="#{v.conductor.rut}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                        <h:outputText value="-#{v.conductor.digitoverificador}" rendered="#{v.conductor.digitoverificador ne null}"/>
+                    </p:column>
+                    <p:column headerText="Conductor" filterBy="#{v.conductor.nombreCompleto}">
+                        <h:outputText value="#{v.conductor.nombreCompleto}" />
+                    </p:column>
+                    <p:column headerText="Peajes">
+                        <h:outputText value="#{v.peaje}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Viáticos">
+                        <h:outputText value="#{v.viatico}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Otros Gastos">
+                        <h:outputText value="#{v.otrosGastos}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Total Gastos">
+                        <h:outputText value="#{inicioReporteLibretas.calcularTotalGastos(v)}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Dinero Entregado (Guía)">
+                        <h:outputText value="#{v.dineroEntregado}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                    <p:column headerText="Dinero Entregado (Caja)">
+                        <h:outputText value="#{inicioReporteLibretas.dineroEntregadoSegunCaja(v)}">
+                            <tvp:convertNumber groupingUsed="true"/>
+                        </h:outputText>
+                    </p:column>
+                </p:dataTable>
+            </p:panel>
+        </h:form>
+    </ui:define>
+</ui:composition>

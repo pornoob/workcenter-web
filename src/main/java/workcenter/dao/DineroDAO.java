@@ -78,4 +78,20 @@ public class DineroDAO {
         query.setParameter("concepto", conceptoParam);
         return query.getResultList();
     }
+
+    public List<Dinero> obtenerDineros(List<Vuelta> vueltas) {
+        CriteriaBuilder cb = em.getCriteriaBuilder();
+        CriteriaQuery<Dinero> cqDinero = cb.createQuery(Dinero.class);
+        Root<Dinero> dinero = cqDinero.from(Dinero.class);
+        List<Predicate> predicates = new ArrayList<Predicate>();
+
+
+        dinero.fetch(Dinero_.receptor, JoinType.INNER);
+        dinero.fetch(Dinero_.ordendecarga, JoinType.INNER);
+        List<Integer> vueltasId = new ArrayList<>();
+        for (Vuelta v : vueltas) vueltasId.add(v.getId());
+        predicates.add(cb.and(dinero.get(Dinero_.ordendecarga).in(vueltasId)));
+        cqDinero.select(dinero).where(predicates.toArray(new Predicate[]{})).orderBy(cb.asc(dinero.get(Dinero_.id)));
+        return em.createQuery(cqDinero).getResultList();
+    }
 }

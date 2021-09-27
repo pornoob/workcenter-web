@@ -7,7 +7,9 @@ package workcenter.util.dto;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -23,6 +25,7 @@ public class ValorActualizadoDTO implements Serializable {
     private Integer rentaNoAfectaActualizada;
     private Integer impuestoUnicoActualizado;
     private List<Integer> mesesTrabajados;
+    private Map<Mes, Integer> rentasAfectas;
 
     public ValorActualizadoDTO() {
         imponible = 0;
@@ -34,6 +37,7 @@ public class ValorActualizadoDTO implements Serializable {
         rentaNoAfectaActualizada = 0;
         impuestoUnicoActualizado = 0;
         mesesTrabajados = new ArrayList<>();
+        rentasAfectas = new HashMap<>();
     }
 
     public Integer getImponible() {
@@ -106,5 +110,13 @@ public class ValorActualizadoDTO implements Serializable {
 
     public void setRentaNoAfectaActualizada(Integer rentaNoAfectaActualizada) {
         this.rentaNoAfectaActualizada = rentaNoAfectaActualizada;
+    }
+
+    public Map<Mes, Integer> getRentasAfectas() {
+        return rentasAfectas;
+    }
+
+    public void setRentasAfectas(Map<Mes, Integer> rentasAfectas) {
+        this.rentasAfectas = rentasAfectas;
     }
 }

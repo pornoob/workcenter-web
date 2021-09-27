@@ -30,7 +30,7 @@
             </p:panel>
             <p:outputPanel id="contenedorInforme">
                 <p:panel header="Informe" rendered="#{!mantenedorValoresActualizados.primeraCargaPaso4}">
-                    <p:dataTable value="#{mantenedorValoresActualizados.conductores}" var="c"
+                    <p:dataTable value="#{mantenedorValoresActualizados.conductores}" var="c" rowIndexVar="rowIdx"
                                  emptyMessage="No se han encontrado registros" filterEvent="enter" id="tValoresAct">
                         <f:facet name="header">
                             <h:commandLink title="Exportar Tabla">
@@ -133,9 +133,23 @@
                                 </h:outputText>
                             </f:facet>
                         </p:column>
-                        <p:column headerText="Meses Trabajados">
-                            <h:outputText value="#{mantenedorValoresActualizados.formateaMesesTrabajados(mantenedorValoresActualizados.valoresActualizadoMap[c].mesesTrabajados)}"/>
+
+                        <p:columns var="mes" value="#{constantes.meses}" columnIndexVar="idx">
+                            <f:facet name="header">#{mes.nombre}</f:facet>
+                            <h:outputText value="C" rendered="#{mantenedorValoresActualizados.mesTrabajado(c, mes)}"/>
+                        </p:columns>
+
+                        <p:column headerText="Nº Folio">
+                            <h:outputText value="#{rowIdx+1}"/>
                         </p:column>
+
+                        <p:columns var="mes" value="#{constantes.meses}" columnIndexVar="idx">
+                            <f:facet name="header">#{mes.nombre}</f:facet>
+                            <h:outputText value="#{mantenedorValoresActualizados.valoresActualizadoMap[c].rentasAfectas[mes]}">
+                                <tvp:convertNumber type="currency" currencySymbol="" maxFractionDigits="0"/>
+                            </h:outputText>
+                        </p:columns>
+
                     </p:dataTable>
                 </p:panel>
             </p:outputPanel>

@@ -23,7 +23,7 @@ public class PersonalDao extends MyDao {
     private EntityManager em;
 
     public List<Personal> obtenerTodos() {
-        Query q = em.createNamedQuery("Personal.findAll" );     
+        Query q = em.createNamedQuery("Personal.findAll" );
         return q.getResultList();
     }
 
@@ -57,6 +57,7 @@ public class PersonalDao extends MyDao {
         sb.append("    GROUP BY rut ");
         sb.append(") maxContrato on maxContrato.rut = p.rut ");
         sb.append("inner join contratospersonal cp on (cp.rut = p.rut and cp.fecha = maxContrato.fecha) and cp.cargo=:cargo ");
+        sb.append("order by p.nombres ASC, p.apellidos ASC ");
 
         Query q = em.createNativeQuery(sb.toString(), Personal.class);
         q.setParameter("cargo", cargo);
@@ -99,7 +100,7 @@ public class PersonalDao extends MyDao {
     public Personal obtener(Long rut) {
         return em.find(Personal.class, rut);
     }
-    
+
     public List<Personal> obtener(List<Long> rut) {
         Query q = em.createNamedQuery("Personal.findByRuts", Personal.class);
         q.setParameter("ruts", rut);
@@ -124,7 +125,7 @@ public class PersonalDao extends MyDao {
     public List<DocumentoPersonal> obtenerDocumentos(Personal personal) {
         return em.createNamedQuery("DocumentoPersonal.findByPersonal" ).setParameter("personal", personal).getResultList();
     }
-    
+
     public List<DocumentoPersonal> obtenerDocumentos(){
     	return em.createNamedQuery("DocumentoPersonal.findAll").getResultList();
     }
@@ -221,10 +222,10 @@ public class PersonalDao extends MyDao {
                 .setParameter("rut", p.getRut())
                 .getResultList();
     }
-    
+
     public List<TipoDocPersonal> obtenerTiposDocPersonal() {
         StringBuilder sb = new StringBuilder();
-        sb.append("select dp.* from tiposdocpersonal dp " );        
+        sb.append("select dp.* from tiposdocpersonal dp " );
 
         return em.createNativeQuery(sb.toString(), TipoDocPersonal.class).getResultList();
     }
@@ -236,9 +237,9 @@ public class PersonalDao extends MyDao {
             em.merge(contrato);
     }
 
-	public Personal obtenerPersonal(Personal p) {		
+	public Personal obtenerPersonal(Personal p) {
 		Query q = em.createNamedQuery("Personal.findByRut" );
-        q.setParameter("rut", p.getRut());        
+        q.setParameter("rut", p.getRut());
         return (Personal) q.getSingleResult();
 	}
 
@@ -263,14 +264,14 @@ public class PersonalDao extends MyDao {
         Query q = em.createQuery("select count(p) from Personal p");
         return ((Long) q.getSingleResult()).intValue();
     }
-    
+
     public int obtenerConteoLazy(Map<String, Object> filters) {
         CriteriaBuilder cb = em.getCriteriaBuilder();
         CriteriaQuery<Long> cq = cb.createQuery(Long.class);
         Root<Personal> personal = cq.from(Personal.class);
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
-            
+
             if ("rut".equals(entry.getKey()))
                 cq.where(cb.like(personal.get(Personal_.rut).as(String.class), entry.getValue().toString()+"%"));
             else if ("nombres".equals(entry.getKey()))
@@ -294,7 +295,7 @@ public class PersonalDao extends MyDao {
 
         for (Map.Entry<String, Object> entry : filters.entrySet()) {
             System.err.println("FILTRO " + entry.getKey());
-            
+
             if ("rut".equals(entry.getKey()))
                 cq.where(cb.like(personal.get(Personal_.rut).as(String.class), entry.getValue().toString()+"%"));
             else if ("nombres".equals(entry.getKey()))
