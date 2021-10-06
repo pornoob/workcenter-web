@@ -177,8 +177,10 @@ public class MantenedorLiquidaciones implements Serializable {
         if (ruts.contains(new BigInteger(String.valueOf(liquidacion.getIdPersonal().getRut())))) {
             if (liquidacion.getDiasTrabajados() == 0)
                 gratificacion = 0d;
-            else
+            else {
                 gratificacion = (4.75 * Integer.parseInt(variable.getValor())) / 12;
+                gratificacion = gratificacion * liquidacion.getDiasTrabajados() / constantes.getDiasTrabajados();
+            }
         } else if (Boolean.TRUE.equals(cp.getSinTope())) {
             gratificacion = liquidacion.getSueldoBase() * 0.25;
         } else {
