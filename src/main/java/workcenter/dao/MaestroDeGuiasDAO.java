@@ -2,6 +2,7 @@ package workcenter.dao;
 
 import org.springframework.stereotype.Repository;
 import workcenter.entidades.Personal;
+import workcenter.entidades.Personal_;
 import workcenter.entidades.Vuelta;
 import workcenter.entidades.Vuelta_;
 
@@ -91,6 +92,7 @@ public class MaestroDeGuiasDAO {
         if (!condiciones.isEmpty()) {
             cq.where(condiciones.toArray(new Predicate[condiciones.size()]));
         }
+        vuelta.fetch(Vuelta_.conductor, JoinType.LEFT);
         TypedQuery<Vuelta> query = em.createQuery(cq);
         return query.getResultList();
     }

@@ -14,6 +14,7 @@ public abstract class FactFactura_ {
 	public static volatile SingularAttribute<FactFactura, Empresa> receptor;
 	public static volatile SingularAttribute<FactFactura, Long> facturaId;
 	public static volatile SingularAttribute<FactFactura, Integer> numero;
+	public static volatile SingularAttribute<FactFactura, Float> descuento;
 	public static volatile SetAttribute<FactFactura, FactDetalleFactura> items;
 	public static volatile SingularAttribute<FactFactura, Empresa> emisor;
 

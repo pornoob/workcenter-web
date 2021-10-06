@@ -38,6 +38,7 @@ public abstract class Remuneracion_ {
 	public static volatile SingularAttribute<Remuneracion, Integer> imposiciones;
 	public static volatile SingularAttribute<Remuneracion, Integer> otrosBeneficiosNoImp;
 	public static volatile SingularAttribute<Remuneracion, Double> aportePorcTrabajador;
+	public static volatile SingularAttribute<Remuneracion, ContratoPersonal> contrato;
 	public static volatile SingularAttribute<Remuneracion, Double> porcAporteTrabajador;
 	public static volatile SingularAttribute<Remuneracion, Integer> rentaAfecta;
 	public static volatile SingularAttribute<Remuneracion, Integer> utm;
@@ -71,7 +72,6 @@ public abstract class Remuneracion_ {
 	public static volatile SingularAttribute<Remuneracion, Double> aportePorcEmpresa;
 	public static volatile SingularAttribute<Remuneracion, Integer> otrosDescuentosTemp;
 	public static volatile SingularAttribute<Remuneracion, Personal> idPersonal;
-	public static volatile SingularAttribute<Remuneracion, ContratoPersonal> contrato;
 	public static volatile SingularAttribute<Remuneracion, Integer> totalDctos;
 	public static volatile SingularAttribute<Remuneracion, Integer> totalViaticos;
 	public static volatile SingularAttribute<Remuneracion, Integer> difCaja;

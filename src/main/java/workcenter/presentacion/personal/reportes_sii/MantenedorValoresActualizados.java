@@ -8,6 +8,8 @@ import workcenter.negocio.LogicaEmpresas;
 import workcenter.negocio.personal.LogicaFiniquito;
 import workcenter.negocio.personal.LogicaLibroRemuneraciones;
 import workcenter.negocio.registros.reportes_sii.LogicaReportesSII;
+import workcenter.util.components.Constantes;
+import workcenter.util.dto.Mes;
 import workcenter.util.dto.ValorActualizadoDTO;
 
 import java.io.Serializable;
@@ -28,9 +30,12 @@ public class MantenedorValoresActualizados implements Serializable {
 
     @Autowired
     private LogicaEmpresas logicaEmpresas;
-    
+
     @Autowired
     private LogicaFiniquito logicaFiniquito;
+
+    @Autowired
+    private Constantes constantes;
 
     private List<FactorActualizacionSII> valores;
     private Map<String, String> valoresMap;
@@ -95,11 +100,11 @@ public class MantenedorValoresActualizados implements Serializable {
         primeraCargaPaso2 = Boolean.FALSE;
         primeraCargaPaso3 = Boolean.TRUE;
         valoresDesagregados = new ArrayList<>();
-        
+
         remuneraciones = logicaLibroRemuneraciones.obtenerSegunEmpleador(empleador, null, Integer.parseInt(anio));
         finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(empleador, Integer.parseInt(anio));
-        
-        
+
+
         sumatoriaImponible = 0;
         sumatoriaRentaAfecta = 0;
         sumatoriaRentaNoAfecta = 0;
@@ -118,7 +123,7 @@ public class MantenedorValoresActualizados implements Serializable {
             for (Finiquito finiquito : logicaFiniquito.obtenerFiniquitosTrabajador(r.getIdPersonal(), c.get(Calendar.YEAR), c.get(Calendar.MONTH) + 1)) {
                 rentaExentaMes += finiquito.getMonto();
             }
-            
+
             for (BonoDescuentoRemuneracion bonoDescuentoRemuneracion : r.getRemuneracionBonoDescuentoList()) {
                 if (!Boolean.TRUE.equals(bonoDescuentoRemuneracion.getImponible())) {
                     rentaExentaMes += bonoDescuentoRemuneracion.getMonto().intValue();
@@ -146,24 +151,27 @@ public class MantenedorValoresActualizados implements Serializable {
     public String prepararInforme() {
         conductores = new ArrayList<>();
         Calendar calendar = Calendar.getInstance();
-        
+
         for (Remuneracion r : remuneraciones) {
             Personal trabajador = r.getIdPersonal();
             if (!valoresActualizadoMap.containsKey(trabajador)) {
                 valoresActualizadoMap.put(trabajador, new ValorActualizadoDTO());
                 conductores.add(trabajador);
             }
-            
+
             ValorActualizadoDTO puntero = valoresActualizadoMap.get(trabajador);
+
             puntero.setImponible(puntero.getImponible() + r.getTotalImponible());
             puntero.setRentaAfecta(puntero.getRentaAfecta() + r.getRentaAfecta());
             puntero.setImpuestoUnico(puntero.getImpuestoUnico() + r.getImpUnico().intValue());
-            
+
             puntero.setImponibleActualizado(puntero.getImponibleActualizado() + (int)(r.getTotalImponible() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getTotalImponible()));
             puntero.setRentaAfectaActualizada(puntero.getRentaAfectaActualizada() + (int)(r.getRentaAfecta() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getRentaAfecta()));
             puntero.setImpuestoUnicoActualizado(puntero.getImpuestoUnicoActualizado() + (int)(r.getImpUnico() * obtenerFactor(r.getFechaLiquidacion()) / 100 + r.getImpUnico()));
-            
+
             calendar.setTime(r.getFechaLiquidacion());
+            puntero.getRentasAfectas().put(constantes.getMeses().get(calendar.get(Calendar.MONTH)), r.getRentaAfecta());
+
             int rentaNoAfecta = 0;
             List<Finiquito> finiquitos = logicaFiniquito.obtenerFiniquitosTrabajador(trabajador, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH) + 1);
             for (Finiquito finiquito : finiquitos) {
@@ -177,22 +185,10 @@ public class MantenedorValoresActualizados implements Serializable {
                 }
             }
             puntero.setRentaNoAfectaActualizada(puntero.getRentaNoAfectaActualizada()+ (int)(rentaNoAfecta * obtenerFactor(r.getFechaLiquidacion()) / 100 + rentaNoAfecta));
-            
+
             puntero.getMesesTrabajados().add(calendar.get(Calendar.MONTH)+1);
         }
         return "flowGenerarReporte";
-    }
-    
-    public String formateaMesesTrabajados(List<Integer> mesesTrabajados) {
-        if (mesesTrabajados == null) return "";
-        Collections.sort(mesesTrabajados);
-        StringBuilder builder = new StringBuilder();
-        for (Integer mesTrabajado : mesesTrabajados) {
-            builder.append(mesTrabajado).append('-');
-        }
-        if (builder.length() > 0)
-            builder.setLength(builder.length()-1);
-        return builder.toString();
     }
 
     public String irPaso2() {
@@ -211,6 +207,14 @@ public class MantenedorValoresActualizados implements Serializable {
     public void generarResumenAnual() {
         primeraCargaPaso4 = Boolean.FALSE;
     }
+
+    public Boolean mesTrabajado(Personal conductor, Mes mes) {
+        for (Integer m : this.valoresActualizadoMap.get(conductor).getMesesTrabajados()) {
+            if (m == Integer.parseInt(mes.getId())) return Boolean.TRUE;
+        }
+        return Boolean.FALSE;
+    }
+
 
     // Zona ficticia para generar las remuneraciones asociados al empleador y al conductor seleccionado
     public List<Remuneracion> getRemuneracionesInforme() {

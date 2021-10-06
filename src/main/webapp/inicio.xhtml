@@ -33,7 +33,7 @@
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_USUARIOS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/usuarios')}"
-                                   
+
                             >
                         <i class="fa fa-users fa-5x"></i>
                         <h:outputLabel value="Mantenedor de Usuarios"/>
@@ -41,7 +41,7 @@
 
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('ADMINISTRADOR_DE_REGISTROS')}"
                                    class="menuWorkcenter" action="#{facesUtil.redirigir('/m/registros')}"
-                                   
+
                             >
                         <i class="fa fa-pencil-square-o fa-5x"></i>
                         <h:outputLabel value="Administrador de Registros"/>
@@ -57,7 +57,7 @@
                     <h:commandLink
                             rendered="#{sesionCliente.tienePermiso('LIBRO_REMUNERACIONES_CONDUCTORES')}"
                             class="menuWorkcenter" action="#{facesUtil.redirigir('/m/remuneraciones')}"
-                            
+
                             >
                         <i class="fa fa-book fa-5x"></i>
                         <h:outputLabel value="Libro de Remuneraciones"/>
@@ -75,7 +75,7 @@
                         <i class="fa fa-file-text fa-5x"></i>
                         <h:outputLabel value="Maestro de Guias" style="margin-top: 10px"/>
                     </h:commandLink>
-                    
+
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_MANTENCIONES') or sesionCliente.tienePermiso('BODEGA_TALLER') or sesionCliente.tienePermiso('GESTION_OT')}"
                                    action="#{facesUtil.redirigir('/m/taller')}" class="menuWorkcenter">
                         <i class="fa fa-wrench fa-5x"></i>
@@ -84,7 +84,7 @@
                 </h:panelGrid>
             </p:panel>
 
-            <p:panel header="Módulos Gestión" rendered="#{security:areAnyGranted('MODULO_INCIDENCIAS,MODULO_ALARMAS_GPS,MODULO_INFORME_ACTIVIDADES,MODULO_PROGRAMA_ACTIVIDADES,LIBRO_REMUNERACIONES_CONDUCTORES,CONSULTA_DOCUMENTOS,MODULO_ALARMAS_GPS,HOJA_DE_SERVICIOS,CAJA,CONSULTA_DOCUMENTOS')}">
+            <p:panel header="Módulos Gestión" rendered="#{security:areAnyGranted('MODULO_INCIDENCIAS,MODULO_ALARMAS_GPS,MODULO_INFORME_ACTIVIDADES,MODULO_PROGRAMA_ACTIVIDADES,LIBRO_REMUNERACIONES_CONDUCTORES,CONSULTA_DOCUMENTOS,MODULO_ALARMAS_GPS,HOJA_DE_SERVICIOS,CAJA,CONSULTA_DOCUMENTOS,REPORTE_LIBRETAS')}">
                 <h:panelGrid style="margin-left: auto; margin-right: auto" columns="8">
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('MODULO_INCIDENCIAS')}"
                                    action="#{facesUtil.redirigir('/m/incidencias')}" class="menuWorkcenter">
@@ -135,7 +135,7 @@
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('HOJA_DE_SERVICIOS')}"
                                    action="#{facesUtil.redirigir('/m/hoja_servicio')}"
                                    class="menuWorkcenter" style="display: block"
-                                   
+
 
                                    title="Hoja de Servicio">
                         <i class="fa fa-gear fa-5x"></i>
@@ -144,7 +144,7 @@
                     <h:commandLink rendered="#{sesionCliente.tienePermiso('CAJA')}"
                                    action="#{facesUtil.redirigir('/m/caja')}"
                                    class="menuWorkcenter" style="display: block"
-                                   
+
 
                                    title="Modulo Caja">
                         <i class="fa fa-bank fa-5x"></i>
@@ -155,6 +155,12 @@
                                    class="menuWorkcenter">
                         <i class="fa fa-search fa-5x"></i>
                         <h:outputLabel value="Consulta Documentos Equipo"/>
+                    </h:commandLink>
+                    <h:commandLink rendered="#{sesionCliente.tienePermiso('REPORTE_LIBRETAS')}"
+                                   action="#{facesUtil.redirigir('/m/reporte_libretas')}"
+                                   class="menuWorkcenter">
+                        <i class="fa fa-file-text fa-5x"></i>
+                        <h:outputLabel value="Reporte Libretas"/>
                     </h:commandLink>
                 </h:panelGrid>
             </p:panel>

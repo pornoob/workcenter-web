@@ -53,6 +53,8 @@ http://www.springframework.org/schema/security http://www.springframework.org/sc
         <security:intercept-url pattern="/m/caja" access="hasRole('CAJA')"/>
         <security:intercept-url pattern="/m/maestro_guias" access="hasRole('MAESTRO_DE_GUIAS')"/>
 
+        <security:intercept-url pattern="/m/reporte_libretas" access="hasRole('REPORTE_LIBRETAS')"/>
+
         <security:logout invalidate-session="true"
                          delete-cookies="jsessionid"
                          logout-success-url="/inicio.jsf"
