@@ -19,6 +19,8 @@ import java.io.IOException;
 import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  * Created by claudio on 27-02-16.
@@ -73,8 +75,7 @@ public class ImportadorDatosBonoDescuento {
                     d.setFecha(new Date());
                     logicaCargaMasiva.guardarBonoDescuento(d);
                 } catch (Exception e) {
-                    System.err.println("row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
-                    //e.printStackTrace();
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
                 }
             }
 

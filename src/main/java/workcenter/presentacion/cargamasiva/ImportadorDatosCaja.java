@@ -10,6 +10,7 @@ import org.springframework.stereotype.Component;
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
 import workcenter.entidades.Personal;
+import workcenter.entidades.Vuelta;
 import workcenter.negocio.cargamasiva.LogicaCargaMasiva;
 import workcenter.util.components.FacesUtil;
 
@@ -19,17 +20,19 @@ import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 @Component
 @Scope("view")
 public class ImportadorDatosCaja {
     private transient UploadedFile archivo;
-	private Concepto conceptoSeleccionado;
-	private Date fecha;
+    private Concepto conceptoSeleccionado;
+    private Date fecha;
     private List<Concepto> listaConceptos;
-	
-	@Autowired
-	LogicaCargaMasiva logicaCargaMasiva;
+
+    @Autowired
+    LogicaCargaMasiva logicaCargaMasiva;
 
     @PostConstruct
     public void init() {
@@ -46,34 +49,41 @@ public class ImportadorDatosCaja {
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             Long rutParteNumerica = 0l;
             while ((row = ws.getRow(numRow++)) != null) {
-            	try {
-            		row.getCell(0).getNumericCellValue();	
-				} catch (Exception e) {
-					continue;
-				}
-                
-            	Dinero d = new Dinero();
                 try {
-                	rutParteNumerica = obtenerRut(row.getCell(1).getStringCellValue());
-                    Personal p  = new Personal();
+                    row.getCell(0).getNumericCellValue();
+                } catch (Exception e) {
+                    continue;
+                }
+
+                Dinero d = new Dinero();
+                try {
+                    rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
+                    Personal p = new Personal();
                     p.setRut(rutParteNumerica);
                     d.setReceptor(p);
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-                d.setMonto((int)row.getCell(4).getNumericCellValue());
-                String fechaActual = sdf.format(new Date());
-                String fechaCarga = sdf.format(fecha);
-                d.setFechareal(sdf.parse(fechaActual));
-                d.setFechaactivo(sdf.parse(fechaCarga));
-                d.setConcepto(conceptoSeleccionado);
-                try {              	
-                	logicaCargaMasiva.guardarDinero(d);
+                    d.setMonto((int) row.getCell(3).getNumericCellValue());
+                    if (row.getCell(4) != null) {
+                        int idVuelta = (int) row.getCell(4).getNumericCellValue();
+                        Vuelta vuelta = new Vuelta();
+                        vuelta.setId(idVuelta);
+                        d.setOrdendecarga(vuelta);
+                    }
+                    if (row.getCell(5) != null) {
+                        d.setFechaactivo(row.getCell(5).getDateCellValue());
+                    } else {
+                        String fechaCarga = sdf.format(fecha);
+                        d.setFechaactivo(sdf.parse(fechaCarga));
+                    }
+                    String fechaActual = sdf.format(new Date());
+                    d.setFechareal(sdf.parse(fechaActual));
+                    d.setConcepto(conceptoSeleccionado);
+                    logicaCargaMasiva.guardarDinero(d);
                 } catch (PersistenceException e) {
+                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
                 }
-           }
-                
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");           
+            }
+
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
         } catch (IOException e) {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
@@ -81,13 +91,13 @@ public class ImportadorDatosCaja {
             e.printStackTrace();
             FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
         }
-      
+
     }
-    
-    public Long obtenerRut(String rut){
-    	String cadena = rut.replace(".", "").replace(",", "").trim();
-    	String[] arregloCadena = cadena.split("-");
-    	return Long.valueOf(arregloCadena[0]);
+
+    public Long obtenerRut(String rut) {
+        String cadena = rut.replace(".", "").replace(",", "").trim();
+        String[] arregloCadena = cadena.split("-");
+        return Long.valueOf(arregloCadena[0]);
     }
 
     public UploadedFile getArchivo() {
@@ -98,21 +108,21 @@ public class ImportadorDatosCaja {
         this.archivo = archivo;
     }
 
-	public Date getFecha() {
-		return fecha;
-	}
+    public Date getFecha() {
+        return fecha;
+    }
 
-	public void setFecha(Date fecha) {
-		this.fecha = fecha;
-	}
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
 
-	public Concepto getConceptoSeleccionado() {
-		return conceptoSeleccionado;
-	}
+    public Concepto getConceptoSeleccionado() {
+        return conceptoSeleccionado;
+    }
 
-	public void setConceptoSeleccionado(Concepto conceptoSeleccionado) {
-		this.conceptoSeleccionado = conceptoSeleccionado;
-	}
+    public void setConceptoSeleccionado(Concepto conceptoSeleccionado) {
+        this.conceptoSeleccionado = conceptoSeleccionado;
+    }
 
     public List<Concepto> getListaConceptos() {
         return listaConceptos;
