@@ -76,6 +76,7 @@ public class ImportadorDatosBonoDescuento {
                     logicaCargaMasiva.guardarBonoDescuento(d);
                 } catch (Exception e) {
                     Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
+                    System.err.println("row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
                 }
             }
 

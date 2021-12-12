@@ -1,0 +1,9 @@
+version: "3.9"  # optional since v1.27.0
+services:
+  workcenter:
+    image: tvp/workcenter
+    build:
+      dockerfile: ./docker/app/Dockerfile
+      context: .
+    ports:
+      - "8080:8080"
