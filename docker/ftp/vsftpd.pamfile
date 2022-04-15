@@ -1,0 +1,2 @@
+auth required /usr/lib/security/pam_pwdfile.so pwdfile /etc/vsftpd/ftp.passwd
+account required /usr/lib/security/pam_permit.so
