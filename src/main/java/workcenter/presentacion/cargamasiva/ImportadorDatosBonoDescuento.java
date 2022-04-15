@@ -43,54 +43,51 @@ public class ImportadorDatosBonoDescuento {
         bonoDescuentoList = logicaCargaMasiva.obtenerBonosDescuentos();
     }
 
-    @Transactional(readOnly = false)
-    public void subir() {
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    public void subir() throws Exception {
         XSSFWorkbook wb = null;
-        try {
-            wb = new XSSFWorkbook(archivo.getInputstream());
-            XSSFSheet ws = wb.getSheetAt(0);
-            int numRow = 0;
-            XSSFRow row;
-            Long rutParteNumerica = 0l;
-            while ((row = ws.getRow(numRow++)) != null) {
-                try {
-                    row.getCell(0).getNumericCellValue();
-                } catch (Exception e) {
-                    continue;
-                }
+        wb = new XSSFWorkbook(archivo.getInputstream());
+        XSSFSheet ws = wb.getSheetAt(0);
+        int numRow = 0;
+        XSSFRow row;
+        Long rutParteNumerica = 0l;
+        while ((row = ws.getRow(numRow++)) != null) {
+            try {
+                row.getCell(0).getNumericCellValue();
+            } catch (Exception e) {
+                continue;
+            }
 
-                BonoDescuentoPersonal d = new BonoDescuentoPersonal();
-                try {
-                    rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
-                    Personal p = new Personal();
-                    p.setRut(rutParteNumerica);
+            BonoDescuentoPersonal d = new BonoDescuentoPersonal();
+            try {
+                rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
+                Personal p = new Personal();
+                p.setRut(rutParteNumerica);
 
-                    d.setIdPersonal(p);
-                    d.setFechadesde(fechaDesde);
-                    d.setFechahasta(fechaHasta);
-                    d.setIdBonodescuento(bonoDescuentoSeleccionado);
-                    d.setMonto(
+                d.setIdPersonal(p);
+                d.setFechadesde(fechaDesde);
+                d.setFechahasta(fechaHasta);
+                d.setIdBonodescuento(bonoDescuentoSeleccionado);
+                d.setMonto(
                         BigInteger.valueOf((long) row.getCell(3).getNumericCellValue())
-                    );
-                    d.setFecha(new Date());
-                    logicaCargaMasiva.guardarBonoDescuento(d);
-                } catch (Exception e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
-                    System.err.println("row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
+                );
+                d.setFecha(new Date());
+                logicaCargaMasiva.guardarBonoDescuento(d);
+            } catch (Exception e) {
+                String value = "";
+                try {
+                    value = row.getCell(2).getStringCellValue();
+                } catch (Exception ignored) {
+                    value = String.valueOf(row.getCell(2).getNumericCellValue());
                 }
+                throw new Exception("row " + numRow + " : " + value);
             }
+        }
 
-            if (numRow > 1) {
-                FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
-            } else {
-                FacesUtil.mostrarMensajeError("Operación fallida", "Carga masiva no presenta datos");
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
-        } catch (Exception e) {
-            e.printStackTrace();
-            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
+        if (numRow > 1) {
+            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
+        } else {
+            FacesUtil.mostrarMensajeError("Operación fallida", "Carga masiva no presenta datos");
         }
 
     }

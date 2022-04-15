@@ -11,11 +11,11 @@
             <p:panel>
                 <h:panelGrid columns="4">
                     <h:outputLabel for="iFechaDesde" value="Fecha Desde :"/>
-                    <p:calendar locale="es" id="iFechaDesde" pattern="yyyy-MM-dd"
+                    <p:calendar locale="es" id="iFechaDesde" pattern="yyyy-MM-dd" autocomplete="off"
                                 navigator="true" value="#{importadorDatosBonoDescuento.fechaDesde}">
                     </p:calendar>
                     <h:outputLabel for="iFechaHasta" value="Fecha Hasta :"/>
-                    <p:calendar locale="es" id="iFechaHasta" pattern="yyyy-MM-dd"
+                    <p:calendar locale="es" id="iFechaHasta" pattern="yyyy-MM-dd" autocomplete="off"
                                 navigator="true" value="#{importadorDatosBonoDescuento.fechaHasta}">
                     </p:calendar>
                     <h:outputLabel for="iBonoDescuento" value="Bono Descuento :"/>

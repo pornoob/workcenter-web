@@ -12,7 +12,7 @@
                 <h:panelGrid columns="4">
                     <h:outputLabel for="iFecha" value="Fecha :"/>
                     <p:calendar locale="es" id="iFecha" value="#{importadorDatosCaja.fecha}" pattern="yyyy-MM-dd"
-                                navigator="true">
+                                navigator="true" autocomplete="off">
                     </p:calendar>
                     <h:outputLabel for="iConcepto" value="Concepto :"/>
                     <p:selectOneMenu value="#{importadorDatosCaja.conceptoSeleccionado}" filter="true"

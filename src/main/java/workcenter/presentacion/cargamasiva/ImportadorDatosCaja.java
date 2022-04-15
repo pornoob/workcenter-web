@@ -7,6 +7,8 @@ import org.primefaces.model.UploadedFile;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 import workcenter.entidades.Concepto;
 import workcenter.entidades.Dinero;
 import workcenter.entidades.Personal;
@@ -39,59 +41,57 @@ public class ImportadorDatosCaja {
         listaConceptos = logicaCargaMasiva.obtenerConceptos();
     }
 
-    public void subir() {
+    @Transactional(readOnly = false, rollbackFor = Exception.class)
+    public void subir() throws Exception {
         XSSFWorkbook wb = null;
-        try {
-            wb = new XSSFWorkbook(archivo.getInputstream());
-            XSSFSheet ws = wb.getSheetAt(0);
-            int numRow = 0;
-            XSSFRow row;
-            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
-            Long rutParteNumerica = 0l;
-            while ((row = ws.getRow(numRow++)) != null) {
-                try {
-                    row.getCell(0).getNumericCellValue();
-                } catch (Exception e) {
-                    continue;
-                }
-
-                Dinero d = new Dinero();
-                try {
-                    rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
-                    Personal p = new Personal();
-                    p.setRut(rutParteNumerica);
-                    d.setReceptor(p);
-                    d.setMonto((int) row.getCell(3).getNumericCellValue());
-                    if (row.getCell(4) != null) {
-                        int idVuelta = (int) row.getCell(4).getNumericCellValue();
-                        Vuelta vuelta = new Vuelta();
-                        vuelta.setId(idVuelta);
-                        d.setOrdendecarga(vuelta);
-                    }
-                    if (row.getCell(5) != null) {
-                        d.setFechaactivo(row.getCell(5).getDateCellValue());
-                    } else {
-                        String fechaCarga = sdf.format(fecha);
-                        d.setFechaactivo(sdf.parse(fechaCarga));
-                    }
-                    String fechaActual = sdf.format(new Date());
-                    d.setFechareal(sdf.parse(fechaActual));
-                    d.setConcepto(conceptoSeleccionado);
-                    logicaCargaMasiva.guardarDinero(d);
-                } catch (PersistenceException e) {
-                    Logger.getLogger(this.getClass().getName()).log(Level.SEVERE, "row " + numRow + " : " + row.getCell(2) != null ? row.getCell(2).getStringCellValue() : "Empty");
-                }
+        wb = new XSSFWorkbook(archivo.getInputstream());
+        XSSFSheet ws = wb.getSheetAt(0);
+        int numRow = 0;
+        XSSFRow row;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+        Long rutParteNumerica = 0l;
+        while ((row = ws.getRow(numRow++)) != null) {
+            try {
+                row.getCell(0).getNumericCellValue();
+            } catch (Exception e) {
+                continue;
             }
 
-            FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
-        } catch (IOException e) {
-            e.printStackTrace();
-            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
-        } catch (Exception e) {
-            e.printStackTrace();
-            FacesUtil.mostrarMensajeError("Operación fallida", "El archivo no es válido");
+            Dinero d = new Dinero();
+            try {
+                rutParteNumerica = obtenerRut(row.getCell(2).getStringCellValue());
+                Personal p = new Personal();
+                p.setRut(rutParteNumerica);
+                d.setReceptor(p);
+                d.setMonto((int) row.getCell(3).getNumericCellValue());
+                if (row.getCell(4) != null) {
+                    int idVuelta = (int) row.getCell(4).getNumericCellValue();
+                    Vuelta vuelta = new Vuelta();
+                    vuelta.setId(idVuelta);
+                    d.setOrdendecarga(vuelta);
+                }
+                if (row.getCell(5) != null && row.getCell(5).getDateCellValue() != null) {
+                    d.setFechaactivo(row.getCell(5).getDateCellValue());
+                } else {
+                    String fechaCarga = sdf.format(fecha);
+                    d.setFechaactivo(sdf.parse(fechaCarga));
+                }
+                String fechaActual = sdf.format(new Date());
+                d.setFechareal(sdf.parse(fechaActual));
+                d.setConcepto(conceptoSeleccionado);
+                logicaCargaMasiva.guardarDinero(d);
+            } catch (PersistenceException e) {
+                String value = "";
+                try {
+                    value = row.getCell(2).getStringCellValue();
+                } catch (Exception ignored) {
+                    value = String.valueOf(row.getCell(2).getNumericCellValue());
+                }
+                throw new Exception("row " + numRow + " : " + value);
+            }
         }
 
+        FacesUtil.mostrarMensajeInformativo("Operación exitosa", "Carga masiva Ingresada");
     }
 
     public Long obtenerRut(String rut) {
