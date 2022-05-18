@@ -1,0 +1,13 @@
+services:
+  workcenter:
+    image: tvp/workcenter
+    build:
+      dockerfile: ./docker/app/dev/Dockerfile
+    ports:
+      - "8080:8080"
+  vsftp:
+    image: tvp/ftp-workcenter
+    build:
+      dockerfile: ./docker/ftp/Dockerfile
+    ports:
+      - "21:21"

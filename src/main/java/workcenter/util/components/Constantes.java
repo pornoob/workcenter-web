@@ -467,7 +467,7 @@ public class Constantes implements Serializable {
 
     public String getPathArchivos() {
         if (pathArchivos == null) {
-            pathArchivos = System.getProperty("catalina.home") + "/static/workcenter/";
+            pathArchivos = System.getProperty("jetty.home") + "/static/workcenter/";
         }
         return pathArchivos;
     }

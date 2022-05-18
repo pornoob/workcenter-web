@@ -1,15 +1,19 @@
-FROM debian:bullseye
+FROM ubuntu:20.04
 
 ENV debian_frontend=noninteractive
 
 RUN apt update && \
     apt install -y vsftpd libpam-pwdfile
 
-RUN mkdir -p /srv/ftp/vsftp && \
-    ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime && \
-    addgroup vsftp && adduser vsftp -M --gecos "" --ingroup vsftp --no-create-home && \
-    chown -R vsftp:vsftp /srv/ftp/ && \
-    service enable vsftp
+RUN set -xe \
+    && mkdir -p /srv/ftp/vsftpd \
+    && ln -sf /usr/share/zoneinfo/America/Santiago /etc/localtime \
+    && addgroup vsftpd \
+    && adduser --no-create-home --gecos "" --ingroup vsftpd vsftpd \
+    && chown -R vsftpd:vsftpd /srv/ftp/ \
+    && touch /var/log/vsftpd.log \
+    && chown -R vsftpd:vsftpd /var/log/ \
+    && chown -R vsftpd:vsftpd /var/run/
 
 COPY ./docker/ftp/vsftpd.conf /etc/vsftpd.conf
 COPY ./docker/ftp/ftp.passwd /etc/vsftpd/ftp.passwd

@@ -1,0 +1,5 @@
+services:
+  workcenter:
+    image: registry.digitalocean.com/soappscl/workcenter:${APP_VERSION}
+    build:
+      dockerfile: ./docker/app/prod/Dockerfile

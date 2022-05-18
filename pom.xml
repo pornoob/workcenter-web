@@ -32,7 +32,7 @@
         <javax-el-version>3.0.0</javax-el-version>
         <junit-version>4.11</junit-version>
         <aop-version>1.7.4</aop-version>
-        <mysql-connector-version>5.1.29</mysql-connector-version>
+        <mysql-connector-version>8.0.29</mysql-connector-version>
         <http-client>3.1</http-client>
         <poi-version>3.10-FINAL</poi-version>
         <apache-commons-fu>1.3.1</apache-commons-fu>
